@@ -4,6 +4,9 @@ import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import axios from 'axios'
 import os from 'os'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
 import type { GetStaticPropsContext } from 'next'
 import { CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
@@ -194,7 +197,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   <div className='relative flex flex-col items-center justify-center w-full gap-2 sm:min-h-[480px] py-4 overflow-hidden' key={`used-product-${uIdx}`}>
                     <img src={generateUri(usd?.usedproduct_bgpattern, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='absolute top-0 left-0 w-full h-full z-1' />
                     <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 '>
-                      <h2 className='primary-text-blue title-page font-bold uppercase'>{usd?.usedproduct_title}</h2>
+                      <h2 className='font-bold uppercase primary-text-blue title-page'>{usd?.usedproduct_title}</h2>
                       <div className='mx-auto text-[14px] font-semibold primary-text-blue text-center sm:w-8/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
                       <div className='col-span-12'>
                         <img src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={usd?.usedproduct_title} className='object-cover w-full h-56' />
@@ -206,8 +209,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               </div>
             </div>
             <div className='flex flex-col w-full bg-[#EAEDF5] sm:py-10 py-6 px-4 justify-center text-center gap-2'>
-              <h3 className='heading text-black font-semibold'>Get an instant quote for your camera kit.</h3>
-              <p className='text-x-small text-black font-normal'>Find out how much your equipment is worth.</p>
+              <h3 className='font-semibold text-black heading'>Get an instant quote for your camera kit.</h3>
+              <p className='font-normal text-black text-x-small'>Find out how much your equipment is worth.</p>
               <div className='flex-1 mx-auto mt-4'>
                 <Link href="/sell-or-part-exchange" passHref legacyBehavior>
                   <a className='px-10 py-2 rounded-full btn-c btn-primary'>Check out here now</a>
@@ -224,7 +227,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </div>
                   <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
                     <div className='flex flex-col justify-start w-full gap-4'>
-                      <h2 className='heading font-semibold text-black'>{ab?.about_title}</h2>
+                      <h2 className='font-semibold text-black heading'>{ab?.about_title}</h2>
                       <div className='font-normal text-black sm:w-full text-body-small' dangerouslySetInnerHTML={{ __html: ab?.about_description }}></div>
                     </div>
                   </div>
@@ -235,7 +238,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
                     <div className='flex flex-col justify-center w-full gap-4'>
                       <span className='w-[100px] h-1 bg-black mx-auto'></span>
-                      <h2 className='sub-heading font-semibold text-center text-black'>{swu?.shopwithus_title}</h2>
+                      <h2 className='font-semibold text-center text-black sub-heading'>{swu?.shopwithus_title}</h2>
                       <div className='mx-auto  font-normal text-center !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
                     </div>
                   </div>
@@ -247,118 +250,97 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 </div>
               ))}
               {pageContents?.relateditems?.length > 0 &&
-                <>
-                  <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 slider-btn-css slider-btn-css">
-                    {pageContents?.relateditemheading?.length > 0 && pageContents?.relateditemheading?.map((heading: any, hIdx: number) => (
-                      <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black" key={`related-${hIdx}`}>{heading?.relateditemheading_title}</h3>
-                    ))}
-                    <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
-                  </div>
-                </>
+                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 slider-btn-css slider-btn-css">
+                  {pageContents?.relateditemheading?.length > 0 && pageContents?.relateditemheading?.map((heading: any, hIdx: number) => (
+                    <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`related-${hIdx}`}>{heading?.relateditemheading_title}</h3>
+                  ))}
+                  <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                </div>
               }
               {pageContents?.featureddeal?.length > 0 &&
                 <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 slider-btn-css slider-btn-css">
                   {pageContents?.featureditemheading?.length > 0 && pageContents?.featureditemheading?.map((heading: any, hIdx: number) => (
-                    <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
+                    <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
                   ))}
                   <SectionHomeProductCardNew onlyImage={false} products={pageContents?.featureddeal} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
               }
-              {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
-                <div className='relative sm:min-h-[480px] flex flex-col items-center justify-center w-full gap-2 py-4 overflow-hidden' key={`trade-in-${tradeIdx}`}>
-                  {/* Background image */}
-                  <img
-                    src={generateUri(trade?.tradeinbanner_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
-                    className='absolute top-0 left-0 w-full h-[480px] object-cover z-0'
-                  />
-
-                  {/* Sky-blue overlay with 50% opacity */}
-                  <div className='absolute top-0 left-0 w-full h-[480px] bg-[#294384] opacity-50 z-1'></div>
-
-                  {/* Foreground content */}
-                  <div className='relative flex flex-col items-start justify-start w-full gap-10 pl-6 bg-transparent z-2 sm:pl-20'>
-                    <div className='flex flex-col justify-start w-full gap-1'>
-                      <img src="/theme/camera/image/trade-in-icon.svg" className="w-10 !fill-white trade-icon h-auto" alt="Trade In" />
-                      <h2 className='title-page font-semibold mt-4 text-white uppercase sm:w-10/12'>{trade?.tradeinbanner_title}</h2>
-                    </div>
-                    <div
-                      className='font-medium heading !leading-relaxed text-white sm:w-8/12'
-                      dangerouslySetInnerHTML={{ __html: trade?.tradeinbanner_description }}
-                    ></div>
-                    <Link
-                      href={trade?.tradeinbanner_buttonlink}
-                      className='px-4 py-2 text-sm font-semibold text-[#294384] bg-white border border-[#294384] rounded'
-                    >
-                      {trade?.tradeinbanner_buttontext}
-                    </Link>
+            </div>
+            {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
+              <div className='relative sm:min-h-[480px] flex flex-col items-center justify-center w-full gap-2 py-4 overflow-hidden' key={`trade-in-${tradeIdx}`}>
+                <img src={generateUri(trade?.tradeinbanner_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='absolute top-0 left-0 w-full h-[480px] object-cover z-0' />
+                <div className='absolute top-0 left-0 w-full h-[480px] bg-[#294384] opacity-50 z-1'></div>
+                <div className='container relative flex flex-col items-start justify-start w-full gap-10 pl-6 mx-auto bg-transparent z-2 sm:pl-20'>
+                  <div className='flex flex-col justify-start w-full gap-1'>
+                    <img src="/theme/camera/image/trade-in-icon.svg" className="w-10 !fill-white trade-icon h-auto" alt="Trade In" />
+                    <h2 className='mt-4 font-semibold text-white uppercase title-page sm:w-10/12'>{trade?.tradeinbanner_title}</h2>
                   </div>
+                  <div className='font-medium heading !leading-relaxed text-white sm:w-8/12' dangerouslySetInnerHTML={{ __html: trade?.tradeinbanner_description }}></div>
+                  <Link href={trade?.tradeinbanner_buttonlink} className='px-4 py-2 text-sm font-semibold text-[#294384] bg-white border border-[#294384] rounded' >
+                    {trade?.tradeinbanner_buttontext}
+                  </Link>
                 </div>
-              ))}
-              {pageContents?.beinspiredheading?.length > 0 && pageContents?.beinspiredheading?.map((bih: any, bIdx: number) => (
-                <div className='flex flex-col justify-start w-full' key={`heading-inspired-${bIdx}`}>
-                  <h2 className='title-page  font-semibold text-white uppercase sm:w-10/12'>{bih?.beinspiredheading_title}</h2>
-                </div>
-              ))}
+              </div>
+            ))}
+            <div className='container relative flex flex-col mt-0 mb-7 sm:mb-8 lg:mb-12'>
               {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 sm:pt-8 pt-4 relative`}>
-                  <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
-                    {pageContents?.beinspiredheading?.map((h: any, iIdx: number) => (
-                      <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.beinspiredheading_subtitle} hasNextPrev >
-                        {h?.beinspiredheading_title}
-                      </Heading>
-                    ))}
-                    <div className="glide__track" data-glide-el="track">
-                      <ul className="glide__slides">
-                        {pageContents?.tocategoryinspired?.map((item: any, index: number) => (
-                          <li key={index} className={`glide__slide product-card-item home-product-card`}>
-                            <Link href={sanitizeRelativeUrl(`/${item?.tocategoryinspired_link}`)}>
-                              <div className='relative flex flex-col rounded-lg'>
-                                <img alt={item?.tocategoryinspired_title} src={generateUri(item?.tocategoryinspired_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />                                
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 slider-btn-css slider-btn-css">
+                  {pageContents?.beinspiredheading?.length > 0 && pageContents?.beinspiredheading?.map((heading: any, hIdx: number) => (
+                    <div className='flex items-center justify-start gap-6 pb-4 sm:pb-8' key={`be-inspired-${hIdx}`}>
+                      <h3 className="font-semibold text-black title-page">{heading?.beinspiredheading_title}</h3>
+                      <Link href={heading?.beinspiredheading_buttonlink} className='text-xs font-normal text-black underline' passHref>See more</Link>
                     </div>
-                  </div>
+                  ))}
+                  <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.5 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                    {pageContents?.tocategoryinspired?.map((item: any, pId: number) => (
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+                        <div key={pId} className={`product-card-item home-product-card`}>
+                          <Link href={sanitizeRelativeUrl(`/${item?.tocategoryinspired_link}`)}>
+                            <div className='relative flex flex-col rounded-lg'>
+                              <img alt={item?.tocategoryinspired_title} src={generateUri(item?.tocategoryinspired_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
+                            </div>
+                          </Link>
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 </div>
               }
-              {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className={`nc-SectionSliderProductCard product-card-slider container pl-0 !px-0 sm:pl-0 sm:pt-10 pt-6 relative`}>
-                  <div ref={sliderRefCmp} className={`flow-root ${isShow ? "" : "invisible"}`}>
-                    {pageContents?.competitionheading?.map((h: any, iIdx: number) => (
-                      <Heading key={iIdx} className="mb-4 lg:mb-6 text-neutral-900 dark:text-neutral-50" desc="" rightDescText={h?.competitionheading_subtitle} hasNextPrev >
-                        {h?.competitionheading_title}
-                      </Heading>
-                    ))}
-                    <div className="glide__track" data-glide-el="track">
-                      <ul className="glide__slides">
-                        {pageContents?.competitioncard?.map((item: any, index: number) => (
-                          <li key={index} className={`glide__slide product-card-item home-product-card`}>
-                            <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
-                              <div className='relative flex flex-col rounded-lg'>
-                                <img alt={item?.competitioncard_title} src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
-                                <span className='flex flex-col w-full py-2 text-black'>
-                                  {item?.competitioncard_description != "" && <div className='w-full !text-xs pt-2 font-medium text-left text-gray-800 uppercase' dangerouslySetInnerHTML={{ __html: item?.competitioncard_description }} ></div>}
-                                </span>
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+              {pageContents?.competitioncard?.length > 0 &&
+                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 slider-btn-css slider-btn-css">
+                  {pageContents?.competitionheading?.length > 0 && pageContents?.competitionheading?.map((heading: any, hIdx: number) => (
+                    <div className='flex items-center justify-start gap-6 pb-4 sm:pb-8' key={`be-inspired-${hIdx}`}>
+                      <h3 className="font-semibold text-black title-page">{heading?.competitionheading_title}</h3>
+                      <Link href={heading?.competitionheading_buttonlink} className='text-xs font-normal text-black underline' passHref>See more</Link>
                     </div>
-                  </div>
+                  ))}
+                  <Swiper slidesPerView={1} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.5 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                    {pageContents?.competitioncard?.map((item: any, pId: number) => (
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+                        <div key={pId} className={`product-card-item home-product-card`}>
+                          <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
+                            <div className='relative flex flex-col rounded-lg'>
+                              <img alt={item?.competitioncard_title} src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
+                              <span className='flex flex-col w-full py-2 text-black'>
+                                {item?.competitioncard_description != "" && <div className='w-full !text-xs pt-2 font-medium text-left text-gray-800 uppercase' dangerouslySetInnerHTML={{ __html: item?.competitioncard_description }} ></div>}
+                              </span>
+                            </div>
+                          </Link>
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 </div>
               }
               {pageContents?.brands?.length > 0 &&
-                <div className='flex flex-col w-full mt-2 border-t border-gray-200 sm:mt-4 pt-10'>
+                <div className='flex flex-col w-full pt-4 mt-2 sm:mt-4'>
                   <div className='container !px-0 flex flex-col gap-4 mx-auto'>
                     {pageContents?.brandheading?.map((h: any, iIdx: number) => (
                       <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
-                        <h2 className='title-page  font-semibold dark:text-black'>{h?.brandheading_title}</h2>
+                        <h2 className='font-semibold text-black title-page'>{h?.brandheading_title}</h2>
                       </div>
                     ))}
-                    <div className='grid items-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
+                    <div className='grid items-center justify-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
                       {pageContents?.brands?.map((item: any, itemIdx: number) => (
                         <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
                           <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-2' />
@@ -368,6 +350,16 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </div>
                 </div>
               }
+            </div>
+            <div className='flex flex-col justify-center gap-4 pt-6 pb-20 text-center'>
+              <h3 className='font-semibold text-black heading'>See personalised recommendation</h3>
+              <div className='flex-1 mx-auto btn-primary-clr'>
+                <Link href="/my-account/register" passHref legacyBehavior>
+                  <a className='px-10 py-2 rounded-full btn-c btn-primary'>Sign in</a>
+                </Link>
+              </div>
+              <p className='text-x-small'>Haven't got an account?
+                <Link href="/my-account/login" passHref legacyBehavior><a className='pl-1 primary-text-blue hover:underline'>Start here</a></Link>.</p>
             </div>
           </>
           : <>

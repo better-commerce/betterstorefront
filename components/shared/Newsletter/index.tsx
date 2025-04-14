@@ -38,18 +38,6 @@ export default function Newsletter({ featureToggle }: any) {
 
   return (
     <>
-      {featureToggle?.features?.enableForPCSite &&
-        <div className='flex flex-col justify-center text-center gap-4 pb-20 pt-6'>
-          <h3 className='heading text-black font-semibold'>See personalised recommendation</h3>
-          <div className='flex-1 mx-auto btn-primary-clr'>
-            <Link href="/my-account/register" passHref legacyBehavior>
-              <a className='px-10 py-2 rounded-full btn-c btn-primary'>Sign in</a>
-            </Link>
-          </div>
-          <p className='text-x-small'>Haven't got an account?
-            <Link href="/my-account/login" passHref legacyBehavior><a className='primary-text-blue pl-1 hover:underline'>Start here</a></Link>.</p>
-        </div>
-      }
       <div className={`${featureToggle?.features?.enableForPCSite ? 'flex w-full py-8 bg-white border-t border-gray-400 sm:py-14 footer-top-bg-clr footer-margin-top' : 'flex w-full py-4 bg-white border-t border-gray-400 sm:py-6 footer-top-bg-clr footer-margin-top'} `}>
         <div className='container mx-auto'>
           <div className='flex flex-col justify-between sm:flex-row sm:items-center'>
