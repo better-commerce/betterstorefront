@@ -9,10 +9,10 @@ import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 export default function LinkGroup({ data }: any) {
   return (
     <>
-    <section className="py-8 border-b border-gray-200">
+    <section className="pt-8">
     {data?.map((grp: any, grpIdx: number) => (
       <div className="container mx-auto px-4" key={`linkGrp-${grpIdx}`}>
-        <h2 className="text-xl font-bold text-gray-800 mb-6">{grp?.name}</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-6 heading-border-top">{grp?.name}</h2>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (
             <Link key={cdx} href={item?.link != null ? sanitizeRelativeUrl(`/${item?.link}`) : `#`}  className="group">

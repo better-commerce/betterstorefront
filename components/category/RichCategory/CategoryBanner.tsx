@@ -16,7 +16,7 @@ export default function CategoryBanner({ data }: any) {
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
       </section>
-      <section className="bg-white py-6 border-b border-gray-200">
+      <section className="bg-white pt-6">
         <div className="container mx-auto px-4">
           {/* <div className="bg-white p-6 -mt-20 relative z-10 md:w-3/4 lg:w-2/3 mx-auto shadow-md">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Choosing a Landscape Camera & Lens on a Budget</h2>

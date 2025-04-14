@@ -2546,3 +2546,7 @@ html {
   background-color: #FFFFFF !important;
 }
 }
+.heading-border-top{
+  border-top:1px solid #B2B2B2;
+  padding-top: 10px;
+}
