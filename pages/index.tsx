@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
+import Image from 'next/image'
 import axios from 'axios'
 import os from 'os'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -11,7 +12,7 @@ import type { GetStaticPropsContext } from 'next'
 import { CURRENT_THEME, EmptyGuid, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { Cookie, HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, TOOLS_HOME_PAGE_SLUG } from '@framework/utils/constants'
+import { HOME_PAGE_NEW_SLUG, HOME_PAGE_SLUG, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, TOOLS_HOME_PAGE_SLUG } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, isB2BUser, maxBasketItemsCount, obfuscateHostName, sanitizeRelativeUrl, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -22,7 +23,7 @@ import SectionBrandCard from '@components/SectionBrandCard'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 import Heading from '@components/Heading/Heading'
-// @ts-ignore
+// @ts-ignore - Ignore missing type definitions for Glide
 import Glide from "@glidejs/glide/dist/glide.esm";
 import Link from 'next/link'
 import { IMAGE_CDN_URL, IMG_PLACEHOLDER } from '@components/utils/textVariables'
@@ -33,27 +34,30 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import DealProduct from '@components/home/DealProduct'
 import BrandList from '@components/home/BrandList'
 import BestSellerProduct from '@components/home/Bestseller'
-import { ArrowRight } from '@components/icons'
+// import { ArrowRight } from '@components/icons' // Not used
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import HeroLeft from '@components/ui/Hero/HeroLeft'
 import SectionHomeProductCardNew from '@components/SectionHomeProductCardNew'
-const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'))
-const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'))
-const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'))
-const BackgroundSection = dynamic(() => import('@components/BackgroundSection/BackgroundSection'))
-const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSliderLargeProduct'))
-const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'))
-const ImageBanner = dynamic(() => import('@components/home/ImageBanner'))
-const ChooseList = dynamic(() => import('@components/home/ChooseList'))
-const CategoryList = dynamic(() => import('@components/home/CategoryList'))
-const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'))
-const Loader = dynamic(() => import('@components/ui/LoadingDots'))
+// Optimize dynamic imports with loading priorities
+const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'), { ssr: true })
+const Loader = dynamic(() => import('@components/ui/LoadingDots'), { ssr: true })
+
+// Defer non-critical components
+const DiscoverMoreSlider = dynamic(() => import('@components/DiscoverMoreSlider'), { ssr: false })
+const SectionSliderProductCard = dynamic(() => import('@components/SectionSliderProductCard'), { ssr: false })
+const BackgroundSection = dynamic(() => import('@components/BackgroundSection/BackgroundSection'), { ssr: false })
+const SectionSliderLargeProduct = dynamic(() => import('@components/SectionSliderLargeProduct'), { ssr: false })
+const SectionSliderCategories = dynamic(() => import('@components/SectionSliderCategories/SectionSliderCategories'), { ssr: false })
+const ImageBanner = dynamic(() => import('@components/home/ImageBanner'), { ssr: false })
+const ChooseList = dynamic(() => import('@components/home/ChooseList'), { ssr: false })
+const CategoryList = dynamic(() => import('@components/home/CategoryList'), { ssr: false })
+// const SectionPromo3 = dynamic(() => import('@components/SectionPromo3'), { ssr: false }) // Not used
 const ContentEditorJS = dynamic(() => import("@components/content-editor"), {
   ssr: false,
 });
 declare const window: any
 
-export async function getStaticProps({ preview, locale, locales, }: GetStaticPropsContext) {
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
   const hostName = os.hostname()
   let slug = HOME_PAGE_SLUG;
   if (CURRENT_THEME == "black") {
@@ -80,12 +84,13 @@ export async function getStaticProps({ preview, locale, locales, }: GetStaticPro
 
 const PAGE_TYPE = PAGE_TYPES.Home
 
-function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageContentsMobileWeb, config, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
+function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, deviceInfo, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
   const { user, isGuestUser } = useUI()
   const { isMobile } = deviceInfo
   const currencyCode = getCurrency()
   const translate = useTranslation()
+  // State management
   const [activeTab, setActiveTab] = useState("specialOffers");
   const homePageContents = isMobile ? pageContentsMobileWeb?.find((x: any) => x?.key === currencyCode)?.value || [] : pageContentsWeb?.find((x: any) => x?.key === currencyCode)?.value || []
   const [pageContents, setPageContents] = useState<any>(homePageContents)
@@ -99,7 +104,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   } else {
     Page_Slug = HOME_PAGE_SLUG;
   }
-  useEffect(() => {
+  // Optimize API call with useCallback
+  const fetchPageContents = useCallback(() => {
     const currentCurrency = getCurrentCurrency()
     if (!matchStrings(currencyCode, currentCurrency, true)) {
       axios
@@ -116,7 +122,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         })
       setCurrentCurrency(currencyCode)
     }
-  }, [currencyCode, isMobile])
+  }, [currencyCode, isMobile, Page_Slug])
+
+  // Fetch page contents on currency or device change
+  useEffect(() => {
+    fetchPageContents()
+  }, [fetchPageContents])
 
   useEffect(() => {
     if (typeof window !== "undefined" && window?.ch_session) {
@@ -134,9 +145,12 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
   const sliderRef = useRef(null);
   const sliderRefCmp = useRef(null);
   const [isShow, setIsShow] = useState(false);
-  useEffect(() => {
-    const OPTIONS: Partial<Glide.Options> = {
-      perView: featureToggle?.features?.enableForPCSite ? 3 : 6, gap: 16, bound: true,
+  // Memoize Glide options to prevent unnecessary recalculations
+  const glideOptions = useMemo((): Partial<Glide.Options> => {
+    return {
+      perView: featureToggle?.features?.enableForPCSite ? 3 : 6,
+      gap: 16,
+      bound: true,
       breakpoints: {
         1280: { gap: 16, perView: featureToggle?.features?.enableForPCSite ? 3 : 6, },
         1279: { gap: 16, perView: featureToggle?.features?.enableForPCSite ? 3 : 6, },
@@ -145,10 +159,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
         500: { gap: 16, perView: 1.5, },
       },
     };
+  }, [featureToggle?.features?.enableForPCSite]);
+
+  // Initialize Glide sliders with memoized options
+  useEffect(() => {
     if (!sliderRef.current) return;
 
-    let slider = new Glide(sliderRef.current, OPTIONS);
-    let sliderCmf = new Glide(sliderRefCmp.current, OPTIONS);
+    let slider = new Glide(sliderRef.current, glideOptions);
+    let sliderCmf = new Glide(sliderRefCmp.current, glideOptions);
     slider.mount();
     sliderCmf.mount();
     setIsShow(true);
@@ -156,10 +174,23 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
       slider.destroy();
       sliderCmf.destroy();
     };
-  }, [sliderRef]);
+  }, [sliderRef, glideOptions]);
+  // Add tab change handlers
+  const handleTabChange = useCallback((tabName: string) => {
+    setActiveTab(tabName);
+  }, [setActiveTab]);
+
+  const handleSpecialOffersClick = useCallback(() => {
+    handleTabChange("specialOffers");
+  }, [handleTabChange]);
+
+  const handleNewProductsClick = useCallback(() => {
+    handleTabChange("newProducts");
+  }, [handleTabChange]);
+
   const cleanPath = removeQueryString(router.asPath)
   const redirectHref = useMemo(() => {
-    if (!isGuestUser && user?.userId && user?.id !== Guid.empty && isB2BUser(user)) { // if loggedIn with B2b user 
+    if (!isGuestUser && user?.userId && user?.id !== Guid.empty && isB2BUser(user)) { // if loggedIn with B2b user
       return '/my-account/my-company/quotes';
     } else if (!isGuestUser && user?.userId && user?.id !== Guid.empty) {  // if loggedIn user
       return 'tel:+442086915794';
@@ -186,7 +217,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
       {hostName && <input className="inst" type="hidden" value={hostName} />}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        {featureToggle?.features?.enableForPCSite ?
+        {/* Conditionally render based on feature toggle */}
+        {featureToggle?.features?.enableForPCSite ? (
           <>
             <div className='grid grid-cols-2 gap-2 sm:grid-cols-12'>
               <div className='col-span-12 sm:col-span-8'>
@@ -195,12 +227,27 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               <div className='col-span-12 sm:col-span-4'>
                 {pageContents?.usedproduct?.length > 0 && pageContents?.usedproduct?.map((usd: any, uIdx: number) => (
                   <div className='relative flex flex-col items-center justify-center w-full gap-2 sm:min-h-[480px] py-4 overflow-hidden' key={`used-product-${uIdx}`}>
-                    <img src={generateUri(usd?.usedproduct_bgpattern, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='absolute top-0 left-0 w-full h-full z-1' />
+                    <Image
+                      src={generateUri(usd?.usedproduct_bgpattern, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                      className='absolute top-0 left-0 w-full h-full z-1'
+                      alt="Background pattern"
+                      fill
+                      sizes="100vw"
+                      priority={uIdx === 0}
+                      loading={uIdx === 0 ? "eager" : "lazy"}
+                    />
                     <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 '>
                       <h2 className='font-bold uppercase primary-text-blue title-page'>{usd?.usedproduct_title}</h2>
                       <div className='mx-auto text-[14px] font-semibold primary-text-blue text-center sm:w-8/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
                       <div className='h-48 col-span-12 sm:h-56'>
-                        <img src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={usd?.usedproduct_title} className='object-cover w-full h-40 sm:h-56' />
+                        <Image
+                          src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                          alt={usd?.usedproduct_title}
+                          className='object-cover w-full h-40 sm:h-56'
+                          width={500}
+                          height={224}
+                          loading="lazy"
+                        />
                       </div>
                     </div>
                     <Link href={usd?.usedproduct_primarybuttonlink} className='flex absolute bottom-4 items-center justify-center gap-1 px-4 py-2 text-sm font-semibold bg-transparent border rounded border-[#294384] text-[#294384]'>{usd?.usedproduct_primarybutton} <ArrowRightIcon className='w-4 h-4' /></Link>
@@ -222,7 +269,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12' key={`about-${aIdx}`}>
                   <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
                     <div className='col-span-12'>
-                      <img src={generateUri(ab?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={ab?.about_title} className='object-cover w-full h-full' />
+                      <Image
+                        src={generateUri(ab?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                        alt={ab?.about_title}
+                        className='object-cover w-full h-full'
+                        width={500}
+                        height={500}
+                        loading="lazy"
+                      />
                     </div>
                   </div>
                   <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
@@ -245,31 +299,48 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </div>
                   <div className='order-2 col-span-5 sm:col-span-4 sm:order-2'>
                     <div className='col-span-12'>
-                      <img src={generateUri(swu?.shopwithus_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={swu?.shopwithus_title} className='object-cover w-full h-full' />
+                      <Image
+                        src={generateUri(swu?.shopwithus_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                        alt={swu?.shopwithus_title}
+                        className='object-cover w-full h-full'
+                        width={500}
+                        height={500}
+                        loading="lazy"
+                      />
                     </div>
                   </div>
                 </div>
               ))}
-              {pageContents?.relateditems?.length > 0 &&
+              {/* Related items section */}
+              {pageContents?.relateditems?.length > 0 && (
                 <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
                   {pageContents?.relateditemheading?.length > 0 && pageContents?.relateditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`related-${hIdx}`}>{heading?.relateditemheading_title}</h3>
                   ))}
                   <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
-              }
-              {pageContents?.featureddeal?.length > 0 &&
+              )}
+
+              {/* Featured deals section */}
+              {pageContents?.featureddeal?.length > 0 && (
                 <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
                   {pageContents?.featureditemheading?.length > 0 && pageContents?.featureditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
                   ))}
                   <SectionHomeProductCardNew onlyImage={false} products={pageContents?.featureddeal} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
-              }
+              )}
             </div>
             {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
               <div className='relative sm:min-h-[480px] flex flex-col items-center justify-center w-full gap-2 py-4 overflow-hidden' key={`trade-in-${tradeIdx}`}>
-                <img src={generateUri(trade?.tradeinbanner_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='absolute top-0 left-0 w-full h-[480px] object-cover z-0' />
+                <Image
+                  src={generateUri(trade?.tradeinbanner_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                  className='absolute top-0 left-0 w-full h-[480px] object-cover z-0'
+                  alt="Trade-in banner"
+                  fill
+                  sizes="100vw"
+                  loading="lazy"
+                />
                 <div className='absolute top-0 left-0 w-full h-[480px] bg-[#294384] opacity-50 z-1'></div>
                 <div className='container relative flex flex-col items-start justify-start w-full gap-10 pl-6 mx-auto bg-transparent z-2 sm:pl-20'>
                   <div className='flex flex-col justify-start w-full gap-1'>
@@ -321,7 +392,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                         <div key={pId} className={`product-card-item home-product-card`}>
                           <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
                             <div className='relative flex flex-col rounded-lg'>
-                              <img alt={item?.competitioncard_title} src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
+                              <Image
+                                alt={item?.competitioncard_title}
+                                src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER}
+                                className='object-contain object-top w-full h-auto'
+                                width={450}
+                                height={450}
+                                loading="lazy"
+                              />
                               <span className='flex flex-col w-full py-2 text-black'>
                                 {item?.competitioncard_description != "" && <div className='w-full !text-xs pt-2 font-medium text-left text-gray-800 uppercase' dangerouslySetInnerHTML={{ __html: item?.competitioncard_description }} ></div>}
                               </span>
@@ -333,7 +411,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   </Swiper>
                 </div>
               }
-              {pageContents?.brands?.length > 0 &&
+              {/* Brands section */}
+              {pageContents?.brands?.length > 0 && (
                 <div className='flex flex-col w-full pt-4 mt-2 sm:mt-4'>
                   <div className='container !px-0 flex flex-col gap-4 mx-auto'>
                     {pageContents?.brandheading?.map((h: any, iIdx: number) => (
@@ -344,13 +423,20 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     <div className='grid items-center justify-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
                       {pageContents?.brands?.map((item: any, itemIdx: number) => (
                         <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
-                          <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-2' />
+                          <Image
+                            src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
+                            alt={item?.brands_name}
+                            className='w-full h-auto p-0 sm:p-2'
+                            width={300}
+                            height={150}
+                            loading="lazy"
+                          />
                         </Link>
                       ))}
                     </div>
                   </div>
                 </div>
-              }
+              )}
             </div>
             <div className='flex flex-col justify-center gap-4 pt-6 pb-20 text-center'>
               <h3 className='font-semibold text-black heading'>See personalised recommendation</h3>
@@ -363,7 +449,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                 <Link href="/my-account/login" passHref legacyBehavior><a className='pl-1 primary-text-blue hover:underline'>Start here</a></Link>.</p>
             </div>
           </>
-          : <>
+        ) : (
+          <>
             {featureToggle?.features?.enableFullBanner ? <Hero banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
             {featureToggle?.features?.enableToolsHome &&
               <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
@@ -378,7 +465,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                         </Link>
                       </div>
                       <div className='col-span-5'>
-                        <img src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingoffers_title} className='object-cover w-full h-56' />
+                        <Image
+                        src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                        alt={fo?.fixingoffers_title}
+                        className='object-cover w-full h-56'
+                        width={500}
+                        height={224}
+                        loading="lazy"
+                      />
                       </div>
                     </div>
                   ))}
@@ -396,23 +490,24 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   <button
                     className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
                       }`}
-                    onClick={() => setActiveTab("specialOffers")}
+                    onClick={handleSpecialOffersClick}
                   >
                     Special Offers
                   </button>
                   <button
                     className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
                       }`}
-                    onClick={() => setActiveTab("newProducts")}
+                    onClick={handleNewProductsClick}
                   >
                     New Products
                   </button>
                 </div>
 
-                {/* Tab Content */}
+                {/* Tab content */}
                 {activeTab === "specialOffers" && pageContents?.specialofferproducts?.length > 0 && (
                   <SectionSliderProductCard
-                    deviceInfo={deviceInfo} onlyImage={false}
+                    deviceInfo={deviceInfo}
+                    onlyImage={false}
                     data={pageContents?.specialofferproducts}
                     heading={pageContents?.offerproductheading}
                     featureToggle={featureToggle}
@@ -422,7 +517,8 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
 
                 {activeTab === "newProducts" && pageContents?.newproducts?.length > 0 && (
                   <SectionSliderProductCard
-                    deviceInfo={deviceInfo} onlyImage={false}
+                    deviceInfo={deviceInfo}
+                    onlyImage={false}
                     data={pageContents?.newproducts}
                     heading={pageContents?.newproductheading}
                     featureToggle={featureToggle}
@@ -440,7 +536,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                         </Link>
                       </div>
                       <div className='absolute top-0 left-0 z-0 col-span-12 mob-static'>
-                        <img src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt={fo?.fixingdelivery_title} className='object-cover object-right w-full h-auto invert-1' />
+                        <Image
+                          src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                          alt={fo?.fixingdelivery_title}
+                          className='object-cover object-right w-full h-auto invert-1'
+                          width={500}
+                          height={300}
+                          loading="lazy"
+                        />
                       </div>
                     </div>
                   ))}
@@ -461,7 +564,13 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                       <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
                     </div>
                     <div className="dot-div">
-                      <img src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`} alt="dot image" width={245} height={220} />
+                      <Image
+                        src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`}
+                        alt="dot image"
+                        width={245}
+                        height={220}
+                        loading="lazy"
+                      />
                     </div>
                   </section>
                 }
@@ -481,7 +590,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     </div>
                   </div>
                   <div className='flex flex-col sm:p-20'>
-                    <img alt={data?.about_title} src={generateUri(data?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
+                    <Image
+                      alt={data?.about_title}
+                      src={generateUri(data?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                      className='object-cover object-top w-full h-full rounded-xl'
+                      width={500}
+                      height={500}
+                      loading="lazy"
+                    />
                   </div>
                 </div>
               </div>
@@ -492,7 +608,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   {pageContents?.allcategories?.map((data: any, dataIdx: number) => (
                     <div className='flex flex-col justify-center p-4 text-center rounded-lg shadow-md hover:bg-white hover:shadow-xl bg-slate-50' key={`data-${dataIdx}`}>
                       <div className='h-60'>
-                        <img alt={data?.allcategories_name} src={generateUri(data?.allcategories_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-60 rounded-xl' />
+                        <Image
+                          alt={data?.allcategories_name}
+                          src={generateUri(data?.allcategories_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
+                          className='object-cover object-top w-full h-60 rounded-xl'
+                          width={300}
+                          height={240}
+                          loading="lazy"
+                        />
                       </div>
                       <Link href={data?.allcategories_link} className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
                     </div>
@@ -515,7 +638,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   {pageContents?.allbrands?.map((data: any, dataIdx: number) => (
                     <div className='flex flex-col justify-center p-4 text-center bg-white rounded-lg shadow-md hover:shadow-xl' key={`data-${dataIdx}`}>
                       <div className='h-32'>
-                        <img alt={data?.allbrands_name} src={generateUri(data?.allbrands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-32 rounded-xl' />
+                        <Image
+                          alt={data?.allbrands_name}
+                          src={generateUri(data?.allbrands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
+                          className='object-cover object-center w-full h-32 rounded-xl'
+                          width={300}
+                          height={128}
+                          loading="lazy"
+                        />
                       </div>
                     </div>
                   ))}
@@ -524,7 +654,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             }
             {pageContents?.promotionbanner != "" && CURRENT_THEME == 'etag' &&
               <div className='flex flex-col pt-10 mt-0'>
-                <img alt="Banner" src={generateUri(pageContents?.promotionbanner, 'h=400&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-center w-full h-full' />
+                <Image
+                  alt="Banner"
+                  src={generateUri(pageContents?.promotionbanner, 'h=400&fm=webp') || IMG_PLACEHOLDER}
+                  className='object-cover object-center w-full h-full'
+                  width={1920}
+                  height={400}
+                  loading="lazy"
+                />
               </div>
             }
             {CURRENT_THEME === 'etag' &&
@@ -542,7 +679,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                     <div key={`banner-${itemIdx}`}>
                       <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
                         <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
-                          <img alt={item?.title} src={generateUri(item?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full h-full rounded-xl' />
+                          <Image
+                            alt={item?.title}
+                            src={generateUri(item?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
+                            className='object-cover object-top w-full h-full rounded-xl'
+                            width={1000}
+                            height={600}
+                            loading="lazy"
+                          />
                           <div className='absolute z-10 flex flex-col justify-center space-y-2 text-center top-1/2'>
                             <span className='font-bold text-white sm:text-5xl'>{item?.title}</span>
                             <span className='font-semibold text-white sm:text-xl'>Shop Now</span>
@@ -569,7 +713,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                         <li key={index} className={`glide__slide product-card-item home-product-card`}>
                           <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
                             <div className='relative flex flex-col rounded-lg'>
-                              <img alt={item?.title} src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-cover object-top w-full rounded-lg h-96' />
+                              <Image
+                                alt={item?.title}
+                                src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER}
+                                className='object-cover object-top w-full rounded-lg h-96'
+                                width={450}
+                                height={384}
+                                loading="lazy"
+                              />
                               <span className='absolute flex flex-col w-full px-2 py-4 space-y-2 text-center text-white rounded bg-red-600/80 bottom-2 left-2 image-name-overlay'>
                                 <span className='text-lg font-semibold sm:text-xl'>{item?.title}</span>
                                 <span className='text-2xl font-semibold sm:text-3xl'>{item?.description}</span>
@@ -597,7 +748,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                         key={`category-${itemIdx}`}
                       >
                         <div className='flex flex-col w-full'>
-                          <img src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.category_title} className='w-full h-full' />
+                          <Image
+                            src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
+                            alt={item?.category_title}
+                            className='w-full h-full'
+                            width={400}
+                            height={300}
+                            loading="lazy"
+                          />
                         </div>
                         <div className='flex flex-col gap-5'>
                           <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded sm:h-auto sm:p-2 sm:text-sm'>
@@ -620,7 +778,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             }
             {pageContents?.bannerimage && pageContents?.bannerimage != "" &&
               <div className='flex flex-col w-full'>
-                <img src={pageContents?.bannerimage} className='w-full h-full' alt='Promotion' />
+                <Image
+                  src={pageContents?.bannerimage}
+                  className='w-full h-full'
+                  alt='Promotion'
+                  width={1920}
+                  height={400}
+                  loading="lazy"
+                />
               </div>
             }
 
@@ -630,7 +795,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   {pageContents?.brandcategory?.map((item: any, itemIdx: number) => (
                     <Link href={item?.brandcategory_link} passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
                       <div className='flex flex-col w-full'>
-                        <img src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER} alt={item?.brandcategory_title} className='w-full h-full' />
+                        <Image
+                          src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
+                          alt={item?.brandcategory_title}
+                          className='w-full h-full'
+                          width={400}
+                          height={300}
+                          loading="lazy"
+                        />
                       </div>
                       <div className='flex flex-col gap-5'>
                         <h3 className='flex items-center justify-center w-full h-10 p-1 text-xs font-medium text-center text-white uppercase bg-red-700 rounded'>{item?.brandcategory_title}</h3>
@@ -648,7 +820,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             }
             {pageContents?.promobanner && pageContents?.promobanner != "" &&
               <div className='flex flex-col w-full'>
-                <img src={pageContents?.promobanner} className='w-full h-full' alt='Promotion' />
+                <Image
+                  src={pageContents?.promobanner}
+                  className='w-full h-full'
+                  alt='Promotion'
+                  width={1920}
+                  height={400}
+                  loading="lazy"
+                />
               </div>
             }
 
@@ -661,7 +840,14 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
                   <div className='grid items-center grid-cols-4 gap-4 text-center'>
                     {pageContents?.brands?.map((item: any, itemIdx: number) => (
                       <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
-                        <img src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={item?.brands_name} className='w-full h-auto p-0 sm:p-10' />
+                        <Image
+                          src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
+                          alt={item?.brands_name}
+                          className='w-full h-auto p-0 sm:p-10'
+                          width={300}
+                          height={150}
+                          loading="lazy"
+                        />
                       </Link>
                     ))}
                   </div>
@@ -749,7 +935,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
               </div>
             }
           </>
-        }
+        )}
       </div>
     </>
   )

@@ -1,11 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback, memo, useMemo } from 'react'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
 import rangeMap from '@lib/range-map'
-const ProductCard = dynamic(() => import('@components/ProductCard'))
+import { IExtraProps } from '@components/common/Layout/Layout'
+
+// Optimize dynamic imports with loading priority
+const ProductCard = dynamic(() => import('@components/ProductCard'), { ssr: true })
 const InfiniteScroll = dynamic(() => import('@components/ui/InfiniteScroll'))
 const Pagination = dynamic(() => import('@components/Product/Pagination'))
-import { IExtraProps } from '@components/common/Layout/Layout'
 
 interface Props {
   products: any
@@ -17,26 +19,63 @@ interface Props {
   defaultDisplayMembership: any;
 }
 
-export default function CategoryGrid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll, deviceInfo, maxBasketItemsCount, isCompared, featureToggle, defaultDisplayMembership, }: Props & IExtraProps) {
+function CategoryGrid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll, deviceInfo, maxBasketItemsCount, isCompared, featureToggle, defaultDisplayMembership, }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-  useEffect(() => {
-    Router.events.on('routeChangeComplete', () => {
-      const currentPage: any = Router?.query?.currentPage
-      if (currentPage) {
-        handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
-      }
-    })
-    return () => {
-      Router.events.off('routeChangeComplete', () => { })
+  // Memoize the route change handler to prevent unnecessary re-renders
+  const handleRouteChange = useCallback(() => {
+    const currentPage: any = Router?.query?.currentPage
+    if (currentPage) {
+      handlePageChange({ selected: parseInt(currentPage) - 1 }, false)
     }
-  }, [Router.events])
+  }, [handlePageChange])
+
+  useEffect(() => {
+    Router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      Router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [handleRouteChange])
+
+  // Memoize the grid class to prevent recalculation on every render
+  const gridClass = useMemo(() => {
+    return `p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${
+      products?.results?.length < 5
+        ? `lg:grid-cols-4`
+        : featureToggle?.features?.enableForPCSite
+          ? 'lg:grid-cols-5'
+          : 'lg:grid-cols-4'
+    }`
+  }, [products?.results?.length, featureToggle?.features?.enableForPCSite])
+
+  // Memoize the non-infinite scroll grid class
+  const nonInfiniteGridClass = useMemo(() => {
+    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${
+      products?.results?.length < 5
+        ? `lg:grid-cols-4`
+        : featureToggle?.features?.enableForPCSite
+          ? 'lg:grid-cols-5'
+          : 'lg:grid-cols-4'
+    }`
+  }, [products?.results?.length, featureToggle?.features?.enableForPCSite])
+
+  // Memoize the pagination handler to prevent unnecessary re-renders
+  const handlePagination = useCallback((page: any) => {
+    Router.push(
+      {
+        pathname: Router.pathname,
+        query: { ...Router.query, currentPage: page.selected + 1 },
+      },
+      undefined,
+      { shallow: true }
+    )
+  }, [Router.pathname, Router.query])
 
   return (
     <>
       {IS_INFINITE_SCROLL && (
         <InfiniteScroll fetchData={handleInfiniteScroll} className="w-full mx-auto overflow-hidden sm:px-8" total={products.total} currentNumber={products?.results?.length}
           component={
-            <div className={`p-[5px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-0 ${products?.results?.length < 5 ? `lg:grid-cols-4` : featureToggle?.features?.enableForPCSite ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`} >
+            <div className={gridClass}>
               {!products?.results?.length && rangeMap(12, (i) => (
                 <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                   <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -55,7 +94,7 @@ export default function CategoryGrid({ products, currentPage, handlePageChange =
       )}
       {!IS_INFINITE_SCROLL && (
         <>
-          <div className={`p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-0 sm:px-0 lg:px-4 2xl:px-0 grid-sm-4 ${products?.results?.length < 5 ? `lg:grid-cols-4` : featureToggle?.features?.enableForPCSite ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`} >
+          <div className={nonInfiniteGridClass}>
             {!products?.results?.length && rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
                 <div className="flex flex-row items-center justify-center h-full space-x-5 animate-pulse">
@@ -70,15 +109,17 @@ export default function CategoryGrid({ products, currentPage, handlePageChange =
             ))}
           </div>
           {products.pages > 1 && (
-            <Pagination currentPage={currentPage}
-              onPageChange={(page: any) => {
-                Router.push(
-                  { pathname: Router.pathname, query: { ...Router.query, currentPage: page.selected + 1 }, }, undefined, { shallow: true }
-                )
-              }} pageCount={products.pages} />
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePagination}
+              pageCount={products.pages}
+            />
           )}
         </>
       )}
     </>
   )
 }
+
+// Memoize the CategoryGrid component to prevent unnecessary re-renders
+export default memo(CategoryGrid)

@@ -8,11 +8,11 @@ export default function SectionHomeProductCardNew({ products, productPerColumn, 
       <Swiper
         slidesPerView={2.2}
         spaceBetween={10}
-        navigation={false}
+        navigation={true}
         loop={true}
         breakpoints={{
-          640: { slidesPerView: 2.2 },
-          768: { slidesPerView: 2.2 },
+          640: { slidesPerView: 2.2, navigation: false },
+          768: { slidesPerView: 2.2, navigation: true },
           1024: { slidesPerView: productPerColumn, navigation: true, spaceBetween:20 },
         }}
       >
