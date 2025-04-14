@@ -126,7 +126,7 @@ export default function TradeInDetail() {
           id: tradeDetail?.value?.id,
           itemId: itemId,
           status,
-          rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : QuoteItemStatusType.REJECTED,
+          rejectionReason: status === QuoteItemStatusType.ACCEPTED ? QuoteItemStatusType.SUBMITTED : rejectReasons[itemId],
         };
 
         const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: requestBody };
@@ -318,6 +318,9 @@ export default function TradeInDetail() {
                       <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item.status] || "bg-gray-200 border-gray-500 text-gray-500"}`} >
                         {getStatusLabel(item.status ?? "Unknown")}
                       </span>
+                      {(item.itemStatusId === QuoteItemStatusType.REJECTED && item.rejectionReason) && 
+                        <span className="block px-2 text-[11px] font-medium">{`(${getStatusLabel(item.rejectionReason)})`}</span>
+                      }
                     </td>
                     {showActionColumn && (
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
