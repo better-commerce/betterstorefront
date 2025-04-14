@@ -397,7 +397,10 @@ function CollectionPage(props: any) {
   }, 100)
 
   const debouncedTrackScroll = useDebounce((ev: any) => {
-    setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
+    // Check if ev.currentTarget exists, otherwise use window scroll values
+    const scrollX = ev?.currentTarget?.scrollX ?? window.scrollX ?? 0
+    const scrollY = ev?.currentTarget?.scrollY ?? window.scrollY ?? 0
+    setPageScroll(window?.location, scrollX, scrollY)
   }, 100)
 
   // Optimize scroll event handling with debounce

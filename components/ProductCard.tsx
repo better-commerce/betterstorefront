@@ -231,17 +231,17 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-gray-200 p-2 rounded' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? featureToggle?.features?.enableForPCSite ? '!border !border-sky-600' : '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+      <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-gray-200 p-2 rounded relative z-9' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? featureToggle?.features?.enableForPCSite ? '!border-2 !border-sky-600' : '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className={`${featureToggle?.features?.enableForPCSite ? '' : 'bg-slate-50 dark:bg-slate-300 rounded-3xl'} relative flex-shrink-0 overflow-hidden z-1 group rounded-green product-card__image-container`}>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
-            <div className="flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
+            <div className="relative flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
               <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={data?.name} />
             </div>
           </ButtonLink>
           <div className={CLASSES}>
             <ProductTag product={data} />
           </div>
-          <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />
+          {!featureToggle?.features?.enableForPCSite && <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />}
           {!isComparedEnabled && renderGroupButtons()}
         </div>
 
@@ -301,9 +301,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             )}
           </div>
         )}
+        {isComparedEnabled && !product?.compared && <div className='absolute top-0 left-0 w-full h-full rounded cursor-pointer z-9 bg-black/60' onClick={handleSetCompareProduct}></div>}
       </div>
       {/* QUICKVIEW */}
-      < ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+      <ModalQuickView show={showModalQuickView} onCloseModalQuickView={() => setShowModalQuickView(false)} productData={quickViewData} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
     </>
   );
 };
