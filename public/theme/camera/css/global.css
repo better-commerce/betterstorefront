@@ -2209,7 +2209,8 @@ body .pdp-right-section .price{
 background-color: #ABC1F8 !important;
 min-width:135px  !important;
 color: #1E1E1E !important;
-padding: 5px;
+padding: 6px;
+font-weight: 600 !important;
 }
 .add-btn-plp .cart-btn-plp svg{
   display: none  !important;

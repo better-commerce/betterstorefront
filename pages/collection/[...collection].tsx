@@ -48,6 +48,7 @@ import Loader from '@components/Loader'
 import { AnalyticsEventType } from '@components/services/analytics'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 import Prices from '@components/Prices'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -720,6 +721,9 @@ function CollectionPage(props: any) {
                               </div>
                               <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             </div>
+                          </div>
+                          <div className="cart-recently-viewed">
+                            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
                           </div>
                         </div>
                       </>

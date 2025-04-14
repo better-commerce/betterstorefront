@@ -46,15 +46,15 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
         {featureToggle?.features?.enableForPCSite ? (
           <>
             {price?.raw?.withTax != 0 ? (
-              <div className="flex items-center text-sm font-semibold text-gray-400 price">
-                <span className="flex items-center">
+              <div className="flex items-end text-sm font-semibold text-gray-400 price">
+                <span className="flex items-end">
                   {(() => {
                     const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;
                     // Match: currency symbol, digits with commas, optional decimal
                     const match = rawPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
                     const symbol = match?.[1] || '';
                     const main = match?.[2] || ''; // keep commas here
-                    const decimal = match?.[3] || '';
+                    const decimal = match?.[3]?.replace('.', '') || '';
 
                     return (
                       <span className="relative inline-flex items-start mr-2">
@@ -67,17 +67,17 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
                   {isIncludeVAT ? (
                     listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax &&
                     (
-                      <span className="pl-3 pr-1 text-sm font-normal text-gray-400 line-through list-price"> {listPrice?.formatted?.withTax} </span>
+                      <span className="pl-3 pr-1 font-normal text-gray-400 line-through text-x-small">RRP:{listPrice?.formatted?.withTax} </span>
                     )
                   ) : (
                     listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax &&
                     (
-                      <span className="pl-3 pr-1 text-xs font-normal text-gray-400 line-through list-price"> {listPrice?.formatted?.withoutTax} </span>
+                      <span className="pl-3 pr-1 font-normal text-gray-400 line-through text-x-small">RRP:{listPrice?.formatted?.withoutTax} </span>
                     )
                   )}
                 </span>
                 <span className="text-xs font-normal text-gray-400"> {featureToggle?.features?.enableMembership && `${translate('label.membership.nonMemberPriceText')}`} </span>
-                <span className="pl-2 font-light text-right text-gray-400 ex-vat-text font-10"> {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')} </span>
+                {!featureToggle?.features?.enableForPCSite && <span className="pl-2 font-light text-right text-gray-400 ex-vat-text font-10"> {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')} </span>}
               </div>
             ) : (
               <div className="font-semibold text-green"> {translate('label.orderSummary.freeText')} </div>

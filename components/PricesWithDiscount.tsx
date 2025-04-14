@@ -101,7 +101,7 @@ const Prices: FC<PricesProps> = ({
                     const match = rawPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
                     const symbol = match?.[1] || '';
                     const main = match?.[2] || ''; // keep commas here
-                    const decimal = match?.[3] || '';
+                    const decimal = match?.[3]?.replace('.', '') || '';
 
                     return (
                       <span className="relative inline-flex items-start mr-2">

@@ -80,7 +80,7 @@ export default function ProductCompare({
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-12 md:grid-cols-12 sm:grid-cols-3">
                       <div className="md:col-span-2 sm:col-span-1">
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
-                          <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent min-h-[370px]"></div>
+                          <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent min-h-[400px]"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
                             {translate('common.label.ratingsText')}
                           </span>
