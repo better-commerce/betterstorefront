@@ -2604,3 +2604,28 @@ html {
   color: var(--btn-bg-primary) !important;
   box-shadow: none !important;
 }
+
+/* Footer Accordion Styles */
+@media (max-width: 767px) {
+  .footer-menu-links {
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  }
+
+  .footer-menu-links h2 {
+    padding: 0.75rem 0;
+    position: relative;
+  }
+
+  .accordion-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .accordion-content {
+    will-change: max-height, opacity;
+  }
+
+  /* Add padding to the last item to prevent content being cut off */
+  .footer-menu-links:last-child {
+    padding-bottom: 1.5rem;
+  }
+}

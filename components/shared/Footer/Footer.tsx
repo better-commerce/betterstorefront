@@ -5,7 +5,7 @@ import Link from "next/link";
 import { sanitizeHtmlContent } from "framework/utils/app-util";
 import Newsletter from "../Newsletter";
 import { Guid } from "@commerce/types";
-import Router from "next/router";
+// import Router from "next/router";
 import { NEXT_GET_ALL_STORES } from "@components/utils/constants";
 import axios from "axios";
 
@@ -13,23 +13,25 @@ import axios from "axios";
 const Footer = ({ navItems = [], featureToggle }: any) => {
   const [domLoaded, setDOMLoaded] = useState<boolean>(false)
   const { user, isGuestUser, openLoginSideBar } = useUI();
-  const [stores, setStores] = useState([])
+  // const [stores, setStores] = useState([])
   const [filteredStores, setFilteredStores]: any = useState([])
+  const [openAccordions, setOpenAccordions] = useState<{[key: string]: boolean}>({})
+  const [isMobile, setIsMobile] = useState<boolean>(false)
   useEffect(() => {
     getAllStores()
   }, [])
   const getAllStores = async () => {
     try {
       const { data }: any = await axios.get(NEXT_GET_ALL_STORES)
-      let stores = data?.map((store: any) => {
+      let storeData = data?.map((store: any) => {
         return {
           ...store,
           lat: Number(store?.latitude),
           lng: Number(store?.longitude),
         }
       })
-      setFilteredStores(stores)
-      setStores(stores)
+      setFilteredStores(storeData)
+      // setStores(storeData)
     } catch (error) {
       console.error('err in fetching stores', error)
     }
@@ -68,38 +70,108 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
     setDOMLoaded(true);
   }, []);
 
-  const renderWidgetMenuItem = (item: any, index: number) => {
+  // Toggle accordion open/closed state
+  const toggleAccordion = (accordionId: string) => {
+    if (isMobile) {
+      setOpenAccordions(prev => ({
+        ...prev,
+        [accordionId]: !prev[accordionId]
+      }))
+    }
+  }
+
+  const renderWidgetMenuItem = (item: any, itemIndex: number) => {
     return (
-      item?.navBlocks?.map((menu: any, index: number) => (
-        <div key={index} className="text-sm footer-menu-links">
-          <h2 className={`${featureToggle?.features?.enableForPCSite ? 'font-semibold text-body-small text-white dark:text-white' : 'font-bold text-[16px] text-black dark:text-black'}`}> {menu?.boxTitle} </h2>
-          <ul role="list" className={`${featureToggle?.features?.enableForPCSite ? 'mt-0 space-y-2' : 'mt-0 space-y-6'}`}>
-            <>
-              {menu?.contentBody != '' && (
-                <li className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight dark:text-black" key={`li${index}`} dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(menu?.contentBody), }} />
+      item?.navBlocks?.map((menu: any, index: number) => {
+        const accordionId = `accordion-${itemIndex}-${index}`
+        const isOpen = openAccordions[accordionId] || !isMobile
+
+        return (
+          <div key={index} className="text-sm footer-menu-links">
+            <h2
+              className={`${featureToggle?.features?.enableForPCSite ? 'font-semibold text-body-small text-white dark:text-white' : 'font-bold text-[16px] text-black dark:text-black'}
+                ${isMobile ? 'flex justify-between items-center cursor-pointer' : ''}`}
+              onClick={() => toggleAccordion(accordionId)}
+            >
+              {menu?.boxTitle}
+              {isMobile && (
+                <span className="accordion-icon">
+                  {isOpen ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                  )}
+                </span>
               )}
-              {menu?.navItems != '' && (
-                <>
-                  {menu?.navItems?.map((navItem: any, navItemIdx: number) => (
-                    <li key={navItemIdx + 'navItem'} className={`${featureToggle?.features?.enableForPCSite ? 'text-body-small font-normal text-white mb-1' : 'mb-4 text-xs font-medium text-gray-900 text-footer-clr f-footer-weight'}`} >
-                      <Link legacyBehavior passHref href={`/men/${navItem?.itemLink}`} >
-                        <a href={`/men/${navItem?.itemLink}`} className=" dark:text-white" >
-                          {navItem?.caption}
-                        </a>
-                      </Link>
-                    </li>
-                  ))}
-                </>
-              )}
-            </>
-          </ul>
-        </div>
-      ))
+            </h2>
+            <ul
+              role="list"
+              className={`${featureToggle?.features?.enableForPCSite ? 'mt-0 space-y-2' : 'mt-0 space-y-6'}
+                ${isMobile ? 'accordion-content overflow-hidden transition-all duration-300 ease-in-out' : ''}`}
+              style={isMobile ? { maxHeight: isOpen ? '1000px' : '0', opacity: isOpen ? 1 : 0, marginTop: isOpen ? '0.5rem' : '0' } : {}}
+            >
+              <>
+                {menu?.contentBody != '' && (
+                  <li className="mb-4 text-sm font-medium text-gray-900 text-footer-clr f-footer-weight dark:text-black" key={`li${index}`} dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(menu?.contentBody), }} />
+                )}
+                {menu?.navItems != '' && (
+                  <>
+                    {menu?.navItems?.map((navItem: any, navItemIdx: number) => (
+                      <li key={navItemIdx + 'navItem'} className={`${featureToggle?.features?.enableForPCSite ? 'text-body-small font-normal text-white mb-1' : 'mb-4 text-xs font-medium text-gray-900 text-footer-clr f-footer-weight'}`} >
+                        <Link legacyBehavior passHref href={`/men/${navItem?.itemLink}`} >
+                          <a href={`/men/${navItem?.itemLink}`} className=" dark:text-white" >
+                            {navItem?.caption}
+                          </a>
+                        </Link>
+                      </li>
+                    ))}
+                  </>
+                )}
+              </>
+            </ul>
+          </div>
+        )
+      })
     );
   };
 
   useEffect(() => {
     setDOMLoaded(true)
+
+    // Check if we're on mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    // Initial check
+    checkMobile()
+
+    // Add resize listener
+    window.addEventListener('resize', checkMobile)
+
+    // Initialize all accordions as closed on mobile
+    if (window.innerWidth < 768) {
+      // Small delay to ensure DOM is fully loaded
+      setTimeout(() => {
+        const initialAccordionState: {[key: string]: boolean} = {}
+        navItems.forEach((item: any, itemIndex: number) => {
+          item?.navBlocks?.forEach((menu: any, index: number) => {
+            const accordionId = `accordion-${itemIndex}-${index}`
+            initialAccordionState[accordionId] = false
+          })
+        })
+        setOpenAccordions(initialAccordionState)
+      }, 100)
+    }
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
   return (
@@ -117,8 +189,8 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
                 <SocialsList1 className="flex items-center justify-start gap-4" featureToggle={featureToggle} />
               </div>
             </div>
-            <div className="flex flex-col col-span-12 sm:col-span-6">
-              <div className="grid grid-cols-2 gap-1">
+            <div className="flex flex-col col-span-12 mt-4 mb-4 sm:col-span-6 sm:mb-0 sm:mt-0">
+              <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
                 {domLoaded && navItems?.map(renderWidgetMenuItem)}
               </div>
             </div>
@@ -130,9 +202,9 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
                       <img src={store?.image} className="object-cover w-auto h-20 border-2 border-white rounded-md shadow" alt={store?.name} />
                     </div>
                     <div className="flex flex-col w-full col-span-8">
-                      <h4 className="mb-2 text-body-small font-semibold text-white">{store?.name}</h4>
+                      <h4 className="mb-2 font-semibold text-white text-body-small">{store?.name}</h4>
                       <div dangerouslySetInnerHTML={{ __html: `${store?.address1}, ${store?.address2}` }} className="text-xs text-white sm:block" />
-                      {store?.phoneNo != null && <span className="text-x-small text-white sm:block dark:text-black">Tel: {store?.phoneNo}</span>}
+                      {store?.phoneNo != null && <span className="text-white text-x-small sm:block dark:text-black">Tel: {store?.phoneNo}</span>}
                     </div>
                   </div>
                 </div>

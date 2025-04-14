@@ -3,6 +3,8 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import HomeProductCardMin from './HomeProductCardMin'
 export default function SectionHomeProductCardNew({ products, productPerColumn, deviceInfo, maxBasketItemsCount, defaultDisplayMembership, featureToggle, onlyImage }: any) {
+  const { isMobile } = deviceInfo || { isMobile: false };
+
   return (
     <>
       <Swiper
@@ -10,6 +12,7 @@ export default function SectionHomeProductCardNew({ products, productPerColumn, 
         spaceBetween={10}
         navigation={true}
         loop={true}
+        className={isMobile ? 'mob-navigation-hide' : ''}
         breakpoints={{
           640: { slidesPerView: 2.2, navigation: false },
           768: { slidesPerView: 2.2, navigation: true },

@@ -45,8 +45,11 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
     };
   }, [sliderRef]);
 
+  // Check if we're on mobile
+  const { isMobile } = deviceInfo || { isMobile: false };
+
   return (
-    <div className={`nc-SectionSliderProductCard product-card-slider relative ${className}`}>
+    <div className={`nc-SectionSliderProductCard product-card-slider relative ${className} ${isMobile ? 'mob-navigation-hide' : ''}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {CURRENT_THEME != 'green' ? (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (

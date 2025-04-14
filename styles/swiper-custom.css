@@ -1,0 +1,17 @@
+/* Custom Swiper Navigation Styles */
+
+/* Hide navigation buttons on mobile */
+@media (max-width: 767px) {
+  .mob-navigation-hide .swiper-button-next,
+  .mob-navigation-hide .swiper-button-prev {
+    display: none !important;
+  }
+}
+
+/* Ensure navigation buttons are visible on desktop */
+@media (min-width: 768px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: flex !important;
+  }
+}

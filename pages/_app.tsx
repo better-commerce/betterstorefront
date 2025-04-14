@@ -28,6 +28,7 @@ import '@assets/css/main.css'
 import "fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "styles/index.scss";
 import 'swiper/css/bundle'
+import 'styles/swiper-custom.css'
 import packageInfo from '../package.json'
 import { decrypt, } from '@framework/utils/cipher'
 import { stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
@@ -122,13 +123,13 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
     })
 
     const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => window.location.pathname.startsWith(x))
-    router.events.on('routeChangeComplete', (url: any) => { 
+    router.events.on('routeChangeComplete', (url: any) => {
       if (url === '/password-protection') {
         setPasswordProtectionLoader(false)
       }
 
       if (isScrollEnabled) {
-        backToPageScrollLocation(window.location) 
+        backToPageScrollLocation(window.location)
       }
     })
 
@@ -221,11 +222,11 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
       if (configSettings) {
         const passwordProtectionSettings = configSettings?.find((x: any) => x?.configType === 'PasswordProtectionSettings')?.configKeys || []
         isPasswordProtectionEnabled = stringToBoolean(passwordProtectionSettings?.find((x: any) => x?.key === 'PasswordProtectionSettings.LivePasswordEnabled')?.value || 'False')
-    
+
         //const authenticated = Cookies.get(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)
         const authenticated = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH}`)!
         isAuthenticated = stringToBoolean(authenticated)
-        
+
         if (!router.pathname.startsWith('/password-protection') && isPasswordProtectionEnabled && !isAuthenticated) {
           const isStarted = localStorage.getItem(`${window.location.hostname}-${Cookie.Key.PASSWORD_PROTECTION_AUTH_STARTED}`)
           if (!isStarted) {
@@ -376,7 +377,7 @@ MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> =>
   const serverHost = os?.hostname?.()
   const urlReferrer = req?.headers?.referer
   //const cookies: any = { [Cookie.Key.LANGUAGE]: locale }
-  
+
   return {
     pageProps: { serverHost, urlReferrer, clientIPAddress, locale, },
   }

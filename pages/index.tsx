@@ -363,7 +363,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       <Link href={heading?.beinspiredheading_buttonlink} className='justify-end w-24 text-xs font-normal text-right text-black underline' passHref>See more</Link>
                     </div>
                   ))}
-                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
                     {pageContents?.tocategoryinspired?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
                         <div key={pId} className={`product-card-item home-product-card`}>
@@ -386,7 +386,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       <Link href={heading?.competitionheading_buttonlink} className='justify-end w-24 text-xs font-normal text-right text-black underline' passHref>See more</Link>
                     </div>
                   ))}
-                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
                     {pageContents?.competitioncard?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
                         <div key={pId} className={`product-card-item home-product-card`}>
