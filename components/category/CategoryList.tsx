@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { CURRENT_THEME, EngageEventTypes } from "@components/utils/constants";
+import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
 
 const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
@@ -99,7 +100,7 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                             <h1 className={`block title-page font-bold dark:text-black primary-text-blue `}>{category?.name}</h1>
                             {category?.description &&
                               <div className='flex w-full'>
-                                <div className="block text-sm font-normal text-x-small text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
+                                <div className="block text-sm font-normal text-gray-800 text-x-small dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
                               </div>
                             }
                           </div>
@@ -122,11 +123,17 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                     )}
                     <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
+                  {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                    <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                  </div>}
                 </>
               ) : (
                 <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
                   <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                    <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                  </div>}
                 </div>
               ))}
               <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
