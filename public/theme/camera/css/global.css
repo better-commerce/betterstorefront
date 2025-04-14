@@ -2546,3 +2546,39 @@ html {
   background-color: #FFFFFF !important;
 }
 }
+
+.search-icon-box button .search-icon-div{
+    display: flex;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius:8px !important;
+    justify-content: flex-start;
+}
+.search-icon-box button .search-icon-div img{
+  margin: 0 10px;
+}
+
+@media screen and (max-width:767px) {
+  .account-top-margin{
+    padding-top: 8rem !important;
+  }
+  .icon-div-menu{
+    display: flex;
+    width: 100% !important;
+    background: #FFFFFF !important;
+    border-radius: 10px !important;
+    margin: 0 !important;
+    justify-content: start !important;
+  }
+
+  .mobile-search-text{
+    width: 100% !important;
+    min-width: 300px !important;
+    top: -2px !important;
+    left: 10px !important;
+  }
+
+  img.mobile-search-icon { filter: invert(0) !important; top: -4px !important; left: 5px !important; position: relative;}
+}

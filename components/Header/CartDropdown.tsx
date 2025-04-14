@@ -24,8 +24,9 @@ const BasketList = dynamic(() => import('@components/Header/BasketList'))
 const AddBasketModal = dynamic(() => import('@components/AddBasketModal'))
 const DeleteBasketModal = dynamic(() => import('@components/DeleteBasketModal'))
 
-export default function CartDropdown({ featureToggle }: any) {
+export default function CartDropdown({ featureToggle, deviceInfo }: any) {
   const { recordAnalytics } = useAnalytics()
+  const { isMobile, isIPadorTablet } = deviceInfo
   const { getUserCarts, deleteCart, getCartItemsCount } = useCart()
   const { isGuestUser, user, basketId, cartItems, openCart, setAlert, setBasketId } = useUI()
   const b2bUser = useMemo(() => { return isB2BUser(user) }, [user])
@@ -232,7 +233,7 @@ export default function CartDropdown({ featureToggle }: any) {
                 <>
                   <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 hover:bg-slate-100 dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
                     {featureToggle?.features?.enablePCTopHeader ?
-                      <span className="flex items-center text-xs font-light text-white hover:underline">Basket <ShoppingCartIcon className="w-4 h-4" /></span> :
+                      <span className="flex items-center text-xs font-light text-white hover:underline">{!isMobile && 'Basket'} <ShoppingCartIcon className={`${isMobile ? 'w-7 h-7' : 'w-4 h-4'}`} /></span> :
                       <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
                     }
                   </Popover.Button>
@@ -292,7 +293,7 @@ export default function CartDropdown({ featureToggle }: any) {
                 <>
                   <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} ${featureToggle?.features?.enablePCTopHeader ? '' : 'w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 '} group rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
                     {featureToggle?.features?.enablePCTopHeader ?
-                      <span className="relative flex items-center text-xs font-light -top-[2px] text-white hover:underline gap-1">Basket <ShoppingCartIcon className="w-3 h-3" />
+                      <span className="relative flex items-center text-xs font-light -top-[2px] text-white hover:underline gap-1">{!isMobile && 'Basket'} <ShoppingCartIcon className={`${isMobile ? 'w-5 h-5 relative top-1' : 'w-3 h-3'}`} />
                         {basketItemsCount > 0 && (
                           <div className="w-3.5 h-3.5 flex items-center justify-center bg-red-500 absolute top-0 -right-2.5 rounded-full text-[10px] leading-none text-white font-medium">
                             {basketItemsCount}
@@ -310,7 +311,7 @@ export default function CartDropdown({ featureToggle }: any) {
                         <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
                       </>
                     }
-                  </Popover.Button>              
+                  </Popover.Button>
                 </>
               )}
             </>

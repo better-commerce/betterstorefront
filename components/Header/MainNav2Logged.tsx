@@ -128,7 +128,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                             </span>
                           )}
                         </span>
-                        <CartDropdown featureToggle={featureToggle} />
+                        <CartDropdown featureToggle={featureToggle} deviceInfo={deviceInfo} />
                       </div>
                     </div>
                   </div>
@@ -158,21 +158,55 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
           {featureToggle?.features?.enableSeparateMenu ? (
             <>
               <div className="w-full">
-                <div className="container">
-                  <div className="flex justify-between mx-auto mt-2 mob-container">
-                    {isMobile &&
-                      <div className="flex items-center flex-1">
-                        <MenuBar navItems={config} featureToggle={featureToggle} />
-                      </div>
-                    }
-                    <div className="flex items-center lg:flex-1">
+                {isMobile && featureToggle?.features?.enablePCTopHeader &&
+                  <div className="flex justify-between w-full gap-1 px-4">
+                    <div className="flex items-center justify-start w-5/12 gap-2">
+                      <MenuBar navItems={config} featureToggle={featureToggle} />
                       <Link href="/" passHref>
                         <Logo className="flex-shrink-0" />
                       </Link>
                     </div>
-                    {!isMobile &&
+                    <div className="flex items-center justify-end w-7/12 gap-3">
+                      {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
+                      {featureToggle?.features?.enablePriceIncVatToggle &&
+                        <>
+                          <div className="flex flex-col py-0 text-xs font-light text-white text-invert sm:text-xs whitespace-nowrap">{translate('label.navBar.pricesIncludingVatText')}</div>
+                          <div className="flow-root w-10 px-2 sm:w-12">
+                            <div className="flex justify-center flex-1 mx-auto">
+                              <ToggleSwitch className="include-vat" height={15} width={40} checked={vatIncluded()} checkedIcon={<div className="ml-1 include-vat-checked">{translate('common.label.yesText')}</div>} uncheckedIcon={<div className="mr-1 include-vat-unchecked">{translate('common.label.noText')}</div>} onToggleChanged={onIncludeVATChanged} />
+                            </div>
+                          </div>
+                        </>
+                      }
+                      <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />
+                      <span className="relative flex items-center gap-1 text-xs font-light text-white cursor-pointer hover:underline" onClick={() => { handleWishlist(); }}>{!isMobile && 'Wishlist'} <HeartIcon className={`${isMobile ? 'w-5 h-5' : 'w-3 h-3'}`} aria-hidden="true" aria-label="Wishlist" />
+                        {wishListItems?.length > 0 && delayEffect && (
+                          <span className="absolute top-0 hidden w-4 h-4 ml-2 text-xs font-semibold text-center text-white rounded-full bg-sky-500 sm:block -right-2">
+                            {wishListItems?.length}
+                          </span>
+                        )}
+                      </span>
+                      <CartDropdown featureToggle={featureToggle} deviceInfo={deviceInfo} />
+                    </div>
+                  </div>
+                }
+                <div className="container">
+                  <div className="flex justify-between mx-auto mt-2 mob-container">
+                    {isMobile && !featureToggle?.features?.enablePCTopHeader &&
+                      <div className="flex items-center flex-1">
+                        <MenuBar navItems={config} featureToggle={featureToggle} />
+                      </div>
+                    }
+                    {!isMobile && featureToggle?.features?.enablePCTopHeader &&
+                      <div className="flex items-center lg:flex-1">
+                        <Link href="/" passHref>
+                          <Logo className="flex-shrink-0" />
+                        </Link>
+                      </div>
+                    }
+                    {!isMobile && featureToggle?.features?.enablePCTopHeader &&
                       <div className="search-icon-box flex-[2] hidden sm:flex">
-                        <button className="items-center justify-center w-full h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
+                        <button className="relative items-center justify-center w-full h-10 rounded-full lg:flex sm:h-12 text-slate-700 dark:text-slate-700 search-top hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                           {renderMagnifyingGlassIcon()}
                         </button>
                       </div>
@@ -186,7 +220,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                           {renderMagnifyingGlassIcon()}
                         </button>
                       }
-                      {featureToggle?.features?.enableHeaderWishlist &&
+                      {!featureToggle?.features?.enablePCTopHeader && featureToggle?.features?.enableHeaderWishlist &&
                         <div className="relative flow-root w-10 px-1 text-left md:w-14 xl:w-14 mob-line-height-none">
                           <button onClick={() => { handleWishlist(); }} className="items-center justify-center w-10 h-10 rounded-full wish-hover-icon lg:flex sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                             <HeartIcon className="flex-shrink-0 block mx-auto text-black w-7 h-7 group-hover:text-red-600" aria-hidden="true" aria-label="Wishlist" />
@@ -198,7 +232,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                           </button>
                         </div>
                       }
-                      {featureToggle?.features?.enableTradeIn &&
+                      {featureToggle?.features?.enableTradeIn && !isMobile &&
                         <>
                           <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none sm:pr-10">
                             <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
@@ -215,7 +249,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                         </>
                       }
                       {!featureToggle?.features?.enablePCTopHeader && <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />}
-                      {!featureToggle?.features?.enablePCTopHeader && <CartDropdown featureToggle={featureToggle} />}
+                      {!featureToggle?.features?.enablePCTopHeader && <CartDropdown featureToggle={featureToggle} deviceInfo={deviceInfo} />}
                       {featureToggle?.features?.enableMembership &&
                         <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                           <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />
@@ -224,6 +258,20 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                     </div>
                   </div>
                 </div>
+                {isMobile && featureToggle?.features?.enablePCTopHeader &&
+                  <div className="flex justify-start w-full gap-3 px-5 pt-3 pb-1 divide-x divide-white">
+                    <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none sm:pr-10">
+                      <Link href="/sell-or-part-exchange" className="flex flex-col items-center justify-center w-auto gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
+                        <span className="text-xs font-light">Discover Trade-In</span>
+                      </Link>
+                    </div>
+                    <div className="relative flex flex-col items-center justify-center px-1 pl-3 text-left mob-line-height-none">
+                      <Link href="/" className="flex flex-col items-center justify-center w-auto gap-1 text-white rounded-full wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
+                        <span className="text-xs font-light">Ask an Expert</span>
+                      </Link>
+                    </div>
+                  </div>
+                }
                 {!isMobile &&
                   <div className="w-full mt-2 bg-header-nav-clr">
                     <div className="container flex-[2] justify-center lg:flex custom-padding-nav">
@@ -281,7 +329,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                     </div>
                   }
                   {!featureToggle?.features?.enablePCTopHeader && <AvatarDropdown pluginConfig={pluginConfig} featureToggle={featureToggle} deviceInfo={deviceInfo} />}
-                  {!featureToggle?.features?.enablePCTopHeader && <CartDropdown featureToggle={featureToggle} />}
+                  {!featureToggle?.features?.enablePCTopHeader && <CartDropdown featureToggle={featureToggle} deviceInfo={deviceInfo} />}
                   {featureToggle?.features?.enableMembership &&
                     <Link href="/my-membership" passHref className="flex items-center justify-center w-10 h-10 rounded-full sm:w-12 sm:h-12 text-slate-700 dark:text-slate-700 hover:bg-slate-100 dark:hover:bg-slate-100 focus:outline-none">
                       <StarIcon className="w-7 h-7 text-slate-700" title="Membership" />

@@ -55,7 +55,7 @@ const HeroLeft: React.FC<HeroProps> = ({ banners = [], deviceInfo, featureToggle
                   )}
                 </>
               ) : (
-                <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className={`${featureToggle?.features?.enableForPCSite ? '!object-cover sm:min-h-[480px]' : 'sm:max-h-screen image banner-Image'}`} />
+                <img src={generateUri(banner?.url, 'h=700&fm=webp') || IMG_PLACEHOLDER} alt={banner?.alt || 'banner-image'} style={css} width={1903} height={700} className={`${featureToggle?.features?.enableForPCSite ? '!object-cover object-left sm:min-h-[480px]' : 'sm:max-h-screen image banner-Image'}`} />
               )}
 
               {/* Text Overlay - centered vertically, left aligned */}
