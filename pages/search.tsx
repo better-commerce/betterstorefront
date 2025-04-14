@@ -362,7 +362,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                   <>
                     {!featureToggle?.features?.enableHorizontalFilter ? (
                       <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
-                        <ProductFilterRight handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                        <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
                       </div>
                     ) : (
                       <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />

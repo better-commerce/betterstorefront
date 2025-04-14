@@ -56,7 +56,7 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                     <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   ) : (
                     !featureToggle?.features?.enableHorizontalFilter ? (
-                      <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                      <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                     ) : (
                       <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
                     )

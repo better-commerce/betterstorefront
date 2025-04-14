@@ -697,7 +697,7 @@ function CollectionPage(props: any) {
                     ) : (
                       <>
                         {!featureToggle?.features?.enableHorizontalFilter ? (
-                          <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                          <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                         ) : (
                           <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
                         )}
