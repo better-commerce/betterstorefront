@@ -27,14 +27,14 @@ export default function WalletDetail() {
     try {
       const config: AxiosRequestConfig = { url: NEXT_WALLET_ENABLE_CUSTOMER_WALLET, method: RequestMethod.POST, data: { customerId: user.userId } }
       const { data: walletResult }: any = await callApi(config);
-      if (walletResult?.value) {
-        const config: AxiosRequestConfig = { url: NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, method: RequestMethod.POST, data: { id: user.userId, walletId: walletResult?.value }, }
+      if (walletResult?.data) {
+        const config: AxiosRequestConfig = { url: NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, method: RequestMethod.POST, data: { id: user.userId, walletId: walletResult?.data }, }
         await callApi(config);
         setWalletEnabled(true);
         setSuccessMessage("Your Wallet enabled successfully!!!");
-        setUser({ ...user, walletId: walletResult?.value })
-        if (walletResult?.value) {
-          const walletId = walletResult?.value;
+        setUser({ ...user, walletId: walletResult?.data })
+        if (walletResult?.data) {
+          const walletId = walletResult?.data;
           getWallet(walletId);
         }
         setTimeout(() => {
