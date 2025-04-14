@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios, { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
 import Loader from "@components/Loader";
 import { logError } from "@framework/utils/app-util";
 import { useRouter } from 'next/router'
@@ -160,7 +160,7 @@ export default function TradeInDetail() {
   // At the top of your component (or within the render), define helper variables:
   const status = tradeDetail?.value?.status;
   const showAssessmentPrice = status === "Assessed" || status === "AssessmentApproved" || status === "AssessedPartialReject" || status === "AssessmentAccepted" || status === "TradeInComplete" || status === "TradeInFullReject" || status === "TradeInCompletePartialReject" || status === "AssessedFullReject";
-  const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject";
+  const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject";
 
   const conditionMapping: { [key: number]: string } = {
     1: "Like New",
@@ -324,7 +324,7 @@ export default function TradeInDetail() {
                     </td>
                     {showActionColumn && (
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                        {status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject" ? (
+                        {(status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject") && (item?.status === "Assessed" || item.status === "Quoted") ? (
                           canChangeStatus(item?.status) && (
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.REJECTED_BY_CUSTOMER)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
