@@ -285,7 +285,7 @@ function Home({ setEntities, recordEvent, ipAddress, pageContentsWeb, pageConten
             ))}
             <div className='container relative flex flex-col mt-0 mb-7 sm:mb-8 lg:mb-12'>
               {pageContents?.tocategoryinspired?.length > 0 &&
-                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css slider-btn-css">
+                <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
                   {pageContents?.beinspiredheading?.length > 0 && pageContents?.beinspiredheading?.map((heading: any, hIdx: number) => (
                     <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8' key={`be-inspired-${hIdx}`}>
                       <h3 className="font-semibold text-black title-page">{heading?.beinspiredheading_title}</h3>

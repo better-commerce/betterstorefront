@@ -31,8 +31,8 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
   const translate = useTranslation()
   const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
-  const [recentlyViewedState, setRecentlyViewedState] = useState<any>([])
-  const swiperRefBasket: any = useRef(null)
+  const [recentlyViewedProducts, setRecentlyViewedProducts] = useState<any>([])
+  const swiperRefRecently: any = useRef(null)
   const [isReferModalOpen, setIsReferModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const {
@@ -60,6 +60,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
           localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED)!
         )
         prodStockCodes = tryParseJson(recentProductsJson) || []
+        console.log("---prodStockCodes---", prodStockCodes)
         async function fetchProductsByStockCodes() {
           const data = {
             sortBy: '',
@@ -73,7 +74,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
           const res: any = await axios
             .post(NEXT_GET_CATALOG_PRODUCTS, data)
             .then((results: any) => {
-              setRecentlyViewedState(results?.data?.products?.results)
+              setRecentlyViewedProducts(results?.data?.products?.results)
               setIsLoading(false)
             })
             .catch((err) => {
@@ -82,7 +83,7 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
         }
         fetchProductsByStockCodes()
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleReferralByEmail = async () => {
@@ -141,55 +142,33 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
   }, [])
 
   return (
-    <>
-      <div>
-        {' '}
-        {recentlyViewedState?.length > 0 && (
-          <div className="flex flex-col pt-8 mt-8 border-gray-200 sm:pt-16 mx-5">
-            <div className="flex flex-col w-full container-ffx">
-              <div>
-                <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
-                  <h2 className="font-semibold text-gray-900 uppercase font-18 mb-5">
-                    {translate('common.label.recentlyViewedText')}
-                  </h2>
-                </div>
-                <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
-                  {isLoading ? (
-                    <LoadingDots />
-                  ) : (
-                    <Swiper
-                      slidesPerView={1}
-                      spaceBetween={10}
-                      ref={swiperRefBasket}
-                      navigation={false}
-                      loop={true}
-                      breakpoints={{
-                        640: { slidesPerView: 1.3, spaceBetween: 4 },
-                        768: { slidesPerView: 1.3, spaceBetween: 10 },
-                        1024: { slidesPerView:1.3, spaceBetween: 10 },
-                      }}
-                      className="mySwiper"
-                    >
-                      {recentlyViewedState?.map((product: any, pid: number) => {
-                        return (
-                          <SwiperSlide key={pid} className="height-equal">
-                             <ProductCard
-                              data={product}
-                              deviceInfo={deviceInfo}
-                              maxBasketItemsCount={maxBasketItemsCount(config)}
-                              featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}
-                            />
-                          </SwiperSlide>
-                        )
-                      })}
-                    </Swiper>
-                  )}
-                </div>
-              </div>
+    recentlyViewedProducts?.length > 0 && (
+      <div className="flex flex-col pt-6 mx-5 border-t border-gray-200 sm:pt-10 slider-btn-css">
+        <div className="flex flex-col w-full container-ffx">
+          <div>
+            <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
+              {featureToggle.features?.enableForPCSite ? (
+                <h2 className="mb-6 font-semibold text-black title-page">Customers who viewed items in your browsing history also viewed</h2>
+              ) : (
+                <h2 className="mb-5 font-semibold text-gray-900 uppercase font-18"> {translate('common.label.recentlyViewedText')} </h2>
+              )}
+            </div>
+            <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
+              {isLoading ? (<LoadingDots />) : (
+                <Swiper slidesPerView={2.3} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 10 }, 1024: { slidesPerView: 5, spaceBetween: 10 }, }} className="mySwiper" >
+                  {recentlyViewedProducts?.map((product: any, pid: number) => {
+                    return (
+                      <SwiperSlide key={pid} className="height-equal">
+                        <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </SwiperSlide>
+                    )
+                  })}
+                </Swiper>
+              )}
             </div>
           </div>
-        )}
+        </div>
       </div>
-    </>
+    )
   )
 }

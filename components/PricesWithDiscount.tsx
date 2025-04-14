@@ -94,24 +94,21 @@ const Prices: FC<PricesProps> = ({
                 </span>
               )}
               {featureToggle?.features?.enableForPCSite ? (
-                <>
-                  {(() => {
-                    const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;
-                    // Match: currency symbol, digits with commas, optional decimal
-                    const match = rawPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
-                    const symbol = match?.[1] || '';
-                    const main = match?.[2] || ''; // keep commas here
-                    const decimal = match?.[3]?.replace('.', '') || '';
+                (() => {
+                  const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;
+                  const match = rawPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
+                  const symbol = match?.[1] || '';
+                  const main = match?.[2] || ''; // keep commas here
+                  const decimal = match?.[3]?.replace('.', '') || '';
 
-                    return (
-                      <span className="relative inline-flex items-start mr-2">
-                        <span className="text-sm mr-0.5">{symbol}</span>
-                        <span className="text-3xl font-semibold">{main}</span>
-                        {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
-                      </span>
-                    );
-                  })()}
-                </>
+                  return (
+                    <span className="relative inline-flex items-start mr-2">
+                      <span className="text-sm mr-0.5">{symbol}</span>
+                      <span className="text-3xl font-semibold">{main}</span>
+                      {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
+                    </span>
+                  );
+                })()
               ) : (
                 isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax
               )}
@@ -123,14 +120,14 @@ const Prices: FC<PricesProps> = ({
                   listPrice?.raw?.withTax > 0 &&
                   listPrice?.raw?.withTax > price?.raw?.withTax && (
                     <span className="px-1 text-sm font-normal text-gray-400 line-through">
-                      {listPrice?.formatted?.withTax}
+                      {featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withTax}
                     </span>
                   )
                 ) : (
                   listPrice?.raw?.withoutTax > 0 &&
                   listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
                     <span className="px-1 text-sm font-normal text-gray-400 line-through">
-                      {listPrice?.formatted?.withoutTax}
+                      {featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withoutTax}
                     </span>
                   )
                 )}
@@ -139,11 +136,11 @@ const Prices: FC<PricesProps> = ({
                 {featureToggle?.features?.enableMembership &&
                   `${translate("label.membership.nonMemberPriceText")}`}
               </span>
-              <span className="pl-1 text-sm font-light text-right text-gray-400">
+              {!featureToggle?.features?.enableForPCSite && <span className="pl-1 text-sm font-light text-right text-gray-400">
                 {isIncludeVAT
                   ? translate("label.orderSummary.incVATText")
                   : translate("label.orderSummary.excVATText")}
-              </span>
+              </span>}
             </div>
           </div>
         ) : (

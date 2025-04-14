@@ -672,8 +672,13 @@ function CollectionPage(props: any) {
                       {isMobile ? null : (
                         !featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       )}
-                      {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                      {productDataToPass?.results.length > 0 && <><ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+
+                      </>}
                     </div>
+                    {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                    </div>}
                   </>
                 ) : (
                   <div className="col-span-12">
@@ -722,14 +727,14 @@ function CollectionPage(props: any) {
                               <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             </div>
                           </div>
-                          <div className="cart-recently-viewed">
-                            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
-                          </div>
                         </div>
                       </>
                     }
                     {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
                     {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                    {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                    </div>}
                   </div>
                 )}
               </>

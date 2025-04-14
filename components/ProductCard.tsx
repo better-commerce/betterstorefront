@@ -288,7 +288,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </>
         } */}
         {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && (
-          <div className='my-3 add-btn-plp'>
+          <div className='justify-start my-3 ml-0 text-left add-btn-plp'>
             <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
           </div>
         )}
