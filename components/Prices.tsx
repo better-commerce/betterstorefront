@@ -59,7 +59,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
                     return (
                       <span className="relative inline-flex items-start mr-2">
                         <span className="text-sm mr-0.5">{symbol}</span>
-                        <span className="text-3xl font-32 font-semibold">{main}</span>
+                        <span className="text-3xl font-semibold font-32">{main}</span>
                         {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
                       </span>
                     );
@@ -86,7 +86,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
         ) : (
           <>
             {price?.raw?.withTax != 0 ? (
-              <div className="flex items-center text-sm font-semibold text-gray-400 price">
+              <div className="flex items-center text-sm font-semibold text-gray-400 price sm:px-2">
                 <span className="">
                   {isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax}
                   {isIncludeVAT ? (listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (
