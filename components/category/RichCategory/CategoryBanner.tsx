@@ -8,15 +8,9 @@ export default function CategoryBanner({ data }: any) {
       <section className="relative">
         <div className="relative h-64 md:h-96">
           {/* Background Image */}
-          <img
-            src={data?.additionalInfo3}
-            alt="Banner Image"
-            className="absolute inset-0 object-cover w-full h-full"
-          />
-
+          <img src={data?.additionalInfo3} alt="Banner Image" className="absolute inset-0 object-cover w-full h-full" />
           {/* Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-
           {/* Top Content */}
           <div className="relative z-10 pt-4">
             <div className="container mx-auto">
@@ -29,7 +23,6 @@ export default function CategoryBanner({ data }: any) {
             </div>
           </div>
         </div>
-
       </section>
       <section className="pt-6 bg-white">
         <div className="container px-4 mx-auto">
