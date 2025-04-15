@@ -1,21 +1,35 @@
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { ChevronLeftIcon} from '@heroicons/react/24/outline'
+import { ChevronLeftIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
 export default function CategoryBanner({ data }: any) {
   return (
     <>
       <section className="relative">
-        <div className="relative h-64 bg-center bg-cover md:h-96">
-            <img src={data?.image} alt="Banner Image" className="object-cover w-full h-full" /> 
-            <div className="container absolute z-10 px-4 pt-6 mx-auto top-3 left-5">
-               <Link href="/" className="flex items-center w-full gap-2 mb-2 text-sm text-white">
-                 <ChevronLeftIcon className='w-3 h-3 text-white'/> Home
-              </Link>
-              <h1 className="mb-2 font-bold text-white title-hero">{data?.name}</h1>
-            </div>
+        <div className="relative h-64 md:h-96">
+          {/* Background Image */}
+          <img
+            src={data?.additionalInfo3}
+            alt="Banner Image"
+            className="absolute inset-0 object-cover w-full h-full"
+          />
+
+          {/* Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+
+          {/* Top Content */}
+          <div className="relative z-10 pt-4">
+            <div className="container mx-auto">
+              <div className="text-white">
+                <Link href="/" className="flex items-center w-full gap-2 mb-2 text-sm text-white">
+                  <ChevronLeftIcon className="w-3 h-3 text-white" /> Home
+                </Link>
+                <h1 className="mb-2 font-bold text-white title-hero">{data?.name}</h1>
+              </div>
+            </div>
+          </div>
         </div>
+
       </section>
       <section className="pt-6 bg-white">
         <div className="container px-4 mx-auto">
@@ -30,7 +44,7 @@ export default function CategoryBanner({ data }: any) {
               <span>February 2nd, 2023</span>
             </div>
           </div> */}
-          <div dangerouslySetInnerHTML={{  __html: data?.description, }} className="px-0 mt-8 text-sm text-gray-700" />
+          <div dangerouslySetInnerHTML={{ __html: data?.description, }} className="px-0 mt-8 text-sm text-gray-700" />
         </div>
       </section>
     </>
