@@ -1,6 +1,6 @@
 {
   "features": {
-    "enableLanguage": false,
+    "enableLanguage": true,
     "enablePriceIncVatToggle": true,
     "enableQuickOrderPad": false,
     "enableCompare": false,
@@ -40,9 +40,9 @@
     "enableShortThankYouPage":false
   },
   "social":[
-    { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },
+    { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":false },
     { "name": "Youtube", "icon": "images/socials/twitter.svg", "href": "", "enable":false },
     { "name": "Telegram", "icon": "images/socials/telegram.svg", "href": "", "enable":false },
-    { "name": "Twitter", "icon": "images/socials/youtube.svg", "href": "", "enable":true }
+    { "name": "Twitter", "icon": "images/socials/youtube.svg", "href": "", "enable":false }
   ]
 }

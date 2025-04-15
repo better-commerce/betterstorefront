@@ -20,6 +20,7 @@ import { PagePropType, getPagePropType } from '@framework/page-props'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const GridList = dynamic(() => import('@components/Product/Grid/GridList'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
 const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
@@ -391,7 +392,13 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                     </>
                   }
                   {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
-                  {isValidating && !IS_INFINITE_SCROLL ? <Loader /> : <GridList products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                  {isValidating && !IS_INFINITE_SCROLL ? <Loader /> :
+                    featureToggle.features?.enableForPCSite ? (
+                      <GridList products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    ) : (
+                      <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    )
+                  }
                 </div>
                 <CompareSelectionBar name={translate('label.basket.catalogText')} showCompareProducts={showCompareProducts} products={data.products} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
               </div>)
