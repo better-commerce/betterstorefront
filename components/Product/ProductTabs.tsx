@@ -20,7 +20,7 @@ const TabComponent = ({ tabs, defaultActiveTab }: TabComponentProps) => {
   };
 
   return (
-    <div className="w-full py-4 scroll-mt-32" id="bottomtabs">
+    <div className="w-full py-4 px-4 sm:px-0 scroll-mt-32" id="bottomtabs">
       <div className="bg-gray-100 border border-gray-400">
         <div className="flex overflow-x-auto no-scrollbar">
           {tabs?.map((tab: any) => (

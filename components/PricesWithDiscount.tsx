@@ -39,8 +39,11 @@ const Prices: FC<PricesProps> = ({
   // Calculate discount percentage for the non-member price
   const originalPrice = isIncludeVAT ? listPrice?.raw?.withTax : listPrice?.raw?.withoutTax;
   const currentPrice = isIncludeVAT ? price?.raw?.withTax : price?.raw?.withoutTax;
-  const nonMemberDiscountPercentage = originalPrice > currentPrice ? Math.round(((originalPrice - currentPrice) / originalPrice) * 100) : 0;
-
+  const nonMemberDiscountPercentage = originalPrice > currentPrice ? originalPrice - currentPrice : 0;
+  
+  const formattedOriginalPrice = isIncludeVAT ? listPrice?.formatted?.withTax : listPrice?.formatted?.withoutTax;
+  const match = formattedOriginalPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
+  const symbol = match?.[1] || '';
   return (
     <>
       <div className={`${className}`}>
@@ -89,8 +92,8 @@ const Prices: FC<PricesProps> = ({
             <div className="flex items-center gap-x-1">
               {/* Discount Percentage */}
               {nonMemberDiscountPercentage > 0 && (
-                <span className="mr-2 text-lg font-normal text-red-600">
-                  -{nonMemberDiscountPercentage}%
+                  <span className="mr-2 text-lg font-normal text-red-600">
+                   -{symbol}{Number(nonMemberDiscountPercentage.toFixed(2)).toLocaleString()}
                 </span>
               )}
               {featureToggle?.features?.enableForPCSite ? (
@@ -119,15 +122,15 @@ const Prices: FC<PricesProps> = ({
                 {isIncludeVAT ? (
                   listPrice?.raw?.withTax > 0 &&
                   listPrice?.raw?.withTax > price?.raw?.withTax && (
-                    <span className="px-1 text-sm font-normal text-gray-400 line-through">
-                      {featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withTax}
+                    <span className="px-1 pl-1 text-sm font-normal text-gray-400">
+                      Was: <span className=" line-through">{featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withTax}</span>
                     </span>
                   )
                 ) : (
                   listPrice?.raw?.withoutTax > 0 &&
                   listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
-                    <span className="px-1 text-sm font-normal text-gray-400 line-through">
-                      {featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withoutTax}
+                    <span className="px-1 pl-1 text-sm font-normal text-gray-400">
+                      Was: <span className=" line-through">{featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withoutTax}</span>
                     </span>
                   )
                 )}

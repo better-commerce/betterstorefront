@@ -2201,6 +2201,7 @@ body .pdp-right-section .price{
 .blue-add-btn .add-green-btn .nc-Button{
   background-color: #ACD4FF !important;
   color: #000 !important;
+  box-shadow: none !important;
 }
 .product-card.border-prod-card{
  border:1px solid #efefef !important;
@@ -2507,6 +2508,7 @@ display: none !important;
 }
 .blue-add-btn .buy-btn  .nc-Button{
   background-color: #2D4D9C !important;
+  box-shadow: none !important;
 }
 .blue-add-btn .buy-btn svg{
 display: none !important;
@@ -2627,5 +2629,8 @@ html {
   /* Add padding to the last item to prevent content being cut off */
   .footer-menu-links:last-child {
     padding-bottom: 1.5rem;
+  }
+  .flex-mob-col{
+    flex-direction: column !important;
   }
 }

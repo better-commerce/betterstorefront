@@ -1056,7 +1056,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       <>
         {featureToggle?.features?.enableRichPdpToggle ? (
-          <div className='flex gap-6'>
+          <div className='flex gap-6 flex-mob-col'>
             <div className='w-full lg:w-[60%]'>
               <div className="space-y-4">
                 <div>
@@ -1067,8 +1067,17 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
                   </div>
                   <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-                    <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                  </div>
+                     {selectedOption === "new" && (  
+                      <>
+                      <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </>
+                      )}
+                       {selectedOption === "used" && (  
+                      <>
+                      <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </>
+                      )}
+                   </div> 
                   {/* <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
                     <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
                       <div className="bg-gray-100 rounded-full">
@@ -1220,12 +1229,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                         </div>
                       </div> */}
                       <div className='w-full'>
-                        <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                        <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
                           {isInWishList(selectedAttrData?.productId) ? (
-                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
+                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
                           ) : (
-                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
-                          <span className='text-sm'> Add to Wishlist </span>
+                            <HeartIcon className="flex-shrink-0 w-3 font-semibold text-black h-3 mr-2" />)}
+                          <span className='text-xs text-black font-semibold'> Add to Wishlist </span>
                         </button>
                       </div>
                     </div>
@@ -1446,7 +1455,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     renderThumbInner={customRenderThumbInner}
                   />
                   {featureToggle?.features?.enableRichPdpToggle && (
-                    <p className='text-gray-500'>Product Code: {product?.productCode}</p>
+                    <p className='text-gray-500 pt-4'>Product Code: {product?.productCode}</p>
                   )}
                 </div>
               ) : (

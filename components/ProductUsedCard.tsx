@@ -222,12 +222,12 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </div>
         </div>
         <div className='w-full'>
-          <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-12 px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-sm hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+          <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] rounded-md hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
             {isInWishList ? (
-              <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700" />
+              <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700 font-semibold" />
             ) : (
-              <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2" />)}
-            <span className='text-sm'> Add to Wishlist </span>
+              <HeartIcon className="flex-shrink-0 w-3 h-3 text-black mr-2 font-semibold" />)}
+            <span className='text-xs text-black font-semibold'> Add to Wishlist </span>
           </button>
         </div>
       </div>
