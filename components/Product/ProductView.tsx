@@ -375,10 +375,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
-            productId: selectedAttrData?.productId,
+            productId: selectedAttrData?.productId || selectedAttrData?.recordId,
             qty: quantity,
             manualUnitPrice: product?.price?.raw?.withTax,
-            stockCode: selectedAttrData?.stockCode,
+            stockCode: selectedAttrData?.stockCode || selectedAttrData?.productCode,
             userId: user?.userId,
             isAssociated: user?.isAssociated,
           },
