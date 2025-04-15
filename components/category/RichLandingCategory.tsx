@@ -16,73 +16,73 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
   return (
     <>
       <div className='w-full !px-0 pb-8'>
-        <CategoryBanner data={category}/>
+        <CategoryBanner data={category} />
         {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-          <LandingFeaturedCategory featuredCategory={category?.subCategories} deviceInfo={deviceInfo} categoryname={category?.name}  />
+          <LandingFeaturedCategory featuredCategory={category?.subCategories} deviceInfo={deviceInfo} categoryName={category?.name} />
         }
         <LinkGroup data={category?.linkGroups} deviceInfo={deviceInfo} />
         {productDataToPass?.results?.length > 0 &&
-              <>
-              <div className="container mx-auto px-4 pt-8">
-              <div className="flex gap-x-6 mb-6 heading-border-top">
-                    <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl dark:text-black">Featured {category?.name}</h2>
-                    <button onClick={onToggleBrandListPage} className='text-lg font-normal text-black underline'>See more</button>
+          <>
+            <div className="container px-4 pt-8 mx-auto">
+              <div className="flex pt-4 mb-6 border-t border-gray-400 gap-x-6">
+                <h2 className="block font-semibold text-black heading dark:text-black">Featured {category?.name}</h2>
+                <button onClick={onToggleBrandListPage} className='text-lg font-normal text-black underline'>See more</button>
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
+                {productDataToPass?.results?.map((product: any, pIdx: number) => (
+                  <div key={pIdx}>
+                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
-                  {productDataToPass?.results?.map((product: any, pIdx: number) => (
-                    <div key={pIdx}>
-                      <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </div>
-                  ))}
-                </div>
+                ))}
               </div>
-              </>
-            }
-            {category?.additionalInfo1 && (
-            <div className="w-full !px-0 py-8">
-              <Link href="/sell-or-part-exchange" className="flex flex-col items-start justify-start w-full text-left">
-              <img src={category?.additionalInfo1} alt="Banner Image" className="block w-full"/>
-              </Link>
             </div>
-            )}
-             {category?.featuredBrand?.length > 0 &&
-              <FeaturedBrand featuredBrand={category?.featuredBrand} filterBrandData={filterBrandData} categoryname={category?.name}/>
-            }
-            {category?.additionalInfo2 && (
-            <div className="container mx-auto px-4 py-8">
-               <img src={category?.additionalInfo2} alt="Banner Image" className="block w-full"/>
+          </>
+        }
+        {category?.additionalInfo1 && (
+          <div className="w-full !px-0 py-8">
+            <Link href="/sell-or-part-exchange" className="flex flex-col items-start justify-start w-full text-left">
+              <img src={category?.additionalInfo1} alt="Banner Image" className="block w-full" />
+            </Link>
+          </div>
+        )}
+        {category?.featuredBrand?.length > 0 &&
+          <FeaturedBrand featuredBrand={category?.featuredBrand} filterBrandData={filterBrandData} categoryName={category?.name} />
+        }
+        {category?.additionalInfo2 && (
+          <div className="container px-4 py-8 mx-auto">
+            <img src={category?.additionalInfo2} alt="Banner Image" className="block w-full" />
+          </div>
+        )}
+        {blogList?.length > 0 && (
+          <div className="container px-4 mx-auto">
+            <h2 className="mb-6 font-semibold heading">
+              Our {category?.name} buying guides
+            </h2>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-4 lg:grid-cols-4">
+              {blogList
+                ?.sort(
+                  (a: any, b: any) =>
+                    new Date(b?.lastUpdated).getTime() - new Date(a?.lastUpdated)?.getTime()
+                )
+                ?.slice(0, 4)
+                ?.map((post: any, idx: number) => (
+                  <div key={idx} className="flex flex-col h-full">
+                    <Link
+                      href={sanitizeRelativeUrl(post?.slug)}
+                      className="inline-flex items-center link-clr font-medium hover:text-teal-800 relative w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] overflow-hidden"
+                    >
+                      <img
+                        src={post?.fields?.hero?.[0]?.hero_image || IMG_PLACEHOLDER}
+                        alt={post?.title}
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </Link>
+                  </div>
+                ))}
             </div>
-            )}
-            {blogList?.length > 0 && (
-              <div className="container mx-auto px-4 pt-8">
-                <h2 className="block text-lg font-semibold sm:text-xl lg:text-xl dark:text-black mb-4">
-                  Our {category?.name} buying guides
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-8">
-                  {blogList
-                    ?.sort(
-                      (a: any, b: any) =>
-                        new Date(b?.lastUpdated).getTime() - new Date(a?.lastUpdated)?.getTime()
-                    )
-                    ?.slice(0, 4)
-                    ?.map((post: any, idx: number) => (
-                      <div key={idx} className="flex flex-col h-full">
-                        <Link
-                          href={`/${post?.slug}`}
-                          className="inline-flex items-center link-clr font-medium hover:text-teal-800 relative w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] overflow-hidden"
-                        >
-                          <img
-                            src={post?.fields?.hero?.[0]?.hero_image || IMG_PLACEHOLDER}
-                            alt={post?.title}
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          />
-                        </Link>
-                      </div>
-                    ))}
-                </div>
-              </div>
-            )}
+          </div>
+        )}
 
         <div className='flex flex-col w-full col-span-12 overflow-hidden'>
           <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />

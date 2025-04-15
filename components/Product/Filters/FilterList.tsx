@@ -20,7 +20,6 @@ export const FILTER_KEYS = {
 
 const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = false, isCheckboxTickDisabled = false, bgColor = () => false, onSelect, closeSidebar = () => { }, ...props }: any) => {
   const [isCheckboxChecked, setCheckbox] = useState(isChecked)
-  const currencySymbol = getCurrencySymbol()
 
   useEffect(() => {
     setCheckbox(isChecked)
@@ -35,14 +34,8 @@ const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = fa
   }
 
   const generateOptionName = () => {
-    if (sectionKey === FILTER_KEYS.PRICE)
-      return <>
-        <span className='text-sm font-semibold text-black'>{currencySymbol != undefined ? currencySymbol : ''}{option?.from}</span>
-        -<span className='text-sm font-semibold text-black'>{currencySymbol != undefined ? option?.to != null ? currencySymbol : '' : ''}
-          {option?.to != null ? option?.to : 'Max'}
-        </span>
-      </>
     if (sectionKey === FILTER_KEYS.COLOR) return option.name.split('|')[1]?.toLowerCase()
+    if (sectionKey === FILTER_KEYS.PRICE) return option.name.replace('-', ' to ').toLowerCase()
     if (sectionKey === FILTER_KEYS.RATING) {
       // Check if the option name contains a decimal point
       if (option.name.includes('.')) {
@@ -50,11 +43,10 @@ const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = fa
         const formattedRating = ratingValue.toFixed(2); // Format to always display 2 digits after the decimal point
         return formattedRating.toString(); // Convert it back to string and return
       } else {
-        return option.name;
+        return option.name.replace('-', ' to ').toLowerCase();
       }
     }
-
-    else return option.name
+    else return option.name.replace('-', ' to ').toLowerCase()
   }
 
   let bw = '20px'
@@ -97,7 +89,7 @@ const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = fa
             }}
           />
         )}
-        <span className={`long-f-name capitalize text-black dark:text-black ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'text-xs font-medium' : ''}`}>{generateOptionName()}</span>
+        <span className={`long-f-name text-black dark:text-black ${sectionKey === FILTER_KEYS.COLOR && CURRENT_THEME == 'green' ? 'text-xs font-medium' : ''} ${sectionKey === FILTER_KEYS.PRICE ? 'none' : 'capitalize'}`}>{generateOptionName()}</span>
         {sectionKey === FILTER_KEYS.COLOR && (
           <div
             style={{
@@ -108,7 +100,7 @@ const FilterItem = ({ option, optionIdx, sectionName, sectionKey, isChecked = fa
               width: bw,
               borderRadius: bw,
               background: checkboxBgColor,
-              border: isCheckboxChecked && sectionKey === FILTER_KEYS.COLOR ?'3px solid #000000':'1px solid #cccccc',
+              border: isCheckboxChecked && sectionKey === FILTER_KEYS.COLOR ? '3px solid #000000' : '1px solid #cccccc',
               position: 'relative',
               marginRight: mr,
             }}

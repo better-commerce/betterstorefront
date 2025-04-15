@@ -37,13 +37,19 @@ export default function FiltersRightOpen({ products = { filters: [] }, handleFil
             <Disclosure defaultOpen={featureToggle?.features?.enableForPCSite || sectionIdx === 0 || (isBrandPLP && sectionIdx === 1) || isFilterApplied}>
               {({ open }) => (
                 <>
-                  <Disclosure.Button className={`${featureToggle?.features?.enableForPCSite ? 'pointer-events-none cursor-auto' : ''} flex items-center justify-between w-full gap-2 px-0 py-3 text-left text-black bg-white rounded-lg outline-none dark:bg-transparent hover:bg-white dark:hover:bg-transparent active:outline-none hover:outline-none ${CURRENT_THEME == 'green' ? 'text-xl font-medium' : 'uppercase text-sm font-semibold'}`}>
+                  <Disclosure.Button className={`${featureToggle?.features?.enableForPCSite ? 'pointer-events-none font-semibold sub-heading cursor-auto' : 'uppercase'} flex items-center justify-between w-full gap-2 px-0 py-3 text-left text-black bg-white rounded-lg outline-none dark:bg-transparent hover:bg-white dark:hover:bg-transparent active:outline-none hover:outline-none ${CURRENT_THEME == 'green' ? 'text-xl font-medium' : 'text-sm font-semibold'}`}>
                     <span className='dark:text-black'>{section?.name}</span>
                     {!featureToggle?.features?.enableForPCSite && <ChevronDownIcon className={`${open ? 'rotate-180 transform' : ''} w-5 h-5 dark:text-black`} />}
                   </Disclosure.Button>
                   <Disclosure.Panel className="px-0 pt-0 pb-2">
-                    {(section?.key === FILTER_KEYS.PRICE || section?.key === FILTER_KEYS.ONLY_PRICE) ? <PriceFilterSlider handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} /> :
-                      <FilterList handleFilters={handleFilters} sectionName={section?.name} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} />}
+                    {featureToggle?.features?.enableForPCSite ? (
+                      <FilterList handleFilters={handleFilters} sectionName={section?.name} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} />
+                    ) : (
+                      (section?.key === FILTER_KEYS.PRICE || section?.key === FILTER_KEYS.ONLY_PRICE) ?
+                        <PriceFilterSlider handleFilters={handleFilters} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} /> :
+                        <FilterList handleFilters={handleFilters} sectionName={section?.name} sectionKey={section?.key} items={section?.items} routerFilters={routerFilters} />
+                    )}
+
                   </Disclosure.Panel>
                 </>
               )}
