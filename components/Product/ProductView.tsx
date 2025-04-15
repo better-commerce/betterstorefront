@@ -1060,7 +1060,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <div className='w-full lg:w-[60%]'>
               <div className="space-y-4">
                 <div>
-                  <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
+                  <h1 className="text-xl font-semibold heading sm:text-2xl product-name-h2 dark:text-black mb-2">
                     {product?.name}
                   </h1>
                   <div className="flex flex-col gap-3">
@@ -1162,9 +1162,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       {product?.currentStock > 0 && product?.currentStock <= 5 && (
                         <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
                       )}
-                      <div className="mb-3">
-                        <label htmlFor="quantity" className="block text-sm font-medium"> Quantity: </label>
-                        <select id="quantity" className="w-full p-2 mt-1 border rounded-md" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
+                      {/* <div className="mb-3">
+                        <select id="quantity" className="w-full p-2 border border-[#D9D9D9] bg-[#F5F5F5] rounded-md" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
+                          {[...Array(10).keys()].map((num) => (
+                            <option key={num + 1} value={num + 1}> {num + 1} </option>
+                          ))}
+                        </select>
+                      </div> */}
+                      <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
+                        <span className='pr-1'>Quantity:</span>
+                        <select id="quantity" className="w-full p-2 border-none bg-transparent focus:border-0 focus-none"  value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
                           {[...Array(10).keys()].map((num) => (
                             <option key={num + 1} value={num + 1}> {num + 1} </option>
                           ))}
@@ -1455,7 +1462,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     renderThumbInner={customRenderThumbInner}
                   />
                   {featureToggle?.features?.enableRichPdpToggle && (
-                    <p className='text-gray-500 pt-4'>Product Code: {product?.productCode}</p>
+                    <p className='text-gray-500 text-sm pt-4'>Product Code: {product?.productCode}</p>
                   )}
                 </div>
               ) : (
@@ -1546,8 +1553,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:px-0 lg:px-0 2xl:px-0 md:px-0 pdp-related-product-list slider-btn-css">
                 {featureToggle.features?.enableForPCSite ?
                   <>
-                    <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                    <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                    <h3 className="mb-1 font-semibold heading dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                    <p className='pb-6 text-black text-sm sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
                   </>
                   : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
@@ -1562,8 +1569,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css">
                     {featureToggle.features?.enableForPCSite ?
                       <>
-                        <h3 className="mb-1 text-2xl font-semibold md:text-3xl dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                        <p className='pb-6 text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                        <h3 className="mb-1 heading font-semibold  dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                        <p className='pb-6 text-sm text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
                       </>
                       : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}
                     <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />

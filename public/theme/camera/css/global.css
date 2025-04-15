@@ -608,6 +608,11 @@ h6 {
   font-size: 32px !important;
 }
 
+.font-32{
+  font-size: 32px !important;
+  line-height: 38px !important;
+}
+
 .text-x-small{
   font-size: 12px !important;
   line-height: 16px !important;
@@ -635,6 +640,11 @@ h6 {
 }
 
 @media screen and (max-width:767px) {
+  .font-32{
+    font-size: 22px !important;
+    line-height: 28px !important;
+  } 
+
   .mob-font-16 {
     font-size: 16px !important;
   }
@@ -2202,6 +2212,10 @@ body .pdp-right-section .price{
   background-color: #ACD4FF !important;
   color: #000 !important;
   box-shadow: none !important;
+  font-size: 16px !important;
+}
+.blue-add-btn .add-green-btn .nc-Button svg{
+  display: none !important;
 }
 .product-card.border-prod-card{
  border:1px solid #efefef !important;
@@ -2509,6 +2523,7 @@ display: none !important;
 .blue-add-btn .buy-btn  .nc-Button{
   background-color: #2D4D9C !important;
   box-shadow: none !important;
+  font-size:16px !important;
 }
 .blue-add-btn .buy-btn svg{
 display: none !important;
@@ -2633,4 +2648,9 @@ html {
   .flex-mob-col{
     flex-direction: column !important;
   }
+}
+select.focus-none:focus{
+  --tw-ring-color: transparent !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }

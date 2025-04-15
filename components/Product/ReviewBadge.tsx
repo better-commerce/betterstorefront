@@ -15,7 +15,7 @@ export default function ReviewBadge({ reviewCountdata, ratingdata }: ReviewBadge
       <div className="flex items-center space-x-4">
         {/* Rating + stars */}
         <div className="flex items-center">
-          <span className="text-sm font-semibold text-gray-900 plp-hidden pr-1">
+          <span className="text-x-small font-semibold text-gray-900 plp-hidden pr-1">
             {ratingdata.toFixed(1)}
           </span>
           <div className="flex text-color-primary-blue">
@@ -30,9 +30,9 @@ export default function ReviewBadge({ reviewCountdata, ratingdata }: ReviewBadge
         </div>
 
         {/* Reviews */}
-        <span className="text-xs text-gray-600 underline no-plp-underline"><a href="#bottomtabs">{reviewCountdata} <span className='plp-hidden'>reviews </span></a></span>
+        <span className="text-x-small text-gray-600 underline no-plp-underline"><a href="#bottomtabs">{reviewCountdata} <span className='plp-hidden'>reviews </span></a></span>
         {/* Answers */}
-        <span className="text-xs text-gray-600 underline plp-hidden">{answers} answers</span>
+        <span className="text-x-small text-gray-600 underline plp-hidden">{answers} answers</span>
       </div>
       {/* Deal badge */}
     </>

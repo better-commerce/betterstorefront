@@ -28,7 +28,7 @@ const TabComponent = ({ tabs, defaultActiveTab }: TabComponentProps) => {
               key={tab?.id}
               onClick={() => handleTabClick(tab?.id)}
               className={cn(
-                "py-2 px-4 text-sm font-medium focus:outline-none whitespace-nowrap",
+                "py-2 px-4 text-base font-medium focus:outline-none whitespace-nowrap",
                 activeTab === tab?.id
                   ? "bg-[#2D4D9C] text-white"
                   : "bg-gray-100 text-gray-700 hover:text-white hover:bg-[#2D4D9C]"
