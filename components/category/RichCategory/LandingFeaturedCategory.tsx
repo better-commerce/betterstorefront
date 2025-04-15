@@ -12,7 +12,7 @@ export default function LandingFeaturedCategory({ featuredCategory, categoryName
           {featuredCategory?.filter((featured: any) => featured?.isFeatured === true).map((featured: any, featuredIdx: number) => (
             <div className="w-full text-center" key={featuredIdx}>
               <Link href={sanitizeRelativeUrl(featured?.link)} className="group" >
-                <div className="bg-white border-[#B8B8B8] border p-3 rounded-xl flex flex-col items-center transition-all hover:shadow-md">
+                <div className="bg-[#F7F7F7] border-[#B8B8B8] border p-3 rounded-xl flex flex-col items-center transition-all hover:shadow-md">
                   <div className="flex items-center justify-center w-9/12 mb-2">
                     {featured?.image ? (
                       <img src={generateUri(featured?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-contain max-w-full max-h-full" alt="Image" />
@@ -22,7 +22,7 @@ export default function LandingFeaturedCategory({ featuredCategory, categoryName
                   </div>
                 </div>
               </Link>
-              <span className="block mt-2 text-xs font-medium text-center text-gray-700 group-hover:text-blue-600">
+              <span className="block mt-2 text-xs font-semibold text-center text-black text-body-small group-hover:text-blue-600">
                 {featured?.name}
               </span>
             </div>

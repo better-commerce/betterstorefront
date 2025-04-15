@@ -17,14 +17,14 @@ export default function LinkGroup({ data }: any) {
               {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (
                 <Link key={cdx} href={item?.link != null ? sanitizeRelativeUrl(`/${item?.link}`) : `#`} className="group">
                   <div className="relative overflow-hidden rounded-md">
-                    <div className="flex flex-col items-center w-full img-container-category">
+                    <div className="flex flex-col items-center justify-center w-56 h-56 bg-[#F7f7f7] border border-gray-200 rounded-full img-container-category">
                       {item?.imageUrl != '' ? (
                         <img src={generateUri(item?.imageUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-full" alt="Image" width={240} height={160} />
                       ) : (
                         <img src={IMG_PLACEHOLDER} className="object-cover w-full rounded-full" alt="Image" width={240} height={160} />
                       )}
                     </div>
-                    <span className="block mt-2 text-xs font-medium text-center text-gray-700 group-hover:text-blue-600">
+                    <span className="block mt-2 text-xs font-semibold text-center text-black text-body-small group-hover:text-blue-600">
                       {item?.name}
                     </span>
                   </div>
