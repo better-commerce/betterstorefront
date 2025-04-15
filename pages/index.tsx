@@ -227,20 +227,18 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <div className='col-span-12 sm:col-span-4'>
                 {pageContents?.usedproduct?.length > 0 && pageContents?.usedproduct?.map((usd: any, uIdx: number) => (
                   <div className='relative flex flex-col items-center justify-center w-full gap-2 sm:min-h-[480px] py-4 overflow-hidden' key={`used-product-${uIdx}`}>
-                    <Image
+                    <img
                       src={generateUri(usd?.usedproduct_bgpattern, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                       className='absolute top-0 left-0 w-full h-full z-1'
                       alt="Background pattern"
-                      fill
                       sizes="100vw"
-                      priority={uIdx === 0}
                       loading={uIdx === 0 ? "eager" : "lazy"}
                     />
                     <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 '>
                       <h2 className='font-bold uppercase primary-text-blue title-page'>{usd?.usedproduct_title}</h2>
                       <div className='mx-auto text-[14px] font-semibold primary-text-blue text-center sm:w-8/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
                       <div className='h-48 col-span-12 sm:h-56'>
-                        <Image
+                        <img
                           src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                           alt={usd?.usedproduct_title}
                           className='object-cover w-full h-40 sm:h-56'
@@ -269,7 +267,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                 <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12' key={`about-${aIdx}`}>
                   <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
                     <div className='col-span-12'>
-                      <Image
+                      <img
                         src={generateUri(ab?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                         alt={ab?.about_title}
                         className='object-cover w-full h-full'
@@ -299,7 +297,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   </div>
                   <div className='order-2 col-span-5 sm:col-span-4 sm:order-2'>
                     <div className='col-span-12'>
-                      <Image
+                      <img
                         src={generateUri(swu?.shopwithus_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                         alt={swu?.shopwithus_title}
                         className='object-cover w-full h-full'
@@ -333,11 +331,10 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
             </div>
             {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
               <div className='relative sm:min-h-[480px] flex flex-col items-center justify-center w-full gap-2 py-4 overflow-hidden' key={`trade-in-${tradeIdx}`}>
-                <Image
+                <img
                   src={generateUri(trade?.tradeinbanner_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                   className='absolute top-0 left-0 w-full h-[480px] object-cover z-0'
                   alt="Trade-in banner"
-                  fill
                   sizes="100vw"
                   loading="lazy"
                 />
@@ -392,7 +389,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         <div key={pId} className={`product-card-item home-product-card`}>
                           <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
                             <div className='relative flex flex-col rounded-lg'>
-                              <Image
+                              <img
                                 alt={item?.competitioncard_title}
                                 src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER}
                                 className='object-contain object-top w-full h-auto'
@@ -423,7 +420,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     <div className='grid items-center justify-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
                       {pageContents?.brands?.map((item: any, itemIdx: number) => (
                         <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
-                          <Image
+                          <img
                             src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
                             alt={item?.brands_name}
                             className='w-full h-auto p-0 sm:p-2'
@@ -465,7 +462,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         </Link>
                       </div>
                       <div className='col-span-5'>
-                        <Image
+                        <img
                         src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                         alt={fo?.fixingoffers_title}
                         className='object-cover w-full h-56'
@@ -536,7 +533,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         </Link>
                       </div>
                       <div className='absolute top-0 left-0 z-0 col-span-12 mob-static'>
-                        <Image
+                        <img
                           src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                           alt={fo?.fixingdelivery_title}
                           className='object-cover object-right w-full h-auto invert-1'
@@ -564,7 +561,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       <DealProduct data={pageContents} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} dealOfTheWeekProductPromoDetails={pageContents?.featureproduct[0]} config={config} />
                     </div>
                     <div className="dot-div">
-                      <Image
+                      <img
                         src={`${IMAGE_CDN_URL}/cms-media/dot-image.png?fm=webp&h=220`}
                         alt="dot image"
                         width={245}
@@ -590,7 +587,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     </div>
                   </div>
                   <div className='flex flex-col sm:p-20'>
-                    <Image
+                    <img
                       alt={data?.about_title}
                       src={generateUri(data?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                       className='object-cover object-top w-full h-full rounded-xl'
@@ -608,7 +605,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   {pageContents?.allcategories?.map((data: any, dataIdx: number) => (
                     <div className='flex flex-col justify-center p-4 text-center rounded-lg shadow-md hover:bg-white hover:shadow-xl bg-slate-50' key={`data-${dataIdx}`}>
                       <div className='h-60'>
-                        <Image
+                        <img
                           alt={data?.allcategories_name}
                           src={generateUri(data?.allcategories_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
                           className='object-cover object-top w-full h-60 rounded-xl'
@@ -638,7 +635,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   {pageContents?.allbrands?.map((data: any, dataIdx: number) => (
                     <div className='flex flex-col justify-center p-4 text-center bg-white rounded-lg shadow-md hover:shadow-xl' key={`data-${dataIdx}`}>
                       <div className='h-32'>
-                        <Image
+                        <img
                           alt={data?.allbrands_name}
                           src={generateUri(data?.allbrands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
                           className='object-cover object-center w-full h-32 rounded-xl'
@@ -654,7 +651,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
             }
             {pageContents?.promotionbanner != "" && CURRENT_THEME == 'etag' &&
               <div className='flex flex-col pt-10 mt-0'>
-                <Image
+                <img
                   alt="Banner"
                   src={generateUri(pageContents?.promotionbanner, 'h=400&fm=webp') || IMG_PLACEHOLDER}
                   className='object-cover object-center w-full h-full'
@@ -679,7 +676,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     <div key={`banner-${itemIdx}`}>
                       <Link href={sanitizeRelativeUrl(`/${item?.link}`)} passHref legacyBehavior>
                         <a className='relative flex flex-col items-center justify-center w-full image-overlay-container rounded-xl'>
-                          <Image
+                          <img
                             alt={item?.title}
                             src={generateUri(item?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
                             className='object-cover object-top w-full h-full rounded-xl'
@@ -713,7 +710,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         <li key={index} className={`glide__slide product-card-item home-product-card`}>
                           <Link href={sanitizeRelativeUrl(`/${item?.link}`)}>
                             <div className='relative flex flex-col rounded-lg'>
-                              <Image
+                              <img
                                 alt={item?.title}
                                 src={generateUri(item?.url, 'h=450&fm=webp') || IMG_PLACEHOLDER}
                                 className='object-cover object-top w-full rounded-lg h-96'
@@ -748,7 +745,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         key={`category-${itemIdx}`}
                       >
                         <div className='flex flex-col w-full'>
-                          <Image
+                          <img
                             src={generateUri(item?.category_image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
                             alt={item?.category_title}
                             className='w-full h-full'
@@ -778,7 +775,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
             }
             {pageContents?.bannerimage && pageContents?.bannerimage != "" &&
               <div className='flex flex-col w-full'>
-                <Image
+                <img
                   src={pageContents?.bannerimage}
                   className='w-full h-full'
                   alt='Promotion'
@@ -795,7 +792,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   {pageContents?.brandcategory?.map((item: any, itemIdx: number) => (
                     <Link href={item?.brandcategory_link} passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
                       <div className='flex flex-col w-full'>
-                        <Image
+                        <img
                           src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
                           alt={item?.brandcategory_title}
                           className='w-full h-full'
@@ -820,7 +817,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
             }
             {pageContents?.promobanner && pageContents?.promobanner != "" &&
               <div className='flex flex-col w-full'>
-                <Image
+                <img
                   src={pageContents?.promobanner}
                   className='w-full h-full'
                   alt='Promotion'
@@ -840,7 +837,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   <div className='grid items-center grid-cols-4 gap-4 text-center'>
                     {pageContents?.brands?.map((item: any, itemIdx: number) => (
                       <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
-                        <Image
+                        <img
                           src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
                           alt={item?.brands_name}
                           className='w-full h-auto p-0 sm:p-10'
