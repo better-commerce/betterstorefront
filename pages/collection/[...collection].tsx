@@ -501,7 +501,7 @@ function CollectionPage(props: any) {
                 <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
                   <div className='col-span-4'>
                     <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
-                      <Image
+                      <img
                         src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
                         className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`}
                         alt={product?.name}
@@ -558,13 +558,12 @@ function CollectionPage(props: any) {
                           <div className="relative w-full h-auto px-0 collection-multi-vimage">
                             <Link legacyBehavior href={img?.link || '#'} passHref >
                               <span style={{ paddingTop }} className="block">
-                                <Image
+                                <img
                                   src={generateUri(imgUrl, 'h=1600&fm=webp&q=50') || IMG_PLACEHOLDER}
                                   alt="Collection Banner"
                                   className="object-contain"
                                   width={1600}
-                                  height={500}
-                                  priority={idx < 2} // Prioritize loading first two images
+                                  height={500}                                  
                                   loading={idx < 2 ? "eager" : "lazy"}
                                   onLoad={({ target }) => {
                                     const { naturalWidth, naturalHeight } = target as HTMLImageElement;
@@ -604,12 +603,11 @@ function CollectionPage(props: any) {
                       <div className="w-full h-auto px-0" key={`banner-image-${idx}`} >
                         <Link legacyBehavior href={img?.link || '#'}>
                           <a>
-                            <Image
+                            <img
                               src={imgUrl}
                               width={1920}
                               height={460}
                               alt="banner"
-                              priority={idx < 2}
                               loading={idx < 2 ? "eager" : "lazy"}
                             />
                           </a>
@@ -627,14 +625,13 @@ function CollectionPage(props: any) {
             {props?.images?.map((img: any, idx: number) => (
               <SwiperSlide key={`horizontal-slider-${idx}`}>
                 <Link href={img.link || '#'}>
-                  <Image
+                  <img
                     style={css}
                     width={1920}
                     height={500}
                     src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
                     alt={props?.name || 'Collection Banner'}
                     className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer"
-                    priority={idx < 2}
                     loading={idx < 2 ? "eager" : "lazy"}
                   />
                 </Link>
@@ -741,7 +738,7 @@ function CollectionPage(props: any) {
                               }
                             </div>
                             <div className='sm:col-span-3'>
-                              <Image
+                              <img
                                 src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp'
                                 className='object-cover object-top w-full h-auto rounded-lg'
                                 width={450}
@@ -809,7 +806,7 @@ function CollectionPage(props: any) {
                             }
                           </div>
                           <div className='sm:col-span-3'>
-                            <Image
+                            <img
                               src='https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/a3.png?h=450&fm=webp'
                               className='object-cover object-top w-full h-auto rounded-lg'
                               width={450}
