@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import cartHandler from '@components/services/cart'
 import LookbookGrid from '@components/Product/Lookbook/LookbookGrid'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG } from '@components/utils/constants'
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG, NEXT_CUSTOMER_PRODUCT_INTEREST } from '@components/utils/constants'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
@@ -128,6 +128,27 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     if (alternativeProducts?.length > 0) {
       const { data: compareDataResult }: any = await axios.post(NEXT_COMPARE_ATTRIBUTE, { stockCodes: newArray || [], compareAtPDP: true })
       setCompareProductAttribute(compareDataResult)
+    }
+  }
+  const createProductInterest = async () => {
+    try {
+      const response = await axios.post(NEXT_CUSTOMER_PRODUCT_INTEREST, {
+        id: user?.userId,
+        productId: product?.recordId,
+      })
+      
+      if (response?.data) {
+        setAlert({
+          type: 'success',
+          msg: 'Product interest registered successfully'
+        })
+      }
+    } catch (error) {
+      console.log(error, 'error')
+      setAlert({
+        type: 'error',
+        msg: 'Failed to register product interest'
+      })
     }
   }
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
@@ -953,7 +974,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     )
   }
   const productTabs = [
-    {
+    product?.description != null && {
       id: 'overview',
       label: 'Overview',
       content: (
@@ -962,7 +983,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     },
-    {
+    product && product?.customAttributes?.length > 0 && {
       id: 'specs',
       label: 'Specs',
       content: (
@@ -991,8 +1012,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </>
       )
     },
-    {
-      id: 'Reviewss',
+    reviews?.review?.productReviews?.length > 0 && {
+      id: 'Reviews',
       label: 'Reviews',
       content: (
         <div className="space-y-4 review-none-section container-tabs">
@@ -1002,7 +1023,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     },
-    {
+    product && product?.videos?.length > 0 && {
       id: 'Videos',
       label: 'Videos',
       content: (
@@ -1020,7 +1041,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 </div>
               );
             })}
-          </div>: <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>This product hasn't any video!</div>}
+          </div> : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>This product hasn't any video!</div>}
         </div>
       )
     },
@@ -1060,24 +1081,27 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <div className='w-full lg:w-[60%]'>
               <div className="space-y-4">
                 <div>
-                  <h1 className="text-xl font-semibold heading sm:text-2xl product-name-h2 dark:text-black mb-2">
+                  {product?.condition === 'pre-launch' &&
+                    <h3 className='text-sm font-semibold text-black uppercase'>{product?.brand}</h3>
+                  }
+                  <h1 className="mb-2 text-xl font-semibold heading sm:text-2xl product-name-h2 dark:text-black">
                     {product?.name}
                   </h1>
-                  <div className="flex flex-col gap-3">
+                  {product?.condition != 'pre-launch' && <div className="flex flex-col gap-3">
                     <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
-                  </div>
+                  </div>}
                   <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-                     {selectedOption === "new" && (  
+                    {selectedOption === "new" && product?.condition != 'pre-launch' && (
                       <>
-                      <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                       </>
-                      )}
-                       {selectedOption === "used" && (  
+                    )}
+                    {selectedOption === "used" && product?.condition != 'pre-launch' && (
                       <>
-                      <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                       </>
-                      )}
-                   </div> 
+                    )}
+                  </div>
                   {/* <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
                     <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
                       <div className="bg-gray-100 rounded-full">
@@ -1131,93 +1155,101 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   </div>
                 }
                 {renderSellableType()}
-                <div className='flex short-descriptionc'>
+                {product?.condition != 'pre-launch' ? <div className='flex short-descriptionc'>
                   <LongDescription data={product?.shortDescription} heading="" />
-                </div>
+                </div> :
+                  <div
+                    className="text-sm text-gray-800 description-html"
+                    dangerouslySetInnerHTML={{ __html: product?.shortDescription }}
+                  />
+                }
               </div>
             </div>
             <div className='w-full lg:w-[40%]'>
               <div className="w-full p-0 border rounded-lg shadow-md">
                 {/* New Product Option */}
-                <div className={`p-4 mb-4 ${selectedOption === "new" ? "bg-transparent" : "bg-nonactive"}`}>
-                  <label className="flex items-center justify-between gap-2 cursor-pointer">
-                    <input type="radio" name="product" value="new" checked={selectedOption === "new"} onChange={() => setSelectedOption("new")} className="hidden" />
-                    <span className="font-semibold">Buy new</span>
-                    <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "new" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                      {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                    </span>
-                  </label>
-                  <div className='mt-3 space-y-3'>
-                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                {product?.condition != 'pre-launch' ? (
+                  <>
+                    <div className={`p-4 mb-4 ${selectedOption === "new" ? "bg-transparent" : "bg-nonactive"}`}>
+
+                      <label className="flex items-center justify-between gap-2 cursor-pointer">
+                        <input type="radio" name="product" value="new" checked={selectedOption === "new"} onChange={() => setSelectedOption("new")} className="hidden" />
+                        <span className="font-semibold">Buy new</span>
+                        <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "new" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
+                          {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
+                        </span>
+                      </label>
+                      <div className='mt-3 space-y-3'>
+                        <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
                     <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
-                  </div>
-                  {selectedOption === "new" && (
-                    <div className="mt-2 space-y-2">
-                      {product?.currentStock > 0 ? (
-                        <p className="font-semibold text-green-600">In stock</p>
-                      ) : (
-                        <p className="text-sm font-semibold text-red-600"> Out of Stock</p>
-                      )}
-                      {product?.currentStock > 0 && product?.currentStock <= 5 && (
-                        <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
-                      )}
-                      {/* <div className="mb-3">
+                      </div>
+                      {selectedOption === "new" && (
+                        <div className="mt-2 space-y-2">
+                          {product?.currentStock > 0 ? (
+                            <p className="font-semibold text-green-600">In stock</p>
+                          ) : (
+                            <p className="text-sm font-semibold text-red-600"> Out of Stock</p>
+                          )}
+                          {product?.currentStock > 0 && product?.currentStock <= 5 && (
+                            <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
+                          )}
+                          {/* <div className="mb-3">
                         <select id="quantity" className="w-full p-2 border border-[#D9D9D9] bg-[#F5F5F5] rounded-md" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
                           {[...Array(10).keys()].map((num) => (
                             <option key={num + 1} value={num + 1}> {num + 1} </option>
                           ))}
                         </select>
                       </div> */}
-                      <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
-                        <span className='pr-1'>Quantity:</span>
-                        <select id="quantity" className="w-full p-2 border-none bg-transparent focus:border-0 focus-none"  value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
-                          {[...Array(10).keys()].map((num) => (
-                            <option key={num + 1} value={num + 1}> {num + 1} </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div id="add-to-cart-button" className='blue-add-btn'>
-                        {isMobile ? (
-                          showMobileCaseButton && (
-                            <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                              <div className="container p-4 mx-auto max-w-7xl">
-                                <div className="flex justify-end">
-                                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                          <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
+                            <span className='pr-1'>Quantity:</span>
+                            <select id="quantity" className="w-full p-2 bg-transparent border-none focus:border-0 focus-none" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
+                              {[...Array(10).keys()].map((num) => (
+                                <option key={num + 1} value={num + 1}> {num + 1} </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div id="add-to-cart-button" className='blue-add-btn'>
+                            {isMobile ? (
+                              showMobileCaseButton && (
+                                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
+                                  <div className="container p-4 mx-auto max-w-7xl">
+                                    <div className="flex justify-end">
+                                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                          )
-                        ) : (
-                          <div className="flex w-full rtl:space-x-reverse">
-                            {!isEngravingAvailable && (
-                              <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                                <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                              )
+                            ) : (
+                              <div className="flex w-full rtl:space-x-reverse">
+                                {!isEngravingAvailable && product?.condition != 'pre-launch' && (
+                                  <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
+                                    <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                  </div>
+                                )}
+
+                                {isEngravingAvailable && product?.condition != 'pre-launch' && (
+                                  <>
+                                    <div className='flex flex-col w-full gap-y-2 add-green-btn'>
+                                      <Button className="block py-3 sm:hidden add-green-btn nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                      <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                                      <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
+                                        {translate('label.product.engravingText')}
+                                      </button>
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             )}
-
-                            {isEngravingAvailable && (
+                            {!isGuestUser && user?.userId && product?.condition != 'pre-launch' &&
                               <>
-                                <div className='flex flex-col w-full gap-y-2 add-green-btn'>
-                                  <Button className="block py-3 sm:hidden add-green-btn nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                                    {translate('label.product.engravingText')}
-                                  </button>
+                                <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
+                                  <BuyNowButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                                 </div>
                               </>
-                            )}
+                            }
                           </div>
-                        )}
-                        {!isGuestUser && user?.userId &&
-                          <>
-                            <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
-                              <BuyNowButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                            </div>
-                          </>
-                        }
-                      </div>
-                      {/* <div className='w-full pt-3'>
+                          {/* <div className='w-full pt-3'>
                         <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
                           <h4 className='text-xs'>Dispatches from</h4>
                           <p className='text-xs text-black'>London Store</p>
@@ -1235,38 +1267,62 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                           <p className='text-xs text-color-primary-blue'>Product support included</p>
                         </div>
                       </div> */}
-                      <div className='w-full'>
-                        <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                          {isInWishList(selectedAttrData?.productId) ? (
-                            <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
-                          ) : (
-                            <HeartIcon className="flex-shrink-0 w-3 font-semibold text-black h-3 mr-2" />)}
-                          <span className='text-xs text-black font-semibold'> Add to Wishlist </span>
-                        </button>
-                      </div>
+                          {product?.condition != 'pre-launch' && <div className='w-full'>
+                            <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                              {isInWishList(selectedAttrData?.productId) ? (
+                                <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
+                              ) : (
+                                <HeartIcon className="flex-shrink-0 w-3 h-3 mr-2 font-semibold text-black" />)}
+                              <span className='text-xs font-semibold text-black'> Add to Wishlist </span>
+                            </button>
+                          </div>}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                {/* Used Product Option */}
-                {tabProducts?.USED?.length > 0 && (
-                  <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
-                    <label className="flex items-center justify-between gap-2 cursor-pointer">
-                      <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
-                      <span className="font-semibold">Save with used - Like New</span>
-                      <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                        {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                      </span>
-                    </label>
-                    <div className='mt-3 space-y-2'>
-                      <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
+                    {/* Used Product Option */}
+                    {tabProducts?.USED?.length > 0 && (
+                      <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
+                        <label className="flex items-center justify-between gap-2 cursor-pointer">
+                          <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
+                          <span className="font-semibold">Save with used - Like New</span>
+                          <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
+                            {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
+                          </span>
+                        </label>
+                        <div className='mt-3 space-y-2'>
+                          <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
                       <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
-                    </div>
-                    {selectedOption === "used" && (
-                      <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                        </div>
+                        {selectedOption === "used" && (
+                          <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                        )}
+                      </div>
                     )}
-                  </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={`p-4 flex flex-col bg-nonactive justify-center text-center`}>
+                      <label className="flex items-center justify-between">
+                        <span className="justify-center w-full px-6 py-2 font-normal text-center text-white uppercase bg-orange-500 rounded-full text-x-small">Pre Launch</span>
+                      </label>
+                      {selectedOption === "new" && (
+                        <div className="mt-2 space-y-2">
+                          {product?.currentStock > 0 ? (
+                            <p className="font-semibold text-green-600">In stock</p>
+                          ) : (
+                            <p className="text-sm font-semibold text-red-600">Not for sale now</p>
+                          )}
+                        </div>
+                      )}
+                      <span className='mt-4 mb-3 text-xs font-normal text-gray-700 sm:mt-12'>If you'd like to know more about this product, simply click <span className='font-semibold text-black'>"I'm Interested"</span> and we'll notify you about the launch and its features.</span>
+                      <button className="flex items-center justify-center flex-1 uppercase font-semibold max-w-xs px-8 py-2 text-[#2D4D9C] bg-[#ACD4FF] hover:bg-[#2D4D9C] hover:text-[#ACD4FF] border border-transparent rounded-2xl sm:w-full" onClick={() => createProductInterest()} >
+                        I'm Interested
+                      </button>
+                    </div>
+                  </>
                 )}
+
               </div>
             </div>
           </div>
@@ -1462,7 +1518,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                     renderThumbInner={customRenderThumbInner}
                   />
                   {featureToggle?.features?.enableRichPdpToggle && (
-                    <p className='text-gray-500 text-sm pt-4'>Product Code: {product?.productCode}</p>
+                    <p className='pt-4 text-sm text-gray-500'>Product Code: {product?.productCode}</p>
                   )}
                 </div>
               ) : (
@@ -1554,7 +1610,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 {featureToggle.features?.enableForPCSite ?
                   <>
                     <h3 className="mb-1 font-semibold heading dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                    <p className='pb-6 text-black text-sm sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
+                    <p className='pb-6 text-sm text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
                   </>
                   : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}
                 <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
@@ -1569,7 +1625,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css">
                     {featureToggle.features?.enableForPCSite ?
                       <>
-                        <h3 className="mb-1 heading font-semibold  dark:text-black"> Upgrade Your Kit & Save 20% </h3>
+                        <h3 className="mb-1 font-semibold heading dark:text-black"> Upgrade Your Kit & Save 20% </h3>
                         <p className='pb-6 text-sm text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
                       </>
                       : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}

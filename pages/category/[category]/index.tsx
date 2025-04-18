@@ -163,7 +163,7 @@ export async function getStaticProps(context: any) {
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
           defaultDisplayMembership,
-          blogList : blogListUIDData?.pages ?? []
+          blogList: blogListUIDData?.pages ?? []
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
@@ -177,7 +177,7 @@ export async function getStaticProps(context: any) {
           globalSnippets: infraUIDData?.snippets ?? [],
           snippets: categorySlugUIDData?.snippets ?? [],
           defaultDisplayMembership,
-          blogList : blogListUIDData?.pages ?? []
+          blogList: blogListUIDData?.pages ?? []
         },
         revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
       }
@@ -192,7 +192,7 @@ export async function getStaticProps(context: any) {
         globalSnippets: infraUIDData?.snippets ?? [],
         snippets: categorySlugUIDData?.snippets ?? [],
         defaultDisplayMembership,
-        blogList : blogListUIDData?.pages ?? []
+        blogList: blogListUIDData?.pages ?? []
       },
       revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS)
     }
@@ -343,7 +343,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, categoryId: category?.id, } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, includeFreeProduct: true, categoryId: category?.id, } },
     ],
     ([url, body]: any) => postData(url, body),
     {

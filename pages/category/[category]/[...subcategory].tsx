@@ -319,7 +319,7 @@ function CategoryPage({ category, slug, products, deviceInfo, config, featureTog
   } = useSwr(
     [
       `/api/catalog/products`,
-      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, categoryId: category?.id } },
+      { ...state, ...{ slug: slug, isCategory: true, excludeOOSProduct, includeFreeProduct: true, categoryId: category?.id } },
     ],
     ([url, body]: any) => postData(url, body),
     {

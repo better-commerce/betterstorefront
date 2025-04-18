@@ -3,7 +3,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
 import { stringToBoolean } from '@framework/utils/parse-util'
-import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon, WalletIcon } from '@heroicons/react/24/outline'
+import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon, WalletIcon, HandThumbUpIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from "@heroicons/react/24/outline";
 import { ArrowPathRoundedSquareIcon, BookOpenIcon, ClipboardDocumentListIcon, HeartIcon, ListBulletIcon, QueueListIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
@@ -233,6 +233,17 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           displayOrder: 13
         })
       }
+    }
+    if (featureToggle?.features?.enableTradeIn) {
+      newConfig.push({
+        type: 'tab',
+        text: "I'm Interested In",
+        mtext: "I'm Interested In",
+        props: 'register-interest',
+        head: <HandThumbUpIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        href: '/my-account/register-interest',
+        displayOrder: 13
+      })
     }
     if (featureToggle?.features?.enableTradeIn) {
       newConfig.push({

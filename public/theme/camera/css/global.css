@@ -2370,7 +2370,7 @@ button.icon-grp .header-dark{
     }
 }
 .bg-progress-bar{
-  background-color: var(--btn-bg-hover-primary) !important;
+  background-color: #ffcc02 !important;
 }
 .main-footer-section{
   background: #212B3B !important;

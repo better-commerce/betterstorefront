@@ -209,6 +209,9 @@ export const NEXT_REFERRAL_CLICK_ON_INVITE =
   '/api/customer/referral/referral-click-on-invite'
 export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
 export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
+export const NEXT_CUSTOMER_PRODUCT_INTEREST = '/api/customer/product-interest'
+export const NEXT_DELETE_CUSTOMER_PRODUCT_INTEREST = '/api/customer/remove-user-product-interest'
+export const NEXT_GET_CUSTOMER_PRODUCT_INTEREST = '/api/customer/get-user-interest-products'
 export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
 export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
 export const NEXT_LOG_ACTIVITY = '/api/log/activity'

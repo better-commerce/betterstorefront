@@ -41,6 +41,9 @@ export const OPERATIONS = [
   'editAddress',
   'getWishlist',
   'createWishlist',
+  'createProductInterest',
+  'removeUserProductInterest',
+  'getUserInterestProducts',
   'removeItemFromWishlist',
   'createReview',
   'applyPromo',
@@ -107,6 +110,9 @@ export type Operations<P extends APIProvider> = {
   getOrders: {}
   getWishlist: {}
   createWishlist: {}
+  createProductInterest: {}
+  removeUserProductInterest: {}
+  getUserInterestProducts: {}
   removeItemFromWishlist: {}
   subscribe: {}
   priceMatch: {}
