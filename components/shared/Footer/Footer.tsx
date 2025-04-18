@@ -13,9 +13,8 @@ import axios from "axios";
 const Footer = ({ navItems = [], featureToggle }: any) => {
   const [domLoaded, setDOMLoaded] = useState<boolean>(false)
   const { user, isGuestUser, openLoginSideBar } = useUI();
-  // const [stores, setStores] = useState([])
-  const [filteredStores, setFilteredStores]: any = useState([])
-  const [openAccordions, setOpenAccordions] = useState<{[key: string]: boolean}>({})
+  const [allStores, setAllStores]: any = useState([])
+  const [mobileMenuAccordion, setMobileMenuAccordion] = useState<{ [key: string]: boolean }>({})
   const [isMobile, setIsMobile] = useState<boolean>(false)
   useEffect(() => {
     getAllStores()
@@ -30,8 +29,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
           lng: Number(store?.longitude),
         }
       })
-      setFilteredStores(storeData)
-      // setStores(storeData)
+      setAllStores(storeData)
     } catch (error) {
       console.error('err in fetching stores', error)
     }
@@ -73,7 +71,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
   // Toggle accordion open/closed state
   const toggleAccordion = (accordionId: string) => {
     if (isMobile) {
-      setOpenAccordions(prev => ({
+      setMobileMenuAccordion(prev => ({
         ...prev,
         [accordionId]: !prev[accordionId]
       }))
@@ -84,7 +82,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
     return (
       item?.navBlocks?.map((menu: any, index: number) => {
         const accordionId = `accordion-${itemIndex}-${index}`
-        const isOpen = openAccordions[accordionId] || !isMobile
+        const isOpen = mobileMenuAccordion[accordionId] || !isMobile
 
         return (
           <div key={index} className="text-sm footer-menu-links">
@@ -98,11 +96,11 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
                 <span className="accordion-icon">
                   {isOpen ? (
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                      <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z" />
                     </svg>
                   ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                      <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
                     </svg>
                   )}
                 </span>
@@ -157,14 +155,14 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
     if (window.innerWidth < 768) {
       // Small delay to ensure DOM is fully loaded
       setTimeout(() => {
-        const initialAccordionState: {[key: string]: boolean} = {}
+        const initialAccordionState: { [key: string]: boolean } = {}
         navItems.forEach((item: any, itemIndex: number) => {
           item?.navBlocks?.forEach((menu: any, index: number) => {
             const accordionId = `accordion-${itemIndex}-${index}`
             initialAccordionState[accordionId] = false
           })
         })
-        setOpenAccordions(initialAccordionState)
+        setMobileMenuAccordion(initialAccordionState)
       }, 100)
     }
 
@@ -177,7 +175,6 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
   return (
     <>
       <Newsletter featureToggle={featureToggle} />
-
       {featureToggle?.features?.enableForPCSite ? (
         <div className="relative pt-16 pb-6 bg-neutral-50 nc-Footer lg:pt-16 lg:pb-6 dark:border-neutral-200 main-footer-section dark:bg-white">
           <div className="container grid grid-cols-1 sm:grid-cols-12">
@@ -195,7 +192,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
               </div>
             </div>
             <div className="flex flex-col col-span-12 gap-6 sm:col-span-3">
-              {filteredStores?.length > 0 && filteredStores?.map((store: any, storeIdx: number) => (
+              {allStores?.length > 0 && allStores?.map((store: any, storeIdx: number) => (
                 <div className="flex flex-col gap-2" key={`stores-${storeIdx}`}>
                   <div className="grid items-center grid-cols-12 gap-4">
                     <div className="col-span-4">
@@ -209,14 +206,13 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
                   </div>
                 </div>
               ))}
-
             </div>
           </div>
           <div className="container flex flex-col w-full pt-6 mt-6">
             <p className="text-x-small text-[#B3B3B3]">Technical specifications are for guidance only and cannot be guaranteed accurate. All offers subject to availability and while stocks last. Errors and omissions excepted. Registered Company No. 1449928. Park Cameras Limited is a credit broker, not a lender and is authorised and regulated by the Financial Conduct Authority (FRN 680161). We do not charge you for credit broking services. We will introduce you exclusively to Omni Capital finance products provided by Omni Capital Retail Finance Ltd.</p>
           </div>
           <div className="container flex flex-col w-full pt-6 mt-6 border-t border-gray-700">
-            <p className="text-x-small text-[#B3B3B3]">&copy; 2025 Park Cameras, York Road, Burgess Hill, West Sussex, RH15 9TT | VAT No. GB 315 9441 58 | Registered Company No. 1449928</p>
+            <p className="text-x-small text-[#B3B3B3]">&copy; {new Date().getFullYear()} Park Cameras, York Road, Burgess Hill, West Sussex, RH15 9TT | VAT No. GB 315 9441 58 | Registered Company No. 1449928</p>
           </div>
         </div>
       ) : (
