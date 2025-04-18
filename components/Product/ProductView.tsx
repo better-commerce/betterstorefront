@@ -131,25 +131,33 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   }
   const createProductInterest = async () => {
-    try {
-      const response = await axios.post(NEXT_CUSTOMER_PRODUCT_INTEREST, {
-        id: user?.userId,
-        productId: product?.recordId,
-      })
-      
-      if (response?.data) {
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      openLoginSideBar()
+      return
+    }
+    else {
+      try {
+        const response = await axios.post(NEXT_CUSTOMER_PRODUCT_INTEREST, {
+          id: user?.userId,
+          productId: product?.recordId,
+        })
+
+        if (response?.data) {
+          setAlert({
+            type: 'success',
+            msg: 'Product interest registered successfully'
+          })
+        }
+      } catch (error) {
+        console.log(error, 'error')
         setAlert({
-          type: 'success',
-          msg: 'Product interest registered successfully'
+          type: 'error',
+          msg: 'Failed to register product interest'
         })
       }
-    } catch (error) {
-      console.log(error, 'error')
-      setAlert({
-        type: 'error',
-        msg: 'Failed to register product interest'
-      })
     }
+
   }
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
   useEffect(() => {
@@ -1318,11 +1326,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       <span className='mt-4 mb-3 text-xs font-normal text-gray-700 sm:mt-12'>If you'd like to know more about this product, simply click <span className='font-semibold text-black'>"I'm Interested"</span> and we'll notify you about the launch and its features.</span>
                       <button className="flex items-center justify-center flex-1 uppercase font-semibold max-w-xs px-8 py-2 text-[#2D4D9C] bg-[#ACD4FF] hover:bg-[#2D4D9C] hover:text-[#ACD4FF] border border-transparent rounded-2xl sm:w-full" onClick={() => createProductInterest()} >
                         I'm Interested
-                      </button>
+                      </button>                  
                     </div>
                   </>
                 )}
-
               </div>
             </div>
           </div>
