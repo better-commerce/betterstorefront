@@ -1,5 +1,4 @@
 import {
-  TRADE_IN_GUEST_CHECKOUT,
   TRADE_IN_PRODUCTS,
 } from '@components/utils/constants'
 import fetcher from '@framework/fetcher'

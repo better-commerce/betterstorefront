@@ -247,7 +247,6 @@ export const POST_STORE_BY_POSTALCODE = `/api/${process.env.NEXT_PUBLIC_API_VERS
 
 //TRADE IN JOURNEY NEXT APP ENDPOINTS
 
-export const NEXT_TRADE_IN_GUEST_CHECKOUT = `/api/trade-in/post-quote-as-guest`
 export const NEXT_TRADE_IN_GUEST_LOGIN = `/api/trade-in/post-guest-login`
 export const NEXT_TRADE_IN_LOGIN = `/api/trade-in/post-login`
 export const NEXT_TRADE_IN_LOGIN_USER = `/api/trade-in/quote-as-user`
@@ -270,19 +269,18 @@ export const NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER = `/api/trade-in/cancel-quot
 
 //TRADE IN JOURNEY API ENDPOINTS
 
-export const TRADE_IN_GUEST_CHECKOUT = `/api/quotes/guest`
-export const TRADE_IN_GUEST_LOGIN = `/api/customers/guest`
-export const TRADE_IN_LOGIN = `/api/customers/autheticate`
-export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/quotes`
-export const TRADE_IN_GET_QUOTE_BY_ID = `/api/quotes`
-export const TRADE_IN_GET_QUOTES = `/api/quotes`
-export const TRADE_IN_PRODUCTS = `/api/products`
-export const TRADE_IN_USER_TOKEN = `/api/users/login`
-export const TRADE_IN_GET_SHIPPING_METHODS = `/api/deliveries/shipping-method`
-export const TRADE_IN_GET_STORES = `/api/stores`
-export const TRADE_IN_GET_CUSTOMER = `/api/customers`
-export const TRADE_IN_GET_ASSESSMENT_STATUS = `/api/assessments`
-export const TRADE_IN_DPD_PICKUP_LOCATIONS = `/api/deliveries/pickup-locations`
+export const TRADE_IN_GUEST_LOGIN = `/customers/guest`
+export const TRADE_IN_LOGIN = `/customers/authenticate`
+export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/quotes`
+export const TRADE_IN_GET_QUOTE_BY_ID = `/quotes`
+export const TRADE_IN_GET_QUOTES = `/quotes`
+export const TRADE_IN_PRODUCTS = `/products`
+export const TRADE_IN_USER_TOKEN = `/users/login`
+export const TRADE_IN_GET_SHIPPING_METHODS = `/deliveries/shipping-method`
+export const TRADE_IN_GET_STORES = `/stores`
+export const TRADE_IN_GET_CUSTOMER = `/customers`
+export const TRADE_IN_GET_ASSESSMENT_STATUS = `/assessments`
+export const TRADE_IN_DPD_PICKUP_LOCATIONS = `/deliveries/pickup-locations`
 
 // WALLET NEXT APP ENDPOINTS 
 
