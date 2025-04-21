@@ -7,7 +7,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
-import { NEXT_CREATE_WISHLIST, NEXT_REMOVE_WISHLIST, SITE_ORIGIN_URL } from "@components/utils/constants";
+import { NEXT_CREATE_WISHLIST, NEXT_CUSTOMER_PRODUCT_INTEREST, NEXT_REMOVE_WISHLIST, SITE_ORIGIN_URL } from "@components/utils/constants";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
@@ -22,6 +22,7 @@ import Router from 'next/router';
 import { AnalyticsEventType } from './services/analytics';
 import useAnalytics from './services/analytics/useAnalytics';
 import ReviewBadge from './Product/ReviewBadge';
+import axios from 'axios';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
@@ -197,6 +198,35 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
   }, [isCompared])
+  const createProductInterest = async () => {
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      openLoginSideBar()
+      return
+    }
+    else {
+      try {
+        const response = await axios.post(NEXT_CUSTOMER_PRODUCT_INTEREST, {
+          id: user?.userId,
+          productId: product?.recordId,
+        })
+
+        if (response?.data) {
+          setAlert({
+            type: 'success',
+            msg: 'Product interest registered successfully'
+          })
+        }
+      } catch (error) {
+        console.log(error, 'error')
+        setAlert({
+          type: 'error',
+          msg: 'Failed to register product interest'
+        })
+      }
+    }
+
+  }
   const renderGroupButtons = () => {
     return (
       <>
@@ -206,10 +236,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block cart-btn-plp" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
               }
-              <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              {!data?.newLaunch && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
-              </ButtonSecondary>
+              </ButtonSecondary>}
             </div>
           </>
         ) : (
@@ -218,10 +248,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
               }
-              <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              {!data?.newLaunch && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
-              </ButtonSecondary>
+              </ButtonSecondary>}
             </div>
           </>
         )}
@@ -249,6 +279,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-5 pb-2.5 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
             <div className='mt-4'>
               <h2 className="text-base text-left product-card-title font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
+              {data?.newLaunch && data?.price?.raw?.withTax == 0 && <div dangerouslySetInnerHTML={{ __html: data?.description }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description clamp-4-lines" />}
             </div>
             <div className='flex justify-between mt-1'>
               <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.category}</p>
@@ -263,7 +294,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             </div>
           </div >
         </ButtonLink>
-        {featureToggle?.features?.enableAddButtonBottom ? (
+        {!data?.newLaunch && featureToggle?.features?.enableAddButtonBottom ? (
           <>
             <div className="flex flex-col gap-2 plp-hidden-section">
               <ReviewBadge reviewCountdata={data?.reviewCount} ratingdata={data?.rating} />
@@ -274,9 +305,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             {/* Content to render if false */}
           </>
         )}
-        <div className="flex items-center justify-between mt-2 product-card-panel">
+        {!data?.newLaunch && <div className="flex items-center justify-between mt-2 product-card-panel">
           <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-        </div>
+        </div>}
         {/* {featureToggle.features?.enableForPCSite &&
           <>
             <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
@@ -287,11 +318,18 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             </div>
           </>
         } */}
-        {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && (
+        {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && !data?.newLaunch && (
           <div className='justify-start my-3 ml-0 text-left add-btn-plp'>
             <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
           </div>
         )}
+        {data?.newLaunch &&
+          <div className='justify-start my-3 ml-0 text-left add-btn-plp'>
+            <button className="flex items-center text-xs justify-center flex-1 font-semibold max-w-xs px-8 py-1 text-black bg-[#ABC1F8] hover:bg-[#ABC1F8] hover:text-black border border-transparent rounded-2xl" onClick={() => createProductInterest()} >
+              I'm Interested
+            </button>
+          </div>
+        }
         {isComparedEnabled && product?.compared && (
           <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
             {product?.compared && (
