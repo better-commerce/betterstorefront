@@ -435,7 +435,7 @@ export default function TradeNewAddress({ deviceInfo, getAddressNew }: any) {
     <>
       <main className="">
         <div className="flex items-start">
-          <div className="items-center justify-center hidden text-white sm:flex add-list-div">
+          <div className="items-center justify-center hidden text-white sm:flex add-list-div pc-primary-btn">
             <button
               type="submit"
               onClick={(ev: any) => handleOpenNewAddressModal()}

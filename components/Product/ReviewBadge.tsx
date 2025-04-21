@@ -30,7 +30,17 @@ export default function ReviewBadge({ reviewCountdata, ratingdata }: ReviewBadge
         </div>
 
         {/* Reviews */}
-        <span className="text-x-small text-gray-600 underline no-plp-underline"><a href="#bottomtabs">{reviewCountdata} <span className='plp-hidden'>reviews </span></a></span>
+        {reviewCountdata > 0 ? (
+            <span className="text-x-small text-gray-600 underline no-plp-underline">
+              <a href="#bottomtabs">
+                {reviewCountdata} <span className="plp-hidden">reviews</span>
+              </a>
+            </span>
+          ) : (
+            <span className="text-x-small text-gray-600 underline no-plp-underlinee">
+              {reviewCountdata} <span className="plp-hidden">reviews</span>
+            </span>
+          )}
         {/* Answers */}
         <span className="text-x-small text-gray-600 underline plp-hidden">{answers} answers</span>
       </div>

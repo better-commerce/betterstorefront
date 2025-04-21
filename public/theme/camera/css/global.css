@@ -2208,7 +2208,7 @@ h6 {
 body .pdp-right-section .price{
   font-size: 22px !important;
 }
-.blue-add-btn .add-green-btn .nc-Button{
+.blue-add-btn .add-green-btn .nc-Button, .pc-primary-btn .nc-Button{
   background-color: #ACD4FF !important;
   color: #000 !important;
   box-shadow: none !important;
@@ -2684,4 +2684,44 @@ select.focus-none:focus{
 
 .filter-dropdown:hover{
   background: #e8e8e8;
+}
+.pading-top-cls{
+  padding-top:8.5rem !important;
+}
+.sidebar_bg{
+  background: #294384 !important;
+}
+.sidebar_bg .sidebar_inner_section{
+  background: #EAEDF5;
+  box-shadow: none !important;
+  width: 90%;
+  margin: 0 auto;
+  padding: 15px;
+  margin-top: 25px !important;
+  margin-bottom: 25px !important;
+}
+.pc-bg-active{
+  background-color: rgba(172, 212, 255, 0.5);
+}
+.heading-w-95{
+  width: 90%;
+}
+.pc-none{
+  display: none !important;
+}
+.pc-justify-end{
+  justify-content: end !important;
+}
+.pc-b-padding-none{
+  padding-bottom: 0 !important;
+}
+@media screen and (min-width:1025px) {
+.pc-min-height-container{
+  min-height: 500px  !important;
+}
+}
+@media screen and (max-width:1023px) {
+  .sidebar_bg{
+    background: transparent !important;
+  }
 }

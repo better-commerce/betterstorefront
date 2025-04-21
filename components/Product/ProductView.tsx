@@ -991,7 +991,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     },
-    product && product?.customAttributes?.length > 0 && {
+     product?.customAttributes?.some((attr: { key: any }) => attr?.key?.startsWith('Specs')) && {
       id: 'specs',
       label: 'Specs',
       content: (
@@ -1005,14 +1005,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 </tr>
               </thead>
               <tbody>
-                {product?.customAttributes?.map((attr: any, index: any) => (
-                  <tr key={index} className="border border-gray-300">
-                    <td className="p-3 border border-gray-300">{attr?.display}</td>
-                    <td
-                      className="p-3 border border-gray-300"
-                      dangerouslySetInnerHTML={{ __html: attr?.value }}
-                    />
-                  </tr>
+                {product?.customAttributes?.filter((attr: { key: any }) => attr?.key?.startsWith('Specs')) ?.map((attr:any, index:number) => (
+                 <tr key={index} className="border border-gray-300">
+                 <td className="p-3 border border-gray-300">{attr?.display}</td>
+                 <td
+                   className="p-3 border border-gray-300"
+                   dangerouslySetInnerHTML={{ __html: attr?.value }}
+                 />
+                </tr>
                 ))}
               </tbody>
             </table> : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>No product specifications available.</div>}

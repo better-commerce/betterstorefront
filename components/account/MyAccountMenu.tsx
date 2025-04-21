@@ -332,7 +332,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           </div>
         </>
       ) : (
-        <div className="flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50">
+        <div className={`flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50 ${featureToggle?.features?.enableForPCSite ? 'sidebar_inner_section' : ''}`}>
           {newConfig.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
             <>
               {item.text == myAccountActiveTab ? (
@@ -342,8 +342,8 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
                     shallow={true}
                     href={item.href}
                     passHref
-                    className={`block py-3 pl-2 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
-                      ? 'border-l-sky-500 border-l-2 slate-200 font-semibold dark:text-black icon-text-black'
+                    className={`block py-3 pl-4 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
+                      ? 'border-l-sky-500 border-l-2 slate-200 font-semibold dark:text-black icon-text-black  pc-bg-active'
                       : 'border-white border-l-2 pl-2 text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                       }`}
                   >
@@ -357,7 +357,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
                         href={itemChild?.href}
                         passHref
                         className={`block py-1 pl-4 mt-2 flex-shrink-0 text-xs ${itemChild.text == myAccountActiveTab
-                          ? 'border-l-sky-500 border-l-2 pl-2 font-semibold dark:text-slate-200 icon-text-black'
+                          ? 'border-l-sky-500 border-l-2 pl-2 font-semibold dark:text-slate-200 icon-text-black pc-bg-active'
                           : 'border-white border-l-2 pl-2 text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                           }`}
                       >
@@ -372,7 +372,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
                     shallow={true}
                     href={item.href}
                     passHref
-                    className="flex-shrink-0 block py-3 pl-2 text-sm sm:text-base"
+                    className="flex-shrink-0 block py-3 pl-4 text-sm sm:text-base"
                   >
                     <span className="inline-block text-black sm:hidden dark:text-white">
                       {isMobile ? item?.head : item?.mtext}
