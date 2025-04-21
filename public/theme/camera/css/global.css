@@ -2557,11 +2557,11 @@ html {
   left: auto !important;
 }
 .swiper-pagination-bullet {
-  background: #000000 !important;
+  background: #FFFFFF !important;
 }
 .swiper-pagination-bullet-active {
   opacity: 1;
-  background-color: #FFFFFF !important;
+  background-color: #000000 !important;
 }
 }
 .search-icon-box button .search-icon-div{

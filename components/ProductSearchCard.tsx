@@ -4,7 +4,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
-import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline";
+import { ArrowsPointingOutIcon, ClockIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { NEXT_CREATE_WISHLIST, NEXT_CUSTOMER_PRODUCT_INTEREST, NEXT_REMOVE_WISHLIST, SITE_ORIGIN_URL } from "@components/utils/constants";
@@ -236,7 +236,7 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block cart-btn-plp" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
               }
-              {!data?.newLaunch && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              {data?.condition != "pre-launch" && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
               </ButtonSecondary>}
@@ -248,7 +248,7 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
               {featureToggle?.features?.enableAddToBagPlp &&
                 <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
               }
-              {!data?.newLaunch && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              {data?.condition != "pre-launch" && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
                 <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
                 <span className="ms-1">{translate('common.label.quickViewText')}</span>
               </ButtonSecondary>}
@@ -268,9 +268,17 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
               <img src={generateUri(data?.image, 'h=300&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-[220px]' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={data?.name} />
             </div>
           </ButtonLink>
-          <div className={CLASSES}>
+          {data?.condition != "pre-launch" && <div className={CLASSES}>
             <ProductTag product={data} />
-          </div>
+          </div>}
+          {data?.condition === "pre-launch" && <div className={CLASSES}>
+            <div className='px-2.5 py-1.5 text-xs bg-orange-500 dark:bg-white nc-shadow-lg rounded-full flex items-center justify-center text-white dark:text-slate-900'>
+              <ClockIcon className="w-3.5 h-3.5" />
+              <div className="leading-none ms-1">
+                Pre-Launch
+              </div>
+            </div>
+          </div>}
           <LikeButton liked={isInWishList} className="absolute z-0 top-3 end-3" handleWishList={handleWishList} />
           {!isComparedEnabled && renderGroupButtons()}
         </div>
@@ -280,7 +288,7 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
               <div className=''>
                 <h2 className="text-sm text-base font-semibold text-left transition-colors dark:text-black">{data?.brand}</h2>
                 <h2 className="text-base font-semibold text-left transition-colors dark:text-black nc-ProductCard__title product-card__brand">{data?.name}</h2>
-                {data?.newLaunch && data?.price?.raw?.withTax == 0 && <div dangerouslySetInnerHTML={{ __html: data?.description }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description clamp-4-lines" />}
+                {data?.condition === "pre-launch" && <div dangerouslySetInnerHTML={{ __html: data?.description }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description clamp-4-lines" />}
               </div>
               <div className='flex justify-between mt-1'>
                 <p className={`text-sm text-left text-slate-500 dark:text-slate-500 mt-1 product-card__name`}>{data?.classification?.category}</p>
@@ -295,7 +303,7 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
               </div>
             </div >
           </ButtonLink>
-          {!data?.newLaunch && featureToggle?.features?.enableAddButtonBottom ? (
+          {data?.condition != "pre-launch" && featureToggle?.features?.enableAddButtonBottom ? (
             <>
               <div className="flex flex-col gap-2 plp-hidden-section">
                 <ReviewBadge reviewCountdata={data?.reviewCount} ratingdata={data?.rating} />
@@ -306,7 +314,7 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
               {/* Content to render if false */}
             </>
           )}
-          {!data?.newLaunch && <div className="flex items-center justify-between mt-2 product-card-panel">
+          {data?.condition != "pre-launch" && <div className="flex items-center justify-between mt-2 product-card-panel">
             <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>}
           {/* {featureToggle.features?.enableForPCSite &&
@@ -319,12 +327,12 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
               </div>
             </>
           } */}
-          {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && !data?.newLaunch && (
+          {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && data?.condition != "pre-launch" && (
             <div className='justify-start my-3 ml-0 text-left add-btn-plp'>
               <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
             </div>
           )}
-          {data?.newLaunch &&
+          {data?.condition === "pre-launch" &&
             <div className='justify-start my-3 ml-0 text-left add-btn-plp'>
               <button className="flex items-center text-xs justify-center flex-1 font-semibold max-w-xs px-8 py-1 text-black bg-[#ABC1F8] hover:bg-[#ABC1F8] hover:text-black border border-transparent rounded-2xl" onClick={() => createProductInterest()} >
                 I'm Interested
