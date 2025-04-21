@@ -94,7 +94,7 @@ const FormField = (props: IFormFieldProps) => {
                 ? item?.onChange(e, item, context)
                 : context?.handleChange(e)
             }}
-            checked={
+            defaultChecked={
               item?.checked
                 ? item?.checked(context)
                 : context?.values[item?.name]
@@ -161,7 +161,7 @@ const FormField = (props: IFormFieldProps) => {
                         }
                       />
                       <label
-                        className="text-sm main-custom-check-label flex"
+                        className="flex text-sm main-custom-check-label"
                         htmlFor={option?.label}
                         //title={`Smooth Payments`}
                       >

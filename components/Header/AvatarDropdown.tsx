@@ -2,7 +2,7 @@
 
 import { Popover, Transition } from "@headlessui/react";
 import { avatarImgs } from "@components/Header/fakeData";
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Link from "next/link";
 import Avatar from "../shared/Avatar/Avatar";
 import { getCurrentPage, getEnabledSocialLogins } from "@framework/utils/app-util";
@@ -20,7 +20,7 @@ import { getBrowserName } from "@framework/utils/ui-util";
 import useAnalytics from "@components/services/analytics/useAnalytics";
 import { isMobile } from "react-device-detect";
 
-export default function AvatarDropdown({ pluginConfig = [], featureToggle, deviceInfo }: any) {
+const AvatarDropdown = ({ pluginConfig = [], featureToggle, deviceInfo }:any) => {
   const { recordAnalytics } = useAnalytics()
   const { isDesktop } = deviceInfo
   const translate = useTranslation()
@@ -161,6 +161,7 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
       ),
       onClick: async () => {
         DataLayerInstance.setItemInDataLayer('visitorId', EmptyString)
+        setDisplayText('Sign in. Account & Orders') // Reset the display text
         deleteUser({ router: Router })
         setAlert({ type: AlertType.SUCCESS, msg: translate('common.message.logoutSuccessfulText') })
         if (user?.socialData?.socialMediaType) {
@@ -171,17 +172,27 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
     },
   ]
   let accountDropdownConfig = accountDropDownConfigUnauthorized
-  let title = !isGuestUser ? user?.userId ? (translate('common.label.hiText') + `, ${user?.firstName}`) : translate('label.common.myAccountText') : ''
+  const [displayText, setDisplayText] = useState('Sign in. Account & Orders');
+
+  useEffect(() => {
+    if (!isGuestUser && user?.userId) {
+      setDisplayText(`${translate('common.label.hiText')}, ${user?.firstName}`);
+    }
+  }, [isGuestUser, user, translate]);
   if (!isGuestUser && user?.userId) {
     accountDropdownConfig = accountDropDownConfigAuthorized
   }
   return (
-    <div className="AvatarDropdown ">
+    <div className="AvatarDropdown">
       <Popover className="relative">
         {({ open, close }) => (
           <>
             <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
-              {featureToggle?.features?.enablePCTopHeader ? <span className="flex items-center text-xs font-light text-white text-regular hover:underline">{!isGuestUser && user?.userId ? title : isMobile ? 'Sign in.' : 'Sign in.  Account & Orders'} <ChevronDownIcon className="w-3 h-3" /></span> :
+              {featureToggle?.features?.enablePCTopHeader ? 
+                <span className="flex items-center text-xs font-light text-white text-regular hover:underline">
+                  {displayText} <ChevronDownIcon className="w-3 h-3" />
+                </span> 
+                :
                 <img alt="" src="/images/userIcon.svg" className="w-6 h-6 mx-auto group-hover:text-black" />
               }
             </Popover.Button>
@@ -191,9 +202,9 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
                   <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-white py-7 drop-acc-icon">
                     {!isGuestUser && user?.userId && <>
                       <div className="flex items-center space-x-3">
-                        <img className="w-10 h-10 text-lg rounded-full" alt={title} src={`/assets/user-avatar.png`} />
+                        <img className="w-10 h-10 text-lg rounded-full" alt={displayText || 'User Avatar'} src={`/assets/user-avatar.png`} />
                         <div className="flex-grow">
-                          <h4 className="font-semibold capitalize dark:text-black">{title}</h4>
+                          <h4 className="font-semibold capitalize dark:text-black">{displayText}</h4>
                         </div>
                       </div>
                       <div className="w-full border-b border-neutral-200 dark:border-neutral-200" />
@@ -224,3 +235,5 @@ export default function AvatarDropdown({ pluginConfig = [], featureToggle, devic
     </div>
   );
 }
+
+export default AvatarDropdown;

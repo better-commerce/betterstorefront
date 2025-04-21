@@ -80,6 +80,7 @@ export const getProductListTransform = (results: any) =>
     sku: product?.sku,
     classification: product?.classification,
     currentStock: product?.currentStock,
+    condition: product?.condition,
     description: product?.description,
     attributes: product?.attributes,
     fulfilFromWarehouse: product?.fulfilFromWarehouse,
