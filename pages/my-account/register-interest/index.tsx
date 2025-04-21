@@ -18,33 +18,32 @@ import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Link from 'next/link'
 import { sanitizeRelativeUrl } from '@framework/utils/app-util'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import productInterestHandler from '../../../components/services/product-interest'
 
 function InterestProducts() {
   const [interestProducts, setInterestProducts] = useState([])
   const { user, isGuestUser, changeMyAccountTab, setAlert } = useUI()
   const router = useRouter()
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
+  const { removeFromProductInterest } = productInterestHandler()
   const removeProductInterest = async (productId: any) => {
-    try {
-      const response = await axios.post(NEXT_DELETE_CUSTOMER_PRODUCT_INTEREST, {
-        id: user?.userId,
-        productId: productId,
-      })
-
-      if (response?.data) {
+    removeFromProductInterest(
+      user?.userId,
+      productId,
+      () => {
         setAlert({
           type: 'success',
           msg: 'Product interest removed successfully'
         })
         getUserInterestProducts() // Refresh the list
+      },
+      (error) => {
+        setAlert({
+          type: 'error',
+          msg: error?.response?.data?.message || 'Failed to remove product interest'
+        })
       }
-    } catch (error: any) {
-      console.error('Remove product interest error:', error)
-      setAlert({
-        type: 'error',
-        msg: error?.response?.data?.message || 'Failed to remove product interest'
-      })
-    }
+    )
   }
   const getUserInterestProducts = async () => {
     try {

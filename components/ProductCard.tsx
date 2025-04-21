@@ -7,7 +7,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ArrowsPointingOutIcon, ClockIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
-import { NEXT_CREATE_WISHLIST, NEXT_CUSTOMER_PRODUCT_INTEREST, NEXT_REMOVE_WISHLIST, SITE_ORIGIN_URL } from "@components/utils/constants";
+import { SITE_ORIGIN_URL } from "@components/utils/constants";
 import cartHandler from "@components/services/cart";
 import wishlistHandler from "@components/services/wishlist";
 import { generateUri } from "@commerce/utils/uri-util";
@@ -22,7 +22,7 @@ import Router from 'next/router';
 import { AnalyticsEventType } from './services/analytics';
 import useAnalytics from './services/analytics/useAnalytics';
 import ReviewBadge from './Product/ReviewBadge';
-import axios from 'axios';
+import productInterestHandler from '@components/services/product-interest'
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
@@ -198,34 +198,31 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const isComparedEnabled = useMemo(() => {
     return getFeaturesConfig()?.features?.enableCompare && stringToBoolean(isCompared)
   }, [isCompared])
+  const { addToProductInterest } = productInterestHandler()
+
   const createProductInterest = async () => {
     const objUser = localStorage.getItem('user')
     if (!objUser || isGuestUser) {
       openLoginSideBar()
       return
     }
-    else {
-      try {
-        const response = await axios.post(NEXT_CUSTOMER_PRODUCT_INTEREST, {
-          id: user?.userId,
-          productId: product?.recordId,
-        })
 
-        if (response?.data) {
-          setAlert({
-            type: 'success',
-            msg: 'Product interest registered successfully'
-          })
-        }
-      } catch (error) {
-        console.log(error, 'error')
+    addToProductInterest(
+      user?.userId,
+      product?.recordId,
+      () => {
+        setAlert({
+          type: 'success',
+          msg: 'Product interest registered successfully'
+        })
+      },
+      (error) => {
         setAlert({
           type: 'error',
           msg: 'Failed to register product interest'
         })
       }
-    }
-
+    )
   }
   const renderGroupButtons = () => {
     return (
