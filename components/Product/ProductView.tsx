@@ -1110,6 +1110,26 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       </>
                     )}
                   </div>
+                  {selectedOption === "used" && product?.condition != 'pre-launch' && (
+                  <div className='w-full my-3'>
+                  <div className="max-w-lg bg-[#EAEDF5] rounded-lg p-4 flex gap-3">
+                      <div className="flex-shrink-0">
+                        <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+                         <img src="/theme/camera/image/approved-icon.svg"  alt="approved Icon"/>
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <h3 className="text-sm text-[#1E1E1E]">Park-Approved</h3>
+                        <p className="text-[#1E1E1E] text-xs">
+                          This item has been inspected, tested, and approved by our experts for quality and performance.{" "}
+                          <a href="#" className="link-clr">
+                            Learn more
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  )}
                   {/* <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
                     <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
                       <div className="bg-gray-100 rounded-full">
@@ -1326,7 +1346,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       <span className='mt-4 mb-3 text-xs font-normal text-gray-700 sm:mt-12'>If you'd like to know more about this product, simply click <span className='font-semibold text-black'>"I'm Interested"</span> and we'll notify you about the launch and its features.</span>
                       <button className="flex items-center justify-center flex-1 uppercase font-semibold max-w-xs px-8 py-2 text-[#2D4D9C] bg-[#ACD4FF] hover:bg-[#2D4D9C] hover:text-[#ACD4FF] border border-transparent rounded-2xl sm:w-full" onClick={() => createProductInterest()} >
                         I'm Interested
-                      </button>                  
+                      </button>
                     </div>
                   </>
                 )}
@@ -1484,7 +1504,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-        <div className="lg:flex product-detail-section">
+        <div className="lg:flex product-detail-section overflow-visible">
           {isMobile ? (
             <div className="w-full lg:w-[55%]">
               <Swiper slidesPerView={1} spaceBetween={30} navigation loop className="mySwiper" >
@@ -1509,7 +1529,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           ) : (
             <>
               {featureToggle?.features?.isImageGallery ? (
-                <div className={`w-full sticky top-0 product-image-border ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`} >
+                <div className={`w-full sticky top-0 z-10 product-image-border sticky-container ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`} >
                   <ImageGallery
                     thumbnailAlt={product?.name}
                     thumbnailTitle={product?.name}
@@ -1529,7 +1549,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   )}
                 </div>
               ) : (
-                <div className={`w-full lg:w-[55%] sticky top-0 ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
+                <div className={`w-full lg:w-[55%] sticky top-0 z-10 sticky-container ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
                   <div className="relative">
                     <div className="relative aspect-w-16 aspect-h-16">
                       <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />

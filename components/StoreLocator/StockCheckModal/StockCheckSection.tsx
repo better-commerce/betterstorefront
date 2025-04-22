@@ -33,7 +33,7 @@ const StockCheckSection = ({
                 <h4 className="font-semibold">{translate('label.store.checkStoreStockText')}</h4>
             </div>
 
-            <span className='px-4 pt-4 font-medium text-md dark:text-black'>{translate('label.store.stockCheckDescText')}</span>
+            <span className='px-4 pt-4 font-medium text-md dark:text-black text-sm'>{translate('label.store.stockCheckDescText')}</span>
             <form className='flex flex-row mx-4 mt-4 mb-10 gap-x-4' onSubmit={stockCheckFormik.handleSubmit}>
                 <input
                     name="postCode"
@@ -46,7 +46,7 @@ const StockCheckSection = ({
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className={`${isLoading && 'cursor-not-allowed'} rounded bg-black text-white w-1/2 uppercase font-semibold hover:opacity-80`}
+                    className={`${isLoading && 'cursor-not-allowed'} rounded pc-button bg-black text-white w-1/2 uppercase font-semibold hover:opacity-80`}
                 >
                     {isLoading ? <LoadingDots /> : translate('label.store.findStockText')}
                 </button>

@@ -39,7 +39,7 @@ const Prices: FC<PricesProps> = ({
   // Calculate discount percentage for the non-member price
   const originalPrice = isIncludeVAT ? listPrice?.raw?.withTax : listPrice?.raw?.withoutTax;
   const currentPrice = isIncludeVAT ? price?.raw?.withTax : price?.raw?.withoutTax;
-  const nonMemberDiscountPercentage = originalPrice > currentPrice ? originalPrice - currentPrice : 0;
+  const nonMemberDiscountPercentage = originalPrice > currentPrice? ((originalPrice - currentPrice) / originalPrice) * 100: 0;
   
   const formattedOriginalPrice = isIncludeVAT ? listPrice?.formatted?.withTax : listPrice?.formatted?.withoutTax;
   const match = formattedOriginalPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
@@ -93,7 +93,7 @@ const Prices: FC<PricesProps> = ({
               {/* Discount Percentage */}
               {nonMemberDiscountPercentage > 0 && (
                   <span className="mr-2 font-32 font-normal text-red-600">
-                   -{symbol}{Number(nonMemberDiscountPercentage.toFixed(2)).toLocaleString()}
+                  -{nonMemberDiscountPercentage < 1 ? nonMemberDiscountPercentage.toFixed(2) : Math.round(nonMemberDiscountPercentage)}%
                 </span>
               )}
               {featureToggle?.features?.enableForPCSite ? (

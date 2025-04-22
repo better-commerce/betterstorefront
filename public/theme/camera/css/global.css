@@ -2208,7 +2208,7 @@ h6 {
 body .pdp-right-section .price{
   font-size: 22px !important;
 }
-.blue-add-btn .add-green-btn .nc-Button, .pc-primary-btn .nc-Button{
+.blue-add-btn .add-green-btn .nc-Button, .pc-primary-btn .nc-Button, .pc-button{
   background-color: #ACD4FF !important;
   color: #000 !important;
   box-shadow: none !important;
@@ -2723,5 +2723,22 @@ select.focus-none:focus{
 @media screen and (max-width:1023px) {
   .sidebar_bg{
     background: transparent !important;
+  }
+}
+/* Fix for sticky positioning in product view */
+.product-detail-section {
+  position: relative;
+}
+
+.product-image-border.sticky-container {
+  position: sticky;
+  top: 140px;
+  z-index: 10;
+  height: fit-content;
+}
+
+@media (max-width: 768px) {
+  .product-image-border.sticky-container {
+    position: relative;
   }
 }
