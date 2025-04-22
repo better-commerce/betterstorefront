@@ -58,7 +58,7 @@ export const getProductListTransform = (results: any) =>
     brand: product?.brand,
     brandSlug: product?.brandSlug,
     classification: product?.classification,
-    //condition: product?.condition,
+    condition: product?.condition,
     currentStock: product?.currentStock,
     description: product?.description,
     displayOrder: product?.displayOrder,
