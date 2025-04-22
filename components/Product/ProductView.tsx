@@ -1,41 +1,60 @@
+// React & Next.js
 import { useState, useEffect, useMemo, Fragment } from 'react'
-import axios from 'axios'
 import dynamic from 'next/dynamic'
-import { decrypt, encrypt } from '@framework/utils/cipher'
+import Router from 'next/router'
+
+// Third-party packages
+import axios from 'axios'
+import _, { groupBy, round } from 'lodash'
+import { Dialog, Disclosure, Transition } from '@headlessui/react'
+import ImageGallery from 'react-image-gallery'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+// Icons
 import { GiftIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
-import { useUI } from '@components/ui/context'
-import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
-import ImageGallery from 'react-image-gallery'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.min.css';
-import cartHandler from '@components/services/cart'
-import LookbookGrid from '@components/Product/Lookbook/LookbookGrid'
+
+// Styles
+import 'swiper/swiper-bundle.min.css'
+
+// Utilities
+import { decrypt, encrypt } from '@framework/utils/cipher'
+import { generateUri } from '@commerce/utils/uri-util'
+import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { getCurrentPage, validateAddToCart, vatIncluded } from '@framework/utils/app-util'
+
+// Constants
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG, NEXT_CUSTOMER_PRODUCT_INTEREST } from '@components/utils/constants'
+import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
 import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
-import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
-import { generateUri } from '@commerce/utils/uri-util'
-import _, { groupBy, round } from 'lodash'
-import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
-import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { LocalStorage } from '@components/utils/payment-constants'
-import wishlistHandler from '@components/services/wishlist'
-import { useTranslation } from '@commerce/utils/use-translation'
 import { PRODUCTS } from './data'
-import ProductDescription from './ProductDescription'
-import CacheProductImages from './CacheProductImages'
-import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import ProductSocialProof from './ProductSocialProof'
-import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import TechnicalSpecifications from './TechnicalSpecification'
-import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
-import { AnalyticsEventType } from '@components/services/analytics'
-import Router from 'next/router'
+
+// Hooks & Context
+import { useUI } from '@components/ui/context'
+import { useTranslation } from '@commerce/utils/use-translation'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import TabProductCompare from './TabProductCompare'
-import RichProductView from './RichProductView'
-import DefaultProductView from './DefaultProductView'
+
+// Services
+import cartHandler from '@components/services/cart'
+import wishlistHandler from '@components/services/wishlist'
+
+// Types
+import { AnalyticsEventType } from '@components/services/analytics'
+
+// Dynamically imported components
+const ProductDescription = dynamic(() => import('./ProductDescription'))
+const CacheProductImages = dynamic(() => import('./CacheProductImages'))
+const EngageProductCard = dynamic(() => import('@components/SectionEngagePanels/ProductCard'))
+const ProductSocialProof = dynamic(() => import('./ProductSocialProof'))
+const TechnicalSpecifications = dynamic(() => import('./TechnicalSpecification'))
+const ButtonClose = dynamic(() => import('@components/shared/ButtonClose/ButtonClose'))
+const TabProductCompare = dynamic(() => import('./TabProductCompare'))
+const RichProductView = dynamic(() => import('./RichProductView'))
+const DefaultProductView = dynamic(() => import('./DefaultProductView'))
+const LookbookGrid = dynamic(() => import('@components/Product/Lookbook/LookbookGrid'))
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const PDPDetails = dynamic(() => import('@components/Product/ProductDetails/productDetails'))
 const ProductSpecification = dynamic(() => import('@components/Product/ProductDetails/specification'))
