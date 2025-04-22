@@ -52,10 +52,10 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <h3 className="text-sm text-[#1E1E1E]">Park-Approved</h3>
-                    <p className="text-[#1E1E1E] text-xs">
+                    <h3 className="font-semibold text-black text-body-small">Park-Approved</h3>
+                    <p className="text-[#1E1E1E] font-medium text-x-small">
                       This item has been inspected, tested, and approved by our experts for quality and performance.{" "}
-                      <a href="#" className="link-clr">
+                      <a href="#" className="font-semibold link-clr primary-text-blue">
                         Learn more
                       </a>
                     </p>

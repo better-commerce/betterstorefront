@@ -87,11 +87,12 @@ const PLACEMENTS_MAP: any = {
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership, selectedFilters = [] }: any) {
   const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
+  let currentPage = getCurrentPage()
+  const isIncludeVAT = vatIncluded()
+  const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const { status } = PRODUCTS[0];
   const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
-  const { isInWishList, deleteWishlistItem } = wishlistHandler()
-  const isIncludeVAT = vatIncluded()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
@@ -109,11 +110,27 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [showDetails, setShowGwpDetail] = useState(false)
   const [lookbookData, setLookbookData] = useState<any>(null)
   const [newImages, setImages] = useState([]);
-  let currentPage = getCurrentPage()
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   const [analyticsData, setAnalyticsData] = useState(null)
   const [selectedOption, setSelectedOption] = useState("new");
   const [quantity, setQuantity] = useState(1);
+  // CHECK TRENDING PRODUCTS FROM ENGAGE
+  let similarProduct = []
+  let recentProduct = []
+  if (typeof window !== 'undefined') {
+    similarProduct = window?.similar_products_sorted_product;
+    recentProduct = window?.recent_products_product;
+  }
+  let productDesc = product.description
+  if (product?.shortDescription == "") {
+    productDesc = product.description
+  }
+
+  const detailsConfig = [
+    { name: translate('common.label.descriptionText'), content: productDesc },
+    { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
+    { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
+  ]
   useEffect(() => {
     if (compareProductsAttributes?.length < 0) return
     let mappedAttribsArrStr: any = compareProductsAttributes?.map((o: any) => o?.customAttributes).flat()
@@ -666,7 +683,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setOpenStockCheckModal(true)
   }
 
-  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode !== ITEM_TYPE_ADDON)
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
       let clonedProduct = Object.assign({}, product)
@@ -677,10 +693,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   }
 
   const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
-  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
-  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
-  const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax
-  const css = { maxWidth: '100%', height: 'auto' }
   const attrGroup = groupBy(product?.customAttributes, 'key')
   const tabProducts = groupBy(relatedProducts?.relatedProducts || [], (item) => item?.groupNameList?.[0]?.relatedTypeCode);
   if (!product) {
@@ -693,26 +705,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       thumbnail: image.image,
     }
   })
-
-  const fetchData = async () => {
-    const data = content.map((image: any) => {
-      return {
-        original: image.image,
-        thumbnail: image.image,
-      }
-    })
-
-    const truncateFirstEmptyArray = (arr: any) => {
-      if (arr.length > 0 && Object.keys(arr[0]).length === 0) {
-        return arr.slice(1);
-      }
-      return arr;
-    };
-
-    // Process data
-    let processedData = truncateFirstEmptyArray(data);
-    setImages(processedData);
-  };
 
   const bundleAddToCart = async () => {
     const item = await cartHandler().addToCart(
@@ -777,17 +769,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   }, [product])
 
-  // CHECK TRENDING PRODUCTS FROM ENGAGE
-  let similarProduct = []
-  let recentProduct = []
-  if (typeof window !== 'undefined') {
-    similarProduct = window?.similar_products_sorted_product;
-    recentProduct = window?.recent_products_product;
-  }
-  let productDesc = product.description
-  if (product?.shortDescription == "") {
-    productDesc = product.description
-  }
 
   const showGwpDetails = () => {
     setShowGwpDetail(true)
@@ -795,21 +776,19 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const closeGwpDetails = () => {
     setShowGwpDetail(false)
   }
-  const renderCustomControls = () => {
-    if (fullscreen) {
-      return (
-        <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999 ' onClick={exitFullscreen}>
-          <XMarkIcon className="w-8 h-8 mt-3 text-white border-2 rounded-sm hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
-        </button>
-      );
-    }
-    return
-  };
 
   const exitFullscreen = () => {
     if (document) document?.exitFullscreen();
     return
   };
+
+  const renderCustomControls = () =>
+    fullscreen ? (
+      <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999' onClick={exitFullscreen}>
+        <XMarkIcon className="w-8 h-8 mt-3 text-white border-2 rounded-sm hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
+      </button>
+    ) : null;
+
 
   const customRenderItem = (item: any) => {
     return (
@@ -818,6 +797,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </div>
     );
   };
+
   const customRenderThumbInner = (item: any) => {
     return (
       <span className='relative image-gallery-thumbnail-inner'>
@@ -847,6 +827,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </div>
     );
   };
+
   const renderDetailSection = () => {
     return (
       <div className="flex flex-col">
@@ -860,6 +841,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </div>
     );
   };
+
   const renderProductSpecification = () => {
     return (
       product?.customAttributes?.length > 0 &&
@@ -887,11 +869,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
 
   };
-  const detailsConfig = [
-    { name: translate('common.label.descriptionText'), content: productDesc },
-    { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
-    { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
-  ]
 
   const renderReviews = () => {
     return (
@@ -917,65 +894,78 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </>
     );
   };
-  const renderSellableType = () => {
-    return (
+
+  const sellableTypeMap: Record<string, string> = {
+    Each: "Each",
+    Pallet: `Pallet of ${product?.itemPerCarton}`,
+    Both: "Both",
+    Carton: `Carton of ${product?.itemPerCarton}`,
+    CartonPacks: `Carton of ${product?.itemPerCarton}`,
+  };
+
+  const renderSellableType = () =>
+    product?.sellableType ? (
       <div className='flex justify-start gap-2 divide-x divide-gray-200 p-none'>
-        {product?.sellableType && <h4 className='text-lg font-normal text-black'>Sellable Type: {product?.sellableType == "Each" ? 'Each' : product?.sellableType == "Pallet" ? 'Pallet' : product?.sellableType == "Both" ? 'Both' : product?.sellableType == "Carton" ? 'Carton' : ''}</h4>}
-        {product?.sellableType == "Pallet" && <h4 className='pl-4 text-lg font-normal text-black'>Pallet of {product?.itemPerCarton}</h4>}
-        {product?.sellableType == "CartonPacks" && <h4 className='pl-4 text-lg font-normal text-black'>Carton of {product?.itemPerCarton}</h4>}
+        <h4 className='text-lg font-normal text-black'>Sellable Type: {sellableTypeMap[product.sellableType]}</h4>
       </div>
-    )
-  }
+    ) : null;
 
-  const renderRelatedProducts = () => {
-    return (
-      relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
-        <div className='flex flex-col'>
-          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
-            <>
-              <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
-                <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
-                <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
-                <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
+
+  const GwpModal = ({ gwp, show, onClose }: any) => (
+    <Transition appear show={show} as={Fragment}>
+      <Dialog as="div" className="fixed inset-0 z-50" onClose={onClose}>
+        <div className="flex items-center justify-center h-full px-4 text-center">
+          <Transition.Child enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+            <Dialog.Overlay className="fixed inset-0 bg-black/40" />
+          </Transition.Child>
+          <Transition.Child enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
+            <div className="relative w-full max-w-5xl p-8 overflow-hidden text-left transition-all transform bg-white shadow-xl rounded-2xl">
+              <span className="absolute top-3 right-3">
+                <ButtonClose onClick={onClose} />
+              </span>
+              <div className="flex flex-col items-center">
+                <img alt='' src={gwp?.image} className='h-80' />
+                <div className='mt-6 text-xl font-semibold'>{gwp?.brand}</div>
+                <div className='mt-1 text-2xl font-semibold'>{gwp?.name}</div>
+                <div dangerouslySetInnerHTML={{ __html: gwp?.description }} className="mt-2 text-sm text-gray-500" />
               </div>
-              <Transition appear show={showDetails} as={Fragment}>
-                <Dialog as="div" className="fixed inset-0 z-50 cart-z-index-9999" onClose={closeGwpDetails} >
-                  <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
-                    <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-                      <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
-                    </Transition.Child>
-
-                    {/* This element is to trick the browser into centering the modal contents. */}
-                    <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
-                    <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
-                      <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
-                        <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
-                          <span className="absolute z-50 end-3 top-3">
-                            <ButtonClose onClick={closeGwpDetails} />
-                          </span>
-
-                          <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                            <div className='flex flex-col justify-center text-center'>
-                              <div className='mx-auto'>
-                                <img alt='' src={gwp?.image} className='w-auto h-80' />
-                              </div>
-                              <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
-                              <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
-                              <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Transition.Child>
-                  </div>
-                </Dialog>
-              </Transition>
-            </>
-          ))}
+            </div>
+          </Transition.Child>
         </div>
+      </Dialog>
+    </Transition>
+  );
+  const renderRelatedProducts = () => {
+    const gwpProduct = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)) || [];
+    if (!gwpProduct.length) return null;
+
+    return (
+      <div className='flex flex-col'>
+        {gwpProduct.map((gwp: any, pIdx: number) => (
+          <Fragment key={pIdx}>
+            <div className='flex items-center gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl hover:bg-slate-200' onClick={showGwpDetails}>
+              <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' /></div>
+              <div className='text-sm text-gray-800'>Comes with {gwp?.name}</div>
+              <InformationCircleIcon className='w-5 h-5 text-gray-400' />
+            </div>
+            <GwpModal gwp={gwp} show={showDetails} onClose={closeGwpDetails} />
+          </Fragment>
+        ))}
+      </div>
+    );
+  };
+
+
+  const renderSectionContent = () => {
+    return (
+      featureToggle?.features?.enableRichPDP ? (
+        <RichProductView product={product} selectedOption={selectedOption} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} tabProducts={tabProducts} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
+      ) : (
+        <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
       )
     )
   }
+
   const productTabs = [
     product?.description != null && {
       id: 'overview',
@@ -1076,16 +1066,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       )
     }
   ].filter(Boolean);
-
-  const renderSectionContent = () => {
-    return (
-      featureToggle?.features?.enableRichPDP ? (
-        <RichProductView product={product} selectedOption={selectedOption} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} tabProducts={tabProducts} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
-      ) : (
-        <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
-      )
-    )
-  }
 
   const alsoLikeProducts = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true)) || [];
   const upgradeProducts = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true)) || [];
