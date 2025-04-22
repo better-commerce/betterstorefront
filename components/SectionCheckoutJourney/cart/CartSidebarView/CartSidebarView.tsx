@@ -658,6 +658,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                     reValidateData={reValidateData}
                                     soldOutMessage={soldOutMessage}
                                     getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                                    insertToLocalWishlist={insertToLocalWishlist}
                                   />
                                   {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                                     (child: any, idx: number) => (
@@ -682,6 +683,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                           getLineItemSizeWithoutSlug
                                         }
                                         key={idx}
+                                        insertToLocalWishlist={insertToLocalWishlist}
                                       />
                                     )
                                   )}
