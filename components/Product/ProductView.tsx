@@ -1176,12 +1176,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 {
                   openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
                 }
-                {featureToggle?.features?.enableStoreStockCheck &&
-                  <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-                    <MyLocationIcon className='w-4 h-4' />
-                    <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-                  </div>
-                }
                 {renderSellableType()}
                 {product?.condition != 'pre-launch' ? <div className='flex short-descriptionc'>
                   <LongDescription data={product?.shortDescription} heading="" />
@@ -1222,13 +1216,13 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                           {product?.currentStock > 0 && product?.currentStock <= 5 && (
                             <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
                           )}
-                          {/* <div className="mb-3">
-                        <select id="quantity" className="w-full p-2 border border-[#D9D9D9] bg-[#F5F5F5] rounded-md" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
-                          {[...Array(10).keys()].map((num) => (
-                            <option key={num + 1} value={num + 1}> {num + 1} </option>
-                          ))}
-                        </select>
-                      </div> */}
+
+                            {featureToggle?.features?.enableStoreStockCheck &&
+                                <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
+                                  <MyLocationIcon className='w-4 h-4' />
+                                  <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+                                </div>
+                              }
                           <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
                             <span className='pr-1'>Quantity:</span>
                             <select id="quantity" className="w-full p-2 bg-transparent border-none focus:border-0 focus-none" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
@@ -1323,7 +1317,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
                         </div>
                         {selectedOption === "used" && (
-                          <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                          <>
+                             {featureToggle?.features?.enableStoreStockCheck &&
+                                <div className='flex flex-row w-full mt-3 /!my-4 items-center gap-x-1 /justify-end'>
+                                  <MyLocationIcon className='w-4 h-4' />
+                                  <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+                                </div>
+                              }
+                              <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                          </>                     
                         )}
                       </div>
                     )}

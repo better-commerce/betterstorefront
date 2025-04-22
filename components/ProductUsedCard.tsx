@@ -194,7 +194,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   return (
     <>
       <div key={key} className="w-full blue-add-btn">
-        <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-5 pb-2.5 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
+        <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-3 pb-2.5 ' : 'px-2.5 pt-3 pb-2.5 '} product-card__information`}>
           <div className='flex short-descriptionc'>
             <LongDescription data={data?.description} heading="" />
           </div>

@@ -2160,12 +2160,14 @@ h6 {
 	outline: none !important;
 	border: 1px solid #000 !important;
   border-radius: 8px !important;
+  opacity: 0.5 !important;
 }
 .image-gallery-thumbnail.active,
 .image-gallery-thumbnail:focus {
 	outline: none !important;
 	border: 1px solid #2d4d9c !important;
   border-radius: 8px !important;
+  opacity: 1 !important;
 }
 .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-left .image-gallery-thumbnails .image-gallery-thumbnail+.image-gallery-thumbnail, .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-right .image-gallery-thumbnails .image-gallery-thumbnail+.image-gallery-thumbnail{
   margin-top: 10px !important;
@@ -2179,6 +2181,14 @@ h6 {
 .product-detail-section .image-gallery-left-nav, .product-detail-section .image-gallery-right-nav{
   display: none  !important;
 }
+.product-detail-section .image-gallery-slide-wrapper:hover .image-gallery-left-nav, .product-detail-section .image-gallery-slide-wrapper:hover .image-gallery-right-nav{
+  display: block  !important;
+}
+.product-detail-section .image-gallery-left-nav .image-gallery-svg, .product-detail-section .image-gallery-right-nav .image-gallery-svg{
+  height: 106px;
+  width: 32px;
+}
+
 @media (min-width: 1536px) {
   .container{
     padding-right: 20px !important;
