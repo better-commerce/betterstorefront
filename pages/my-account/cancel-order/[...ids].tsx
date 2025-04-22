@@ -19,7 +19,7 @@ import {
 } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import Spinner from '@components/ui/Spinner'
-import { vatIncluded } from '@framework/utils/app-util'
+import { isB2BUser, vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { generateUri } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
@@ -42,6 +42,7 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
   const [cancellationReasons, setCancellationReasons] = useState<any>(undefined)
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
+  const isB2B = isB2BUser(user)
   const handleFetchOrderDetails = async (id: any) => {
     const { data: orderDetails }: any = await axios.post(
       NEXT_GET_ORDER_DETAILS,
@@ -95,7 +96,12 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
       if (response) {
         setCancelLoading(false)
         setAlert({ type: 'cancel', msg: translate('label.order.orderCancelledSuccessfullyText') })
-        Router.push('/my-account/orders')
+        if (isB2B) {
+          Router.push('/my-account/my-company/orders')
+        } else {
+          Router.push('/my-account/orders')
+        }
+
       }
     } catch (error) {
       setCancelLoading(false)
@@ -146,18 +152,18 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
             style={{ display: showCancellationReasons ? 'none' : 'block' }}
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
-              <Link href="/my-account/orders">
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
-                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
+              <Link href={`${isB2B ? '/my-account/my-company/orders' : '/my-account/orders'}`}>
+                <h3 className="flex items-center max-w-4xl mx-auto text-xl font-semibold text-gray-900">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('label.order.cancelOrderText')}
                 </h3>
               </Link>
             </div>
 
             <div className="mx-auto cancel-continer">
-              <Link href="/my-account/orders" className="mobile-view">
-                <h4 className="mr-2 text-xl font-semibold leading-none text-gray-900 uppercase flex items-center">
-                <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
+              <Link href={`${isB2B ? '/my-account/my-company/orders' : '/my-account/orders'}`} className="mobile-view">
+                <h4 className="flex items-center mr-2 text-xl font-semibold leading-none text-gray-900 uppercase">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('label.order.cancelOrderText')}
                 </h4>
               </Link>
@@ -173,7 +179,7 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                                 <img
                                   width={72}
                                   height={128}
-                                  src={generateUri(item?.image ,'h=128&fm=webp')||IMG_PLACEHOLDER}
+                                  src={generateUri(item?.image, 'h=128&fm=webp') || IMG_PLACEHOLDER}
                                   alt="image"
                                   className="basket-image"
                                 />
@@ -254,8 +260,8 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                   hideCancellationReasons()
                 }}
               >
-                <h3 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 flex items-center">
-                  <ArrowLeftIcon className='w-4 h-4 text-gray-500 mr-2'/>{' '}
+                <h3 className="flex items-center max-w-4xl mx-auto text-xl font-semibold text-gray-900">
+                  <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('label.cancelReason.cancelReasonHeadingText')}
                 </h3>
               </a>

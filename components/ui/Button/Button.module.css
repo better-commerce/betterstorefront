@@ -16,11 +16,11 @@
 }
 
 .loading {
-  @apply cursor-not-allowed bg-accent-1 text-accent-3 border-accent-2;
+  @apply cursor-not-allowed bg-accent-1 text-accent-3 border-accent-2 !bg-black;
 }
 
 .slim {
-  @apply py-2 normal-case transform-none;
+  @apply py-2 normal-case transform-none !bg-black;
 }
 
 .ghost {
