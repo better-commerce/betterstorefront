@@ -28,7 +28,7 @@
     "enableToolsHome":false,
     "enableTradeIn": false,
     "enableWallet": false,
-    "enableBottomTabsSection":false,
+    "enableRichPDPTabs":false,
     "enableForPCSite":false,
     "enablePCTopHeader":false
   },

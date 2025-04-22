@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, Fragment } from 'react'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
 import { decrypt, encrypt } from '@framework/utils/cipher'
-import { GiftIcon, HeartIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon, CreditCardIcon } from '@heroicons/react/24/outline'
+import { GiftIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useUI } from '@components/ui/context'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
@@ -18,20 +18,14 @@ import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-s
 import { generateUri } from '@commerce/utils/uri-util'
 import _, { groupBy, round } from 'lodash'
 import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
-import { getCurrentPage, sanitizeRelativeUrl, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
+import { getCurrentPage, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
 import { LocalStorage } from '@components/utils/payment-constants'
 import wishlistHandler from '@components/services/wishlist'
-import AccordionInfo from '@components/AccordionInfo'
-import Link from 'next/link'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { PRODUCTS } from './data'
-import DeliveryInfo from './DeliveryInfo'
 import ProductDescription from './ProductDescription'
 import CacheProductImages from './CacheProductImages'
-import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import MyLocationIcon from '@components/shared/icons/MyLocationIcon'
-import StockCheckModal from '@components/StoreLocator/StockCheckModal/StockCheckModal'
 import ProductSocialProof from './ProductSocialProof'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import TechnicalSpecifications from './TechnicalSpecification'
@@ -39,11 +33,9 @@ import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-import { CURRENT_THEME } from "@components/utils/constants";
-import ReviewBadge from './ReviewBadge'
-import LongDescription from './LongDescription'
-import PricesWithDiscount from '@components/PricesWithDiscount'
 import TabProductCompare from './TabProductCompare'
+import RichProductView from './RichProductView'
+import DefaultProductView from './DefaultProductView'
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const PDPDetails = dynamic(() => import('@components/Product/ProductDetails/productDetails'))
 const ProductSpecification = dynamic(() => import('@components/Product/ProductDetails/specification'))
@@ -51,18 +43,12 @@ const ProductSpecifications = dynamic(() => import('@components/Product/Specific
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const ProductTabs = dynamic(() => import('@components/Product/ProductTabs'))
 const TabProductCard = dynamic(() => import('@components/Product/TabProductCard'))
-const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCard'))
 const ReviewItem = dynamic(() => import('@components/ReviewItem'))
-const Prices = dynamic(() => import('@components/Prices'))
 const AttributesHandler = dynamic(() => import('@components/Product/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const Bundles = dynamic(() => import('@components/Product/Bundles'))
 const Engraving = dynamic(() => import('@components/Product/Engraving'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
-const BuyNowButton = dynamic(() => import('@components/ui/BuyNowButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/Product/RelatedProducts/RelatedProductWithGroup'))
-const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
-const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
 declare const window: any
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -689,7 +675,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   })
 
-
   const fetchData = async () => {
     const data = content.map((image: any) => {
       return {
@@ -709,9 +694,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     let processedData = truncateFirstEmptyArray(data);
     setImages(processedData);
   };
-
-
-
 
   const bundleAddToCart = async () => {
     const item = await cartHandler().addToCart(
@@ -928,57 +910,51 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
 
   const renderRelatedProducts = () => {
     return (
-      <>
-        {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
-          <div className='flex flex-col'>
-            {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
-              <>
-                <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
-                  <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
-                  <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
-                  <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
-                </div>
-                <Transition appear show={showDetails} as={Fragment}>
-                  <Dialog
-                    as="div"
-                    className="fixed inset-0 z-50 cart-z-index-9999"
-                    onClose={closeGwpDetails}
-                  >
-                    <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
-                      <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-                        <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
-                      </Transition.Child>
+      relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
+        <div className='flex flex-col'>
+          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
+            <>
+              <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
+                <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
+                <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
+                <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
+              </div>
+              <Transition appear show={showDetails} as={Fragment}>
+                <Dialog as="div" className="fixed inset-0 z-50 cart-z-index-9999" onClose={closeGwpDetails} >
+                  <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
+                    <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+                      <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
+                    </Transition.Child>
 
-                      {/* This element is to trick the browser into centering the modal contents. */}
-                      <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
-                      <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
-                        <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
-                          <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
-                            <span className="absolute z-50 end-3 top-3">
-                              <ButtonClose onClick={closeGwpDetails} />
-                            </span>
+                    {/* This element is to trick the browser into centering the modal contents. */}
+                    <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
+                    <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
+                      <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
+                        <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
+                          <span className="absolute z-50 end-3 top-3">
+                            <ButtonClose onClick={closeGwpDetails} />
+                          </span>
 
-                            <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                              <div className='flex flex-col justify-center text-center'>
-                                <div className='mx-auto'>
-                                  <img alt='' src={gwp?.image} className='w-auto h-80' />
-                                </div>
-                                <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
-                                <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
-                                <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
+                          <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
+                            <div className='flex flex-col justify-center text-center'>
+                              <div className='mx-auto'>
+                                <img alt='' src={gwp?.image} className='w-auto h-80' />
                               </div>
+                              <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
+                              <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
+                              <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
                             </div>
                           </div>
                         </div>
-                      </Transition.Child>
-                    </div>
-                  </Dialog>
-                </Transition>
-              </>
-            ))}
-          </div>
-        )}
-      </>
+                      </div>
+                    </Transition.Child>
+                  </div>
+                </Dialog>
+              </Transition>
+            </>
+          ))}
+        </div>
+      )
     )
   }
   const productTabs = [
@@ -991,7 +967,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     },
-     product?.customAttributes?.some((attr: { key: any }) => attr?.key?.startsWith('Specs')) && {
+    product?.customAttributes?.some((attr: { key: any }) => attr?.key?.startsWith('Specs')) && {
       id: 'specs',
       label: 'Specs',
       content: (
@@ -1005,14 +981,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 </tr>
               </thead>
               <tbody>
-                {product?.customAttributes?.filter((attr: { key: any }) => attr?.key?.startsWith('Specs')) ?.map((attr:any, index:number) => (
-                 <tr key={index} className="border border-gray-300">
-                 <td className="p-3 border border-gray-300">{attr?.display}</td>
-                 <td
-                   className="p-3 border border-gray-300"
-                   dangerouslySetInnerHTML={{ __html: attr?.value }}
-                 />
-                </tr>
+                {product?.customAttributes?.filter((attr: { key: any }) => attr?.key?.startsWith('Specs'))?.map((attr: any, index: number) => (
+                  <tr key={index} className="border border-gray-300">
+                    <td className="p-3 border border-gray-300">{attr?.display}</td>
+                    <td
+                      className="p-3 border border-gray-300"
+                      dangerouslySetInnerHTML={{ __html: attr?.value }}
+                    />
+                  </tr>
                 ))}
               </tbody>
             </table> : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>No product specifications available.</div>}
@@ -1067,7 +1043,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Kits and bundles',
       content: (
         <div className="space-y-4">
-          <TabProductCard products={tabProducts?.["KITS AND BUNDLES"]} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+          <TabProductCard products={tabProducts?.["KITS AND BUNDLES"]} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
         </div>
       )
     },
@@ -1076,415 +1052,58 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Accessories',
       content: (
         <div className="space-y-4">
-          <TabProductCard products={tabProducts?.ACCESSORIES} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+          <TabProductCard products={tabProducts?.ACCESSORIES} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
         </div>
       )
     }
   ].filter(Boolean);
+
   const renderSectionContent = () => {
     return (
+      featureToggle?.features?.enableRichPDP ? (
+        <RichProductView product={product} selectedOption={selectedOption} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} tabProducts={tabProducts} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
+      ) : (
+        <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
+      )
+    )
+  }
+
+  const alsoLikeProducts = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true)) || [];
+  const upgradeProducts = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true)) || [];
+
+  const renderRelatedSection = (products: any[], type: 'ALSOLIKE' | 'UPGRADE') => {
+    if (!products.length) return null;
+
+    const isUpgrade = type === 'UPGRADE';
+
+    return (
       <>
-        {featureToggle?.features?.enableRichPdpToggle ? (
-          <div className='flex gap-6 flex-mob-col'>
-            <div className='w-full lg:w-[60%]'>
-              <div className="space-y-4">
-                <div>
-                  {product?.condition === 'pre-launch' &&
-                    <h3 className='text-sm font-semibold text-black uppercase'>{product?.brand}</h3>
-                  }
-                  <h1 className="mb-2 text-xl font-semibold heading sm:text-2xl product-name-h2 dark:text-black">
-                    {product?.name}
-                  </h1>
-                  {product?.condition != 'pre-launch' && <div className="flex flex-col gap-3">
-                    <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
-                  </div>}
-                  <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-                    {selectedOption === "new" && product?.condition != 'pre-launch' && (
-                      <>
-                        <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      </>
-                    )}
-                    {selectedOption === "used" && product?.condition != 'pre-launch' && (
-                      <>
-                        <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      </>
-                    )}
-                  </div>
-                  {selectedOption === "used" && product?.condition != 'pre-launch' && (
-                  <div className='w-full my-3'>
-                  <div className="max-w-lg bg-[#EAEDF5] rounded-lg p-4 flex gap-3">
-                      <div className="flex-shrink-0">
-                        <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
-                         <img src="/theme/camera/image/approved-icon.svg"  alt="approved Icon"/>
-                        </div>
-                      </div>
-                      <div className="flex flex-col">
-                        <h3 className="text-sm text-[#1E1E1E]">Park-Approved</h3>
-                        <p className="text-[#1E1E1E] text-xs">
-                          This item has been inspected, tested, and approved by our experts for quality and performance.{" "}
-                          <a href="#" className="link-clr">
-                            Learn more
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  )}
-                  {/* <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
-                    <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
-                      <div className="bg-gray-100 rounded-full">
-                        <CreditCardIcon className="w-4 h-4 text-black" />
-                      </div>
-                      <h2 className="text-sm font-semibold text-gray-800">{product?.brand} Cashback</h2>
-                    </div>
-
-                    <div className="px-3 py-2 pb-4 mt-2 space-y-1 ">
-                      <div className="flex items-baseline">
-                        <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
-                        <span className="ml-2 text-sm font-bold text-red-700">£1,749.00</span>
-                      </div>
-
-                      <p className="text-sm font-medium text-gray-800">after £400 cashback</p>
-
-                      <div className="pt-2 mt-8">
-                        <p className="text-sm text-gray-800">
-                          Cashback applies if product ordered within the offer period, even if out of stock.{" "}
-                          <a href="#" className="text-blue-600 hover:underline link-clr">How to redeem?</a>
-                        </p>
-                      </div>
-                    </div>
-                  </div> */}
-                </div>
-                {attrGroup['product.relatedproducts']?.length > 0 &&
-                  <div className='flex w-full'>
-                    <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
-                      {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
-                        <SwiperSlide key={index}>
-                          <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                            <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
-                          </div>
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                  </div>
-                }
-                {renderRelatedProducts()}
-                <div className="">{renderVariants()}</div>
-                {product?.quantityBreakRules?.length > 0 &&
-                  <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
-                }
-                {
-                  openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
-                }
-                {renderSellableType()}
-                {product?.condition != 'pre-launch' ? <div className='flex short-descriptionc'>
-                  <LongDescription data={product?.shortDescription} heading="" />
-                </div> :
-                  <div
-                    className="text-sm text-gray-800 description-html"
-                    dangerouslySetInnerHTML={{ __html: product?.shortDescription }}
-                  />
-                }
-              </div>
-            </div>
-            <div className='w-full lg:w-[40%]'>
-              <div className="w-full p-0 border rounded-lg shadow-md">
-                {/* New Product Option */}
-                {product?.condition != 'pre-launch' ? (
-                  <>
-                    <div className={`p-4 mb-4 ${selectedOption === "new" ? "bg-transparent" : "bg-nonactive"}`}>
-
-                      <label className="flex items-center justify-between gap-2 cursor-pointer">
-                        <input type="radio" name="product" value="new" checked={selectedOption === "new"} onChange={() => setSelectedOption("new")} className="hidden" />
-                        <span className="font-semibold">Buy new</span>
-                        <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "new" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                          {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                        </span>
-                      </label>
-                      <div className='mt-3 space-y-3'>
-                        <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                    <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
-                      </div>
-                      {selectedOption === "new" && (
-                        <div className="mt-2 space-y-2">
-                            {featureToggle?.features?.enableStoreStockCheck &&
-                                <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-                                  <MyLocationIcon className='w-4 h-4' />
-                                  <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-                                </div>
-                              }
-                          <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
-                            <span className='pr-1'>Quantity:</span>
-                            <select id="quantity" className="w-full p-2 bg-transparent border-none focus:border-0 focus-none" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
-                              {[...Array(10).keys()].map((num) => (
-                                <option key={num + 1} value={num + 1}> {num + 1} </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div id="add-to-cart-button" className='blue-add-btn'>
-                            {isMobile ? (
-                              showMobileCaseButton && (
-                                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                                  <div className="container p-4 mx-auto max-w-7xl">
-                                    <div className="flex justify-end">
-                                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                    </div>
-                                  </div>
-                                </div>
-                              )
-                            ) : (
-                              <div className="flex w-full rtl:space-x-reverse">
-                                {!isEngravingAvailable && product?.condition != 'pre-launch' && (
-                                  <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                                    <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                  </div>
-                                )}
-
-                                {isEngravingAvailable && product?.condition != 'pre-launch' && (
-                                  <>
-                                    <div className='flex flex-col w-full gap-y-2 add-green-btn'>
-                                      <Button className="block py-3 sm:hidden add-green-btn nc-button" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                      <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                      <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                                        {translate('label.product.engravingText')}
-                                      </button>
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                            )}
-                            {!isGuestUser && user?.userId && product?.condition != 'pre-launch' &&
-                              <>
-                                <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
-                                  <BuyNowButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                                </div>
-                              </>
-                            }
-                          </div>
-                          {/* <div className='w-full pt-3'>
-                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                          <h4 className='text-xs'>Dispatches from</h4>
-                          <p className='text-xs text-black'>London Store</p>
-                        </div>
-                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                          <h4 className='text-xs'>Returns</h4>
-                          <p className='text-xs text-color-primary-blue'>Returnable within 30 days of receipt</p>
-                        </div>
-                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                          <h4 className='text-xs'>Payment</h4>
-                          <p className='text-xs text-color-primary-blue'>Secure transaction</p>
-                        </div>
-                        <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
-                          <h4 className='text-xs'>Support</h4>
-                          <p className='text-xs text-color-primary-blue'>Product support included</p>
-                        </div>
-                      </div> */}
-                          {product?.condition != 'pre-launch' && <div className='w-full'>
-                            <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                              {isInWishList(selectedAttrData?.productId) ? (
-                                <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
-                              ) : (
-                                <HeartIcon className="flex-shrink-0 w-3 h-3 mr-2 font-semibold text-black" />)}
-                              <span className='text-xs font-semibold text-black'> Add to Wishlist </span>
-                            </button>
-                          </div>}
-                        </div>
-                      )}
-                    </div>
-                    {/* Used Product Option */}
-                    {tabProducts?.USED?.length > 0 && (
-                      <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
-                        <label className="flex items-center justify-between gap-2 cursor-pointer">
-                          <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
-                          <span className="font-semibold">Save with used - Like New</span>
-                          <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
-                            {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
-                          </span>
-                        </label>
-                        <div className='mt-3 space-y-2'>
-                          <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                          {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                      <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
-                        </div>
-                        {selectedOption === "used" && (
-                          <>
-                             {featureToggle?.features?.enableStoreStockCheck &&
-                                <div className='flex flex-row w-full mt-3 /!my-4 items-center gap-x-1 /justify-end'>
-                                  <MyLocationIcon className='w-4 h-4' />
-                                  <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-                                </div>
-                              }
-                              <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
-                          </>                     
-                        )}
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <div className={`p-4 flex flex-col bg-nonactive justify-center text-center`}>
-                      <label className="flex items-center justify-between">
-                        <span className="justify-center w-full px-6 py-2 font-normal text-center text-white uppercase bg-orange-500 rounded-full text-x-small">Pre Launch</span>
-                      </label>
-                      {selectedOption === "new" && (
-                        <div className="mt-2 space-y-2">
-                          {product?.currentStock > 0 ? (
-                            <p className="font-semibold text-green-600">In stock</p>
-                          ) : (
-                            <p className="text-sm font-semibold text-red-600">Not for sale now</p>
-                          )}
-                        </div>
-                      )}
-                      <span className='mt-4 mb-3 text-xs font-normal text-gray-700 sm:mt-12'>If you'd like to know more about this product, simply click <span className='font-semibold text-black'>"I'm Interested"</span> and we'll notify you about the launch and its features.</span>
-                      <button className="flex items-center justify-center flex-1 uppercase font-semibold max-w-xs px-8 py-2 text-[#2D4D9C] bg-[#ACD4FF] hover:bg-[#2D4D9C] hover:text-[#ACD4FF] border border-transparent rounded-2xl sm:w-full" onClick={() => createProductInterest()} >
-                        I'm Interested
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="space-y-8">
-              <div>
-                <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
-                  {product?.name}
-                </h1>
-                <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                  {reviews?.review?.totalRecord > 0 &&
-                    <>
-                      <div className="flex w-64">
-                        <Link href={`#productReview`} className="flex text-sm font-medium" >
-                          <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
-                          <div className="ms-1.5 flex">
-                            <span className='dark:text-black'>{reviews?.review?.ratingAverage}</span>
-                            <span className="block mx-2 dark:text-black">·</span>
-                            <span className="underline text-slate-600 dark:text-slate-600">
-                              {reviews?.review?.totalRecord} {translate('common.label.reviews')}
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                    </>
-                  }
-                </div>
-              </div>
-              {attrGroup['product.relatedproducts']?.length > 0 &&
-                <div className='flex w-full'>
-                  <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
-                    {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
-                      <SwiperSlide key={index}>
-                        <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                          <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </div>
-              }
-
-              {renderRelatedProducts()}
-              <div className="">{renderVariants()}</div>
-              {product?.quantityBreakRules?.length > 0 &&
-                <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
-              }
-              {promotions?.promotions?.availablePromotions?.length > 0 && (
-                <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
-              )}
-              {
-                openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
-              }
-              {featureToggle?.features?.enableStoreStockCheck &&
-                <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-                  <MyLocationIcon className='w-4 h-4' />
-                  <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-                </div>
-              }
-              {renderSellableType()}
-              {product?.preOrder?.isEnabled &&
-                <div className='flex flex-col'>
-                  <h4 className='font-medium text-orange-500 tet-xl'>{product?.preOrder?.shortMessage}</h4>
-                </div>
-              }
-              <div id="add-to-cart-button">
-                {isMobile ? (
-                  <>
-                    {showMobileCaseButton && (
-                      <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                        <div className="container p-4 mx-auto max-w-7xl">
-                          <div className="flex justify-end">
-                            <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                            <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                              {isInWishList(selectedAttrData?.productId) ? (
-                                <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                              ) : (
-                                <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                              )}
-                              <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className="flex rtl:space-x-reverse">
-                    {!isEngravingAvailable && (
-                      <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                        <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                        <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                          {isInWishList(selectedAttrData?.productId) ? (
-                            <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                          ) : (
-                            <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                          )}
-                          <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                        </button>
-                      </div>
-                    )}
-
-                    {isEngravingAvailable && (
-                      <>
-                        <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                        <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                        <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                          {translate('label.product.engravingText')}
-                        </button>
-                        <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                          {isInWishList(selectedAttrData?.productId) ? (
-                            <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                          ) : (
-                            <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                          )}
-                          <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-              <hr className=" border-slate-200 dark:border-slate-700"></hr>
-              {!featureToggle?.features?.enableCustomToolWidget ? (
-                <>
-                  {product && <AccordionInfo product={product} data={detailsConfig} />}
-                  {renderProductSpecification()}
-                </>
-              ) : (
-                <></>
-              )}
-              <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
-                <DeliveryInfo product={product} grpData={attrGroup} config={config} />
-              </div>
-            </div>
-          </>
-        )}
+        <hr className="border-slate-200 dark:border-slate-700" />
+        <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css">
+          {featureToggle.features?.enableForPCSite && isUpgrade ? (
+            <>
+              <h3 className="mb-1 font-semibold heading dark:text-black">Upgrade Your Kit & Save 20%</h3>
+              <p className="pb-6 text-sm text-black sm:pb-10">
+                Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.
+              </p>
+            </>
+          ) : (
+            <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black">
+              {translate('label.product.youMayAlsoLikeText')}
+            </h3>
+          )}
+          <RelatedProductWithGroup
+            products={products}
+            productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+            featureToggle={featureToggle}
+          />
+        </div>
       </>
     );
   };
+
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -1497,7 +1116,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-        <div className="lg:flex product-detail-section overflow-visible">
+        <div className="overflow-visible lg:flex product-detail-section">
           {isMobile ? (
             <div className="w-full lg:w-[55%]">
               <Swiper slidesPerView={1} spaceBetween={30} navigation loop className="mySwiper" >
@@ -1520,58 +1139,53 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </Swiper>
             </div>
           ) : (
-            <>
-              {featureToggle?.features?.isImageGallery ? (
-                <div className={`w-full sticky top-0 z-10 product-image-border sticky-container ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`} >
-                  <ImageGallery
-                    thumbnailAlt={product?.name}
-                    thumbnailTitle={product?.name}
-                    originalAlt={product?.name}
-                    items={images ?? []}
-                    thumbnailPosition="left"
-                    showPlayButton={false}
-                    additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
-                    onScreenChange={toggleFullscreen}
-                    disableThumbnailScroll={false}
-                    renderCustomControls={renderCustomControls}
-                    renderItem={customRenderItem}
-                    renderThumbInner={customRenderThumbInner}
-                  />
-                  {featureToggle?.features?.enableRichPdpToggle && (
-                    <p className='pt-4 text-sm text-gray-500'>Product Code: {product?.productCode}</p>
-                  )}
-                </div>
-              ) : (
-                <div className={`w-full lg:w-[55%] sticky top-0 z-10 sticky-container ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
-                  <div className="relative">
-                    <div className="relative aspect-w-16 aspect-h-16">
-                      <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+            featureToggle?.features?.isImageGallery ? (
+              <div className={`w-full sticky top-0 z-10 product-image-border sticky-container ${featureToggle?.features?.enableRichPDP ? "lg:w-[50%]" : "lg:w-[55%]"}`} >
+                <ImageGallery
+                  thumbnailAlt={product?.name}
+                  thumbnailTitle={product?.name}
+                  originalAlt={product?.name}
+                  items={images ?? []}
+                  thumbnailPosition="left"
+                  showPlayButton={false}
+                  additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
+                  onScreenChange={toggleFullscreen}
+                  disableThumbnailScroll={false}
+                  renderCustomControls={renderCustomControls}
+                  renderItem={customRenderItem}
+                  renderThumbInner={customRenderThumbInner}
+                />
+                {featureToggle?.features?.enableRichPDP && (<p className='pt-4 text-sm text-gray-500'>Product Code: {product?.productCode}</p>)}
+              </div>
+            ) : (
+              <div className={`w-full lg:w-[55%] sticky top-0 z-10 sticky-container ${featureToggle?.features?.enableRichPDP ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
+                <div className="relative">
+                  <div className="relative aspect-w-16 aspect-h-16">
+                    <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                  </div>
+                  {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
+                    <div className='absolute z-10 right-1 top-1'>
+                      <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-red-500 rounded-full' />
                     </div>
-                    {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
-                      <div className='absolute z-10 right-1 top-1'>
-                        <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-red-500 rounded-full' />
-                      </div>
-                    }
-                    {renderStatus()}
-                  </div>
-                  <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-                    {product?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification")
-                      .map((item: any, index: number) => (
-                        <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                          <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
-                        </div>
-                      ))}
-                  </div>
+                  }
+                  {renderStatus()}
                 </div>
-              )}
-            </>
+                <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
+                  {product?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification")
+                    .map((item: any, index: number) => (
+                      <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )
           )}
-          <div
-            className={`px-4 sm:px-0 w-full pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10 pdp-right-section ${featureToggle?.features?.enableRichPdpToggle ? "lg:w-[50%]" : "lg:w-[45%]"}`}>
+          <div className={`px-4 sm:px-0 w-full pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10 pdp-right-section ${featureToggle?.features?.enableRichPDP ? "lg:w-[50%]" : "lg:w-[45%]"}`}>
             {renderSectionContent()}
           </div>
         </div>
-        {featureToggle?.features?.enableCustomToolWidget ? (
+        {featureToggle?.features?.enableCustomToolWidget &&
           <>
             <div className="flex w-full bg-white product-tab-active">
               <div className="lg:mx-auto container-ffx">
@@ -1584,9 +1198,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </div>
           </>
-        ) : (
-          <></>
-        )}
+        }
         {/* {LookBook} */}
         {lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
@@ -1623,38 +1235,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         }
         <div className="w-full px-4 pt-6 mx-auto sm:px-0 lg:max-w-none sm:pt-8">
-          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
-            <>
-              <hr className="border-slate-200 dark:border-slate-700" />
-              <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:px-0 lg:px-0 2xl:px-0 md:px-0 pdp-related-product-list slider-btn-css">
-                {featureToggle.features?.enableForPCSite ?
-                  <>
-                    <h3 className="mb-1 font-semibold heading dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                    <p className='pb-6 text-sm text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
-                  </>
-                  : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}
-                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
-              </div>
-            </>
-          )}
-          {featureToggle.features?.enableForPCSite && (
-            <>
-              {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true))?.length > 0 && (
-                <>
-                  <hr className="border-slate-200 dark:border-slate-700" />
-                  <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css">
-                    {featureToggle.features?.enableForPCSite ?
-                      <>
-                        <h3 className="mb-1 font-semibold heading dark:text-black"> Upgrade Your Kit & Save 20% </h3>
-                        <p className='pb-6 text-sm text-black sm:pb-10'>Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.</p>
-                      </>
-                      : <><h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3> </>}
-                    <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
-                  </div>
-                </>
-              )}
-            </>
-          )}
+          {renderRelatedSection(alsoLikeProducts, 'ALSOLIKE')}
+          {featureToggle.features?.enableForPCSite && renderRelatedSection(upgradeProducts, 'UPGRADE')}
           {featureToggle?.features?.enableEngage &&
             <>
               <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
@@ -1671,20 +1253,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
-          {!featureToggle?.features?.enableBottomTabsSection && (
-            <>
-              {reviews?.review?.productReviews?.length > 0 &&
-                renderReviews()
-              }
-            </>
-          )}
+          {!featureToggle?.features?.enableRichPDPTabs && reviews?.review?.productReviews?.length > 0 && renderReviews()}
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6 pdp-description-section">
               <ProductDescription seoInfo={attrGroup} />
             </div>
           </div>
         </div>
-        {featureToggle?.features?.enableBottomTabsSection && (
+        {featureToggle?.features?.enableRichPDPTabs && (
           <ProductTabs tabs={productTabs} defaultActiveTab="overview" />
         )}
       </main>

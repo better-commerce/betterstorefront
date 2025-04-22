@@ -316,7 +316,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   {pageContents?.relateditemheading?.length > 0 && pageContents?.relateditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`related-${hIdx}`}>{heading?.relateditemheading_title}</h3>
                   ))}
-                  <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                  <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
               )} */}
               <RecentlyViewedProduct isHome={true} deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
@@ -327,7 +327,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   {pageContents?.featureditemheading?.length > 0 && pageContents?.featureditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
                   ))}
-                  <SectionHomeProductCardNew onlyImage={false} products={pageContents?.featureddeal} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                  <SectionHomeProductCardNew onlyImage={false} products={pageContents?.featureddeal} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
               )}
             </div>
