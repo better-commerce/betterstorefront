@@ -51,7 +51,7 @@ export const getProductTransform = (product: any) => ({
   //collections: product?.collections,
   //componentsInStock: product?.componentsInStock,
   componentProducts: product?.componentProducts,
-  //condition: product?.condition,
+  condition: product?.condition,
   //couponProvider: product?.couponProvider,
   currentStock: product?.currentStock,
   customAttributes: product?.customAttributes?.length
