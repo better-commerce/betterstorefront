@@ -5,7 +5,7 @@ import Router from 'next/router'
 
 // Third-party packages
 import axios from 'axios'
-import _, { groupBy, round } from 'lodash'
+import _, { groupBy } from 'lodash'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import ImageGallery from 'react-image-gallery'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -27,7 +27,7 @@ import { getCurrentPage, validateAddToCart, vatIncluded } from '@framework/utils
 import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG, NEXT_CUSTOMER_PRODUCT_INTEREST } from '@components/utils/constants'
 import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
 import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
 import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { PRODUCTS } from './data'
@@ -85,14 +85,14 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership, selectedFilters = [] }: any) {
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
   const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   let currentPage = getCurrentPage()
   const isIncludeVAT = vatIncluded()
-  const { isInWishList, deleteWishlistItem } = wishlistHandler()
+  const { isMobile } = deviceInfo
   const { status } = PRODUCTS[0];
-  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
-  const { isMobile, isIPadorTablet } = deviceInfo
+  const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
@@ -109,11 +109,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [openStoreLocatorModal, setOpenStockCheckModal] = useState(false)
   const [showDetails, setShowGwpDetail] = useState(false)
   const [lookbookData, setLookbookData] = useState<any>(null)
-  const [newImages, setImages] = useState([]);
-  const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   const [analyticsData, setAnalyticsData] = useState(null)
   const [selectedOption, setSelectedOption] = useState("new");
   const [quantity, setQuantity] = useState(1);
+  const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
   let recentProduct = []
