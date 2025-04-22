@@ -1208,15 +1208,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                       </div>
                       {selectedOption === "new" && (
                         <div className="mt-2 space-y-2">
-                          {product?.currentStock > 0 ? (
-                            <p className="font-semibold text-green-600">In stock</p>
-                          ) : (
-                            <p className="text-sm font-semibold text-red-600"> Out of Stock</p>
-                          )}
-                          {product?.currentStock > 0 && product?.currentStock <= 5 && (
-                            <p className="text-sm font-normal text-red-600"> Only {product.currentStock} left in stock.</p>
-                          )}
-
                             {featureToggle?.features?.enableStoreStockCheck &&
                                 <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
                                   <MyLocationIcon className='w-4 h-4' />
