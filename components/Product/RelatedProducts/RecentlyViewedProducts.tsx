@@ -26,8 +26,9 @@ import {
 } from '@components/utils/constants'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { useTranslation } from '@commerce/utils/use-translation'
+import HomeProductCardMin from '@components/HomeProductCardMin'
 
-export default function RecentlyViewedProduct({ deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
+export default function RecentlyViewedProduct({ isHome = false ,deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
@@ -159,7 +160,11 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
                   {recentlyViewedProducts?.map((product: any, pid: number) => {
                     return (
                       <SwiperSlide key={pid} className="height-equal">
-                        <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        {isHome ? (
+                          <HomeProductCardMin onlyImage={true} deviceInfo={deviceInfo} data={product} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        ) : (
+                          <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        )}
                       </SwiperSlide>
                     )
                   })}

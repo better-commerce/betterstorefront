@@ -38,6 +38,7 @@ import BestSellerProduct from '@components/home/Bestseller'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import HeroLeft from '@components/ui/Hero/HeroLeft'
 import SectionHomeProductCardNew from '@components/SectionHomeProductCardNew'
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 // Optimize dynamic imports with loading priorities
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'), { ssr: true })
 const Loader = dynamic(() => import('@components/ui/LoadingDots'), { ssr: true })
@@ -310,14 +311,15 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                 </div>
               ))}
               {/* Related items section */}
-              {pageContents?.relateditems?.length > 0 && (
+              {/* {pageContents?.relateditems?.length > 0 && (
                 <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
                   {pageContents?.relateditemheading?.length > 0 && pageContents?.relateditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`related-${hIdx}`}>{heading?.relateditemheading_title}</h3>
                   ))}
                   <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableBottomTabsSection ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
-              )}
+              )} */}
+              <RecentlyViewedProduct isHome={true} deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
 
               {/* Featured deals section */}
               {pageContents?.featureddeal?.length > 0 && (
