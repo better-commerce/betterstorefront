@@ -3,7 +3,6 @@ import { useEffect, useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
 // Package Imports
 import axios from 'axios'
-import Link from 'next/link'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
 import cartHandler from '@components/services/cart'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -30,26 +29,13 @@ import HomeProductCardMin from '@components/HomeProductCardMin'
 
 export default function RecentlyViewedProduct({ isHome = false, deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
-  const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState<any>([])
   const swiperRefRecently: any = useRef(null)
   const [isReferModalOpen, setIsReferModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const {
-    user,
-    cartItems,
-    isGuestUser,
-  } = useUI()
-  const [referralObj, setReferralObj] = useState({
-    id: '',
-    userId: '',
-    name: '',
-    slug: '',
-    invitesSent: 0,
-    clickOnInvites: 0,
-    successfulInvites: 0,
-  })
+  const { user, cartItems, isGuestUser, } = useUI()
+  const [referralObj, setReferralObj] = useState({ id: '', userId: '', name: '', slug: '', invitesSent: 0, clickOnInvites: 0, successfulInvites: 0, })
   const [referralOffers, setReferralOffers] = useState<any>(null)
   const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
 
@@ -63,17 +49,9 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
         prodStockCodes = tryParseJson(recentProductsJson) || []
         console.log("---prodStockCodes---", prodStockCodes)
         async function fetchProductsByStockCodes() {
-          const data = {
-            sortBy: '',
-            sortOrder: '',
-            currentPage: 1,
-            pageSize: 10,
-            filters: [],
-            stockCodes: prodStockCodes,
-          }
+          const data = { sortBy: '', sortOrder: '', currentPage: 1, pageSize: 10, filters: [], stockCodes: prodStockCodes, }
           setIsLoading(true)
-          const res: any = await axios
-            .post(NEXT_GET_CATALOG_PRODUCTS, data)
+          const res: any = await axios.post(NEXT_GET_CATALOG_PRODUCTS, data)
             .then((results: any) => {
               setRecentlyViewedProducts(results?.data?.products?.results)
               setIsLoading(false)
@@ -144,34 +122,30 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
 
   return (
     recentlyViewedProducts?.length > 0 && (
-      <div className={`flex flex-col pt-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-5'}`}>
-        <div className="flex flex-col w-full container-ffx">
-          <div>
-            <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
-              {featureToggle.features?.enableForPCSite ? (
-                <h2 className="mb-6 font-semibold text-black title-page">Customers who viewed items in your browsing history also viewed</h2>
-              ) : (
-                <h2 className="mb-5 font-semibold text-gray-900 uppercase font-18"> {translate('common.label.recentlyViewedText')} </h2>
-              )}
-            </div>
-            <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
-              {isLoading ? (<LoadingDots />) : (
-                <Swiper slidesPerView={2.3} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 10 }, 1024: { slidesPerView: 5, spaceBetween: 10 }, }} className="mySwiper" >
-                  {recentlyViewedProducts?.map((product: any, pid: number) => {
-                    return (
-                      <SwiperSlide key={pid} className="height-equal">
-                        {isHome ? (
-                          <HomeProductCardMin onlyImage={true} deviceInfo={deviceInfo} data={product} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        ) : (
-                          <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        )}
-                      </SwiperSlide>
-                    )
-                  })}
-                </Swiper>
-              )}
-            </div>
-          </div>
+      <div className={`flex flex-col w-full container-ffx pt-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-5'}`}>
+        <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
+          {featureToggle.features?.enableForPCSite ? (
+            <h2 className="mb-6 font-semibold text-black title-page">Customers who viewed items in your browsing history also viewed</h2>
+          ) : (
+            <h2 className="mb-5 font-semibold text-gray-900 uppercase font-18"> {translate('common.label.recentlyViewedText')} </h2>
+          )}
+        </div>
+        <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
+          {isLoading ? (<LoadingDots />) : (
+            <Swiper slidesPerView={2.3} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 10 }, 1024: { slidesPerView: 5, spaceBetween: 10 }, }} className="mySwiper" >
+              {recentlyViewedProducts?.map((product: any, pid: number) => {
+                return (
+                  <SwiperSlide key={pid} className="height-equal">
+                    {isHome ? (
+                      <HomeProductCardMin onlyImage={true} deviceInfo={deviceInfo} data={product} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    ) : (
+                      <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    )}
+                  </SwiperSlide>
+                )
+              })}
+            </Swiper>
+          )}
         </div>
       </div>
     )
