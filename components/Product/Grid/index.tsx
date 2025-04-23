@@ -15,10 +15,11 @@ interface Props {
   handleInfiniteScroll: any
   isCompared: any
   defaultDisplayMembership: any
+  isPagination:boolean
 }
 
 function Grid({ products, currentPage, handlePageChange = () => { }, handleInfiniteScroll,
-  deviceInfo, maxBasketItemsCount, isCompared, featureToggle, defaultDisplayMembership, }: Props & IExtraProps) {
+  deviceInfo, maxBasketItemsCount, isCompared, featureToggle, defaultDisplayMembership,isPagination=true }: Props & IExtraProps) {
   const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
   // Memoize the route change handler to prevent unnecessary re-renders
   const handleRouteChange = useCallback(() => {
@@ -124,7 +125,7 @@ function Grid({ products, currentPage, handlePageChange = () => { }, handleInfin
             ))}
           </div>
 
-          {products?.pages > 1 && (
+          {products?.pages > 1 && isPagination && (
             <div className='flex items-center justify-center gap-1'>
               <Pagination
                 currentPage={currentPage}
