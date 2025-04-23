@@ -364,31 +364,73 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const handleNotification = () => {
     openNotifyUser(product?.recordId)
   }
-
-  const productImages = product?.images || []
-  const productVideos = product?.videos || []
-
-  let content = useMemo(() => {
-    let images = [...productImages]
-
-    if (selectedAttrData?.image) {
-      images.push({ image: selectedAttrData?.image })
+  const filterAndGroupProducts = (
+    products: any[] | undefined, 
+    filterKey: string, 
+    groupKey: string
+  ) => {
+    return groupBy(
+      (products || []).filter((item: { groupNameList: { relatedTypeCode: string }[] }) => 
+        item?.groupNameList?.some((group: { relatedTypeCode: string }) => 
+          group?.relatedTypeCode === filterKey
+        )
+      ),
+      () => groupKey
+    );
+  };
+  const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Used", "Used");
+  const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Accessories", "Accessories");
+  const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Compare", "Compare");
+  interface MediaItem {
+    [key: string]: string; // Can be either image or url or any other property name
+  }
+  
+  interface GetProductMediaOptions {
+    mediaProperty?: string; // Property name to use for the media URL (defaults to 'image')
+  }
+  
+  const getProductMedia = (
+    productData: any,
+    selectedAttrImage?: string,
+    options: GetProductMediaOptions = { mediaProperty: 'image' }
+  ) => {
+    const productImages = productData?.images || [];
+    const productVideos = productData?.videos || [];
+    const { mediaProperty = 'image' } = options;
+  
+    let images = [...productImages];
+  
+    if (selectedAttrImage) {
+      images.push({ [mediaProperty]: selectedAttrImage });
     }
-
-    let data = [...images].filter(
-      (value: any, index: number, self: any) =>
-        index === self.findIndex((t: any) => t.image === value.image)
-    )
-
-    if (product?.videos && product?.videos?.length > 0) {
+  
+    // Remove duplicates
+    let data = images.filter(
+      (value, index, self) =>
+        index === self.findIndex((t) => t[mediaProperty] === value[mediaProperty])
+    );
+  
+    // Include videos if they exist
+    if (productVideos.length > 0) {
       data = [...productImages, ...productVideos].filter(
-        (value: any, index: number, self: any) =>
-          index === self.findIndex((t: any) => t.image === value.image)
-      )
+        (value, index, self) =>
+          index === self.findIndex((t) => t[mediaProperty] === value[mediaProperty])
+      );
     }
-
-    return data
-  }, [selectedAttrData?.image, product, productImages])
+  
+    // Format for image gallery
+    return data.map((item) => ({
+      original: item[mediaProperty],
+      thumbnail: item[mediaProperty],
+    }));
+  };
+  
+  // Usage examples:
+  const images = getProductMedia(product, selectedAttrData?.image); 
+  // Uses 'image' as default property
+  
+  const usedImages = getProductMedia(usedProducts?.Used?.[0], selectedAttrData?.image, { mediaProperty: 'url' }); 
+  // Uses 'url' as the property name
 
   const handleTogglePersonalizationDialog = () => {
     if (!isPersonalizeLoading) showEngravingModal((v) => !v)
@@ -694,33 +736,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
   const attrGroup = groupBy(product?.customAttributes, 'key')
   const tabProducts = groupBy(relatedProducts?.relatedProducts || [], (item) => item?.groupNameList?.[0]?.relatedTypeCode);
-  const filterAndGroupProducts = (
-    products: any[] | undefined, 
-    filterKey: string, 
-    groupKey: string
-  ) => {
-    return groupBy(
-      (products || []).filter((item: { groupNameList: { relatedTypeCode: string }[] }) => 
-        item?.groupNameList?.some((group: { relatedTypeCode: string }) => 
-          group?.relatedTypeCode === filterKey
-        )
-      ),
-      () => groupKey
-    );
-  };
-  const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Used", "Used");
-  const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Accessories", "Accessories");
-  const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Compare", "Compare");
+
   if (!product) {
     return null
   }
 
-  const images = content.map((image: any) => {
-    return {
-      original: image.image,
-      thumbnail: image.image,
-    }
-  })
+
 
   const bundleAddToCart = async () => {
     const item = await cartHandler().addToCart(
@@ -1153,20 +1174,45 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               <Swiper slidesPerView={1} spaceBetween={30} navigation loop className="mySwiper" >
                 <SwiperSlide>
                   <div className="relative">
-                    <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full" alt={product?.name} />
+                      {selectedOption === "used" ? (
+                        <>
+                           {usedProducts?.Used?.[0]?.images?.slice(0, 1).map((image:any, index:number) => (
+                           <img key={index} src={generateUri(image.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}  className="object-cover object-top w-full" alt={product?.name} />
+                            ))}
+                        </>
+                      ) : (
+                        <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full" alt={product?.name} />
+                      )}
                     {renderStatus()}
                   </div>
                 </SwiperSlide>
-                {product?.images?.map((item: any, index: number) => {
-                  return (
-                    item?.tag != "specification" &&
-                    <SwiperSlide key={index}>
-                      <div className="relative">
-                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
-                      </div>
-                    </SwiperSlide>
-                  )
-                })}
+                {selectedOption === "used" ? (
+                   <>
+                     {usedProducts?.Used?.[0]?.images?.map((item: any, index: number) => {
+                        return (
+                          item?.tag != "specification" &&
+                          <SwiperSlide key={index}>
+                            <div className="relative">
+                              <img src={generateUri(item?.url, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
+                            </div>
+                          </SwiperSlide>
+                        )
+                   })}
+                   </>
+                  ) : (
+                   <>
+                      {product?.images?.map((item: any, index: number) => {
+                        return (
+                          item?.tag != "specification" &&
+                          <SwiperSlide key={index}>
+                            <div className="relative">
+                              <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
+                            </div>
+                          </SwiperSlide>
+                        )
+                      })}
+                   </>
+                  )}
               </Swiper>
             </div>
           ) : (
@@ -1176,7 +1222,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   thumbnailAlt={product?.name}
                   thumbnailTitle={product?.name}
                   originalAlt={product?.name}
-                  items={images ?? []}
+                  items={selectedOption === "used" ? usedImages ?? [] : images ?? []}
                   thumbnailPosition="left"
                   showPlayButton={false}
                   additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
@@ -1192,9 +1238,17 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               <div className={`w-full lg:w-[55%] sticky top-0 z-10 sticky-container ${featureToggle?.features?.enableRichPDP ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
                 <div className="relative">
                   <div className="relative aspect-w-16 aspect-h-16">
-                    <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                  {selectedOption === "used" ? (
+                    <>
+                    {usedProducts?.Used?.[0]?.images?.slice(0, 1).map((image:any, index:number) => (
+                    <img key={index} src={generateUri(image?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                    ))}
+                    </>
+                    ) : (
+                      <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                    )}
                   </div>
-                  {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
+                  {relatedProducts && relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
                     <div className='absolute z-10 right-1 top-1'>
                       <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-red-500 rounded-full' />
                     </div>
@@ -1202,12 +1256,25 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   {renderStatus()}
                 </div>
                 <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-                  {product?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification")
+                  {selectedOption === "used" ? (
+                    <>
+                   {usedProducts?.Used?.[0]?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification")
+                    .map((item: any, index: number) => (
+                      <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                        <img src={generateUri(item?.url, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                      </div>
+                    ))}
+                    </>
+                    ) : (
+                    <>
+                     {product?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification")
                     .map((item: any, index: number) => (
                       <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
                         <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
                       </div>
                     ))}
+                    </>
+                    )}
                 </div>
               </div>
             )
