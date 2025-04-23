@@ -172,27 +172,15 @@ export default function RichLandingCategoryV2({ featureToggle, category, handleF
                                     Our {category?.name} buying guides
                                   </h2>
                                   <div className="grid grid-cols-1 gap-8 md:grid-cols-4 lg:grid-cols-4">
-                                    {blogList
-                                      ?.sort(
-                                        (a: any, b: any) =>
-                                          new Date(b?.lastUpdated).getTime() - new Date(a?.lastUpdated)?.getTime()
-                                      )
-                                      ?.slice(0, 4)
-                                      ?.map((post: any, idx: number) => (
-                                        <div key={idx} className="flex flex-col h-full">
-                                          <Link
-                                            href={sanitizeRelativeUrl(post?.slug)}
-                                            className="inline-flex items-center link-clr font-medium hover:text-teal-800 relative w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] overflow-hidden"
-                                          >
-                                            <img
-                                              src={post?.fields?.hero?.[0]?.hero_image || IMG_PLACEHOLDER}
-                                              alt={post?.title}
-                                              className="object-cover"
-                                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            />
+                                    {blogList?.sort((a: any, b: any) => new Date(b?.lastUpdated).getTime() - new Date(a?.lastUpdated)?.getTime())?.slice(0, 4)?.map((post: any, idx: number) => (
+                                      <div key={idx} className="flex flex-col h-full">
+                                        {post?.fields?.hero?.map((hero: any, heroIdx: number) => (
+                                          <Link href={sanitizeRelativeUrl(post?.slug)} key={`hero-${heroIdx}`} className="inline-flex items-center link-clr font-medium hover:text-teal-800 relative w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] overflow-hidden" >
+                                            <img src={generateUri(hero?.hero_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={post?.title} className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                                           </Link>
-                                        </div>
-                                      ))}
+                                        ))}
+                                      </div>
+                                    ))}
                                   </div>
                                 </div>
                               )}

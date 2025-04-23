@@ -9,6 +9,7 @@ import Link from "next/link";
 import CategoryBanner from "./RichCategory/CategoryBanner";
 import LinkGroup from "./RichCategory/LinkGroup";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
+import { generateUri } from "@commerce/utils/uri-util";
 
 export default function RichLandingCategory({ category, deviceInfo, filterBrandData, productDataToPass, onToggleBrandListPage, maxBasketItemsCount, config, featureToggle, defaultDisplayMembership, campaignData, blogList }: any) {
   return (
@@ -20,26 +21,24 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
         }
         <LinkGroup data={category?.linkGroups} deviceInfo={deviceInfo} />
         {productDataToPass?.results?.length > 0 &&
-          <>
-            <div className="container px-4 pt-8 mx-auto">
-              <div className="flex pt-4 mb-6 border-t border-gray-400 gap-x-6">
-                <h2 className="block font-semibold text-black heading dark:text-black">Featured {category?.name}</h2>
-                <button onClick={onToggleBrandListPage} className='text-lg font-normal text-black underline'>See more</button>
-              </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
-                {productDataToPass?.results?.map((product: any, pIdx: number) => (
-                  <div key={pIdx}>
-                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                  </div>
-                ))}
-              </div>
+          <div className="container px-4 pt-8 mx-auto">
+            <div className="flex pt-4 mb-6 border-t border-gray-400 gap-x-6">
+              <h2 className="block font-semibold text-black heading dark:text-black">Featured {category?.name}</h2>
+              <button onClick={onToggleBrandListPage} className='text-lg font-normal text-black underline'>See more</button>
             </div>
-          </>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
+              {productDataToPass?.results?.map((product: any, pIdx: number) => (
+                <div key={pIdx}>
+                  <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div>
+              ))}
+            </div>
+          </div>
         }
         {category?.additionalInfo1 && (
           <div className="w-full !px-0 py-8">
             <Link href="/sell-or-part-exchange" className="flex flex-col items-start justify-start w-full text-left">
-              <img src={category?.additionalInfo1} alt="Banner Image" className="block w-full" />
+              <img src={generateUri(category?.additionalInfo1, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt="Banner Image" className="block w-full" />
             </Link>
           </div>
         )}
@@ -48,7 +47,7 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
         }
         {category?.additionalInfo2 && (
           <div className="container px-4 py-8 mx-auto">
-            <img src={category?.additionalInfo2} alt="Banner Image" className="block w-full" />
+            <img src={generateUri(category?.additionalInfo2, 'h=500&fm=webp') || IMG_PLACEHOLDER} alt="Banner Image" className="block w-full" />
           </div>
         )}
         {blogList?.length > 0 && (
@@ -56,28 +55,16 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
             <h2 className="mb-6 font-semibold heading">
               Our {category?.name} buying guides
             </h2>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-4 lg:grid-cols-4">
-              {blogList
-                ?.sort(
-                  (a: any, b: any) =>
-                    new Date(b?.lastUpdated).getTime() - new Date(a?.lastUpdated)?.getTime()
-                )
-                ?.slice(0, 4)
-                ?.map((post: any, idx: number) => (
-                  <div key={idx} className="flex flex-col h-full">
-                    <Link
-                      href={sanitizeRelativeUrl(post?.slug)}
-                      className="inline-flex items-center link-clr font-medium hover:text-teal-800 relative w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] overflow-hidden"
-                    >
-                      <img
-                        src={post?.fields?.hero?.[0]?.hero_image || IMG_PLACEHOLDER}
-                        alt={post?.title}
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-4 lg:grid-cols-6">
+              {blogList?.sort((a: any, b: any) => new Date(b?.lastUpdated).getTime() - new Date(a?.lastUpdated)?.getTime())?.slice(0, 4)?.map((post: any, idx: number) => (
+                <div key={idx} className="flex flex-col h-full">
+                  {post?.fields?.hero?.map((hero: any, heroIdx: number) => (
+                    <Link href={sanitizeRelativeUrl(post?.slug)} key={`hero-${heroIdx}`} className="inline-flex items-center link-clr font-medium hover:text-teal-800 relative w-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] overflow-hidden" >
+                      <img src={generateUri(hero?.hero_image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={post?.title} className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
                     </Link>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         )}
