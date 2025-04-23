@@ -15,33 +15,21 @@ import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection, 
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import commerce from '@lib/api/commerce'
-import { generateUri, removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
+import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
-import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
-import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
-const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
-const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import Loader from '@components/Loader'
 import { AnalyticsEventType } from '@components/services/analytics'
-import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 import RichLandingCategory from '@components/category/RichLandingCategory'
 import LandingCategory from '@components/category/LandingCategory'
 import CategoryList from '@components/category/CategoryList'

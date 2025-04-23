@@ -6,7 +6,7 @@ import { useUI } from '@components/ui'
 import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import dynamic from 'next/dynamic'
 import { useTranslation } from "@commerce/utils/use-translation";
-const ProductGrid = dynamic(() => import('@components/Product/Grid'))
+const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 export const ACTION_TYPES = {
   SORT_BY: 'SORT_BY',
   PAGE: 'PAGE',
@@ -218,7 +218,7 @@ export default function ProductCollection({
             featureToggle={featureToggle}
           />
         </div> */}
-        <ProductGrid
+        <ProductGridWithFacet isPagination={true}
           products={productDataToPass}
           currentPage={state.currentPage}
           handleInfiniteScroll={handleInfiniteScroll}

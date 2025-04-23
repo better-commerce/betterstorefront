@@ -30,7 +30,6 @@ import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import useDebounce from '@commerce/utils/use-debounce'
-import Image from 'next/image'
 // Optimize dynamic imports with loading priority
 const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'), { ssr: true })
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'), { ssr: true })
