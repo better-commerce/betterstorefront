@@ -28,7 +28,7 @@ const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { useTranslation } from '@commerce/utils/use-translation'
 import HomeProductCardMin from '@components/HomeProductCardMin'
 
-export default function RecentlyViewedProduct({ isHome = false ,deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
+export default function RecentlyViewedProduct({ isHome = false, deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
   const translate = useTranslation()
   const { addToCart } = cartHandler()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
@@ -144,7 +144,7 @@ export default function RecentlyViewedProduct({ isHome = false ,deviceInfo, conf
 
   return (
     recentlyViewedProducts?.length > 0 && (
-      <div className="flex flex-col pt-6 mx-5 border-t border-gray-200 sm:pt-10 slider-btn-css">
+      <div className={`flex flex-col pt-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-5'}`}>
         <div className="flex flex-col w-full container-ffx">
           <div>
             <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
