@@ -2752,3 +2752,8 @@ select.focus-none:focus{
     position: relative;
   }
 }
+.enablenotifymebtn{
+  pointer-events: none !important;
+  cursor: not-allowed;
+  opacity: 0.5 !important;
+}

@@ -694,6 +694,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
   const attrGroup = groupBy(product?.customAttributes, 'key')
   const tabProducts = groupBy(relatedProducts?.relatedProducts || [], (item) => item?.groupNameList?.[0]?.relatedTypeCode);
+  const filterAndGroupProducts = (
+    products: any[] | undefined, 
+    filterKey: string, 
+    groupKey: string
+  ) => {
+    return groupBy(
+      (products || []).filter((item: { groupNameList: { relatedTypeCode: string }[] }) => 
+        item?.groupNameList?.some((group: { relatedTypeCode: string }) => 
+          group?.relatedTypeCode === filterKey
+        )
+      ),
+      () => groupKey
+    );
+  };
+  const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Used", "Used");
+  const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Accessories", "Accessories");
+  const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Compare", "Compare");
   if (!product) {
     return null
   }
@@ -958,7 +975,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderSectionContent = () => {
     return (
       featureToggle?.features?.enableRichPDP ? (
-        <RichProductView product={product} selectedOption={selectedOption} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} tabProducts={tabProducts} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
+        <RichProductView product={product} selectedOption={selectedOption} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} tabProducts={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
       ) : (
         <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
       )
@@ -1037,12 +1054,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     },
-    tabProducts?.COMPARE && {
+    compareProducts?.Compare && {
       id: 'Compare',
       label: 'Compare',
       content: (
         <div className="space-y-4">
-          <TabProductCompare products={tabProducts?.COMPARE} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} />
+          <TabProductCompare products={compareProducts?.Compare} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} />
         </div>
       )
     },
@@ -1055,12 +1072,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
       )
     },
-    tabProducts?.ACCESSORIES && {
+    accessoriesProducts?.Accessories && {
       id: 'Accessories',
       label: 'Accessories',
       content: (
         <div className="space-y-4">
-          <TabProductCard products={tabProducts?.ACCESSORIES} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+          <TabProductCard products={accessoriesProducts?.Accessories} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
         </div>
       )
     }
@@ -1101,7 +1118,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </>
     );
   };
-
+  const renderUsedRelatedSection = () => {
+    return (
+      <>
+        <hr className="border-slate-200 dark:border-slate-700" />
+        <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css scroll-mt-32" id="usedSection">
+        <h3 className="mb-1 font-semibold heading dark:text-black">Used Products</h3>
+          <RelatedProductWithGroup
+            products={usedProducts?.Used?.slice(1)} 
+            productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+            featureToggle={featureToggle}
+          />
+        </div>
+      </>
+    );
+  };
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
@@ -1261,6 +1294,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         {featureToggle?.features?.enableRichPDPTabs && (
           <ProductTabs tabs={productTabs} defaultActiveTab="overview" />
         )}
+        {featureToggle.features?.enableForPCSite && usedProducts?.Used?.length > 0 && renderUsedRelatedSection()}
       </main>
     </>
   )

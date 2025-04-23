@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ReviewBadge from "./ReviewBadge";
 import PricesWithDiscount from '@components/PricesWithDiscount'
+import {ChevronRightIcon } from '@heroicons/react/24/outline'
 import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 import StockCheckModal from "@components/StoreLocator/StockCheckModal/StockCheckModal";
 import LongDescription from "./LongDescription";
@@ -39,7 +40,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
               )}
               {selectedOption === "used" && product?.condition != 'pre-launch' && (
                 <>
-                  <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.[0]?.price} listPrice={tabProducts?.[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                 </>
               )}
             </div>
@@ -226,7 +227,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                 )}
               </div>
               {/* Used Product Option */}
-              {tabProducts?.USED?.length > 0 && (
+              {tabProducts?.length > 0 && (
                 <div className={`p-4 ${selectedOption === "used" ? "bg-transparent" : "bg-nonactive"}`}>
                   <label className="flex items-center justify-between gap-2 cursor-pointer">
                     <input type="radio" name="product" value="used" checked={selectedOption === "used"} onChange={() => setSelectedOption("used")} className="hidden" />
@@ -236,7 +237,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     </span>
                   </label>
                   <div className='mt-3 space-y-2'>
-                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.USED[0]?.price} listPrice={tabProducts?.USED[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={tabProducts?.[0]?.price} listPrice={tabProducts?.[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
                       <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
                   </div>
@@ -248,7 +249,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
                         </div>
                       }
-                      <UsedProductCard products={tabProducts?.USED[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                      <UsedProductCard products={tabProducts[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                     </>
                   )}
                 </div>
@@ -277,6 +278,24 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
             </>
           )}
         </div>
+        {tabProducts?.length > 1 && (
+        <div className="max-w-md mx-auto mt-4">
+        <div className="border border-[#757575] rounded-md bg-white px-6 py-6 flex justify-between items-center shadow-sm"
+             style={{ minHeight: "100px" }}>
+          <div className="text-sm font-semibold text-black leading-snug">
+            {tabProducts?.length -1 } other Used {product?.name}
+          </div>
+          <button
+            onClick={() => {
+              document.getElementById('usedSection')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group hover:bg-gray-100 transition rounded-full p-2"
+          >
+            <ChevronRightIcon className="w-6 h-6 text-black"/>
+          </button>
+        </div>
+      </div>
+       )}
       </div>
     </div>
   )
