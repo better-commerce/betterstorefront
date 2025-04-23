@@ -1,7 +1,6 @@
-import { CURRENT_THEME, EngageEventTypes } from "@components/utils/constants";
+import { EngageEventTypes } from "@components/utils/constants";
 import LandingFeaturedCategory from "./RichCategory/LandingFeaturedCategory";
 import { sanitizeRelativeUrl } from "@framework/utils/app-util";
-import FeaturedBanner from "./FeaturedBanner";
 import FeaturedBrand from "./RichCategory/FeatureBrand";
 import dynamic from "next/dynamic";
 const ProductCard = dynamic(() => import('@components/ProductCard'))
@@ -9,7 +8,6 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Link from "next/link";
 import CategoryBanner from "./RichCategory/CategoryBanner";
 import LinkGroup from "./RichCategory/LinkGroup";
-import BuyingGuide from "./RichCategory/BuyingGuide";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 
 export default function RichLandingCategory({ category, deviceInfo, filterBrandData, productDataToPass, onToggleBrandListPage, maxBasketItemsCount, config, featureToggle, defaultDisplayMembership, campaignData, blogList }: any) {

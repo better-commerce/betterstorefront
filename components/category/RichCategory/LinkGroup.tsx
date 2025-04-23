@@ -9,15 +9,15 @@ import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 export default function LinkGroup({ data }: any) {
   return (
     <>
-      <section className="pt-8">
+      <section className="flex flex-col gap-4 pt-8">
         {data?.map((grp: any, grpIdx: number) => (
-          <div className="container px-4 mx-auto" key={`linkGrp-${grpIdx}`}>
+          <div className="container !px-0 mx-auto" key={`linkGrp-${grpIdx}`}>
             <h2 className="pt-4 mb-6 font-semibold text-black border-t border-gray-400 heading">{grp?.name}</h2>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
               {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (
                 <Link key={cdx} href={item?.link != null ? sanitizeRelativeUrl(`/${item?.link}`) : `#`} className="group">
                   <div className="relative overflow-hidden rounded-md">
-                    <div className="flex flex-col items-center justify-center w-56 h-56 bg-[#F7f7f7] border border-gray-200 rounded-full img-container-category">
+                    <div className="flex flex-col items-center justify-center sm:w-40 sm:h-40 mx-auto bg-[#F7f7f7] border border-gray-200 rounded-full img-container-category">
                       {item?.imageUrl != '' ? (
                         <img src={generateUri(item?.imageUrl, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-full" alt="Image" width={240} height={160} />
                       ) : (

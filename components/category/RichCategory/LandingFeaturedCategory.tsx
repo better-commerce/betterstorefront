@@ -6,9 +6,9 @@ import Link from "next/link";
 export default function LandingFeaturedCategory({ featuredCategory, categoryName, deviceInfo }: any) {
   return (
     <section className="pt-8">
-      <div className="container px-4 mx-auto">
+      <div className="container !px-0 mx-auto">
         <h2 className="pt-4 mb-6 font-semibold text-gray-800 border-t border-gray-400 heading">Shop {categoryName} by Category</h2>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
           {featuredCategory?.filter((featured: any) => featured?.isFeatured === true).map((featured: any, featuredIdx: number) => (
             <div className="w-full text-center" key={featuredIdx}>
               <Link href={sanitizeRelativeUrl(featured?.link)} className="group" >

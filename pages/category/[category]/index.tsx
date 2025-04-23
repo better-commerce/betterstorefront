@@ -1,38 +1,50 @@
+// React and Next.js core imports
 import { useReducer, useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import NextHead from 'next/head'
-import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
+
+// Third-party package imports
 import useSwr from 'swr'
 import 'swiper/css'
 import 'swiper/css/navigation'
+
+// Framework and utility imports
+import commerce from '@lib/api/commerce'
+import { Guid } from '@commerce/types'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
-import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
-import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection, } from 'framework/utils/app-util'
+import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError, sanitizeRelativeUrl } from '@framework/utils/app-util'
-import commerce from '@lib/api/commerce'
-import { useTranslation } from '@commerce/utils/use-translation'
-import { SCROLLABLE_LOCATIONS } from 'pages/_app'
-import { postData } from '@components/utils/clientFetcher'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import { useUI } from '@components/ui'
-import { BLOG_COLS, BLOG_PAGE_ID, CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-import { Guid } from '@commerce/types'
+import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
-import useAnalytics from '@components/services/analytics/useAnalytics'
+
+// Constants and types
+import { SCROLLABLE_LOCATIONS } from 'pages/_app'
+import { BLOG_COLS, BLOG_PAGE_ID, CURRENT_THEME, EmptyObject, EmptyString, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { AnalyticsEventType } from '@components/services/analytics'
-import LandingCategory from '@components/category/LandingCategory'
-import CategoryList from '@components/category/CategoryList'
-import RichLandingCategory from '@components/category/RichLandingCategory'
+
+// Hooks and services
+import { useUI } from '@components/ui'
+import { postData } from '@components/utils/clientFetcher'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+
+// Dynamic component imports
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'), { ssr: true })
+const LandingCategory = dynamic(() => import('@components/category/LandingCategory'), { ssr: false })
+const CategoryList = dynamic(() => import('@components/category/CategoryList'), { ssr: false })
+const RichLandingCategory = dynamic(() => import('@components/category/RichLandingCategory'), { ssr: false })
+const RichLandingCategoryV2 = dynamic(() => import('@components/category/RichLandingCategoryV2'), { ssr: false })
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -588,13 +600,82 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
           (
             <>
               {featureToggle?.features?.enableForPCSite ? (
-                <RichLandingCategory blogList={blogList} category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
+                router.asPath == "/category/digital-cameras" ?
+                  <RichLandingCategoryV2
+                    shopAll={false}
+                    featureToggle={featureToggle}
+                    category={category}
+                    handleFilters={handleFilters}
+                    productDataToPass={productDataToPass}
+                    state={state}
+                    data={data}
+                    excludeOOSProduct={excludeOOSProduct}
+                    handleInfiniteScroll={handleInfiniteScroll}
+                    deviceInfo={deviceInfo}
+                    maxBasketItemsCount={maxBasketItemsCount}
+                    config={config}
+                    isCompared={isCompared}
+                    defaultDisplayMembership={defaultDisplayMembership}
+                    closeCompareProducts={closeCompareProducts}
+                    onEnableOutOfStockItems={onEnableOutOfStockItems}
+                    isValidating={isValidating}
+                    isMobile={isMobile}
+                    products={products}
+                    handleSortBy={handleSortBy}
+                    clearAll={clearAll}
+                    removeFilter={removeFilter}
+                    isProductCompare={isProductCompare}
+                    showCompareProducts={showCompareProducts}
+                    handlePageChange={handlePageChange}
+                    campaignData={campaignData}
+                    blogList={blogList} 
+                    filterBrandData={filterBrandData}
+                    onToggleBrandListPage={onToggleBrandListPage} />
+
+                  : <RichLandingCategory
+                    blogList={blogList}
+                    category={category}
+                    deviceInfo={deviceInfo}
+                    filterBrandData={filterBrandData}
+                    productDataToPass={productDataToPass}
+                    onToggleBrandListPage={onToggleBrandListPage}
+                    maxBasketItemsCount={maxBasketItemsCount}
+                    config={config}
+                    featureToggle={featureToggle}
+                    defaultDisplayMembership={defaultDisplayMembership}
+                    campaignData={campaignData} />
               ) : (
                 <LandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
               )}
             </>
           ) : (
-            <CategoryList shopAll={false} featureToggle={featureToggle} category={category} handleFilters={handleFilters} productDataToPass={productDataToPass} state={state} data={data} excludeOOSProduct={excludeOOSProduct} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} isCompared={isCompared} defaultDisplayMembership={defaultDisplayMembership} closeCompareProducts={closeCompareProducts} onEnableOutOfStockItems={onEnableOutOfStockItems} isValidating={isValidating} isMobile={isMobile} products={products} handleSortBy={handleSortBy} clearAll={clearAll} removeFilter={removeFilter} isProductCompare={isProductCompare} showCompareProducts={showCompareProducts} handlePageChange={handlePageChange} campaignData={campaignData} />
+            <CategoryList
+              shopAll={false}
+              featureToggle={featureToggle}
+              category={category}
+              handleFilters={handleFilters}
+              productDataToPass={productDataToPass}
+              state={state}
+              data={data}
+              excludeOOSProduct={excludeOOSProduct}
+              handleInfiniteScroll={handleInfiniteScroll}
+              deviceInfo={deviceInfo}
+              maxBasketItemsCount={maxBasketItemsCount}
+              config={config}
+              isCompared={isCompared}
+              defaultDisplayMembership={defaultDisplayMembership}
+              closeCompareProducts={closeCompareProducts}
+              onEnableOutOfStockItems={onEnableOutOfStockItems}
+              isValidating={isValidating}
+              isMobile={isMobile}
+              products={products}
+              handleSortBy={handleSortBy}
+              clearAll={clearAll}
+              removeFilter={removeFilter}
+              isProductCompare={isProductCompare}
+              showCompareProducts={showCompareProducts}
+              handlePageChange={handlePageChange}
+              campaignData={campaignData} />
           )}
       </section>
     </>
