@@ -292,7 +292,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
             </>
           ) : (
             <>
-              <div className="container flex justify-between mx-auto mob-container">
+              <div className="container flex justify-between mx-auto mob-container header-padding">
                 {isMobile &&
                   <div className="flex items-center flex-1">
                     <MenuBar navItems={config} featureToggle={featureToggle} />

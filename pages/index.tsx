@@ -455,9 +455,9 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
                 <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
                   {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
-                    <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx == 0 ? 'bg-gray-200 text-black' : 'bg-orange-500 text-white'}`} key={`data-${fIdx}`}>
+                    <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx === 0 || fIdx === 3 || fIdx === 5 || fIdx === 7  ? 'bg-gray-200 text-black' : 'bg-orange-500 bg-light-skyblue text-white'}`} key={`data-${fIdx}`}>
                       <div className='flex flex-col col-span-7 gap-5'>
-                        <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingoffers_title}</h2>
+                        <h2 className='text-3xl font-semibold uppercase textcapitalize'>{fo?.fixingoffers_title}</h2>
                         <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
                         <Link href={fo?.fixingoffers_buttonlink} legacyBehavior passHref>
                           <a href={fo?.fixingoffers_buttonlink} className='btn btn-primary'>{fo?.fixingoffers_buttontitle}</a>
@@ -476,32 +476,32 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     </div>
                   ))}
                 </div>
-                <div className='flex flex-col justify-center mb-6 text-center sm:mb-10'>
-                  {pageContents?.fixingheading?.length > 0 && pageContents?.fixingheading?.map((heading: any, hIdx: number) => (
-                    <div key={`heading-${hIdx}`} className='flex flex-col justify-center gap-4 mt-6 sm:mt-10'>
-                      <h2 className='text-3xl font-semibold text-black uppercase'>{heading?.fixingheading_title}</h2>
-                      <div className='mx-auto text-sm font-normal !leading-relaxed text-gray-600 cms-para sm:w-10/12' dangerouslySetInnerHTML={{ __html: heading?.fixingheading_description }}></div>
+                {Array.isArray(pageContents?.fixingheading) && pageContents?.fixingheading?.some( (item: any) => item?.fixingheading_title?.trim() || item?.fixingheading_description?.trim()    
+                 ) && (
+                    <div className="flex flex-col justify-center mb-6 text-center sm:mb-10">
+                      {pageContents.fixingheading.map( (heading: any, hIdx: number) => {
+                          const hasTitle = heading?.fixingheading_title?.trim();
+                          const hasDescription = heading?.fixingheading_description?.trim();
+                          if (!hasTitle && !hasDescription) return null;
+                          return (
+                            <div  key={`heading-${hIdx}`} className="flex flex-col justify-center gap-4 mt-6 sm:mt-10" >
+                              {hasTitle && (  <h2 className="text-3xl font-semibold text-black uppercase">  {heading.fixingheading_title} </h2>)}
+                              {hasDescription && (
+                                <div className="mx-auto text-sm font-normal !leading-relaxed text-gray-600 cms-para sm:w-10/12" dangerouslySetInnerHTML={{   __html: heading.fixingheading_description, }} />
+                              )}
+                            </div>
+                          );
+                        }
+                      )}
                     </div>
-                  ))}
-                </div>
+                  )}
                 {/* Tabs */}
+                {(pageContents?.specialofferproducts?.length > 0 || pageContents?.newproducts?.length > 0) && (
                 <div className="flex justify-center gap-6 mb-4 sm:mb-10">
-                  <button
-                    className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
-                      }`}
-                    onClick={handleSpecialOffersClick}
-                  >
-                    Special Offers
-                  </button>
-                  <button
-                    className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 border-blue-500 text-white" : "text-gray-600 bg-gray-100"
-                      }`}
-                    onClick={handleNewProductsClick}
-                  >
-                    New Products
-                  </button>
+                  <button className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 bg-active-clr border-blue-500 text-white" : "text-gray-600 bg-gray-100" }`}  onClick={handleSpecialOffersClick}> Special Offers </button>
+                  <button className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 bg-active-clr border-blue-500 text-white" : "text-gray-600 bg-gray-100" }`} onClick={handleNewProductsClick} > New Products </button>
                 </div>
-
+               )}
                 {/* Tab content */}
                 {activeTab === "specialOffers" && pageContents?.specialofferproducts?.length > 0 && (
                   <SectionSliderProductCard
@@ -513,7 +513,6 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     defaultDisplayMembership={defaultDisplayMembership}
                   />
                 )}
-
                 {activeTab === "newProducts" && pageContents?.newproducts?.length > 0 && (
                   <SectionSliderProductCard
                     deviceInfo={deviceInfo}
