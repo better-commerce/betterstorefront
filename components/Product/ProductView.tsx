@@ -379,8 +379,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
   const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Used", "Used");
+  const kitsProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "KITS&BUNDLES", "KITS&BUNDLES");
   const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Accessories", "Accessories");
   const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Compare", "Compare");
+  const overlayImages = product?.images?.filter((x: any) => matchStrings(x?.tag, "overlay", true));
+  const overlayImage = product?.images?.find((x: any) => matchStrings(x?.tag, "overlay", true));
   interface MediaItem {
     [key: string]: string; // Can be either image or url or any other property name
   }
@@ -818,7 +821,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     if (document) document?.exitFullscreen();
     return
   };
-
+  const weloveAttribute = product?.customAttributes?.find(
+    (attr: { key: string }) => attr?.key === "web.welove"
+  );
   const renderCustomControls = () =>
     fullscreen ? (
       <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999' onClick={exitFullscreen}>
@@ -992,11 +997,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
 
-
+ 
   const renderSectionContent = () => {
     return (
       featureToggle?.features?.enableRichPDP ? (
-        <RichProductView product={product} selectedOption={selectedOption} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
+        <RichProductView product={product} selectedOption={selectedOption} kitsProducts={kitsProducts?.['KITS&BUNDLES']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
       ) : (
         <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
       )
@@ -1008,7 +1013,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       id: 'overview',
       label: 'Overview',
       content: (
-        <div className="space-y-4 container-tabs">
+        <div className="space-y-4 w-full">
           <div className="text-sm text-gray-800 description-html description-p-long" dangerouslySetInnerHTML={{ __html: product?.description }} />
         </div>
       )
@@ -1018,7 +1023,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Specs',
       content: (
         <>
-          <div className="p-4 overflow-x-auto container-tabs">
+          <div className="p-4 overflow-x-auto w-full">
             {product && product?.customAttributes?.length > 0 ? <table className="w-full border border-gray-300">
               <thead>
                 <tr className="text-left bg-gray-200">
@@ -1225,6 +1230,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                   renderItem={customRenderItem}
                   renderThumbInner={customRenderThumbInner}
                 />
+                {selectedOption === "new" ? (
+                  <>
+                  {overlayImages?.length > 0 &&
+                    <div className='absolute z-10 top-1 right-1 border border-[#ddd] shadow-md'>
+                      <img
+                        src={generateUri(overlayImage?.image, 'h=100&fm=webp') || IMG_PLACEHOLDER}
+                        className='overlayImage'
+                        width="100"
+                        height="100"
+                        title="Free Gift"
+                        alt={product?.name} />
+                    </div>
+                 }
+                  </>
+                    ) : (
+                  <></>
+                 )}
                 {featureToggle?.features?.enableRichPDP && (<p className='pt-4 text-sm text-gray-500'>Product Code: {product?.productCode}</p>)}
               </div>
             ) : (

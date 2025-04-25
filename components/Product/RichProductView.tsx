@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ReviewBadge from "./ReviewBadge";
 import PricesWithDiscount from '@components/PricesWithDiscount'
+import ParkPoint from '@components/ParkPoint'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 import StockCheckModal from "@components/StoreLocator/StockCheckModal/StockCheckModal";
@@ -15,8 +16,9 @@ const BuyNowButton = dynamic(() => import('@components/ui/BuyNowButton'))
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import { HeartIcon } from "@heroicons/react/24/outline";
+import KitPrice from "@components/KitPrice";
 const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCard'))
-export default function RichProductView({ product, selectedOption, isGuestUser, handleWishList, isInWishList, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile }: any) {
+export default function RichProductView({ product, selectedOption, isGuestUser, handleWishList, isInWishList, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
   const translate = useTranslation()
   return (
     <div className='flex gap-6 flex-mob-col'>
@@ -63,6 +65,45 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   </div>
                 </div>
               </div>
+            )}
+            {selectedOption === "new" && product?.condition != 'pre-launch' && (  
+             <>
+             <div className="flex my-3 gap-x-2 items-center w-full">
+              <img src="/theme/camera/image/pc-point-icon.svg" alt="icon"/>
+              <p className="text-xs text-black">Earn <ParkPoint price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} /> Park Points. <a href="#" className="font-semibold link-clr primary-text-blue">Details</a></p>
+            </div>
+            {kitsProducts?.length > 0 && (
+            <div className="w-full">
+              <h1 className="text-sm mb-2 text-gray-700">
+                Configuration: <span className="font-semibold text-black">{product?.name}</span>
+              </h1> 
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div  className="pt-2 relative rounded-md border-2 text-center bg-[#F5F5F5] justify-center transition-all hover:border-blue-500/50 flex flex-col active-clr">
+                  <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
+                    {product?.name}
+                    </h2>
+                    <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t w-full">
+                    <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    </p>
+                </div>
+                {kitsProducts?.map((item: any, index: number) => (
+                  <Link 
+                    key={index} 
+                    href={sanitizeRelativeUrl(`/${item?.slug}`)} 
+                    className="pt-2 border-2 relative text-center rounded-md bg-[#F5F5F5] border-[#757575] justify-center transition-all hover:border-blue-500/50 flex flex-col hover-link-clr"
+                  >
+                    <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
+                      {item?.name}
+                    </h2>
+                    <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t border-[#D9D9D9] w-full">
+                     <KitPrice price={item?.price} listPrice={item?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            )}
+            </>
             )}
             {/* <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
                     <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
@@ -119,6 +160,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
               dangerouslySetInnerHTML={{ __html: product?.shortDescription }}
             />
           }
+          {weloveAttribute && (
+            <div className="w-full make-section ul-li-html bg-[#EAEDF5] p-2 rounded-md">
+              <h4 className="txt-black font-semibold text-sm mb-2">What Makes it Great</h4>
+                <LongDescription data={weloveAttribute?.value} heading="" />
+            </div>
+          )}
         </div>
       </div>
       <div className='w-full lg:w-[40%]'>
@@ -148,14 +195,22 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
                       </div>
                     }
-                    <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
+                    {product?.currentStock > 1 ? (
+                        <p className="font-semibold text-green-600">In stock</p>
+                      ) : (
+                       <></>
+                      )}
+                      {product?.currentStock > 0 && product?.currentStock === 1 && (
+                        <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
+                    )}
+                    {/* <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
                       <span className='pr-1'>Quantity:</span>
                       <select id="quantity" className="w-full p-2 bg-transparent border-none focus:border-0 focus-none" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
                         {[...Array(10).keys()].map((num) => (
                           <option key={num + 1} value={num + 1}> {num + 1} </option>
                         ))}
                       </select>
-                    </div>
+                    </div> */}
                     <div id="add-to-cart-button" className='blue-add-btn'>
                       {isMobile ? (
                         showMobileCaseButton && (
@@ -249,6 +304,14 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
                         </div>
                       }
+                    {product?.currentStock > 1 ? (
+                        <p className="font-semibold text-green-600">In stock</p>
+                      ) : (
+                        <></>
+                      )}
+                      {product?.currentStock > 0 && product?.currentStock === 1 && (
+                        <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
+                    )}
                       <UsedProductCard products={usedProduct[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                     </>
                   )}

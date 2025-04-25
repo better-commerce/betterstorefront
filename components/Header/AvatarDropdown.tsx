@@ -191,7 +191,7 @@ const AvatarDropdown = ({ pluginConfig = [], featureToggle, deviceInfo }: any) =
           <>
             <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
               {featureToggle?.features?.enablePCTopHeader ?
-                <span className="flex items-center text-xs font-light text-white text-regular hover:underline">
+                <span className="flex items-center text-xs font-light text-white pc-text-header-clr text-regular hover:underline">
                   {displayText} <ChevronDownIcon className="w-3 h-3" />
                 </span>
                 :

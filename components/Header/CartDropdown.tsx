@@ -293,7 +293,7 @@ export default function CartDropdown({ featureToggle, deviceInfo }: any) {
                 <>
                   <Popover.Button onClick={() => openMiniBasket(cartItems)} className={` ${open ? "" : "text-opacity-90"} ${featureToggle?.features?.enablePCTopHeader ? '' : 'w-10 h-10 sm:w-12 sm:h-12 hover:bg-slate-100 dark:hover:bg-slate-100 '} group rounded-full inline-flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 relative`}>
                     {featureToggle?.features?.enablePCTopHeader ?
-                      <span className="relative flex items-center text-xs font-light -top-[2px] text-white hover:underline gap-1">{!isMobile && 'Basket'} <ShoppingCartIcon className={`${isMobile ? 'w-5 h-5 relative top-1' : 'w-3 h-3'}`} />
+                      <span className="relative flex items-center text-xs font-light -top-[2px] text-white pc-text-header-clr hover:underline gap-1">{!isMobile && 'Basket'} <ShoppingCartIcon className={`${isMobile ? 'w-5 h-5 relative top-1' : 'w-3 h-3'}`} />
                         {basketItemsCount > 0 && (
                           <div className="w-3.5 h-3.5 flex items-center justify-center bg-red-500 absolute top-0 -right-2.5 rounded-full text-[10px] leading-none text-white font-medium">
                             {basketItemsCount}

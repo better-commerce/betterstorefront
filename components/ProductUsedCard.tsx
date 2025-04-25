@@ -211,7 +211,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             </div>
           </>
         }
-        <div className='w-full pt-3 mb-6'>
+        {/* <div className='w-full pt-3 mb-6'>
           <div className='flex flex-row gap-2 sm:grid sm:grid-cols-2'>
             <h4 className='text-xs'>Dispatches from</h4>
             <p className='text-xs text-black'>London Store</p>
@@ -220,7 +220,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             <h4 className='text-xs'>Warranty</h4>
             <p className='text-xs text-color-primary-blue'>6 Months</p>
           </div>
-        </div>
+        </div> */}
         <div className='w-full'>
           <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] rounded-md hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
             {isInWishList ? (
