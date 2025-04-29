@@ -39,6 +39,8 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import HeroLeft from '@components/ui/Hero/HeroLeft'
 import SectionHomeProductCardNew from '@components/SectionHomeProductCardNew'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
+import ImageCollection from '@components/home/ImageCollection'
+import ProductTabs from '@components/Product/ProductTabs'
 // Optimize dynamic imports with loading priorities
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'), { ssr: true })
 const Loader = dynamic(() => import('@components/ui/LoadingDots'), { ssr: true })
@@ -199,7 +201,80 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       return '/my-account/login';
     }
   }, [isGuestUser, user]);
-
+  const productTabs = [
+    pageContents?.cameraslist && {
+      id: 'Cameras',
+      label: 'Cameras',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.cameraslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    pageContents?.usedcameraslist && {
+      id: 'UsedCameras',
+      label: 'Used Cameras',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.usedcameraslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    pageContents?.lenseslist && {
+      id: 'Lenses',
+      label: 'Lenses',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.lenseslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    pageContents?.usedlenseslist && {
+      id: 'UsedLenses',
+      label: 'Used Lenses',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.usedlenseslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    pageContents?.bagslist && {
+      id: 'Bags',
+      label: 'Bags',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.bagslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    pageContents?.tripodslist && {
+      id: 'Tripods',
+      label: 'Tripods',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.tripodslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    pageContents?.videolist && {
+      id: 'Video',
+      label: 'Video',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.videolist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    pageContents?.accessorieslist && {
+      id: 'Accessories',
+      label: 'Accessories',
+      content: (
+        <div className="space-y-4">
+          <SectionHomeProductCardNew onlyImage={false} products={pageContents?.accessorieslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+  ].filter(Boolean);
   return (
     <>
       {(pageContents?.metatitle || pageContents?.metadescription || pageContents?.metakeywords) && (
@@ -331,6 +406,43 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                 </div>
               )}
             </div>
+            {/* brand Image collection list start */}
+            {pageContents?.brandlist?.length > 0 && (<><ImageCollection data={pageContents?.brandlist} deviceInfo={deviceInfo}/></>)}
+            {/* brand Image collection list End */}
+            {Array.isArray(productTabs) && productTabs.length > 0 && (
+              <div className='container py-6 pb-0 tab-padding-none slider-btn-css'>
+                {pageContents?.featureproductsheading?.length > 0 && pageContents?.featureproductsheading?.map((heading: any, hIdx: number) => (
+                    <h3 className="pb-3 font-semibold text-black title-page sm:pb-4 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureproductsheading_title}</h3>
+                ))}
+               <ProductTabs tabs={productTabs} defaultActiveTab="Cameras" />
+              </div>
+            )}
+            {/* Brands section */}
+            {pageContents?.brands?.length > 0 && (
+                <div className='flex flex-col w-full pt-4 mt-2 sm:mt-4'>
+                  <div className='container flex flex-col gap-4 mx-auto'>
+                    {pageContents?.brandheading?.map((h: any, iIdx: number) => (
+                      <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
+                        <h2 className='font-semibold text-black title-page'>{h?.brandheading_title}</h2>
+                      </div>
+                    ))}
+                    <div className='grid items-center justify-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
+                      {pageContents?.brands?.map((item: any, itemIdx: number) => (
+                        <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
+                          <img
+                            src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
+                            alt={item?.brands_name}
+                            className='w-full h-auto p-0 sm:p-2'
+                            width={300}
+                            height={150}
+                            loading="lazy"
+                          />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+            )}
             {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
               <div className='relative sm:min-h-[480px] flex flex-col items-center justify-center w-full gap-2 py-4 overflow-hidden' key={`trade-in-${tradeIdx}`}>
                 <img
@@ -410,32 +522,6 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   </Swiper>
                 </div>
               }
-              {/* Brands section */}
-              {pageContents?.brands?.length > 0 && (
-                <div className='flex flex-col w-full pt-4 mt-2 sm:mt-4'>
-                  <div className='container !px-0 flex flex-col gap-4 mx-auto'>
-                    {pageContents?.brandheading?.map((h: any, iIdx: number) => (
-                      <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
-                        <h2 className='font-semibold text-black title-page'>{h?.brandheading_title}</h2>
-                      </div>
-                    ))}
-                    <div className='grid items-center justify-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
-                      {pageContents?.brands?.map((item: any, itemIdx: number) => (
-                        <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
-                          <img
-                            src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
-                            alt={item?.brands_name}
-                            className='w-full h-auto p-0 sm:p-2'
-                            width={300}
-                            height={150}
-                            loading="lazy"
-                          />
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
             <div className='flex flex-col justify-center gap-4 pt-6 pb-20 text-center'>
               <h3 className='font-semibold text-black heading'>See personalised recommendation</h3>

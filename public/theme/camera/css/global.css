@@ -2788,3 +2788,7 @@ filter: invert(1);
 .active-clr, .hover-link-clr:hover{
   border-color: #536DAE !important;
 }
+.tab-padding-none .padding-0-sec{
+  padding-left:0 !important;
+  padding-right:0 !important;
+}

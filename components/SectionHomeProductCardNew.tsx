@@ -16,7 +16,7 @@ export default function SectionHomeProductCardNew({ products, productPerColumn, 
         breakpoints={{
           640: { slidesPerView: 2.2, navigation: false },
           768: { slidesPerView: 2.2, navigation: true },
-          1024: { slidesPerView: productPerColumn, navigation: true, spaceBetween:20 },
+          1024: { slidesPerView: productPerColumn, spaceBetween:20 },
         }}
       >
         {products?.map((product: any, pId: number) => (

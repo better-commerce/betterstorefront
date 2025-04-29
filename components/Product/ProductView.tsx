@@ -43,6 +43,7 @@ import wishlistHandler from '@components/services/wishlist'
 
 // Types
 import { AnalyticsEventType } from '@components/services/analytics'
+import ReviewInput from './Reviews/ReviewInput'
 
 // Dynamically imported components
 const ProductDescription = dynamic(() => import('./ProductDescription'))
@@ -112,6 +113,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [analyticsData, setAnalyticsData] = useState(null)
   const [selectedOption, setSelectedOption] = useState("new");
   const [quantity, setQuantity] = useState(1);
+  const [isSubmitReview, setSubmitReview] = useState(false)
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
@@ -379,7 +381,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
   const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Used", "Used");
-  const kitsProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "KITS&BUNDLES", "KITS&BUNDLES");
+  const kitsProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Bundle", "Bundle");
   const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Accessories", "Accessories");
   const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Compare", "Compare");
   const overlayImages = product?.images?.filter((x: any) => matchStrings(x?.tag, "overlay", true));
@@ -1001,7 +1003,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderSectionContent = () => {
     return (
       featureToggle?.features?.enableRichPDP ? (
-        <RichProductView product={product} selectedOption={selectedOption} kitsProducts={kitsProducts?.['KITS&BUNDLES']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
+        <RichProductView product={product} selectedOption={selectedOption} kitsProducts={kitsProducts?.['Bundle']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
       ) : (
         <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
       )
@@ -1047,14 +1049,18 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </>
       )
     },
-    reviews?.review?.productReviews?.length > 0 && {
+     {
       id: 'Reviews',
       label: 'Reviews',
       content: (
         <div className="space-y-4 review-none-section container-tabs">
           {reviews?.review?.productReviews?.length > 0
             ? renderReviews()
-            : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>This product hasn't been reviewed yet. Be the first to share your thoughts!</div>}
+            : 
+            <div className='flex justify-start flex-col text-xl font-semibold text-left text-gray-400'>
+              This product hasn't been reviewed yet. Be the first to share your thoughts!
+              <div className='w-full mt-4'><ReviewInput data={product} productId={ product?.productId ?? product?.recordId} setSubmitReview={setSubmitReview}deviceInfo={deviceInfo}/></div>
+            </div>}
         </div>
       )
     },
