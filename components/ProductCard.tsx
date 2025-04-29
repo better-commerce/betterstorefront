@@ -146,6 +146,11 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         return isValid
       },
       action: async () => {
+        if (isInWishList) {
+          await deleteWishlistItem(user?.userId, data?.recordId)
+          removeFromWishlist(data?.recordId)
+          setIsInWishList(false)
+        }
         const item = await cartHandler()?.addToCart(
           {
             basketId,
