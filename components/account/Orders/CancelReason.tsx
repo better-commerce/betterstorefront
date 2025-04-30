@@ -148,7 +148,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                         <div className='w-full'>
                           <p className='text-sm text-black'>{translate('label.cancelReason.cancelConfirmationText')} {cancelTitle} {translate('common.label.questionMark')}</p>
                         </div>
-                        <div className='flex justify-between w-full mt-4'>
+                        <div className='flex justify-between w-full mt-4 button-section-cancel'>
                           <Button
                             variant='slim'
                             onClick={closeModal}

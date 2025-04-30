@@ -231,7 +231,7 @@ export default function CartDropdown({ featureToggle, deviceInfo }: any) {
             <>
               {b2bUser ? (
                 <>
-                  <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 hover:bg-slate-100 dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
+                  <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
                     {featureToggle?.features?.enablePCTopHeader ?
                       <span className="flex items-center text-xs font-light text-white hover:underline">{!isMobile && 'Basket'} <ShoppingCartIcon className={`${isMobile ? 'w-7 h-7' : 'w-4 h-4'}`} /></span> :
                       <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
@@ -240,7 +240,7 @@ export default function CartDropdown({ featureToggle, deviceInfo }: any) {
                   <Transition as={Fragment} enter="transition ease-out duration-200" enterFrom="opacity-0 translate-y-1" enterTo="opacity-100 translate-y-0" leave="transition ease-in duration-150" leaveFrom="opacity-100 translate-y-0" leaveTo="opacity-0 translate-y-1" >
                     <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 mt-3.5 -right-10 sm:right-0 sm:px-0">
                       <div className="overflow-hidden shadow-lg rounded-3xl ring-1 ring-black ring-opacity-5">
-                        <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-neutral-800 py-7">
+                        <div className="relative grid grid-cols-1 gap-6 px-6 bg-white dark:bg-neutral-800 py-7 dark-white-bg">
                           {
                             b2bBasketConfig?.filter((item: any) => item?.enabled)?.map((item: any) => {
 
@@ -249,7 +249,7 @@ export default function CartDropdown({ featureToggle, deviceInfo }: any) {
                               }
 
                               return (
-                                <Link key={item?.title} title={item?.id} passHref href="#" className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${!item?.head ? '!cursor-default hover:!bg-transparent' : ''}`} onClick={(ev: any) => {
+                                <Link key={item?.title} title={item?.id} passHref href="#" className={`flex dark-text-black items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 ${!item?.head ? '!cursor-default hover:!bg-transparent' : ''}`} onClick={(ev: any) => {
                                   if (item?.onClick) {
                                     item?.onClick(ev)
                                   }

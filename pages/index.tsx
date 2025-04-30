@@ -619,7 +619,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                           <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
                         </Link>
                       </div>
-                      <div className='absolute top-0 left-0 z-0 col-span-12 mob-static'>
+                      <div className='absolute top-0 right-0 left-0 z-0 col-span-12 mob-static'>
                         <img
                           src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                           alt={fo?.fixingdelivery_title}

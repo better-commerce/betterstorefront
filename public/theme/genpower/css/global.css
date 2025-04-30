@@ -2887,3 +2887,27 @@ background-color: #ffb400 !important;
   color:#ffb400  !important
 }
 
+@media (prefers-color-scheme: dark) {
+  .bg-header-clr .header-nav-font, .LangDropdown button span, label, .text-orange {
+   color: #000 !important
+  }
+  button.nc-Button, body .dark-white-bg, body .button-section-cancel button {
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+  body .dark-white-bg {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+  .dark-text-black, p{
+    color: #000 !important;
+  }
+}
+
+.bg-header-clr .header-nav-font, .LangDropdown button span, label {
+  @apply  dark:!text-black;
+}
+button.nc-Button {
+  @apply dark:!bg-black;
+  @apply dark:!text-black;
+}

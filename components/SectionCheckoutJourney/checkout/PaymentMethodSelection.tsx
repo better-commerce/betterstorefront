@@ -463,7 +463,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
             </div>
           </div>
         ) : (
-          <p>{translate('label.checkout.noPaymentMethodText')}</p>
+          <p className='dark:text-black'>{translate('label.checkout.noPaymentMethodText')}</p>
         )}
       </>
     ) : (
