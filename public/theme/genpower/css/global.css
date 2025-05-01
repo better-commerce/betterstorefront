@@ -1482,9 +1482,13 @@ p {
 }
 @media screen and (max-width:767px) {
 .cart-recently-viewed{
-  width: 325px !important;
-  max-width: 325px !important;
+  width: 98% !important;
+  max-width: 98% !important;
   min-width: auto;
+}
+body .max-w-md.mob-width-full{
+  width: 100% !important;
+  max-width: 100% !important;
 }
 }
 .wishlist-img-height{
@@ -2866,6 +2870,9 @@ body .round-md-btn, .btn-radius-sm{
   margin-top:30px  !important
 }
 @media screen and (max-width: 767px) {
+  body .top-header-search {
+    top: 8px;
+  }
  .mobile-flex{
   display: flex !important;
   flex-direction: column-reverse;

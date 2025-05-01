@@ -103,7 +103,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       // Optionally, you can display a general error message at the top
       setAlert({
         type: 'error',
-        msg: 'Please Enter PO Number/ETA before submit request.'
+        msg: 'Please Enter PO Number/ETA/Phone Number before submit request.'
       });
     }
   };
@@ -349,7 +349,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         <div className="sm:col-span-4">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col w-full gap-3 p-3 border shadow bg-gray-50 rounded-xl border-slate-200">
-              {Object?.keys(formConfig?.fields)?.map((fieldKey) => {
+              {Object?.keys(formConfig?.fields)?.map((fieldKey:any) => {
                 const field: any = formConfig.fields[fieldKey];
                 const today = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD' format
 

@@ -766,7 +766,7 @@ function CollectionPage(props: any) {
                       </>}
                     </div>
                     {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
-                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
                     </div>}
                   </>
                 ) : (
@@ -829,7 +829,7 @@ function CollectionPage(props: any) {
                     {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
                     {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                     {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
-                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
                     </div>}
                   </div>
                 )}
