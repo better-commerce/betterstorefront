@@ -159,15 +159,19 @@ const getSiteLocales = () => {
 
     const siteLocales = [...new Set(infraConfig?.languages?.map((i) => i.languageCulture))]
     const allLocales = [...new Set([ ...siteLocales, ... micrositeLocales ])]
-    //console.log({ defaultLocale, siteLocales, micrositeLocales, allLocales })
+    
+    // Ensure defaultLocale is included in the locales array
     let locales = {
-      locales: infraConfig?.languages?.length ? allLocales : [defaultLocale],
+      locales: infraConfig?.languages?.length ? 
+        (allLocales.includes(defaultLocale) ? allLocales : [...allLocales, defaultLocale]) : 
+        [defaultLocale],
       defaultLocale: defaultLocale,
     }
+    
     console.log("----------------- | Supported i18n | -----------------")
     console.log(locales)
     console.log("------------------------------------------------------")
-    // fs.writeFileSync(__dirname.join('/'))
+    
     fs.writeFileSync(__dirname + '/framework/bettercommerce/locales.json', JSON.stringify(locales), (e) => console.log(e))
     fs.writeFileSync(__dirname + '/framework/bettercommerce/microsites.json', JSON.stringify({ microsites: microsites?.map((m) => { 
       let origin = "", slug = ""
