@@ -1322,7 +1322,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </>
         }
 
-        {product?.componentProducts && (
+        {product?.componentProducts && !featureToggle.features?.enableForPCSite && (
           <>
             <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
             <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} product={product} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />

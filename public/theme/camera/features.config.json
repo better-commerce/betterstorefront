@@ -21,7 +21,7 @@
     "enableAddressIOSearch":false,
     "enableGoogleAnalytics": false,
     "enableOmnilytics": true,
-    "enableHorizontalFilter": false,
+    "enableHorizontalFilter": true,
     "enableCustomHomeWidget":false,
     "enableFullBanner":true,
     "enableCustomToolWidget": false,

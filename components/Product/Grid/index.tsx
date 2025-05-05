@@ -39,26 +39,26 @@ function Grid({ products, currentPage, handlePageChange = () => { }, handleInfin
 
   // Memoize the grid class to prevent recalculation on every render
   const gridClass = useMemo(() => {
-    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 ${
+    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 pc-padding-x-none ${
       products.results.length < 4
         ? `lg:grid-cols-3`
         : featureToggle?.features?.enableHorizontalFilter
-          ? 'lg:grid-cols-4'
+          ? 'lg:grid-cols-5'
           : featureToggle?.features?.enableForPCSite
             ? 'lg:grid-cols-3'
-            : 'lg:grid-cols-4'
+            : 'lg:grid-cols-5'
     }`
   }, [products.results.length, featureToggle?.features?.enableHorizontalFilter, featureToggle?.features?.enableForPCSite])
 
   // Memoize the non-infinite scroll grid class
   const nonInfiniteGridClass = useMemo(() => {
-    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 ${
+    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 pc-padding-x-none ${
       products.results.length < 4
         ? 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'
         : featureToggle?.features?.enableHorizontalFilter
-          ? 'lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4'
+          ? 'lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-5'
           : featureToggle?.features?.enableForPCSite
-            ? 'lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4'
+            ? 'lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-5'
             : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'
     }`
   }, [products.results.length, featureToggle?.features?.enableHorizontalFilter, featureToggle?.features?.enableForPCSite])

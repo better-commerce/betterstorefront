@@ -2792,3 +2792,12 @@ filter: invert(1);
   padding-left:0 !important;
   padding-right:0 !important;
 }
+.collection-full-container.container{
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+.pc-padding-x-none{
+  padding-left:0 !important;
+  padding-right:0 !important;
+}

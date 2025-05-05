@@ -38,7 +38,7 @@ function GridList({ products, currentPage, handlePageChange = () => { }, handleI
 
   // Memoize the grid class to prevent recalculation on every render
   const gridClass = useMemo(() => {
-    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 ${
+    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 pc-padding-x-none ${
       products.results.length < 4
         ? `lg:grid-cols-3`
         : featureToggle?.features?.enableHorizontalFilter
@@ -51,7 +51,7 @@ function GridList({ products, currentPage, handlePageChange = () => { }, handleI
 
   // Memoize the non-infinite scroll grid class
   const nonInfiniteGridClass = useMemo(() => {
-    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 ${
+    return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 pc-padding-x-none ${
       products.results.length < 4
         ? 'lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1'
         : featureToggle?.features?.enableHorizontalFilter
