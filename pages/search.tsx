@@ -357,19 +357,22 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
           <>
             {!!productDataToPass?.results?.length ? (
               <div className={`${featureToggle?.features?.enableForPCSite ? 'gap-1 mt-0' : 'gap-1 mt-1.5 sm:mt-3'} sm:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid w-full grid-cols-1 px-0 mx-auto overflow-hidden sm:px-0 lg:px-0`}>
-                {isMobile ? (
-                  <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                ) : (
-                  <>
-                    {!featureToggle?.features?.enableHorizontalFilter ? (
-                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
-                        <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
-                      </div>
-                    ) : (
-                      <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                    )}
-                  </>
-                )}
+              {!featureToggle.features?.enableForPCSite &&  <>
+                  {isMobile ? (
+                    <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                  ) : (
+                    <>
+                      {!featureToggle?.features?.enableHorizontalFilter ? (
+                        <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
+                          <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                        </div>
+                      ) : (
+                        <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                      )}
+                    </>
+                  )}
+                </>
+                }
                 <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                   {featureToggle.features?.enableForPCSite &&
                     <>
@@ -380,6 +383,19 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                           </h1>
                           <p className='text-xs font-normal text-black'>Check each product page for other buying options.</p>
                         </div>
+                        {isMobile ? (
+                            <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                          ) : (
+                            <>
+                              {!featureToggle?.features?.enableHorizontalFilter ? (
+                                <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-2 md:col-span-2 lg:col-span-2 filter-panel-3' : 'sm:col-span-3 md:col-span-3 lg:col-span-3'}`}>
+                                  <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} />
+                                </div>
+                              ) : (
+                                <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                              )}
+                            </>
+                          )}
                         <div className='flex justify-start w-full gap-3 p-2 mt-2 border border-[#D9D9D9] rounded sm:col-span-12'>
                           <div className='flex items-center justify-between w-full gap-0'>
                             <div className='flex justify-start gap-3'>

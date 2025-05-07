@@ -86,7 +86,7 @@ export default function FilterHorizontal({ products = { filters: [] }, handleFil
   };
 
   return (
-    <div className='relative flex flex-wrap w-full col-span-12 gap-2 pt-4'>
+    <div className='relative flex flex-wrap w-full col-span-12 gap-2 pt-2'>
       {getFilter()?.slice(0, displayedFiltersCount).map((infoWidget: any, index: number) => (
         <div className="relative inline-block text-left" key={`applied-filter-right-${index}`} ref={(ref) => (filterRef.current[index] = ref)}>
           <div>

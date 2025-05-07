@@ -23,6 +23,7 @@ import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
 import { useUI } from '@components/ui'
 import { ImageBanner, ImageCollection, PlainText, Video } from '@components/SectionBrands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import BrandBanner from '@components/brand/BrandBanner'
 const HeadingWithButton = dynamic(() => import('@components/Heading/HeadingWithButton'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
@@ -679,7 +680,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <>
                   {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                     <>
-                      {isMobile ? (
+                        {!featureToggle.features?.enableForPCSite &&  <>
+                          {isMobile ? (
                         <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       ) : (
                         <>
@@ -690,13 +692,14 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                           )}
                         </>
                       )}
+                        </>}
                       <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                         {featureToggle.features?.enableForPCSite &&
                           <>
                             <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
                               <div className='flex flex-col w-full gap-4 sm:col-span-12'>
                                 <div className="bg-transparent fixing-main-section dark:bg-white">
-                                  <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+                                  <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
                                     <li className='flex items-center text-10-mob sm:text-sm'>
                                       <Link href="/brands" passHref>
                                         <span className="flex items-end upper case font-12 dark:text-black">{translate('common.label.brandsText')}</span>
@@ -712,20 +715,22 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                     </li>
                                   </ol>
                                 </div>
-                                {brandDetails?.premiumBrandLogo != "" && <div className='flex flex-col justify-center w-full bg-gray-100 sm:col-span-12'>
-                                  <img src={brandDetails?.premiumBrandLogo} className='object-cover object-center w-full h-[220px]' />
-                                </div>}
-                                <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
-                                  {brandDetails?.name}
-                                </h1>
-                                {sanitizedDescription &&
-                                  <div className='flex w-full'>
-                                    <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
-                                  </div>
-                                }
+                                <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription}/>
                               </div>
-
-                              <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                              <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
+                              {isMobile ? (
+                                    <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                                  ) : (
+                                    <>
+                                      {!featureToggle?.features?.enableHorizontalFilter ? (
+                                        <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                      ) : (
+                                        <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
                                 <div className='flex items-center justify-between w-full gap-0'>
                                   <div className='flex justify-start gap-3'>
                                     <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${brandDetails?.name}`}</span>
@@ -774,19 +779,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   </li>
                                 </ol>
                               </div>
-                              {brandDetails?.premiumBrandLogo != "" && <div className='flex flex-col justify-center w-full bg-gray-100 sm:col-span-12'>
-                                <img src={brandDetails?.premiumBrandLogo} className='object-cover object-center w-full h-[220px]' />
-                              </div>}
-                              <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
-                                {brandDetails?.name}
-                              </h1>
-                              {sanitizedDescription &&
-                                <div className='flex w-full'>
-                                  <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
-                                </div>
-                              }
+                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription}/>
                             </div>
-                            <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
                                 <div className='flex justify-start gap-3'>
                                   <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${brandDetails?.name}`}</span>

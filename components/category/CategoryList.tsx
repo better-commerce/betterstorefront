@@ -4,7 +4,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useTranslation } from "@commerce/utils/use-translation";
 import { CURRENT_THEME, EngageEventTypes } from "@components/utils/constants";
 import RecentlyViewedProduct from "@components/Product/RelatedProducts/RecentlyViewedProducts";
-
+import CategoryBanner from '@components/category/CategoryBanner'
 const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -52,6 +52,7 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
             <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
               {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                 <>
+                {!featureToggle.features?.enableForPCSite &&  <>
                   {isMobile ? (
                     <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   ) : (
@@ -61,12 +62,11 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                       <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
                     )
                   )}
+                </>}
                   <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                     {featureToggle.features?.enableForPCSite &&
                       <>
-                        <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
-                          <div className='flex flex-col w-full gap-4 sm:col-span-9'>
-                            {shopAll ? (
+                        {shopAll ? (
                               <div className="mt-2 bg-transparent dark:bg-white">
                                 <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
                                   <li className='flex items-center text-10-mob sm:text-sm'>
@@ -97,17 +97,20 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                                 </ol>
                               </div>
                             ) : (category?.breadCrumbs && (<BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />))}
-                            <h1 className={`block title-page font-bold dark:text-black primary-text-blue `}>{category?.name}</h1>
-                            {category?.description &&
-                              <div className='flex w-full'>
-                                <div className="block text-sm font-normal text-gray-800 text-x-small dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
-                              </div>
-                            }
+                        <div className='grid items-center mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
+                          <CategoryBanner props={category} deviceInfo={deviceInfo}/>
+                          <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
+                          {isMobile ? (
+                                <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                              ) : (
+                                !featureToggle?.features?.enableHorizontalFilter ? (
+                                  <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                ) : (
+                                  <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                )
+                            )}
                           </div>
-                          <div className='justify-center sm:col-span-3'>
-                            {category?.image != "" && <img src={category?.image} className='object-cover object-top w-full h-auto rounded-lg' />}
-                          </div>
-                          <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                          <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
                             <div className='flex items-center justify-between w-full gap-0'>
                               <div className='flex justify-start gap-3'>
                                 <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${category?.name}`}</span>

@@ -716,25 +716,25 @@ function CollectionPage(props: any) {
                     <CollectionBanner props={props} deviceInfo={deviceInfo} />
                     </>
                   }
-                  <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container' : ' w-full'} col-span-12`}>
-                  {isMobile ? (
-                      <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                    ) : (
-                      <>
-                        {!featureToggle?.features?.enableHorizontalFilter ? (
-                          <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                        ) : (
-                          <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                        )}
-                      </>
-                    )}
-                  </div>
                     <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'} ${featureToggle?.features?.enableForPCSite ? 'container' : ''}`}>
                       {featureToggle.features?.enableForPCSite &&
                         <>
                           <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4 pc-padding-x-none'>
                             {renderFeaturedProduct()}
-                            <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
+                            {isMobile ? (
+                                <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                              ) : (
+                                <>
+                                  {!featureToggle?.features?.enableHorizontalFilter ? (
+                                    <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                  ) : (
+                                    <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                  )}
+                                </>
+                              )}
+                          </div>
+                            <div className='flex justify-start w-full gap-3 p-2 mt-2 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
                                 <div className='flex justify-start gap-3'>
                                   <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
