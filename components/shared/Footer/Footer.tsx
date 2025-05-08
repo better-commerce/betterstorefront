@@ -179,7 +179,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
         <div className="relative pt-16 pb-6 bg-neutral-50 nc-Footer lg:pt-16 lg:pb-6 dark:border-neutral-200 main-footer-section dark:bg-white">
           <div className="container grid grid-cols-1 sm:grid-cols-12">
             <div className="flex flex-col col-span-12 sm:col-span-3">
-              <div className="col-span-2 md:col-span-1 footer-logo">
+              <div className="col-span-2 md:col-span-1 footer-logo pc-footer-filter">
                 <Logo />
               </div>
               <div className="flex justify-start gap-2 mt-10">
