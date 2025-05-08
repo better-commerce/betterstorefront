@@ -37,7 +37,7 @@ export const generateDocPDF = (pdfFile: any, data: any) => {
 
 export const generatePackingSlip = (pdfFile: any, data: any) => {
   if (!isString(pdfFile)) return false
-  const fileName = `PU${data}`
+  const fileName = `PS-${data}`
   const pdfData = atob(pdfFile)
   const arrayBuffer = new ArrayBuffer(pdfData.length)
   const uint8Array = new Uint8Array(arrayBuffer)
