@@ -492,11 +492,11 @@ function CollectionPage(props: any) {
     return (
       <>
         {topFeaturedProduct?.length > 0 &&
-          <div className='flex flex-col w-full gap-4 p-2 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
+          <div className='flex flex-col w-full gap-4 p-2 mt-4 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
             <div className='flex flex-col justify-end w-full text-right'>
               <h4 className='text-xs font-normal primary-text-blue'>Featured Products</h4>
             </div>
-            <div className='grid grid-cols-3 gap-3 p-2'>
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 p-2'>
               {topFeaturedProduct?.map((product: any, pIdx: number) => (
                 <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
                   <div className='col-span-4'>
@@ -685,7 +685,7 @@ function CollectionPage(props: any) {
           </>
         }
         {
-          <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
+          <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden pc-overflow-visible lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
             {isValidating ? (
               <Loader />
             ) : (
@@ -719,9 +719,8 @@ function CollectionPage(props: any) {
                     <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'} ${featureToggle?.features?.enableForPCSite ? 'container' : ''}`}>
                       {featureToggle.features?.enableForPCSite &&
                         <>
-                          <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4 pc-padding-x-none'>
                             {renderFeaturedProduct()}
-                            <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
+                            <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
                             {isMobile ? (
                                 <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                               ) : (
@@ -734,7 +733,7 @@ function CollectionPage(props: any) {
                                 </>
                               )}
                           </div>
-                            <div className='flex justify-start w-full gap-3 p-2 mt-2 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
                                 <div className='flex justify-start gap-3'>
                                   <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
@@ -742,7 +741,6 @@ function CollectionPage(props: any) {
                                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                               </div>
                             </div>
-                          </div>
                         </>
                       }
                       {isMobile ? null : (
@@ -780,9 +778,9 @@ function CollectionPage(props: any) {
                             </div>
                           </div>
                         <CollectionBanner props={props} deviceInfo={deviceInfo} />
-                        <div className={`grid mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4 ${featureToggle.features?.enableForPCSite ? 'container' : ''}`}>
+                        <div className={`grid lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 ${featureToggle.features?.enableForPCSite ? 'container' : ''}`}>
                           {renderFeaturedProduct()}
-                          <div className='flex justify-start w-full gap-3 p-2 mt-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                          <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                             <div className='flex items-center justify-between w-full gap-0'>
                               <div className='flex justify-start gap-3'>
                                 <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>

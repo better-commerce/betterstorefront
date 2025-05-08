@@ -1202,7 +1202,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         <></>
       )}
       <div className="flex justify-between w-full gap-0 container-storefront small-screen no-padding-container">
-        <div className="justify-start w-full pr-0 bg-white dark:bg-white checkout-container padding-left-20">
+        <div className="justify-start w-full pr-0 bg-white dark:bg-white checkout-container padding-left-20 pc-x-padding">
           <div className="flex justify-start w-full pt-5 pb-2">
             <div className="flex items-center justify-between gap-2">
               <Link href={`/cart`} passHref legacyBehavior>

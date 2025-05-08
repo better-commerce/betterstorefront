@@ -50,7 +50,7 @@ export default function CollectionBanner({ data, props, deviceInfo }: any) {
                                   src={imgUrl}
                                   alt="banner"
                                   loading={idx < 2 ? "eager" : "lazy"}
-                             className="object-cover object-center w-full h-[400px] max-h-[400px] cursor-pointer"
+                             className="object-cover object-center w-full h-auto sm:h-[400px] sm:max-h-[400px] cursor-pointer"
                               />
                           </a>
                       </Link>
@@ -61,7 +61,7 @@ export default function CollectionBanner({ data, props, deviceInfo }: any) {
           </>
          )}
       </section>
-     <section className="pt-6 grid col-span-12 bg-white">
+     <section className="pt-4 grid col-span-12 bg-white">
       <div className="container mx-auto space-y-4">
       <h1 className={`block title-page font-bold dark:text-black primary-text-blue`}>
         {props?.name}

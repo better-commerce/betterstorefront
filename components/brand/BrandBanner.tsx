@@ -9,7 +9,7 @@ export default function BrandBanner({ data, props, deviceInfo, description }: an
         {props?.premiumBrandLogo != ""  &&(
           <>
             <div className="relative">
-              <img src={props?.premiumBrandLogo} alt="banner" className="object-cover object-center w-full h-[400px] max-h-[400px] cursor-pointer" />
+              <img src={props?.premiumBrandLogo} alt="banner" className="object-cover object-center w-full h-auto sm:h-[400px] sm:max-h-[400px] cursor-pointer" />
                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
             </div>
           </>

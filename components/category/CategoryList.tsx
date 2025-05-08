@@ -97,7 +97,6 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                                 </ol>
                               </div>
                             ) : (category?.breadCrumbs && (<BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />))}
-                        <div className='grid items-center mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
                           <CategoryBanner props={category} deviceInfo={deviceInfo}/>
                           <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
                           {isMobile ? (
@@ -110,7 +109,7 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                                 )
                             )}
                           </div>
-                          <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
+                          <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                             <div className='flex items-center justify-between w-full gap-0'>
                               <div className='flex justify-start gap-3'>
                                 <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${category?.name}`}</span>
@@ -118,7 +117,6 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                               <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             </div>
                           </div>
-                        </div>
                       </>
                     }
                     {isMobile ? null : (

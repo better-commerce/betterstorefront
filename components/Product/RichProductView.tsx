@@ -215,8 +215,8 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                       {isMobile ? (
                         showMobileCaseButton && (
                           <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                            <div className="container p-4 mx-auto max-w-7xl">
-                              <div className="flex justify-end">
+                            <div className="container p-4 mx-auto max-w-7xl blue-add-btn">
+                              <div className="flex justify-end add-green-btn">
                                 <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
                               </div>
                             </div>

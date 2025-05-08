@@ -2515,8 +2515,12 @@ display: none !important;
   padding-right:0 !important;
 }
 @media screen and (max-width:767px) {
+  .pc-x-padding{
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
 .theme-top {
-  padding-top: 4.22rem !important;
+  padding-top: 8.5rem !important;
 }
 .mob-p-d-none{
   display: none !important;
@@ -2806,4 +2810,20 @@ filter: invert(1);
 }
 .pc-footer-filter img.brand-logo, .pc-img-filter .brand-logo{
   filter: brightness(0) invert(1) !important;
+}
+.sticky-filter-container{
+  position: sticky;
+  top: 135px;
+  z-index: 9;
+  background-color: #fff;
+  transition: all 0.3s ease; 
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  /* box-shadow: 0 4px 4px -4px #D9D9D9;
+  border-bottom: 1px solid #D9D9D9; */
+}
+@media (min-width: 1025px) {
+  .pc-overflow-visible{
+    overflow:visible !important;
+  }
 }

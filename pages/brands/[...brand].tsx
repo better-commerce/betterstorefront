@@ -673,7 +673,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             </>
           }
           {
-            <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
+            <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 pc-overflow-visible ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
               {isValidating ? (
                 <Loader />
               ) : (
@@ -693,10 +693,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                         </>
                       )}
                         </>}
-                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
+                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                         {featureToggle.features?.enableForPCSite &&
                           <>
-                            <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
                               <div className='flex flex-col w-full gap-4 sm:col-span-12'>
                                 <div className="bg-transparent fixing-main-section dark:bg-white">
                                   <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
@@ -730,7 +729,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                     </>
                                   )}
                                 </div>
-                              <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
+                              <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
                                 <div className='flex items-center justify-between w-full gap-0'>
                                   <div className='flex justify-start gap-3'>
                                     <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${brandDetails?.name}`}</span>
@@ -738,7 +737,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                                 </div>
                               </div>
-                            </div>
                           </>
                         }
                         {isMobile ? null : (
