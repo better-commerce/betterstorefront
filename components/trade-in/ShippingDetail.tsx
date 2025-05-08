@@ -1,7 +1,7 @@
 import Loader from "@components/Loader";
 import TradeNewAddress from "@components/account/Address/TradeNewAddress";
 import { useUI } from "@components/ui";
-import { NEXT_ADDRESS, TRADE_IN_DPD_PICKUP_LOCATIONS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition, EmptyString } from '@components/utils/constants';
+import { NEXT_ADDRESS, TRADE_IN_DPD_PICKUP_LOCATIONS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition, EmptyString, NEXT_TRADE_IN_SCHEDULE_DELIVERY } from '@components/utils/constants';
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
 import { callApi } from "@framework/utils/api-util";
 import { logError } from "@framework/utils/app-util";
@@ -15,6 +15,7 @@ interface ShippingDetailProps {
   nextSteps: any;
   quoteData: any;
   shippingData: any;
+  setDeliveryData: any;
 }
 
 interface DPDAddress {
@@ -28,7 +29,7 @@ interface DPDAddress {
   countryCode: string;
 }
 
-export default function ShippingDetail({ nextSteps, quoteData, shippingData }: ShippingDetailProps) {
+export default function ShippingDetail({ nextSteps, quoteData, shippingData, setDeliveryData }: ShippingDetailProps) {
   const [selectedCameraStore, setSelectedCameraStore] = useState<any>(0);
   const { setAlert, user } = useUI()
   const translate = useTranslation();
@@ -74,10 +75,13 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
       const response = await callApi(config);
 
       if (response?.data?.isSuccess) {
-
         // Fetch updated quote only if the response is successful
         const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteData?.value?.id } };
         const responseNew = await callApi(config);
+
+        const configDelivery: AxiosRequestConfig = { url: NEXT_TRADE_IN_SCHEDULE_DELIVERY, method: RequestMethod.POST, data: { quoteId: quoteData?.value?.id } };
+        const responseDelivery = await callApi(configDelivery);
+        setDeliveryData(responseDelivery?.data)
         nextSteps(responseNew?.data);
       }
     } catch (error) {
@@ -94,7 +98,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
     setIsLoading(true);
 
     const getAddressPayload = () => {
-      if(addressData?.addressType === 3){
+      if (addressData?.addressType === 3) {
         return addressData
       }
 
@@ -140,6 +144,10 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
       const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteData?.value?.id } };
       const responseNew = await callApi(config);
 
+      const configDelivery: AxiosRequestConfig = { url: NEXT_TRADE_IN_SCHEDULE_DELIVERY, method: RequestMethod.POST, data: { quoteId: quoteData?.value?.id } };
+      const responseDelivery = await callApi(configDelivery);
+      setDeliveryData(responseDelivery?.data)
+
       nextSteps(responseNew?.data);
     } catch (error) {
       logError(error);
@@ -182,7 +190,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
     if (!user?.userId || (userAddress && Object.keys(userAddress).length > 0)) return; // Avoid refetching
 
     try {
-      const config: AxiosRequestConfig = { url: NEXT_ADDRESS, method: RequestMethod.POST, data: { id: user?.userId } }; 
+      const config: AxiosRequestConfig = { url: NEXT_ADDRESS, method: RequestMethod.POST, data: { id: user?.userId } };
       const response = await callApi(config)
       setUserAddress(response.data || {});
       return response.data;
@@ -192,12 +200,12 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
   };
 
   const fetchDPDStoreList = async () => {
-    if(!postCode || !validatePostCode(postCode)) return
+    if (!postCode || !validatePostCode(postCode)) return
     setIsLoading(true);
     try {
-      const config: AxiosRequestConfig = { url: TRADE_IN_DPD_PICKUP_LOCATIONS, method: RequestMethod.POST, data: { currentPage : 1, pageSize : 20, postCode } }; 
+      const config: AxiosRequestConfig = { url: TRADE_IN_DPD_PICKUP_LOCATIONS, method: RequestMethod.POST, data: { currentPage: 1, pageSize: 20, postCode } };
       const { data } = await callApi(config)
-      if(data?.length){
+      if (data?.length) {
         setStoreList(data)
         setIsStoreAvailable(true)
       } else {
@@ -213,7 +221,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
     }
   }
 
-  const validatePostCode = (postCode: string) =>{
+  const validatePostCode = (postCode: string) => {
     const trimmed = postCode?.trim()?.toUpperCase();
     const isValid = /^([A-Z]{1,2}\d{1,2}[A-Z]?)\s?(\d[A-Z]{2})$/i.test(trimmed);
     setIsValidPostCode(isValid)
@@ -231,7 +239,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
       postcode: storeDetails?.postCode || EmptyString,
     });
   }
-  
+
   return (
     <>
       {isLoading && <Loader />}
@@ -448,12 +456,11 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData }: S
             <div className='flex justify-start flex-1 w-full mt-2 sm:w-5/12'>
               <input
                 type="text"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPostCode(e.target.value) }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPostCode(e.target.value)}
                 maxLength={8}
                 value={postCode}
-                className={`w-full rounded-md px-2 py-3 text-sm font-normal text-black bg-white border ${
-                  isValidPostCode ? 'border-gray-200' : 'border-red-500'
-                } placeholder:text-gray-400`}
+                className={`w-full rounded-md px-2 py-3 text-sm font-normal text-black bg-white border ${isValidPostCode ? 'border-gray-200' : 'border-red-500'
+                  } placeholder:text-gray-400`}
                 placeholder="Postcode"
               />
               <button className={`px-10 py-3 mx-1 text-sm text-white ${!postCode ? 'bg-[#39a029a4]' : 'bg-[#39a029]'} rounded disabled:bg-gray-300`} onClick={fetchDPDStoreList} > Find </button>

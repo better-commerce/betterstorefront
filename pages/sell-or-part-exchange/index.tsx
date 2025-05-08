@@ -75,6 +75,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   const [isLoadingDots, setIsLoadingDots] = useState(false);
   const [shippingData, setShippingData] = useState<any>([])
   const [message, setMessage] = useState("")
+  const [deliveryData, setDeliveryData] = useState<any>([])
 
   const fetchData = useCallback(
     useDebounce(async (searchText: any) => {
@@ -174,6 +175,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     setSearchText({});
     setProducts([]);
     setCurrentStep(0);
+    setDeliveryData([]);
     updateQueryParams(router, {}, ["quoteId"]);
   };
 
@@ -267,10 +269,10 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                 <GetQuote user={user} startNewTrade={startNewTrade} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.SHIPPING_DETAILS &&
-                <ShippingDetail shippingData={shippingData} nextSteps={handleNextStep} quoteData={quoteData} />
+                <ShippingDetail shippingData={shippingData} setDeliveryData={setDeliveryData} nextSteps={handleNextStep} quoteData={quoteData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.FINAL_DETAILS &&
-                <QuoteDetails data={data?.stores} quoteData={quoteData} startNewTrade={startNewTrade} />
+                <QuoteDetails data={data?.stores} quoteData={quoteData} startNewTrade={startNewTrade} deliveryData={deliveryData} />
               }
             </div>
           </div>

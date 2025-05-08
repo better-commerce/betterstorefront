@@ -266,6 +266,8 @@ export const NEXT_TRADE_IN_UPDATE_STORE_ADDRESS = `/api/trade-in/update-store-ad
 export const NEXT_TRADE_IN_CUSTOMERS = `/api/trade-in/customers`
 export const NEXT_TRADE_IN_CUSTOMER_TRADES = `/api/trade-in/customer-trades`
 export const NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER = `/api/trade-in/cancel-quote-by-customer`
+export const NEXT_TRADE_IN_SCHEDULE_DELIVERY = `/api/trade-in/schedule-deliveries`
+export const NEXT_TRADE_IN_PACKING_SLIP = `/api/trade-in/get-packing-slip`
 
 //TRADE IN JOURNEY API ENDPOINTS
 
@@ -281,6 +283,8 @@ export const TRADE_IN_GET_STORES = `/stores`
 export const TRADE_IN_GET_CUSTOMER = `/customers`
 export const TRADE_IN_GET_ASSESSMENT_STATUS = `/assessments`
 export const TRADE_IN_DPD_PICKUP_LOCATIONS = `/deliveries/pickup-locations`
+export const TRADE_IN_GET_DELIVERY_ID = `/deliveries/schedule-delivery`
+export const TRADE_IN_GET_PACKING_SLIP = `/deliveries`
 
 // WALLET NEXT APP ENDPOINTS 
 

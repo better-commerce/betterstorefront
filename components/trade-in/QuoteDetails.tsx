@@ -1,14 +1,54 @@
-import { TradeInItemCondition } from "@components/utils/constants";
+import Loader from "@components/Loader";
+import { NEXT_TRADE_IN_PACKING_SLIP, TradeInItemCondition } from "@components/utils/constants";
+import { generatePackingSlip, generatePDF } from "@components/utils/order";
+import { callApi } from "@framework/utils/api-util";
+import { logError } from "@framework/utils/app-util";
+import { AxiosRequestConfig } from "axios";
+import { RequestMethod } from "bc-payments-sdk/dist/constants";
+import { useEffect, useState } from "react";
 
-export default function QuoteDetails({ data, quoteData, startNewTrade }: any) {
+export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryData }: any) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [downloadData, setDownloadData] = useState<any>(null);
+
+  const getDownloadFile = async () => {
+    setIsLoading(true);
+    try {
+      const config: AxiosRequestConfig = {
+        url: NEXT_TRADE_IN_PACKING_SLIP,
+        method: RequestMethod.POST,
+        data: { id: deliveryData?.value },
+      };
+      const response = await callApi(config);
+
+      generatePackingSlip(response?.data?.base64Pdf, quoteData?.value?.quoteNo);
+    } catch (error) {
+      logError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
+      {isLoading && <Loader />}
       <div className='flex flex-col w-full gap-4 border-t border-gray-200'>
         <div className='flex flex-col justify-start w-full gap-4 mt-4 text-left'>
           <h3 className="px-0 py-0 text-xl font-semibold w-full text-[#2d4d9c]">That's it, all the hard work is done!</h3>
           <h3 className="px-0 py-0 text-xl font-semibold w-full text-[#2d4d9c]">Your Quote Reference Number: {quoteData?.value?.quoteNo} <span className="text-sm text-black">(Status: {quoteData?.value?.status})</span></h3>
           <p className='text-sm font-normal text-gray-600'>Thank you for choosing to visit Park Cameras Burgess Hill to complete your trade-in. We look forward to seeing you. Our friendly in-store staff will be happy to guide you through the trade-in process whilst answering any other questions you may have regarding photographic equipment.</p>
           <p className='text-sm font-normal text-gray-600'>To ensure your trade-in continues to move forward smoothly, please can you either print out the packing slip below or download to your phone so the in-store team can pick up the trade-in from the correct point.</p>
+          {deliveryData?.value && <div className="mt-4">
+            <button
+              onClick={getDownloadFile}
+              className="px-4 py-2 text-white bg-[#2d4d9c] rounded hover:bg-[#1e3a7a] flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download Packing Slip
+            </button>
+          </div>}
         </div>
         <div className='flex flex-col justify-start w-full mt-3 text-left'>
           <h3 className="text-xl font-semibold w-full text-[#2d4d9c] rounded disabled:bg-gray-300">Trade-in Summary</h3>
