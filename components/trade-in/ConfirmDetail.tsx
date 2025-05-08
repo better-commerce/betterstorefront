@@ -59,7 +59,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
         conditions: conditionLabels[selectedCondition?.conditionName] || 0,
         accessories: selectedAccessories || [],
       }));
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { customerId: guestLoginResult?.userId, items } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_LOGIN_USER, method: RequestMethod.POST, data: { customerId: guestLoginResult?.customerId, items } };
       const { data: quoteId } = await callApi(config);
       updateQueryParams(router, { quoteId });
       if (quoteId) {

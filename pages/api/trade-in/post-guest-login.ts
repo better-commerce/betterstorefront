@@ -9,7 +9,7 @@ import cookie from 'cookie';
 const postGuestLoginApiMiddleware = async (req: any, res: any) => {
   try {
     const response = await postGuestLogin(req.body?.data, req?.cookies)
-    if (response?.userId && response?.userToken?.access_token) {
+    if (response?.customerId && response?.userToken?.access_token) {
 
       // Clip userToken information from the actual response that is sent to the UI layer.
       const { userToken, ...rest } = response
