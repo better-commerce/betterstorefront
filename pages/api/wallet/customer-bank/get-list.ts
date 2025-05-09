@@ -1,8 +1,8 @@
 import { apiMiddlewareErrorHandler } from '@framework/utils';
 import apiRouteGuard from '../../base/api-route-guard';
-import getCustomerBankListById from '@framework/wallet/customer-bank/get-customer-bank-list';
+import getCustomerBankList from '@framework/wallet/customer-bank/get-list';
 
-const getCustomerBankByIdApiMiddleware = async (req: any, res: any) => {
+const getCustomerBankListApiMiddleware = async (req: any, res: any) => {
   if (req.method !== 'POST') { 
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
@@ -13,11 +13,11 @@ const getCustomerBankByIdApiMiddleware = async (req: any, res: any) => {
       return res.status(400).json({ error: 'Wallet ID is required' });
     }
 
-    const response: any = await getCustomerBankListById(walletId, { page, pageSize }, req?.cookies);
+    const response: any = await getCustomerBankList(walletId, { page, pageSize }, req?.cookies);
     res.status(200).json(response);
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error);
   }
 };
 
-export default apiRouteGuard(getCustomerBankByIdApiMiddleware);
+export default apiRouteGuard(getCustomerBankListApiMiddleware);

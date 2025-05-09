@@ -3,7 +3,7 @@ import fetcher from '@framework/fetcher'
 import { logError } from '@framework/utils/app-util'
 import { DIGITAL_WALLET_BASE_URL } from '@framework/utils/constants'
 
-export default function getCustomerBankListById(
+export default function getCustomerBankList(
   walletId: string,
   data: any,
   cookies?: any
