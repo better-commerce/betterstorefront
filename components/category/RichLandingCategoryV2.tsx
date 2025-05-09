@@ -104,7 +104,8 @@ export default function RichLandingCategoryV2({ featureToggle, category, handleF
             <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
               {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                 <>
-                  {isMobile ? (
+                  {!featureToggle.features?.enableForPCSite &&<>
+                      {isMobile ? (
                     <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                   ) : (
                     !featureToggle?.features?.enableHorizontalFilter ? (
@@ -113,6 +114,7 @@ export default function RichLandingCategoryV2({ featureToggle, category, handleF
                       <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
                     )
                   )}
+                    </>}
                   <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                     {featureToggle.features?.enableForPCSite &&
                       <>
@@ -162,6 +164,17 @@ export default function RichLandingCategoryV2({ featureToggle, category, handleF
                                   <div className="block text-sm font-normal text-gray-800 text-x-small dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
                                 </div>
                               }
+                                <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                                 {isMobile ? (
+                                    <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                                  ) : (
+                                    !featureToggle?.features?.enableHorizontalFilter ? (
+                                      <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                    ) : (
+                                      <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                    )
+                                  )}
+                                </div>
                               {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
                                 <LandingFeaturedCategory featuredCategory={category?.subCategories} deviceInfo={deviceInfo} categoryName={category?.name} />
                               }
