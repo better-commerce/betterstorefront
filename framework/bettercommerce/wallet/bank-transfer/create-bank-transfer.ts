@@ -1,5 +1,5 @@
 import { BANK_TRANSFER } from '@components/utils/constants'
-import fetcher from '../fetcher'
+import fetcher from '../../fetcher'
 import { logError } from '@framework/utils/app-util'
 import { DIGITAL_WALLET_BASE_URL } from '@framework/utils/constants'
 

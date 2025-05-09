@@ -293,8 +293,8 @@ export const NEXT_WALLET_GET_CUSTOMER_WALLET = `/api/wallet/get-customer-wallet`
 export const NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS = `/api/wallet/get-customer-wallet-transaction`
 export const NEXT_WALLET_ASSOCIATE_TO_CUSTOMER = `/api/wallet/associate-customer-wallet`
 export const NEXT_WALLET_GET_BALANCE = `/api/wallet/get-balance`
-export const NEXT_GET_CUSOMER_BANK_LIST = '/api/customer-bank/get-customer-bank-list'
-export const NEXT_BANK_TRANSFER = '/api/bank-transfers/create-bank-transfer'
+export const NEXT_GET_CUSOMER_BANK_LIST = '/api/wallet/customer-bank/get-customer-bank-list'
+export const NEXT_BANK_TRANSFER = '/api/wallet/bank-transfers/create-bank-transfer'
 
 //TRADE IN JOURNEY API ENDPOINTS
 export const WALLET_ENABLE_CUSTOMER_WALLET = `/wallets/enable`

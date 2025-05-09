@@ -1,6 +1,6 @@
 import { apiMiddlewareErrorHandler } from '@framework/utils'
-import apiRouteGuard from '../base/api-route-guard'
-import createBankTransfer from '@framework/bank-transfer/create-bank-transfer'
+import apiRouteGuard from '../../base/api-route-guard'
+import createBankTransfer from '@framework/wallet/bank-transfer/create-bank-transfer'
 
 async function createBankTransferApiMiddleware(req: any, res: any) {
   if (req.method !== 'POST') {

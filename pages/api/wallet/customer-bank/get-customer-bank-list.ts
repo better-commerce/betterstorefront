@@ -1,6 +1,6 @@
 import { apiMiddlewareErrorHandler } from '@framework/utils';
-import apiRouteGuard from '../base/api-route-guard';
-import getCustomerBankListById from '@framework/customer-bank/get-customer-bank-list';
+import apiRouteGuard from '../../base/api-route-guard';
+import getCustomerBankListById from '@framework/wallet/customer-bank/get-customer-bank-list';
 
 const getCustomerBankByIdApiMiddleware = async (req: any, res: any) => {
   if (req.method !== 'POST') { 
