@@ -1,5 +1,6 @@
 "use client"
 import Loader from '@components/Loader';
+import TransferToBankModal from '@components/TransferToBankModal';
 import { LoadingDots } from '@components/ui';
 import { useUI } from '@components/ui/context'
 import { DATE_FORMAT, NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, NEXT_WALLET_ENABLE_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS } from "@components/utils/constants";
@@ -21,6 +22,7 @@ export default function WalletDetail() {
   const [walletDetail, setWalletDetail] = useState<any>({})
   const [walletTransactions, setWalletTransaction] = useState<any>({})
   const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 1, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
+  const [openTransferToBankModal, setOpenTransferToBankModal] = useState(false)
   const { user, setUser } = useUI()
   const handleEnableWallet = async () => {
     setIsLoading(true);
@@ -105,7 +107,13 @@ export default function WalletDetail() {
             </div>
           }
           <div className="w-full px-6">
+            <div className="flex justify-between items-center">
             <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>My Wallet</h2>
+            {walletEnabled && 
+              <div className="flex w-60 sm:flex-col mb-6">
+                <button className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary" onClick={() => setOpenTransferToBankModal(true)}>Transfer To Bank</button>
+              </div>}
+            </div>
             {!walletEnabled &&
               <div className="flex flex-col w-full gap-4 mt-6">
                 <div className="flex flex-col w-full pb-4 mb-2 border-b border-gray-200">
@@ -182,6 +190,8 @@ export default function WalletDetail() {
               </div>
             )}
           </div>
+          <TransferToBankModal open={openTransferToBankModal} handleClose={() => {setOpenTransferToBankModal(false)}} walletId={user.walletId} walletDetail={walletDetail} setSuccessMessage={setSuccessMessage} />
+          
         </>
     )
   );
