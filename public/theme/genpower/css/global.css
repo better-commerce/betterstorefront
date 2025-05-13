@@ -2918,3 +2918,6 @@ button.nc-Button {
   @apply dark:!bg-black;
   @apply dark:!text-black;
 }
+.product-card-title{
+word-break: break-word;
+}
