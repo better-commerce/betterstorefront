@@ -60,7 +60,7 @@ class EventManager {
      */
     private dispatchEvent(providerKey: string, eventType: string, eventData: any) {
 
-        if (featureToggle?.features?.enableGoogleAnalytics || featureToggle?.features?.enableOmnilytics) {
+        if (featureToggle?.features?.enableGoogleAnalytics || featureToggle?.features?.enableOmnilytics || featureToggle?.features?.enableRakutenAnalytics) {
             const providerConfig = ALL_EVENTS[providerKey];
             if (!providerConfig || !providerConfig.events || !providerConfig.events[eventType]) {
                 //console.warn(`No event configuration found for ${eventType} on provider ${providerKey}`)
@@ -97,6 +97,16 @@ class EventManager {
                         const dataLayer = typeof window !== 'undefined' && (<any>window).dataLayer && (<any>window).dataLayer[0].ipAddress
                         if (dataLayer) {
                             eventDispatcher(eventTypeName, translatedEventData)
+                        }
+                    }
+                    break;
+
+                case AnalyticsType.RAKUTEN:
+                    if (featureToggle?.features?.enableOmnilytics) {
+                        console.log("checkoutConfirmation", translatedEventData)
+
+                        if (eventConfig?.postProcess) {
+                            eventConfig.postProcess(translatedEventData)
                         }
                     }
                     break;

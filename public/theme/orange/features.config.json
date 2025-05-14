@@ -20,6 +20,7 @@
     "enableLoqateSearch": true,
     "enableAddressIOSearch":false,
     "enableGoogleAnalytics": true,
+    "enableRakutenAnalytics": false,
     "enableOmnilytics": true,
     "enableHorizontalFilter": false,
     "enableCustomHomeWidget":false,
