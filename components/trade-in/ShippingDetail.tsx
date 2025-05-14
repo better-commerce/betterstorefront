@@ -10,6 +10,7 @@ import { AxiosRequestConfig } from 'axios';
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { ChangeEvent, useState } from "react";
 import { AlertType } from "@framework/utils/enums";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 interface ShippingDetailProps {
   nextSteps: any;
@@ -348,8 +349,8 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
           <button onClick={() => {
             submitRequest();
             document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-            Confirm collection from DPD
+          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] flex justify-center items-center gap-1 rounded disabled:bg-gray-300">
+            Confirm collection from DPD <ChevronRightIcon className="w-5 h-5" />
           </button>
         </div>
       }
@@ -400,8 +401,8 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
           <button onClick={() => {
             submitRequest();
             document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-            Confirm collection from DPD
+          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded flex justify-center items-center gap-1 disabled:bg-gray-300">
+            Confirm collection from DPD  <ChevronRightIcon className="w-5 h-5" />
           </button>
         </div>
       }
@@ -443,8 +444,8 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
           <button onClick={() => {
             submitStoreDropOff(); // Pass true for store drop-off
             document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-            Confirm Drop off to Park Cameras Store
+          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded flex justify-center items-center gap-1 disabled:bg-gray-300">
+            Confirm Drop off to Park Cameras Store <ChevronRightIcon className="w-5 h-5" />
           </button>
         </>
       }
@@ -528,8 +529,8 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
               <button onClick={() => {
                 submitRequest();
                 document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-                Confirm Drop off at DPD Store
+              }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded flex justify-center items-center gap-1 disabled:bg-gray-300">
+                Confirm Drop off at DPD Store <ChevronRightIcon className="w-5 h-5" />
               </button>
             </>
           }

@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronRightIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
 import Carousel from "./Carousal";
 import { TradeInItemCondition } from "@components/utils/constants";
@@ -225,9 +225,9 @@ export default function AddItems({ products, images, onChangeSearch, nextStep, s
               }
             }}
             disabled={isNextDisabled}
-            className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300"
+            className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] justify-center flex items-center gap-1 rounded disabled:bg-gray-300"
           >
-            Next add your details
+            Next add your details  <ChevronRightIcon className="w-5 h-5"/> 
           </button>
           <span className='text-xs font-normal text-left text-black'>*Some products require further attention. One of used specialists will update the quote within 2 working days.</span>
         </div>

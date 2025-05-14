@@ -14,6 +14,7 @@ import { updateQueryParams } from 'framework/utils/app-util'
 import Loader from '@components/Loader'
 import { RequestMethod } from 'bc-payments-sdk/dist/constants'
 import { callApi } from '@framework/utils/api-util'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 
 interface LoginProps {
   isLoginSidebarOpen?: boolean;
@@ -142,7 +143,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
       <>
         {isLoading && <Loader />}
         <div className="flex flex-col w-full h-full">
-          <button onClick={() => submitLoggedInUserRequest()} className="py-3 px-6 text-white bg-[#2d4d9c] rounded w-full">Continue</button>
+          <button onClick={() => submitLoggedInUserRequest()} className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full">Continue  <ChevronRightIcon className="w-5 h-5"/> </button>
         </div>
       </>
     )
@@ -201,8 +202,8 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
                     </div>
                   ))}
 
-                  <button onClick={submitLoginRequest} className="py-2 px-6 w-full text-white bg-[#2d4d9c] rounded">
-                    Login
+                  <button onClick={submitLoginRequest} className="py-2 px-6 w-full flex justify-center items-center gap-1 text-white bg-[#2d4d9c] rounded">
+                    Login  <ChevronRightIcon className="w-5 h-5"/>
                   </button>
                 </div>
                 <div className={`flex flex-col items-start text-left justify-start w-full mt-0 mx-auto ${isLoginSidebarOpen ? 'sm:w-full ' : 'sm:w-full'}`} >

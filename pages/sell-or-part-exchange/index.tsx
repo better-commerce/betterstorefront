@@ -1,25 +1,25 @@
-import { useCallback, useEffect, useState } from 'react'
+import os from 'os'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
+import { useCallback, useEffect, useState } from 'react'
 import axios, { AxiosRequestConfig } from 'axios'
-import os from 'os'
 import type { GetStaticPropsContext } from 'next'
 import { EmptyGuid, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_PRODUCTS, SITE_ORIGIN_URL, TradeInSteps } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+
 import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS, TRADE_IN_PAGE_SLUG } from '@framework/utils/constants'
 import { getCurrency, getCurrentCurrency, logError, obfuscateHostName, setCurrentCurrency } from '@framework/utils/app-util'
 import { getSecondsInMinutes, matchStrings, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-import Layout from '@components/Layout/Layout'
-import { useUI } from '@components/ui/context'
-
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { PagePropType, getPagePropType } from '@framework/page-props'
 // @ts-ignore
 import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { useUI } from '@components/ui/context'
+import Layout from '@components/Layout/Layout'
 const AddItems = dynamic(() => import('@components/trade-in/AddItems'))
 const ConfirmDetails = dynamic(() => import('@components/trade-in/ConfirmDetail'))
 const GetQuote = dynamic(() => import('@components/trade-in/GetQuote'))
@@ -127,6 +127,11 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     if (currentStep < data?.steps.length - 1) {
       setCurrentStep((prev) => prev + 1);
     }
+  };
+
+  
+  const prevStep = () => {
+    setCurrentStep(0);
   };
 
   useEffect(() => {
@@ -263,7 +268,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                   currentStep={currentStep} isLoadingDots={isLoadingDots} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
-                <ConfirmDetails selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} nextSteps={handleNextStep} />
+                <ConfirmDetails selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} nextSteps={handleNextStep} prevStep={prevStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.GET_QUOTE &&
                 <GetQuote user={user} startNewTrade={startNewTrade} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />

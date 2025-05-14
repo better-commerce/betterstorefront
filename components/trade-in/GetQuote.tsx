@@ -7,6 +7,7 @@ import { logError } from '@framework/utils/app-util';
 import { LoadingDots } from '@components/ui';
 import { RequestMethod } from 'bc-payments-sdk/dist/constants';
 import { callApi } from '@framework/utils/api-util';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
 export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade }: any) {
   const [isLoading, setIsLoading] = useState(false);
@@ -222,8 +223,8 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
 
                   <button
                     onClick={() => fetchShippingMethods()}
-                    className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
-                    Continue
+                    className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full">
+                    Continue  <ChevronRightIcon className="w-5 h-5" />
                   </button>
                 </div>
               )}
