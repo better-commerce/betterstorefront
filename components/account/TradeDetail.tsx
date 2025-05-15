@@ -11,6 +11,53 @@ import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, N
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
 
+export const statusClasses: Record<string, string> = {
+  // QuoteStatus
+  AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500",
+  Quoted: "bg-sky-200 border-sky-500 text-sky-500",
+  QuoteAccepted: "bg-emerald-200 border-emerald-500 text-emerald-500",
+  QuoteRejected: "bg-red-100 border-red-300 text-red-600",
+  QuoteExpired: "bg-orange-200 border-orange-500 text-orange-500",
+  CollectionArranged: "bg-indigo-200 border-indigo-500 text-indigo-500",
+  ParcelArrived: "bg-teal-200 border-teal-500 text-teal-500",
+  Assessment: "bg-yellow-100 border-yellow-300 text-yellow-500",
+  FurtherAssessment: "bg-yellow-200 border-yellow-400 text-yellow-600",
+  Assessed: "bg-emerald-600 border-emerald-700 text-emerald-100",
+  TradeInComplete: "bg-emerald-900 border-emerald-900 text-emerald-100",
+  AssessedFullReject: "bg-red-100 border-red-300 text-red-600",
+  AssessedPartialReject: "bg-orange-100 border-orange-300 text-orange-600",
+  TradeInFullReject: "bg-red-100 border-red-300 text-red-600",
+  TradeInCompletePartialReject: "bg-orange-200 border-orange-400 text-orange-600",
+  CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500",
+  CompleteBookedIntoStockPartialReturn: "bg-orange-500 border-orange-700 text-white",
+  FullReturn: "bg-red-500 border-red-700 text-white",
+  TradeInCompleteFullReturn: "bg-fuchsia-200 border-fuchsia-400 text-fuchsia-600",
+  CancelledByCustomer: "bg-red-100 border-red-400 text-red-600",
+  CancelledByBusiness: "bg-red-100 border-red-400 text-red-700",
+
+  // QuoteItemStatus
+  Submitted: "bg-sky-300 border-sky-600 text-sky-600",
+  PriceNeeded: "bg-yellow-200 border-yellow-500 text-yellow-700",
+  Accepted: "bg-emerald-200 border-emerald-500 text-emerald-500",
+  Rejected: "bg-red-100 border-red-300 text-red-600",
+  Expired: "bg-orange-500 border-orange-700 text-white",
+  AssessmentInProgress: "bg-yellow-200 border-yellow-500 text-yellow-500",
+  AssessedRejectedByBusiness: "bg-red-100 border-red-300 text-red-600",
+  AssessedRejectedByCustomer: "bg-red-100 border-red-300 text-red-600",
+  AssessmentAccepted: "bg-emerald-100 border-emerald-300 text-emerald-500",
+  StockBookedIn: "bg-purple-300 border-purple-600 text-purple-600",
+
+  // AssessmentStatuses
+  Pending: "bg-gray-100 border-gray-400 text-gray-500",
+  InProgress: "bg-blue-300 border-blue-500 text-blue-500",
+  AccessoriesChecked: "bg-teal-300 border-teal-500 text-teal-500",
+  ItemChecked: "bg-indigo-300 border-indigo-500 text-indigo-500",
+  ImagesUploaded: "bg-orange-300 border-orange-500 text-orange-500",
+  Approved: "bg-green-300 border-green-500 text-green-500",
+  RejectedByCustomer: "bg-red-100 border-red-500 text-red-500",
+  RejectedByBusiness: "bg-red-100 border-red-600 text-red-600",
+};
+
 export default function TradeInDetail() {
   const router: any = useRouter();
   const [tradeDetail, setTradeDetail] = useState<any>(null);
@@ -26,53 +73,6 @@ export default function TradeInDetail() {
     { id: 3, value: "Change of mind" },
     { id: 4, value: "Just getting an idea" }
   ];
-
-  const statusClasses: Record<string, string> = {
-    // QuoteStatus
-    AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500",
-    Quoted: "bg-sky-200 border-sky-500 text-sky-500",
-    QuoteAccepted: "bg-emerald-200 border-emerald-500 text-emerald-500",
-    QuoteRejected: "bg-red-100 border-red-300 text-red-600",
-    QuoteExpired: "bg-orange-200 border-orange-500 text-orange-500",
-    CollectionArranged: "bg-indigo-200 border-indigo-500 text-indigo-500",
-    ParcelArrived: "bg-teal-200 border-teal-500 text-teal-500",
-    Assessment: "bg-yellow-100 border-yellow-300 text-yellow-500",
-    FurtherAssessment: "bg-yellow-200 border-yellow-400 text-yellow-600",
-    Assessed: "bg-emerald-600 border-emerald-700 text-emerald-100",
-    TradeInComplete: "bg-emerald-900 border-emerald-900 text-emerald-100",
-    AssessedFullReject: "bg-red-100 border-red-300 text-red-600",
-    AssessedPartialReject: "bg-orange-100 border-orange-300 text-orange-600",
-    TradeInFullReject: "bg-red-100 border-red-300 text-red-600",
-    TradeInCompletePartialReject: "bg-orange-200 border-orange-400 text-orange-600",
-    CompleteBookedIntoStock: "bg-purple-200 border-purple-500 text-purple-500",
-    CompleteBookedIntoStockPartialReturn: "bg-orange-500 border-orange-700 text-white",
-    FullReturn: "bg-red-500 border-red-700 text-white",
-    TradeInCompleteFullReturn: "bg-fuchsia-200 border-fuchsia-400 text-fuchsia-600",
-    CancelledByCustomer: "bg-red-100 border-red-400 text-red-600",
-    CancelledByBusiness: "bg-red-100 border-red-400 text-red-700",
-
-    // QuoteItemStatus
-    Submitted: "bg-sky-300 border-sky-600 text-sky-600",
-    PriceNeeded: "bg-yellow-200 border-yellow-500 text-yellow-700",
-    Accepted: "bg-emerald-200 border-emerald-500 text-emerald-500",
-    Rejected: "bg-red-100 border-red-300 text-red-600",
-    Expired: "bg-orange-500 border-orange-700 text-white",
-    AssessmentInProgress: "bg-yellow-200 border-yellow-500 text-yellow-500",
-    AssessedRejectedByBusiness: "bg-red-100 border-red-300 text-red-600",
-    AssessedRejectedByCustomer: "bg-red-100 border-red-300 text-red-600",
-    AssessmentAccepted: "bg-emerald-100 border-emerald-300 text-emerald-500",
-    StockBookedIn: "bg-purple-300 border-purple-600 text-purple-600",
-
-    // AssessmentStatuses
-    Pending: "bg-gray-100 border-gray-400 text-gray-500",
-    InProgress: "bg-blue-300 border-blue-500 text-blue-500",
-    AccessoriesChecked: "bg-teal-300 border-teal-500 text-teal-500",
-    ItemChecked: "bg-indigo-300 border-indigo-500 text-indigo-500",
-    ImagesUploaded: "bg-orange-300 border-orange-500 text-orange-500",
-    Approved: "bg-green-300 border-green-500 text-green-500",
-    RejectedByCustomer: "bg-red-100 border-red-500 text-red-500",
-    RejectedByBusiness: "bg-red-100 border-red-600 text-red-600",
-  };
 
   useEffect(() => {
     fetchTradeDetail(tradeinId);
@@ -176,7 +176,7 @@ export default function TradeInDetail() {
       .replace(/_/g, " ") // Replace underscores with spaces (if any)
       .trim();
   };
-  const canChangeStatus = (itemStatus: string) => !["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness"].includes(itemStatus);
+  const canChangeStatus = (itemStatus: string) => !["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness","Quoted"].includes(itemStatus);
   const canCancelTradeIn = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted", "QuoteExpired"].includes(itemStatus);
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
     <div className="flex items-center justify-start gap-2">
