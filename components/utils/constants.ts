@@ -769,6 +769,7 @@ export enum AssessmentStatus {
   RejectedByBusiness = "Rejected By Business",
 }
 
+export const UNCHANGEABLE_STATUSES = ["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness", "Quoted"];
 
 export const PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES =
   process.env.PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES

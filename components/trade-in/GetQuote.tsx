@@ -8,6 +8,7 @@ import { LoadingDots } from '@components/ui';
 import { RequestMethod } from 'bc-payments-sdk/dist/constants';
 import { callApi } from '@framework/utils/api-util';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { statusClasses } from '@components/account/TradeDetail';
 
 export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade }: any) {
   const [isLoading, setIsLoading] = useState(false);
@@ -160,40 +161,11 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                           </div>
                         </td>
                         <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
-                        {updatedQuoteDetail?.value?.status != "Quoted" && updatedQuoteDetail?.value?.status != "QuoteAccepted" && updatedQuoteDetail?.value?.status != "QuoteRejected" && updatedQuoteDetail?.value?.status != "QuoteExpired" ? (
                           <td>
                             <div className="flex justify-end pr-3">
-                              <span className={`bg-yellow-100 border-yellow-400 text-yellow-600 px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{updatedQuoteDetail?.value?.status}</span>
+                              <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item.status] || "bg-gray-200 border-gray-500 text-gray-500"}`} >{item?.status}</span>
                             </div>
                           </td>
-                        ) : (
-                          <td>
-                            {item?.status === "Accepted" || item?.status === "Rejected" ? (
-                              <div className="flex justify-end pr-3">
-                                <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
-                              </div>
-                            ) : (
-                              showDropdown[item?.itemId] ? (
-                                <div className="flex justify-end gap-2">
-                                  <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
-                                    <option value="">Select a reason</option>
-                                    {rejectionOptions?.map((reason, idx) => (
-                                      <option key={idx} value={reason?.id}>{reason?.value}</option>
-                                    ))}
-                                  </select>
-                                  <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
-                                  <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
-                                </div>
-                              ) : (
-                                <div className="flex justify-end gap-2 pr-3">
-                                  <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                                  <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
-                                </div>
-                              )
-                            )}
-                          </td>
-                        )}
-
                       </tr>
                     ))}
                   </tbody>
