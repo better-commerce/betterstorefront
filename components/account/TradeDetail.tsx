@@ -27,6 +27,33 @@ export default function TradeInDetail() {
     { id: 4, value: "Just getting an idea" }
   ];
 
+  const notes = [
+    {
+        "noteId": "db542e4b-64f7-497f-b30b-17ab321742a3",
+        "stageId": 1,
+        "stage": "AccessroyUpdated",
+        "notes": "asdf",
+        "createdBy": "sanjay@devpc.com",
+        "createdOn": "05/14/2025 12:30:46"
+    },
+    {
+        "noteId": "1c8a23a5-eb97-4731-a1a6-80ce2184c5c9",
+        "stageId": 2,
+        "stage": "ChecklistUpdated",
+        "notes": "asdf",
+        "createdBy": "sanjay@devpc.com",
+        "createdOn": "05/14/2025 12:30:52"
+    },
+    {
+        "noteId": "de8157c9-980a-4e13-baae-99554a85b0e3",
+        "stageId": 3,
+        "stage": "Submitted",
+        "notes": "asdf",
+        "createdBy": "sanjay@devpc.com",
+        "createdOn": "05/14/2025 12:30:56"
+    }
+]
+
   const statusClasses: Record<string, string> = {
     // QuoteStatus
     AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500",
@@ -198,6 +225,14 @@ export default function TradeInDetail() {
             <strong>Accessories: </strong>
             {[...accessories].sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
               .map((acc: any) => acc?.name) // Extract names
+              .join(", ")}
+          </span>
+        )}
+        {product?.assessment?.assessmentNotes?.length > 0 && (
+          <span className="text-xs text-gray-600">
+            <strong>Assessmnet Notes: </strong>
+            {[...product?.assessment?.assessmentNotes].sort((a: any, b: any) => a.stage.localeCompare(b.stage)) // Sort alphabetically
+              .map((acc: any) => acc?.notes) // Extract notes
               .join(", ")}
           </span>
         )}
