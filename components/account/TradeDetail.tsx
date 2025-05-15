@@ -10,6 +10,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
+import QuoteAssessmentNotes from './QuoteAssessmentNotes';
 
 export const statusClasses: Record<string, string> = {
   // QuoteStatus
@@ -78,7 +79,7 @@ export default function TradeInDetail() {
   const fetchTradeDetail = async (tradeinId: string) => {
     setIsLoading(true);
     try {
-      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: tradeinId } }; 
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: tradeinId } };
       const quoteResult = await callApi(config)
       setTradeDetail(quoteResult?.data);
     } catch (error) {
@@ -198,18 +199,10 @@ export default function TradeInDetail() {
               .join(", ")}
           </span>
         )}
-        {product?.notes?.length > 0 && (
-          <span className="text-xs text-gray-600">
-            <strong>Assessmnet Notes: </strong>
-            {[...product?.notes].sort((a: any, b: any) => a.stage.localeCompare(b.stage)) // Sort alphabetically
-              .map((acc: any) => (
-                <p key={acc?.noteId}>
-                  <span className="font-semibold ms-2">{acc?.stage}</span> : {acc?.notes}
-                </p>
-              )) // Extract notes
-            }
-          </span>
-        )}
+        <span className="text-xs text-gray-600">
+          <strong>Assessment Notes: </strong>
+          <QuoteAssessmentNotes notes={product?.notes} />
+        </span>
       </div>
     </div>
   );
@@ -327,7 +320,7 @@ export default function TradeInDetail() {
                       <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item.status] || "bg-gray-200 border-gray-500 text-gray-500"}`} >
                         {getStatusLabel(item.status ?? "Unknown")}
                       </span>
-                      {(item.itemStatusId === QuoteItemStatusType.REJECTED && item.rejectionReason) && 
+                      {(item.itemStatusId === QuoteItemStatusType.REJECTED && item.rejectionReason) &&
                         <span className="block px-2 text-[11px] font-medium">{`(${getStatusLabel(item.rejectionReason)})`}</span>
                       }
                     </td>
