@@ -5,6 +5,7 @@ import { Analytics } from './events';
 import { mapObject } from '@framework/utils/translate-util';
 import { CURRENT_THEME, EmptyObject } from '@components/utils/constants';
 import { eventDispatcher } from './eventDispatcher';
+import { AnalyticsEventStrategyType } from '@framework/utils/enums';
 const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
@@ -54,16 +55,16 @@ class EventManager {
         const config = featureToggle?.features?.googleAnalyticsEvents || {};
 
         switch (config?.strategy) {
-            case 'include-all':
+            case AnalyticsEventStrategyType.INCLUDE_ALL:
                 return true;
 
-            case 'exclude-all':
+            case AnalyticsEventStrategyType.EXCLUDE_ALL:
                 return false;
 
-            case 'include-specific':
+            case AnalyticsEventStrategyType.INCLUDE_SPECIFIC:
                 return config.events?.includes(eventType) ?? false;
 
-            case 'exclude-specific':
+            case AnalyticsEventStrategyType.EXCLUDE_SPECIFIC:
                 return !config.events?.includes(eventType);
 
             default:
