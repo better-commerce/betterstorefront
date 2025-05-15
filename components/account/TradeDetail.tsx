@@ -7,7 +7,7 @@ import Loader from "@components/Loader";
 import { logError } from "@framework/utils/app-util";
 import { useRouter } from 'next/router'
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition } from "@components/utils/constants";
+import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
 
@@ -58,6 +58,8 @@ export const statusClasses: Record<string, string> = {
   RejectedByBusiness: "bg-red-100 border-red-600 text-red-600",
 };
 
+const rejectionValues = ["Offer too low", "Better offer elsewhere", "Change of mind", "Just getting an idea"]
+
 export default function TradeInDetail() {
   const router: any = useRouter();
   const [tradeDetail, setTradeDetail] = useState<any>(null);
@@ -67,12 +69,7 @@ export default function TradeInDetail() {
   const [message, setMessage] = useState("")
   const tradeinId = router.query?.tradeinId[0]
 
-  const rejectionOptions = [
-    { id: 1, value: "Offer too low" },
-    { id: 2, value: "Better offer elsewhere" },
-    { id: 3, value: "Change of mind" },
-    { id: 4, value: "Just getting an idea" }
-  ];
+  const rejectionOptions = rejectionValues.map((x, i) => ({id: i+ 1, value: x}));
 
   useEffect(() => {
     fetchTradeDetail(tradeinId);
@@ -176,7 +173,7 @@ export default function TradeInDetail() {
       .replace(/_/g, " ") // Replace underscores with spaces (if any)
       .trim();
   };
-  const canChangeStatus = (itemStatus: string) => !["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness","Quoted"].includes(itemStatus);
+  const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus);
   const canCancelTradeIn = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted", "QuoteExpired"].includes(itemStatus);
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
     <div className="flex items-center justify-start gap-2">
