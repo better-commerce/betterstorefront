@@ -35,9 +35,6 @@ export const MAPP_ANALYTICS_EVENTS: any = {
                             }))
                         : new Array<any>(),
                 }),
-                currency: (source: any) => `${source?.price?.currencySymbol}`,
-                value: (source: any) => `${source?.cartItems?.grandTotal?.raw?.withTax}`,
-                add_to_cart_type: (source: any) => source?.addToCartType,
             },
         },
 

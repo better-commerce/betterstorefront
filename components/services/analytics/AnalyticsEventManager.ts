@@ -51,7 +51,7 @@ class EventManager {
     }
 
     private shouldSendGAEvent(eventType: string): boolean {
-        const config = featureToggle?.googleAnalyticsEvents || {};
+        const config = featureToggle?.features?.googleAnalyticsEvents || {};
 
         switch (config?.strategy) {
             case 'include-all':
