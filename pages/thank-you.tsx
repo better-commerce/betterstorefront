@@ -270,7 +270,7 @@ export default function OrderConfirmation({ config, featureToggle }: any) {
       const { data }: any = await axios.post(NEXT_GET_ORDER, {
         id: orderId,
       })
-      const orderData: any = order?.data
+      const orderData: any = data.order
       setOrderData(data.order)
       
       // PURCHASE EVENT
