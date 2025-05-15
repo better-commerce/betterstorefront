@@ -20,7 +20,13 @@
     "enableLoqateSearch": true,
     "enableAddressIOSearch":false,
     "enableGoogleAnalytics": true,
+    "googleAnalyticsEvents": {
+      "_comment": "strategy types are <include-all>, <exclude-all>, <include-specific>, <exclude-specific>",
+      "strategy": "include-all",
+      "events": []
+    },
     "enableRakutenAnalytics": false,
+    "enableMappAnalytics": false,
     "enableOmnilytics": true,
     "enableHorizontalFilter": false,
     "enableCustomHomeWidget":false,
