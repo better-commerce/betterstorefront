@@ -674,6 +674,7 @@ export enum TradeInItemCondition {
   VERY_GOOD = 'VeryGood',
   GOOD = 'Good',
   WELL_USED = 'WellUsed',
+  FAULTY = 'Faulty',
 }
 
 export enum TradeInSteps {

@@ -141,7 +141,8 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                                     item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
                                       item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
                                         item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
-                                          'N/A'
+                                          item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                            'N/A'
                                 }
                               </span>
                             }

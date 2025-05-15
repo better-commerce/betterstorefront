@@ -277,6 +277,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                             item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
                               item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
                                 item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                  item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
                                   'N/A'
                         }
                       </span>

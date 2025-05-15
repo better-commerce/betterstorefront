@@ -42,6 +42,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
     [TradeInItemCondition.VERY_GOOD]: 3,
     [TradeInItemCondition.GOOD]: 4,
     [TradeInItemCondition.WELL_USED]: 5,
+    [TradeInItemCondition.FAULTY]: 6,
   };
   const submitGuestRequest = async () => {
     if (!validateGuestForm()) return;
@@ -95,7 +96,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
                   {item?.selectedProduct}
                 </td>
                 <td className="px-3 py-4 text-sm text-left text-gray-500">{item?.selectedCondition?.conditionName == TradeInItemCondition.WELL_USED ? 'Well Used' :
-                  item?.selectedCondition?.conditionName == TradeInItemCondition.GOOD ? 'Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.selectedCondition?.conditionName == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
+                  item?.selectedCondition?.conditionName == TradeInItemCondition.FAULTY ? 'Faulty' : item?.selectedCondition?.conditionName == TradeInItemCondition.GOOD ? 'Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.selectedCondition?.conditionName == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
                 }</td>
                 <td className="px-3 py-4 text-sm text-left text-gray-500">
                   {item?.selectedAccessories?.length ? (

@@ -44,6 +44,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
     [TradeInItemCondition.VERY_GOOD]: 3,
     [TradeInItemCondition.GOOD]: 4,
     [TradeInItemCondition.WELL_USED]: 5,
+    [TradeInItemCondition.FAULTY]: 6,
   };
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
@@ -115,6 +116,7 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
       [TradeInItemCondition.VERY_GOOD]: 3,
       [TradeInItemCondition.GOOD]: 4,
       [TradeInItemCondition.WELL_USED]: 5,
+      [TradeInItemCondition.FAULTY]: 6,
     };
     return conditionMap[conditionName] || 0;
   };

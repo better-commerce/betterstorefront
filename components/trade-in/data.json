@@ -36,6 +36,12 @@
       "desc": "Your equipment will be showing significant signs of wear.",
       "icon": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg",
       "id": "5"
+    },
+    {
+      "name": "Faulty",
+      "desc": "Your equipment will be showing significant signs of wear and damage.",
+      "icon": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/home/cam-icon.svg",
+      "id": "6"
     }
   ],
   "shipping": [
@@ -177,6 +183,11 @@
           "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-used-5a.png",
           "title": "Well Used",
           "description": "Your equipment will have significant signs of wear."
+        },
+        {
+          "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-used-5a.png",
+          "title": "Faulty",
+          "description": "Your equipment will have significant signs of wear and damage."
         }
       ],
       "side": [
@@ -204,6 +215,11 @@
           "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-side-5.png",
           "title": "Well Used",
           "description": "Your equipment will have significant signs of wear."
+        },
+        {
+          "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-side-5.png",
+          "title": "Faulty",
+          "description": "Your equipment will have significant signs of wear and damage."
         }
       ],
       "back": [
@@ -231,6 +247,11 @@
           "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-back-5.png",
           "title": "Well Used",
           "description": "Your equipment will have significant signs of wear."
+        },
+        {
+          "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-back-5.png",
+          "title": "Faulty",
+          "description": "Your equipment will have significant signs of wear and damage."
         }
       ],
       "upper": [
@@ -258,6 +279,11 @@
           "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-upper-5.png",
           "title": "Well Used",
           "description": "Your equipment will have significant signs of wear."
+        },
+        {
+          "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/cam-upper-5.png",
+          "title": "Faulty",
+          "description": "Your equipment will have significant signs of wear and damage."
         }
       ]
     },
@@ -287,6 +313,11 @@
           "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/lens-used-5a.png",
           "title": "Well Used",
           "description": "Your equipment will have significant signs of wear."
+        },
+        {
+          "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/lens-used-5a.png",
+          "title": "Faulty",
+          "description": "Your equipment will have significant signs of wear and damage."
         }
       ],
       "down": [
@@ -314,6 +345,11 @@
           "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/lens-down-5.png",
           "title": "Well Used",
           "description": "Your equipment will have significant signs of wear."
+        },
+        {
+          "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/lens-down-5.png",
+          "title": "Faulty",
+          "description": "Your equipment will have significant signs of wear and damage."
         }
       ],
       "back": [
@@ -341,6 +377,11 @@
           "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/lens-back-5.png",
           "title": "Well Used",
           "description": "Your equipment will have significant signs of wear."
+        },
+        {
+          "src": "https://liveocxstorage.blob.core.windows.net/testpc/cms-media/icons/lens-back-5.png",
+          "title": "Faulty",
+          "description": "Your equipment will have significant signs of wear and damage."
         }
       ]
     }

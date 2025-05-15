@@ -78,6 +78,7 @@ export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryD
                             item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
                               item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
                                 item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                  item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
                                   'N/A'
                         }
                       </span>
