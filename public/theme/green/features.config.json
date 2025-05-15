@@ -21,6 +21,7 @@
     "enableAddressIOSearch":false,
     "enableGoogleAnalytics": false,
     "enableRakutenAnalytics": false,
+    "enableMappAnalytics": false,
     "enableOmnilytics": true,
     "enableHorizontalFilter": false,
     "enableCustomHomeWidget":false,

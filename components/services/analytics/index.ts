@@ -69,4 +69,5 @@ export const AnalyticsType = {
     OMNILYTICS: 'omnilytics',
     GOOGLE_TAG: 'googleTag',
     RAKUTEN: 'rakuten',
+    MAPP: 'mapp',
 }

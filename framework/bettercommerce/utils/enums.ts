@@ -40,3 +40,10 @@ export enum CheckoutStep {
 export enum ProductType {
   BUNDLE = 7
 }
+
+export enum AnalyticsEventStrategyType {
+  INCLUDE_ALL = 'include-all',
+  EXCLUDE_ALL = 'exclude-all',
+  INCLUDE_SPECIFIC = 'include-specific',
+  EXCLUDE_SPECIFIC = 'exclude-specific',
+}

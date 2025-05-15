@@ -19,8 +19,14 @@
     "enableDemoToggle": false,
     "enableLoqateSearch": false,
     "enableAddressIOSearch":false,
-    "enableGoogleAnalytics": false,
+    "enableGoogleAnalytics": true,
+    "googleAnalyticsEvents": {
+      "_comment": "strategy types are <include-all>, <exclude-all>, <include-specific>, <exclude-specific>",
+      "strategy": "exclude-all",
+      "events": []
+    },
     "enableRakutenAnalytics": true,
+    "enableMappAnalytics": true,
     "enableOmnilytics": true,
     "enableHorizontalFilter": true,
     "enableCustomHomeWidget":false,

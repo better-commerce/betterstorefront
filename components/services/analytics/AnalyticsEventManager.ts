@@ -5,6 +5,7 @@ import { Analytics } from './events';
 import { mapObject } from '@framework/utils/translate-util';
 import { CURRENT_THEME, EmptyObject } from '@components/utils/constants';
 import { eventDispatcher } from './eventDispatcher';
+import { AnalyticsEventStrategyType } from '@framework/utils/enums';
 const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`);
 
 declare const window: any
@@ -51,6 +52,33 @@ class EventManager {
     }
 
     /**
+     * Determines whether a Google Analytics event should be sent based on the configured event strategy
+     * @param {string} eventType - The type of the event, which should match the key of an event config
+     * in the Analytics.Events object
+     * @returns {boolean} - Whether the event should be sent
+     */
+    private shouldSendGAEvent(eventType: string): boolean {
+        const config = featureToggle?.features?.googleAnalyticsEvents || {};
+
+        switch (config?.strategy) {
+            case AnalyticsEventStrategyType.INCLUDE_ALL:
+                return true;
+
+            case AnalyticsEventStrategyType.EXCLUDE_ALL:
+                return false;
+
+            case AnalyticsEventStrategyType.INCLUDE_SPECIFIC:
+                return config.events?.includes(eventType) ?? false;
+
+            case AnalyticsEventStrategyType.EXCLUDE_SPECIFIC:
+                return !config.events?.includes(eventType);
+
+            default:
+                return false; // Safe default
+        }
+    }
+
+    /**
      * Dispatches an analytics event to a specific provider (e.g. Google Analytics, Dynamic Yield)
      * @param {string} providerKey - The key of the analytics provider in the Analytics.Events object
      * @param {string} eventType - The type of the event, which should match the key of an event config
@@ -59,8 +87,8 @@ class EventManager {
      * the transformMap in the event config
      */
     private dispatchEvent(providerKey: string, eventType: string, eventData: any) {
-
-        if (featureToggle?.features?.enableGoogleAnalytics || featureToggle?.features?.enableOmnilytics || featureToggle?.features?.enableRakutenAnalytics) {
+        const processAnalyticsEvent = (featureToggle?.features?.enableGoogleAnalytics || featureToggle?.features?.enableOmnilytics || featureToggle?.features?.enableRakutenAnalytics || featureToggle?.features?.enableMappAnalytics)
+        if (processAnalyticsEvent) {
             const providerConfig = ALL_EVENTS[providerKey];
             if (!providerConfig || !providerConfig.events || !providerConfig.events[eventType]) {
                 //console.warn(`No event configuration found for ${eventType} on provider ${providerKey}`)
@@ -74,6 +102,11 @@ class EventManager {
             // Dispatch the event to the analytics platform (customize based on provider)
             switch (providerKey) {
                 case AnalyticsType.GOOGLE_ANALYTICS:
+
+                    /**
+                     * Based on configuration, allow which events to send to GA, Governed by {@link AnalyticsEventStrategyType}
+                     */
+                    if (!this.shouldSendGAEvent(eventType)) return;
 
                     if (featureToggle?.features?.enableGoogleAnalytics) {
                         window.dataLayer = window.dataLayer || [];
@@ -108,6 +141,16 @@ class EventManager {
                         if (eventConfig?.postProcess) {
                             eventConfig.postProcess(translatedEventData)
                         }
+                    }
+                    break;
+
+                case AnalyticsType.MAPP:
+                    if (featureToggle?.features?.enableMappAnalytics) {
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({
+                            event: eventTypeName,
+                            page: translatedEventData
+                        })
                     }
                     break;
             }
