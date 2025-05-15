@@ -274,12 +274,9 @@ export default function OrderConfirmation({ config, featureToggle }: any) {
       setOrderData(data.order)
       
       // PURCHASE EVENT
-      let cartItems: any = Object.assign(EmptyObject, { ...orderData, id: orderData?.basketId, lineItems: orderData?.items, })
       const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
+      const cartItems = { ...orderData, id: orderData?.basketId, lineItems: orderData?.items, }
       recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, basketId: orderData?.basketId, cartItems, orderInfo, orderData, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Order, })
-      if (cartItems?.items) {
-        delete cartItems.items
-      }
 
       setTimeout(() => {
         setSnippets(data?.snippets || [])
