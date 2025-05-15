@@ -51,6 +51,12 @@ class EventManager {
         })
     }
 
+    /**
+     * Determines whether a Google Analytics event should be sent based on the configured event strategy
+     * @param {string} eventType - The type of the event, which should match the key of an event config
+     * in the Analytics.Events object
+     * @returns {boolean} - Whether the event should be sent
+     */
     private shouldSendGAEvent(eventType: string): boolean {
         const config = featureToggle?.features?.googleAnalyticsEvents || {};
 
