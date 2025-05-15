@@ -24,6 +24,7 @@ import useAnalytics from './services/analytics/useAnalytics';
 import ReviewBadge from './Product/ReviewBadge';
 import productInterestHandler from '@components/services/product-interest'
 import { EVENTS_MAP } from './services/analytics/constants';
+import { getItem } from './utils/localStorage';
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
 const LikeButton = dynamic(() => import('@components/LikeButton'))
 const Prices = dynamic(() => import('@components/Prices'))
@@ -164,6 +165,7 @@ const ProductSearchCard: FC<ProductCardProps> = ({ className = "", data, isLiked
 
         if (typeof window !== 'undefined') {
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          const cartItems = getItem('cartItems')
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From Search PLP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Search, });
         }
       },

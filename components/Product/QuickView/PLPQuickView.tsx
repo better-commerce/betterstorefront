@@ -24,6 +24,7 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
+import { getItem } from '@components/utils/localStorage'
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 
 SwiperCore.use([Navigation])
@@ -129,6 +130,7 @@ export default function PLPQuickView({
         if (typeof window !== 'undefined') {
           //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          const cartItems = getItem('cartItems')
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
           if (currentPage) {
@@ -202,6 +204,7 @@ export default function PLPQuickView({
             if (typeof window !== 'undefined') {
               //debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+              const cartItems = getItem('cartItems')
               recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
               if (currentPage) {

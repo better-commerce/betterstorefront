@@ -44,6 +44,7 @@ import wishlistHandler from '@components/services/wishlist'
 // Types
 import { AnalyticsEventType } from '@components/services/analytics'
 import ReviewInput from './Reviews/ReviewInput'
+import { getItem } from '@components/utils/localStorage'
 
 // Dynamically imported components
 const ProductDescription = dynamic(() => import('./ProductDescription'))
@@ -486,6 +487,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (typeof window !== 'undefined') {
           //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          const cartItems = getItem('cartItems')
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
           if (currentPage) {
@@ -569,6 +571,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (typeof window !== 'undefined') {
               //debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+              const cartItems = getItem('cartItems')
               recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
               if (currentPage) {
