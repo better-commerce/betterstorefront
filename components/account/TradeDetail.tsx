@@ -201,6 +201,18 @@ export default function TradeInDetail() {
               .join(", ")}
           </span>
         )}
+        {product?.notes?.length > 0 && (
+          <span className="text-xs text-gray-600">
+            <strong>Assessmnet Notes: </strong>
+            {[...product?.notes].sort((a: any, b: any) => a.stage.localeCompare(b.stage)) // Sort alphabetically
+              .map((acc: any) => (
+                <p key={acc?.noteId}>
+                  <span className="font-semibold ms-2">{acc?.stage}</span> : {acc?.notes}
+                </p>
+              )) // Extract notes
+            }
+          </span>
+        )}
       </div>
     </div>
   );
