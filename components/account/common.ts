@@ -24,10 +24,8 @@ export const useHandleSubmit = () => {
     setTitle: any,
     url: string = URLS.updateDetails) => {
     try {
-      const response = await axios.post(url, {
-        ...user,
-        ...values,
-      })
+      const response = await axios.post(url, { ...user, ...values, })
+      const subscribeResponse = await axios.post(NEXT_SUBSCRIBE, { ...user, ...values, })
       if (response) {
         setUser({ ...user, ...values })
         setAlert({type:'success',msg: translate('label.addressBook.detailsUpdatedText')})
