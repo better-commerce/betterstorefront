@@ -1,15 +1,16 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AxiosRequestConfig } from "axios";
 import Loader from "@components/Loader";
 import { logError } from "@framework/utils/app-util";
 import { useRouter } from 'next/router'
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
+import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_AMEND_PRODUCT, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
+import AmendProductModal from "./AmendProduct";
 import QuoteAssessmentNotes from './QuoteAssessmentNotes';
 
 export const statusClasses: Record<string, string> = {
@@ -68,6 +69,7 @@ export default function TradeInDetail() {
   const [showDropdown, setShowDropdown] = useState<{ [key: string]: boolean }>({});
   const [rejectReasons, setRejectReasons] = useState<{ [key: string]: number }>({});
   const [message, setMessage] = useState("")
+  const [assessmentModal, setAssessmentModal] = useState<{ open: boolean; data: any }>({ open: false, data: null });
   const tradeinId = router.query?.tradeinId[0]
 
   const rejectionOptions = rejectionValues.map((x, i) => ({id: i+ 1, value: x}));
@@ -141,6 +143,27 @@ export default function TradeInDetail() {
     }
   };
 
+  const onToggleAssessmentModal = useCallback(() => setAssessmentModal((prev: any) => ({ ...prev, open: !prev?.open })), []);
+
+  const handleAmendItem = async (item: any) => {
+    if (!item) {
+      setMessage("No item found to amend");
+      setTimeout(() => { setMessage(""); }, 3000);
+      return;
+    }
+    try {
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_AMEND_PRODUCT, method: RequestMethod.POST, data: { id: item?.assessment?.assessmentId } };
+      const amendResult = await callApi(config)
+      if (amendResult?.data) {
+        setAssessmentModal((prev: any) => ({ ...prev, open: !prev?.open, data: { product: item, id: item?.assessment?.assessmentId } }));
+      }
+    } catch (error) {
+      logError(error)
+    }
+  }
+
+  const showAmendButton = (item: any) => { return item?.assessment?.assessmentId && item?.assessment?.assessmentId !== EmptyGuid }
+
   const handleCancelQuote = async (quoteId: any, status: number) => {
     setIsLoading(true)
     try {
@@ -158,7 +181,7 @@ export default function TradeInDetail() {
   // At the top of your component (or within the render), define helper variables:
   const status = tradeDetail?.value?.status;
   const showAssessmentPrice = status === "Assessed" || status === "AssessmentApproved" || status === "AssessedPartialReject" || status === "AssessmentAccepted" || status === "TradeInComplete" || status === "TradeInFullReject" || status === "TradeInCompletePartialReject" || status === "AssessedFullReject";
-  const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject";
+  const showActionColumn = status === "Assessed" || status === "Quoted" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject" || status === "FurtherAssessment";
 
   const conditionMapping: { [key: number]: string } = {
     1: "Like New",
@@ -326,11 +349,12 @@ export default function TradeInDetail() {
                     </td>
                     {showActionColumn && (
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                        {(status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject") && (item?.status === "Assessed" || item.status === "Quoted") ? (
+                        {(status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject" || status === "FurtherAssessment") && (item?.status === "Assessed" || item.status === "Quoted") ? (
                           canChangeStatus(item?.status) && (
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.REJECTED_BY_CUSTOMER)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.APPROVED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                              {showAmendButton(item) && <button onClick={() => handleAmendItem(item)} className="px-2 py-1 text-xs text-white rounded bg-blue" > Amend </button>}
                             </div>
                           )
                         ) : status === "Quoted" ? (
@@ -401,6 +425,7 @@ export default function TradeInDetail() {
           </div>
         </div>
       }
+      {assessmentModal?.open && <AmendProductModal {...assessmentModal} onCloseAmendProduct={onToggleAssessmentModal} /> }
     </>
   );
 }
