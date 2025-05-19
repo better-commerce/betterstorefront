@@ -60,11 +60,11 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
                 const rmTransConfig = `
                     var rm_trans = {
                         affiliateConfig: ${JSON.stringify(params.affiliateConfig)},
-                        orderid: ${JSON.stringify(params.orderId)},
+                        orderid: ${JSON.stringify(params.orderNo)},
                         currency: ${JSON.stringify(params.currency)},
                         customerStatus: ${JSON.stringify(params.customerStatus)},
                         conversionType: ${JSON.stringify(params.conversionType)},
-                        customerID: ${JSON.stringify(params.customerId)},
+                        customerID: ${JSON.stringify(params?.customer?.userId)},
                         discountCode: ${JSON.stringify(params.discountCode)},
                         discountAmount: ${JSON.stringify(params.discountAmount)},
                         taxAmount: ${JSON.stringify(params.taxAmount)},
