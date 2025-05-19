@@ -65,6 +65,8 @@ export module Cookie {
     export const SESSION_ID = 'sessionId'
     export const BASKET_ID = 'basketId'
     export const ORDER_ID = 'orderId'
+    export const SITE_USER_ID = 'suid'
+    export const SITE_USER_HAS_MEMBERSHIP = 'suhm'
     export const COMPANY_ID = 'CompanyId'
     export const GOOGLE_TRANSLATE = 'googtrans'
     export const KIT_BASKET_ID = 'kitBasketId'

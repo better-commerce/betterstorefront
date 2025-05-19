@@ -868,6 +868,10 @@ export const UIProvider: React.FC<any> = (props) => {
   const setUser = useCallback(
     (payload: any) => {
       setItem('user', payload)
+      if (payload?.userId) {
+        Cookies.set(Cookie.Key.SITE_USER_ID, payload?.userId)
+        Cookies.set(Cookie.Key.SITE_USER_HAS_MEMBERSHIP, payload?.hasMembership)
+      }  
       if (payload?.companyId) {
         Cookies.set(Cookie.Key.COMPANY_ID, payload?.companyId)
       } else {

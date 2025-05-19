@@ -2,6 +2,12 @@ import { getOrderId } from "@framework/utils/app-util";
 import { AnalyticsEventType } from "..";
 import { EmptyString } from "@components/utils/constants";
 
+export enum RakutenCustomerStatusType {
+  NEW = "New",
+  EXISTING = "Existing",
+  RETURNING = "Returning",
+}
+
 export const RAKUTEN_ANALYTICS_EVENTS: any = {
     /**
      * All events supported for Rakuten Analytics tracking
@@ -27,7 +33,7 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
                 },
                 orderid: (source: any) => getOrderId(source?.orderInfo?.order),
                 currency: (source: any) => source?.cartItems?.baseCurrency,
-                customerStatus: "Existing",
+                customerStatus: (source: any) => source?.customerStatusType,
                 conversionType: "Sale",
                 customerID: (source: any) => source?.user?.userId,
                 discountCode: (source: any) =>
