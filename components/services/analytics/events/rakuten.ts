@@ -68,7 +68,7 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
                     discountCode: ${JSON.stringify(params.discountCode)},
                     discountAmount: ${JSON.stringify(params.discountAmount)},
                     taxAmount: ${JSON.stringify(params.taxAmount)},
-                    lineitems: ${JSON.stringify(params.lineitems)},
+                    lineitems: ${JSON.stringify(params.lineitems)}
                 `;
 
                 const originalScript = `
