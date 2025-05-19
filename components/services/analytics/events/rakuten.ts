@@ -59,16 +59,16 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
             postProcess: (params: any): void => {
                 const rmTransConfig = `
                     var rm_trans = {
-                        affiliateConfig: ${params.affiliateConfig},
-                        orderid: ${params.orderId},
-                        currency: ${params.currency},
-                        customerStatus: ${params.customerStatus},
-                        conversionType: ${params.conversionType},
-                        customerID: ${params.customerId},
-                        discountCode: ${params.discountCode},
-                        discountAmount: ${params.discountAmount},
-                        taxAmount: ${params.taxAmount},
-                        lineitems: ${params.lineitems},
+                    affiliateConfig: ${JSON.stringify(params.affiliateConfig)},
+                    orderid: ${JSON.stringify(params.orderId)},
+                    currency: ${JSON.stringify(params.currency)},
+                    customerStatus: ${JSON.stringify(params.customerStatus)},
+                    conversionType: ${JSON.stringify(params.conversionType)},
+                    customerID: ${JSON.stringify(params.customerId)},
+                    discountCode: ${JSON.stringify(params.discountCode)},
+                    discountAmount: ${JSON.stringify(params.discountAmount)},
+                    taxAmount: ${JSON.stringify(params.taxAmount)},
+                    lineitems: ${JSON.stringify(params.lineitems)},
                 `;
 
                 const originalScript = `
