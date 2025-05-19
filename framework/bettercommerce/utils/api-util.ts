@@ -17,6 +17,8 @@ export const callApi = async (config: AxiosRequestConfig) => {
     const response: any = await axios(config)
     if (response?.data?.redirect) {
         removeItem('user')
+        Cookies.remove(Cookie.Key.SITE_USER_ID)
+        Cookies.remove(Cookie.Key.SITE_USER_HAS_MEMBERSHIP)
         setItem('wishListItems', [])
         setItem('cartItems', { lineItems: [] })
         Cookies.remove(Cookie.Key.USER_TOKEN)

@@ -936,6 +936,8 @@ export const UIProvider: React.FC<any> = (props) => {
 
       const logoutUser = (isSilentLogout: boolean) => {
         removeItem('user')
+        Cookies.remove(Cookie.Key.SITE_USER_ID)
+        Cookies.remove(Cookie.Key.SITE_USER_HAS_MEMBERSHIP)
         dispatch({ type: 'SET_WISHLIST', payload: [] })
         setItem('wishListItems', [])
         setItem('cartItems', { lineItems: [] })
