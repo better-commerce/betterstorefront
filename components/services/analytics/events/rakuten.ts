@@ -59,16 +59,17 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
             postProcess: (params: any): void => {
                 const rmTransConfig = `
                     var rm_trans = {
-                    affiliateConfig: ${JSON.stringify(params.affiliateConfig)},
-                    orderid: ${JSON.stringify(params.orderId)},
-                    currency: ${JSON.stringify(params.currency)},
-                    customerStatus: ${JSON.stringify(params.customerStatus)},
-                    conversionType: ${JSON.stringify(params.conversionType)},
-                    customerID: ${JSON.stringify(params.customerId)},
-                    discountCode: ${JSON.stringify(params.discountCode)},
-                    discountAmount: ${JSON.stringify(params.discountAmount)},
-                    taxAmount: ${JSON.stringify(params.taxAmount)},
-                    lineitems: ${JSON.stringify(params.lineitems)}
+                        affiliateConfig: ${JSON.stringify(params.affiliateConfig)},
+                        orderid: ${JSON.stringify(params.orderId)},
+                        currency: ${JSON.stringify(params.currency)},
+                        customerStatus: ${JSON.stringify(params.customerStatus)},
+                        conversionType: ${JSON.stringify(params.conversionType)},
+                        customerID: ${JSON.stringify(params.customerId)},
+                        discountCode: ${JSON.stringify(params.discountCode)},
+                        discountAmount: ${JSON.stringify(params.discountAmount)},
+                        taxAmount: ${JSON.stringify(params.taxAmount)},
+                        lineitems: ${JSON.stringify(params.lineitems)}
+                    };
                 `;
 
                 const originalScript = `
@@ -82,7 +83,11 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
                 const script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.text = rmTransConfig + originalScript;
-                document.head.appendChild(script);
+                if (document.head) {
+                    document.head.appendChild(script);
+                } else {
+                    document.documentElement.appendChild(script);
+                }
             },
         },
     },
