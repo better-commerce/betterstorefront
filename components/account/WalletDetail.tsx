@@ -3,7 +3,7 @@ import Loader from '@components/Loader';
 import TransferToBankModal from '@components/TransferToBankModal';
 import { LoadingDots } from '@components/ui';
 import { useUI } from '@components/ui/context'
-import { DATE_FORMAT, NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, NEXT_WALLET_ENABLE_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS } from "@components/utils/constants";
+import { DATE_FORMAT, NEXT_WALLET_ASSOCIATE_TO_CUSTOMER, NEXT_WALLET_ENABLE_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_BANKS, NEXT_WALLET_GET_CUSTOMER_WALLET, NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS } from "@components/utils/constants";
 import { callApi } from '@framework/utils/api-util';
 import { logError } from "@framework/utils/app-util";
 import { WalletIcon } from "@heroicons/react/24/outline";
@@ -21,6 +21,7 @@ export default function WalletDetail() {
   const [successMessage, setSuccessMessage] = useState("")
   const [walletDetail, setWalletDetail] = useState<any>({})
   const [walletTransactions, setWalletTransaction] = useState<any>({})
+  const [bankAccountList, setBankAccountList] = useState<any>([{}])
   const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 1, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
   const [openTransferToBankModal, setOpenTransferToBankModal] = useState(false)
   const { user, setUser } = useUI()
@@ -69,6 +70,9 @@ export default function WalletDetail() {
       const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS, method: RequestMethod.POST, data: { walletId, page, pageSize: 10, sortBy, sortDescending, filters }, }
       const { data: transactionsResult }: any = await callApi(config)
       setWalletTransaction(transactionsResult?.data);
+      const bankConfig: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_BANKS, method: RequestMethod.POST, data: { walletId, page, pageSize: 10, sortBy, sortDescending, filters }, }
+      const { data: bankResult }: any = await callApi(bankConfig)
+      setBankAccountList(bankResult?.data)
       setPaginationState((prev: any) => ({
         ...prev,
         pageNumber: transactionsResult?.data?.page || page, // ✅ Set current page from API response
@@ -107,12 +111,18 @@ export default function WalletDetail() {
             </div>
           }
           <div className="w-full px-6">
-            <div className="flex justify-between items-center">
-            <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>My Wallet</h2>
-            {walletEnabled && 
-              <div className="flex w-60 sm:flex-col mb-6">
-                <button className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary" onClick={() => setOpenTransferToBankModal(true)}>Transfer To Bank</button>
-              </div>}
+            <div className="flex items-center justify-between">
+              <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>My Wallet</h2>
+              {walletEnabled &&
+                <div className="flex mb-6 w-60 sm:flex-col">
+                  <button
+                    className={`w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary ${bankAccountList?.length > 0 ? '' : '!cursor-not-allowed opacity-50'}`}
+                    onClick={() => setOpenTransferToBankModal(true)}
+                    disabled={!(bankAccountList?.length > 0)}
+                  >
+                    Transfer To Bank
+                  </button>
+                </div>}
             </div>
             {!walletEnabled &&
               <div className="flex flex-col w-full gap-4 mt-6">
@@ -190,8 +200,8 @@ export default function WalletDetail() {
               </div>
             )}
           </div>
-          <TransferToBankModal open={openTransferToBankModal} handleClose={() => {setOpenTransferToBankModal(false)}} walletId={user.walletId} walletDetail={walletDetail} setSuccessMessage={setSuccessMessage} />
-          
+          <TransferToBankModal open={openTransferToBankModal} handleClose={() => { setOpenTransferToBankModal(false) }} walletId={user.walletId} walletDetail={walletDetail} setSuccessMessage={setSuccessMessage} />
+
         </>
     )
   );
