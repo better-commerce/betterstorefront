@@ -190,7 +190,7 @@ export default function WalletDetail() {
               </div>
             )}
           </div>
-          <TransferToBankModal open={openTransferToBankModal} handleClose={() => {setOpenTransferToBankModal(false)}} walletId={user.walletId} walletDetail={walletDetail} setSuccessMessage={setSuccessMessage} />
+          <TransferToBankModal open={openTransferToBankModal} handleClose={() => {setOpenTransferToBankModal(false)}} walletId={user.walletId} walletDetail={walletDetail} setSuccessMessage={setSuccessMessage} refreshWalletDetails={getWallet} />
           
         </>
     )
