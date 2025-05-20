@@ -9,7 +9,7 @@ import { callApi } from '@framework/utils/api-util'
 import { logError } from '@framework/utils/app-util'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
-export default function TransferModal({ open, handleClose, walletId, walletDetail, setSuccessMessage, }: any) {
+export default function TransferModal({ open, handleClose, walletId, walletDetail, setSuccessMessage, refreshWalletDetails }: any) {
   const [customerBankList, setCustomerBankList] = useState([{}])
   const [customerBankDropdown, setCustomerBankDropdown] = useState([])
 
@@ -42,7 +42,10 @@ export default function TransferModal({ open, handleClose, walletId, walletDetai
     try {
       const config: AxiosRequestConfig = { url: NEXT_BANK_TRANSFER, method: RequestMethod.POST, data: payload, }
       const { data }: any = await callApi(config)
-      if(data) setSuccessMessage("Amount Transfer to bank successfully!!!");
+      if(data) {
+        setSuccessMessage("Amount Transfer to bank successfully!!!");
+        refreshWalletDetails(walletDetail?.walletId)
+      }
       setTimeout(() => {
         setSuccessMessage("");
       }, 5000);
