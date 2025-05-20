@@ -1,4 +1,5 @@
 "use client"
+import AddBankDetailsModal from '@components/AddBankDetailsModal';
 import Loader from '@components/Loader';
 import TransferToBankModal from '@components/TransferToBankModal';
 import { LoadingDots } from '@components/ui';
@@ -24,6 +25,8 @@ export default function WalletDetail() {
   const [bankAccountList, setBankAccountList] = useState<any>([{}])
   const [paginationState, setPaginationState] = useState<any>({ pageNumber: 1, pageSize: 1, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
   const [openTransferToBankModal, setOpenTransferToBankModal] = useState(false)
+  const [openAddBankDetailsModal, setOpenAddBankDetailsModal] = useState(false)
+
   const { user, setUser } = useUI()
   const handleEnableWallet = async () => {
     setIsLoading(true);
@@ -114,13 +117,19 @@ export default function WalletDetail() {
             <div className="flex items-center justify-between">
               <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>My Wallet</h2>
               {walletEnabled &&
-                <div className="flex mb-6 w-60 sm:flex-col">
+                <div className="flex mb-6 w-60 sm:flex-col gap-2">
                   <button
                     className={`w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary ${bankAccountList?.length > 0 ? '' : '!cursor-not-allowed opacity-50'}`}
                     onClick={() => setOpenTransferToBankModal(true)}
                     disabled={!(bankAccountList?.length > 0)}
                   >
                     Transfer To Bank
+                  </button>
+                  <button
+                    className={`w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary`}
+                    onClick={() => setOpenAddBankDetailsModal(true)}
+                  >
+                    Add Bank Details
                   </button>
                 </div>}
             </div>
@@ -201,7 +210,7 @@ export default function WalletDetail() {
             )}
           </div>
           <TransferToBankModal open={openTransferToBankModal} handleClose={() => {setOpenTransferToBankModal(false)}} walletId={user.walletId} walletDetail={walletDetail} setSuccessMessage={setSuccessMessage} refreshWalletDetails={getWallet} />
-
+          <AddBankDetailsModal open={openAddBankDetailsModal} handleClose={() => {setOpenAddBankDetailsModal(false)}} walletId={user.walletId} walletDetail={walletDetail} setSuccessMessage={setSuccessMessage} refreshWalletDetails={getWallet} />
         </>
     )
   );
