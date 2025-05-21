@@ -354,7 +354,7 @@ export default function TradeInDetail() {
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.REJECTED_BY_CUSTOMER)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.APPROVED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
-                              {showAmendButton(item) && <button onClick={() => handleAmendItem(item)} className="px-2 py-1 text-xs text-white rounded bg-blue" > Amend </button>}
+                              {/* {showAmendButton(item) && <button onClick={() => handleAmendItem(item)} className="px-2 py-1 text-xs text-white rounded bg-blue" > Amend </button>} */}
                             </div>
                           )
                         ) : status === "Quoted" ? (
