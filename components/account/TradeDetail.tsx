@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { AxiosRequestConfig } from "axios";
 import Loader from "@components/Loader";
@@ -229,6 +229,8 @@ export default function TradeInDetail() {
       </div>
     </div>
   );
+  const showReturnNumberHeader = useMemo(() => tradeDetail?.value?.items?.some((item: any) => item?.returnNo), [tradeDetail]);
+  const showTrackingNumberHeader = useMemo(() => tradeDetail?.value?.items?.some((item: any) => item?.trackingNo), [tradeDetail]);
   return (
     <>
       {isLoading ? <Loader /> :
@@ -270,12 +272,18 @@ export default function TradeInDetail() {
               <h3 className="text-xl font-semibold w-full text-[#2d4d9c] rounded disabled:bg-gray-300">Summary</h3>
             </div>
           </div>
-          <div className="flex flex-col w-full overflow-hidden shadow ring-1 ring-gray-300 sm:rounded">
-            <table className="min-w-full divide-y divide-gray-300">
+          <div className="flex flex-col w-full  overflow-x-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 shadow ring-1 ring-gray-300 sm:rounded">
+            <table className="min-w-full divide-y divide-gray-300 table-auto">
               <thead className="bg-gray-100">
                 <tr>
-                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Product</th>
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 min-w-[300px]">Product</th>
                   <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Price</th>
+                  {showReturnNumberHeader && (
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Return Number</th>
+                  )}
+                  {showTrackingNumberHeader && (
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Tracking Number</th>
+                  )}
                   {showAssessmentPrice && (
                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Assessment Price</th>
                   )}
@@ -288,7 +296,7 @@ export default function TradeInDetail() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {tradeDetail?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName)).map((item: any, itemIdx: number) => (
                   <tr key={`item-${itemIdx}`} className={`${item?.status?.includes("Reject") ? 'bg-red-50 hover:bg-red-100' : 'bg-white hover:bg-gray-100'}`}>
-                    <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6">
+                    <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 whitespace-nowrap sm:pl-6 min-w-[300px]">
                       <div className="flex flex-col justify-center w-full gap-1 text-left">
                         {item?.assessment?.assessmentId !== EmptyGuid ? (
                           <div className="flex flex-col w-full gap-1">
@@ -336,6 +344,12 @@ export default function TradeInDetail() {
                       </div>
                     </td>
                     <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">£{item?.price}</td>
+                    {showReturnNumberHeader && (
+                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{item?.returnNo ? `#${item?.returnNo}` : ""}</td>
+                    )}
+                    {showTrackingNumberHeader && (
+                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{item?.trackingNo || ""}</td>
+                    )}
                     {showAssessmentPrice && (
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">£{item?.assessmentPrice}</td>
                     )}
@@ -389,6 +403,8 @@ export default function TradeInDetail() {
                 <tr>
                   <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.grandTotal}</td>
+                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
+                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
                   {showAssessmentPrice && (
                     <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</td>
                   )}
