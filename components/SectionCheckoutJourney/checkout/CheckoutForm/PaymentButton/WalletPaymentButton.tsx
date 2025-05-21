@@ -37,10 +37,12 @@ export class WalletPaymentButton extends BasePaymentButton {
       if (walletId && walletId !== Guid.empty) {
         const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_BALANCE, method: RequestMethod.POST, data: { walletId }, }
         const { data, error }: any = await callApi(config)
-        const walletBalance = data?.value?.balance
-
+        const walletBalance = data?.data?.balance
+        
         if (basketOrderInfo?.basket?.grandTotal?.raw?.withTax <= walletBalance) {
+
           uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
+          
           const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState, true)
           if (orderResult?.success && orderResult?.result?.id) {
             uiContext?.hideOverlayLoaderState()
@@ -58,8 +60,10 @@ export class WalletPaymentButton extends BasePaymentButton {
               dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
             }
           }
+
         } else {
           uiContext?.hideOverlayLoaderState()
+  
           dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.notEnoughBalanceErrorMsg'), })
         }
       } else {
@@ -81,8 +85,8 @@ export class WalletPaymentButton extends BasePaymentButton {
       uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
       const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_BALANCE, method: RequestMethod.POST, data: { walletId }, }
       callApi(config).then(({ data, error }: any) => {
-        if (data?.value?.balance) {
-          this.setState({ walletBalance: data?.value?.balance })
+        if (data?.data?.balance) {
+          this.setState({ walletBalance: data?.data?.balance })
         }
         uiContext?.hideOverlayLoaderState()
       }).catch((error: any) => {
@@ -103,7 +107,7 @@ export class WalletPaymentButton extends BasePaymentButton {
     return (
       <>
         <div className="w-full">
-          <dl className="w-2/3 px-2 py-3 mt-2 space-y-2 sm:space-y-2">
+          <dl className="w-full px-2 py-3 mt-2 space-y-2 sm:space-y-2">
             <div className="flex items-center justify-between">
               <dt className="text-sm text-gray-600">Wallet Balance</dt>
               <dd className="font-semibold text-black text-md">
@@ -112,6 +116,7 @@ export class WalletPaymentButton extends BasePaymentButton {
               </dd>
             </div>
           </dl>
+
 
           {this.baseRender({
             ...this?.props,
