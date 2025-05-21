@@ -122,7 +122,7 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
       </div>
       <div className="flex-col items-start justify-start flex-1 ml-0">
         <button onClick={() => prevStep()} className="px-3 py-2 items-center gap-1 flex border border-[#2d4d9c] text-[#2d4d9c] rounded hover:bg-[#2d4d9c] text-sm hover:text-white disabled:bg-gray-300">
-          <ChevronLeftIcon className="w-5 h-5"/> Add/Update Products
+          <ChevronLeftIcon className="w-5 h-5"/> Edit Products
         </button>
       </div>
       <div className="flex flex-col justify-center">
