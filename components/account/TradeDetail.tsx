@@ -349,7 +349,7 @@ export default function TradeInDetail() {
                     </td>
                     {showActionColumn && (
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                        {(status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject" || status === "FurtherAssessment") && (item?.status === "Assessed" || item.status === "Quoted") ? (
+                        {(status === "Quoted" || status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject" || status === "FurtherAssessment") && (item?.status === "Assessed" || item.status === "Quoted") ? (
                           canChangeStatus(item?.status) && (
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.REJECTED_BY_CUSTOMER)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
