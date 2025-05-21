@@ -279,10 +279,10 @@ export default function TradeInDetail() {
                   <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 min-w-[300px]">Product</th>
                   <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Price</th>
                   {showReturnNumberHeader && (
-                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Return Number</th>
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Return #</th>
                   )}
                   {showTrackingNumberHeader && (
-                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Tracking Number</th>
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Tracking #</th>
                   )}
                   {showAssessmentPrice && (
                     <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Assessment Price</th>
@@ -345,7 +345,7 @@ export default function TradeInDetail() {
                     </td>
                     <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">£{item?.price}</td>
                     {showReturnNumberHeader && (
-                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{item?.returnNo ? `#${item?.returnNo}` : ""}</td>
+                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{item?.returnNo || ""}</td>
                     )}
                     {showTrackingNumberHeader && (
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{item?.trackingNo || ""}</td>
@@ -403,8 +403,8 @@ export default function TradeInDetail() {
                 <tr>
                   <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.grandTotal}</td>
-                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
-                  <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
+                  {showReturnNumberHeader && <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>}
+                  {showTrackingNumberHeader && <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>}
                   {showAssessmentPrice && (
                     <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</td>
                   )}
