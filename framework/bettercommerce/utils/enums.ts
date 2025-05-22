@@ -47,3 +47,9 @@ export enum AnalyticsEventStrategyType {
   INCLUDE_SPECIFIC = 'include-specific',
   EXCLUDE_SPECIFIC = 'exclude-specific',
 }
+
+export enum StoreType {
+  HOME_COLLECTION = 1,
+  STORE_DROP = 2,
+  PICKUP_SHOP = 3,
+}

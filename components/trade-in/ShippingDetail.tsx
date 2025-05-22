@@ -1,7 +1,7 @@
 import Loader from "@components/Loader";
 import TradeNewAddress from "@components/account/Address/TradeNewAddress";
 import { useUI } from "@components/ui";
-import { NEXT_ADDRESS, TRADE_IN_DPD_PICKUP_LOCATIONS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition, EmptyString, NEXT_TRADE_IN_SCHEDULE_DELIVERY } from '@components/utils/constants';
+import { NEXT_ADDRESS, NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition, EmptyString, NEXT_TRADE_IN_SCHEDULE_DELIVERY } from '@components/utils/constants';
 import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
 import { callApi } from "@framework/utils/api-util";
 import { logError } from "@framework/utils/app-util";
@@ -9,7 +9,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { AxiosRequestConfig } from 'axios';
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { ChangeEvent, useEffect, useState } from "react";
-import { AlertType } from "@framework/utils/enums";
+import { AlertType, StoreType } from "@framework/utils/enums";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
 interface ShippingDetailProps {
@@ -39,6 +39,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
   const [storeData, setStoreData] = useState<any>([])
   const [isStoreOpen, setStoreOpen] = useState<any>(0)
   const [addressData, setAddressData] = useState({ addressType: 2, street: "", street2: "", city: "", state: "", country: "", postcode: "" });
+  const [pickupShopAddressData, setPickupShopAddressData] = useState({ addressType: 3, street: "", street2: "", city: "", state: "", country: "", postcode: "" });
   const [userAddress, setUserAddress] = useState<any>([])
   const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>(null)
   const [selectedUserAddress, setSelectedUserAddress] = useState<any>(null);
@@ -99,8 +100,8 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
     setIsLoading(true);
 
     const getAddressPayload = () => {
-      if (addressData?.addressType === 3) {
-        return addressData
+      if(isStoreOpen === StoreType.PICKUP_SHOP) {
+        return pickupShopAddressData
       }
 
       if (isStoreDropOff && selectedCameraStore !== null) {
@@ -204,11 +205,21 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
     if (!postCode || !validatePostCode(postCode)) return
     setIsLoading(true);
     try {
-      const config: AxiosRequestConfig = { url: TRADE_IN_DPD_PICKUP_LOCATIONS, method: RequestMethod.POST, data: { currentPage: 1, pageSize: 20, postCode } };
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS, method: RequestMethod.POST, data: { currentPage: 1, pageSize: 20, postCode } };
       const { data } = await callApi(config)
       if (data?.length) {
         setStoreList(data)
         setIsStoreAvailable(true)
+        const storeDetails = data[0]?.pickupLocation?.address;
+        setPickupShopAddressData({
+          addressType: 3,
+          street: storeDetails?.street || EmptyString,
+          street2: storeDetails?.locality || storeDetails?.organisation || EmptyString,
+          city: storeDetails?.town || EmptyString,
+          state: storeDetails?.county || storeDetails?.town || EmptyString,
+          country: storeDetails?.countryCode || EmptyString,
+          postcode: storeDetails?.postCode || EmptyString,
+        });
       } else {
         setAlert({ type: AlertType.ERROR, msg: translate('common.message.noAddressFoundErrorMsg') });
       }
@@ -230,7 +241,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
   }
 
   const handleStoreSelect = (storeDetails: DPDAddress) => {
-    setAddressData({
+    setPickupShopAddressData({
       addressType: 3,
       street: storeDetails?.street || EmptyString,
       street2: storeDetails?.locality || storeDetails?.organisation || EmptyString,
@@ -504,7 +515,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                     store?.pickupLocation?.disabledAccess ? "Disabled Access" : "Access"
                   ];
                   const address: DPDAddress = store?.pickupLocation?.address;
-                  const isSelected = `${address?.postCode}-${address?.street}` === `${addressData?.postcode}-${addressData?.street}`;
+                  const isSelected = `${address?.postCode}-${address?.street}` === `${pickupShopAddressData?.postcode}-${pickupShopAddressData?.street}`;
 
                   return (
                     <div key={index} className={`p-4 text-left bg-white border rounded shadow-lg ${isSelected && 'border border-black'}`} onClick={() => handleStoreSelect(address)}>

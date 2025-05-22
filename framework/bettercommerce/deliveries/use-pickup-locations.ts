@@ -12,13 +12,12 @@ interface Props {
 
 export default function usePickupLocations() {
     return async function handler({ currentPage = 1, pageSize = 20, postCode, cookies }: Props) {
-        const url = new URL( TRADE_IN_DPD_PICKUP_LOCATIONS, TRADE_IN_BASE_URL )
+        const url = new URL( `${TRADE_IN_DPD_PICKUP_LOCATIONS}?currentPage=${currentPage}&pageSize=${pageSize}&postCode=${postCode}`, TRADE_IN_BASE_URL )
         try {  
             const response = await fetcher({
                 baseUrl: TRADE_IN_BASE_URL,
                 url: url.href,
-                data: { currentPage, pageSize, postCode },
-                method: 'POST', 
+                method: 'GET', 
                 cookies,
                 headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
               })

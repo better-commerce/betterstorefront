@@ -275,6 +275,7 @@ export const NEXT_TRADE_IN_UPDATE_PRODUCT_CONDITION = `/api/trade-in/assessments
 export const NEXT_TRADE_IN_UPDATE_PRODUCT_NOTES = `/api/trade-in/assessments/update-product-notes`
 export const NEXT_TRADE_IN_SCHEDULE_DELIVERY = `/api/trade-in/schedule-deliveries`
 export const NEXT_TRADE_IN_PACKING_SLIP = `/api/trade-in/get-packing-slip`
+export const NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS = `/api/deliveries/pickup-locations`
 
 //TRADE IN JOURNEY API ENDPOINTS
 
