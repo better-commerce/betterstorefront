@@ -8,7 +8,7 @@ import { logError } from "@framework/utils/app-util";
 import { useTranslation } from '@commerce/utils/use-translation'
 import { AxiosRequestConfig } from 'axios';
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { AlertType } from "@framework/utils/enums";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 
@@ -241,6 +241,13 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
     });
   }
 
+  useEffect(() => {
+    if (userAddress?.length > 0) {
+      const defaultAddressIndex = userAddress.findIndex((address: any) => address?.isDefault);
+      setSelectedUserAddress(defaultAddressIndex);
+    }
+  }, [userAddress]);
+
   return (
     <>
       {isLoading && <Loader />}
@@ -359,7 +366,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
         <div className={`flex flex-col w-full gap-4 ${user?.userId ? ' sm:w-full' : ' sm:w-5/12'}`}>
           <div className='flex items-center justify-between w-full gap-1 mt-4'>
             <h4 className='text-xl font-medium text-left text-black'>Your Address</h4>
-            {userAddress?.length > 0 && <TradeNewAddress getAddressNew={getAddress} />}
+            {userAddress?.length > 0 && <TradeNewAddress getAddressNew={getAddress} setUserAddress={setUserAddress} />}
           </div>
           {user?.userId ? (
             <div className="grid grid-cols-3 gap-4 text-left">
@@ -379,7 +386,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                   </div>
                 );
               }) : (
-                <TradeNewAddress getAddressNew={getAddress} />
+                <TradeNewAddress getAddressNew={getAddress} setUserAddress={setUserAddress} />
               )}
             </div>
           ) : (

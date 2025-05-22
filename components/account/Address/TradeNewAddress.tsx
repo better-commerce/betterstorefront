@@ -49,7 +49,7 @@ export function asyncHandler() {
   }
 }
 
-export default function TradeNewAddress({ deviceInfo, getAddressNew }: any) {
+export default function TradeNewAddress({ deviceInfo, getAddressNew, setUserAddress }: any) {
   const { recordAnalytics } = useAnalytics()
   const [data, setData] = useState([])
   const translate = useTranslation();
@@ -210,6 +210,7 @@ export default function TradeNewAddress({ deviceInfo, getAddressNew }: any) {
       const response: any = await getAddress(user.userId)
       setIsLoading(false)
       setData(response)
+      setUserAddress(response || []);
     } catch (error) {
       console.log(error, 'err')
       failCb()
