@@ -8,10 +8,12 @@ import { RequestMethod } from 'bc-payments-sdk/dist/constants'
 import { callApi } from '@framework/utils/api-util'
 import { logError } from '@framework/utils/app-util'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
 
-export default function TransferModal({ open, handleClose, walletId, walletDetail, setSuccessMessage, refreshWalletDetails }: any) {
+export default function TransferModal({ open, handleClose, walletId, walletDetail, setSuccessMessage, refreshWalletDetails, refreshWalletTranscations }: any) {
   const [customerBankList, setCustomerBankList] = useState([{}])
   const [customerBankDropdown, setCustomerBankDropdown] = useState([])
+  const router = useRouter()
 
   const onClose = () => { handleClose() }
 
@@ -45,6 +47,7 @@ export default function TransferModal({ open, handleClose, walletId, walletDetai
       if(data) {
         setSuccessMessage("Amount Transfer to bank successfully!!!");
         refreshWalletDetails(walletDetail?.walletId)
+        router.refresh()
       }
       setTimeout(() => {
         setSuccessMessage("");

@@ -75,7 +75,7 @@ export default function WalletDetail() {
       setWalletTransaction(transactionsResult?.data);
       const bankConfig: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_BANKS, method: RequestMethod.POST, data: { walletId, page, pageSize: 10, sortBy, sortDescending, filters }, }
       const { data: bankResult }: any = await callApi(bankConfig)
-      setBankAccountList(bankResult?.data)
+      setBankAccountList(bankResult?.data?.items)
       setPaginationState((prev: any) => ({
         ...prev,
         pageNumber: transactionsResult?.data?.page || page, // ✅ Set current page from API response

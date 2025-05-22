@@ -222,10 +222,12 @@ export default function TradeInDetail() {
               .join(", ")}
           </span>
         )}
-        <span className="text-xs text-gray-600">
-          <strong>Assessment Notes: </strong>
-          <QuoteAssessmentNotes notes={product?.notes} />
-        </span>
+        {product?.notes?.length > 0 && (
+          <span className="text-xs text-gray-600">
+            <strong>Assessment Notes: </strong>
+            <QuoteAssessmentNotes notes={product?.notes} />
+          </span>
+        )}
       </div>
     </div>
   );
