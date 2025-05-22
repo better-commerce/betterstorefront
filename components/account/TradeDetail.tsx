@@ -403,8 +403,12 @@ export default function TradeInDetail() {
                 <tr>
                   <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
                   <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.grandTotal}</td>
-                  {showReturnNumberHeader && <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>}
-                  {showTrackingNumberHeader && <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>}
+                  {showReturnNumberHeader === true ? (
+                    <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
+                  ) : <></>}
+                  {showTrackingNumberHeader === true ? (
+                    <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
+                  ) : <></>}
                   {showAssessmentPrice && (
                     <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{tradeDetail?.value?.assessmentTotal}</td>
                   )}
