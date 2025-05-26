@@ -54,7 +54,7 @@ function Grid({ products, currentPage, handlePageChange = () => { }, handleInfin
   const nonInfiniteGridClass = useMemo(() => {
     return `p-[1px] border-gray-100 gap-x-4 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-2 px-3 sm:px-2 pc-padding-x-none ${
       products.results.length < 4
-        ? 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'
+        ? 'lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4'
         : featureToggle?.features?.enableHorizontalFilter
           ? 'lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4'
           : featureToggle?.features?.enableForPCSite
