@@ -31,7 +31,7 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
                     removeTaxFromDiscount: true,
                     tagType: "mop",
                 },
-                orderid: (source: any) => getOrderId(source?.orderInfo?.order),
+                orderid: (source: any) => source?.orderNo, //getOrderId(source?.orderInfo?.order),
                 currency: (source: any) => source?.cartItems?.baseCurrency,
                 customerStatus: (source: any) => source?.customerStatusType,
                 conversionType: "Sale",
@@ -40,11 +40,8 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
                     source?.cartItems?.promotionsApplied?.length
                         ? (source.cartItems.promotionsApplied.map((x: any) => x.promoCode) || EmptyString).join(',')
                         : EmptyString,
-                discountAmount: (source: any) =>
-                    source?.cartItems?.discount?.raw?.withTax || 0,
-                taxAmount: (source: any) =>
-                    source?.cartItems?.grandTotal?.raw?.tax,
-                lineitems: (source: any) =>
+                discountAmount: (source: any) => source?.cartItems?.discount?.raw?.withTax || 0,
+                taxAmount: (source: any) => source?.cartItems?.grandTotal?.raw?.tax, lineitems: (source: any) =>
                     source?.cartItems?.lineItems?.length
                         ? source.cartItems.lineItems.map((item: any) => ({
                             quantity: item.qty,

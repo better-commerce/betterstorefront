@@ -10,7 +10,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { NEXT_REFERRAL_BY_EMAIL, NEXT_REFERRAL_INVITE_SENT, NEXT_REFERRAL_INFO, FACEBOOK_SHARE_STRING, TWITTER_SHARE_STRING, NEXT_GET_ORDER, NEXT_GET_ORDERS, EmptyString, SITE_ORIGIN_URL, SITE_NAME, EmptyObject, CURRENT_THEME } from '@components/utils/constants'
 import { Button, LoadingDots } from '@components/ui'
-import { removeItem } from '@components/utils/localStorage'
+import { getItem, removeItem } from '@components/utils/localStorage'
 import { ELEM_ATTR, ORDER_CONFIRMATION_AFTER_PROGRESS_BAR_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
 import { generateUri } from '@commerce/utils/uri-util'
 import { LocalStorage } from '@components/utils/payment-constants'
@@ -190,6 +190,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
       // PURCHASE EVENT
       const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
       const cartItems = { ...orderData, id: orderData?.basketId, lineItems: orderData?.items, }
+      const user = getItem('user')
       recordAnalytics(AnalyticsEventType.PURCHASE, { ...{ ...extras }, user, basketId: orderData?.basketId, cartItems, orderInfo, orderData, itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Order, customerStatusType, })
 
       setTimeout(() => {
