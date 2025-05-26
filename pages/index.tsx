@@ -540,11 +540,11 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
                 <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
                   {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
-                    <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx === 0 || fIdx === 3 || fIdx === 5 || fIdx === 7  ? 'bg-gray-200 text-black' : 'bg-orange-500 bg-light-skyblue text-white'}`} key={`data-${fIdx}`}>
+                    <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx === 0 || fIdx === 3 || fIdx === 5 || fIdx === 7  ? 'bg-gray-200 text-black' : 'bg-orange-500 bg-green-light bg-light-skyblue text-white'}`} key={`data-${fIdx}`}>
                       <div className='flex flex-col col-span-7 gap-5'>
                         <h2 className='text-3xl font-semibold uppercase textcapitalize'>{fo?.fixingoffers_title}</h2>
                         <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
-                        <Link href={fo?.fixingoffers_buttonlink} legacyBehavior passHref>
+                        <Link href={fo?.fixingoffers_buttonlink || '#'} legacyBehavior passHref>
                           <a href={fo?.fixingoffers_buttonlink} className='btn btn-primary'>{fo?.fixingoffers_buttontitle}</a>
                         </Link>
                       </div>
@@ -552,7 +552,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         <img
                         src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                         alt={fo?.fixingoffers_title}
-                        className='object-cover w-full h-56'
+                        className='object-cover object-pos-right w-full h-56'
                         width={500}
                         height={224}
                         loading="lazy"
@@ -614,8 +614,8 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       <div className='relative z-10 flex flex-col col-span-7 gap-5 pt-4 sm:pt-6 text-black-clr-sec'>
                         <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingdelivery_title}</h2>
                         <p className='text-sm font-normal'>{fo?.fixingdelivery_shortdescription}</p>
-                        <Link href={fo?.fixingdelivery_buttonlink} legacyBehavior passHref>
-                          <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
+                        <Link href={fo?.fixingdelivery_buttonlink || '#' }  legacyBehavior passHref>
+                          <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-link-white-clr text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
                         </Link>
                       </div>
                       <div className='absolute top-0 right-0 left-0 z-0 col-span-12 mob-static'>
@@ -669,7 +669,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     <h3 className='text-5xl font-semibold text-orange-600'>{data?.about_title}</h3>
                     <div className='text-2xl font-normal text-black cms-para' dangerouslySetInnerHTML={{ __html: data?.about_description }}></div>
                     <div>
-                      <Link href={redirectHref} className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
+                      <Link href={redirectHref || '#' } className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
                     </div>
                   </div>
                   <div className='flex flex-col sm:p-20'>
@@ -700,7 +700,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                           loading="lazy"
                         />
                       </div>
-                      <Link href={data?.allcategories_link} className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
+                      <Link href={data?.allcategories_link || '#' } className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
                     </div>
                   ))}
                 </div>
@@ -826,7 +826,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   ))}
                   <div className='grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-6'>
                     {pageContents?.category?.map((item: any, itemIdx: number) => (
-                      <Link href={item?.category_link} passHref
+                      <Link href={item?.category_link || '#' } passHref
                         className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section'
                         key={`category-${itemIdx}`}
                       >
@@ -876,7 +876,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <div className='flex flex-col justify-center gap-4 py-6 text-center bg-gray-50 sm:py-10'>
                 <div className='container grid grid-cols-2 gap-2 mx-auto sm:grid-cols-4 sm:gap-6'>
                   {pageContents?.brandcategory?.map((item: any, itemIdx: number) => (
-                    <Link href={item?.brandcategory_link} passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
+                    <Link href={item?.brandcategory_link ||'#' } passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
                       <div className='flex flex-col w-full'>
                         <img
                           src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
@@ -922,7 +922,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   ))}
                   <div className='grid items-center grid-cols-4 gap-4 text-center'>
                     {pageContents?.brands?.map((item: any, itemIdx: number) => (
-                      <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
+                      <Link href={item?.brands_link ||'#' } passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
                         <img
                           src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
                           alt={item?.brands_name}
