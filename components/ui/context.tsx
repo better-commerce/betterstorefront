@@ -824,6 +824,9 @@ export const UIProvider: React.FC<any> = (props) => {
         return
       }
       const newCartData = processCartData(payload);
+      if (newCartData?.messageCode && !["C001"].includes(newCartData?.messageCode)) {
+        setAlert({ type: 'error', msg: newCartData?.message })
+      }
       setItem('cartItems', newCartData)
 
       if (newCartData?.lineItems?.length == 0) {
