@@ -16,7 +16,7 @@ export default function ReviewBadge({ reviewCountdata, ratingdata }: ReviewBadge
         {/* Rating + stars */}
         <div className="flex items-center">
           <span className="text-x-small font-semibold text-gray-900 plp-hidden pr-1">
-            {ratingdata.toFixed(1)}
+            {ratingdata?.toFixed(1)}
           </span>
           <div className="flex text-color-primary-blue">
             {[...Array(starCount)].map((_, i) => (
