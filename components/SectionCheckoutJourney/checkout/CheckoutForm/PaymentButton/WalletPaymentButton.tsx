@@ -1,5 +1,5 @@
 // Component Imports
-import { IPaymentButtonProps } from './BasePaymentButton'
+import { IPartialPaymentProps, IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout/PaymentGatewayNotification'
 
@@ -16,7 +16,7 @@ export class WalletPaymentButton extends BasePaymentButton {
    * CTor
    * @param props
    */
-  constructor(props: IPaymentButtonProps & IDispatchState) {
+  constructor(props: IPaymentButtonProps & IDispatchState & IPartialPaymentProps) {
     super(props)
     this.state = { isPaymentInitiated: false, paymentMethod: super.getPaymentMethod(props?.paymentMethod), walletBalance: 0, orderTotal: props?.basketOrderInfo?.basket?.grandTotal?.raw?.withTax, }
   }
@@ -38,12 +38,12 @@ export class WalletPaymentButton extends BasePaymentButton {
         const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_BALANCE, method: RequestMethod.POST, data: { walletId }, }
         const { data, error }: any = await callApi(config)
         const walletBalance = data?.data?.balance
-        
-        if (basketOrderInfo?.basket?.grandTotal?.raw?.withTax <= walletBalance) {
+        const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : this.props?.partialAmount
+        if (amountToBePaid <= walletBalance) {
 
           uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
           
-          const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState, true)
+          const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState, false)
           if (orderResult?.success && orderResult?.result?.id) {
             uiContext?.hideOverlayLoaderState()
 
@@ -126,7 +126,7 @@ export class WalletPaymentButton extends BasePaymentButton {
         </div>
 
         {this.state.isPaymentInitiated && (
-          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} />
+          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} paymentType={this.props?.paymentType} partialAmount={this.props?.partialAmount} />
         )}
       </>
     )

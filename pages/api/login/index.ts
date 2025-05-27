@@ -35,7 +35,7 @@ export default apiRouteGuard(loginApiMiddleware)
  
 export const USER_TOKEN_COOKIE_OPTIONS: CookieSerializeOptions = {
   path: "/",
-  httpOnly: true, // Cookie is not accessible via client-side JavaScript
+  httpOnly: (process.env.NODE_ENV === 'production'), // Cookie is not accessible via client-side JavaScript
   secure: (process.env.NODE_ENV === 'production'), // Send only over HTTPS in production
   sameSite: 'lax', // Helps protect against CSRF attacks
   maxAge: getMinutesInDays(365) * 60 * 1000,
