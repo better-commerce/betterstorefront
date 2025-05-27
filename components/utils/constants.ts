@@ -278,21 +278,21 @@ export const NEXT_TRADE_IN_PACKING_SLIP = `/api/trade-in/get-packing-slip`
 export const NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS = `/api/deliveries/pickup-locations`
 
 //TRADE IN JOURNEY API ENDPOINTS
-
-export const TRADE_IN_GUEST_LOGIN = `/customers/guest`
-export const TRADE_IN_LOGIN = `/customers/authenticate`
-export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/quotes`
-export const TRADE_IN_GET_QUOTE_BY_ID = `/quotes`
-export const TRADE_IN_GET_QUOTES = `/quotes`
-export const TRADE_IN_PRODUCTS = `/products`
-export const TRADE_IN_USER_TOKEN = `/users/login`
-export const TRADE_IN_GET_SHIPPING_METHODS = `/deliveries/shipping-method`
-export const TRADE_IN_GET_STORES = `/stores`
-export const TRADE_IN_GET_CUSTOMER = `/customers`
-export const TRADE_IN_GET_ASSESSMENT_STATUS = `/assessments`
-export const TRADE_IN_DPD_PICKUP_LOCATIONS = `/deliveries/pickup-locations`
-export const TRADE_IN_GET_DELIVERY_ID = `/deliveries/schedule-delivery`
-export const TRADE_IN_GET_PACKING_SLIP = `/deliveries`
+export const TRADE_IN_MODULE_CODE=`tradein`
+export const TRADE_IN_GUEST_LOGIN = `/${TRADE_IN_MODULE_CODE}/customers/guest`
+export const TRADE_IN_LOGIN = `/${TRADE_IN_MODULE_CODE}/customers/authenticate`
+export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/${TRADE_IN_MODULE_CODE}/quotes`
+export const TRADE_IN_GET_QUOTE_BY_ID = `/${TRADE_IN_MODULE_CODE}/quotes`
+export const TRADE_IN_GET_QUOTES = `/${TRADE_IN_MODULE_CODE}/quotes`
+export const TRADE_IN_PRODUCTS = `/${TRADE_IN_MODULE_CODE}/products`
+export const TRADE_IN_USER_TOKEN = `/${TRADE_IN_MODULE_CODE}/users/login`
+export const TRADE_IN_GET_SHIPPING_METHODS = `/${TRADE_IN_MODULE_CODE}/deliveries/shipping-method`
+export const TRADE_IN_GET_STORES = `/${TRADE_IN_MODULE_CODE}/stores`
+export const TRADE_IN_GET_CUSTOMER = `/${TRADE_IN_MODULE_CODE}/customers`
+export const TRADE_IN_GET_ASSESSMENT_STATUS = `/${TRADE_IN_MODULE_CODE}/assessments`
+export const TRADE_IN_DPD_PICKUP_LOCATIONS = `/${TRADE_IN_MODULE_CODE}/deliveries/pickup-locations`
+export const TRADE_IN_GET_DELIVERY_ID = `/${TRADE_IN_MODULE_CODE}/deliveries/schedule-delivery`
+export const TRADE_IN_GET_PACKING_SLIP = `/${TRADE_IN_MODULE_CODE}/deliveries`
 
 // WALLET NEXT APP ENDPOINTS 
 
@@ -307,12 +307,13 @@ export const NEXT_BANK_TRANSFER = '/api/wallet/bank-transfers/create'
 export const NEXT_CUSTOMER_BANK_CREATE = '/api/wallet/customer-bank/create'
 
 //TRADE IN JOURNEY API ENDPOINTS
-export const WALLET_ENABLE_CUSTOMER_WALLET = `/wallets/enable`
-export const WALLET_GET_CUSTOMER_WALLET = `/wallets`
+export const WALLET_MODULE_CODE=`wallet`
+export const WALLET_ENABLE_CUSTOMER_WALLET = `/${WALLET_MODULE_CODE}/wallets/enable`
+export const WALLET_GET_CUSTOMER_WALLET = `/${WALLET_MODULE_CODE}/wallets`
 export const WALLET_WALLET_ASSOCIATE_TO_CUSTOMER = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer`
-export const GET_CUSOMER_BANK_LIST = '/customer-bank'
-export const BANK_TRANSFER = '/bank-transfer'
-export const BANK_DETAILS = '/customer-bank'
+export const GET_CUSOMER_BANK_LIST = '/${WALLET_MODULE_CODE}/customer-bank'
+export const BANK_TRANSFER = '/${WALLET_MODULE_CODE}/bank-transfer'
+export const BANK_DETAILS = '/${WALLET_MODULE_CODE}/customer-bank'
 
 //CONSTANTS
 

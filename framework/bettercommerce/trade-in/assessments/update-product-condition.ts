@@ -1,15 +1,15 @@
 import { TRADE_IN_GET_ASSESSMENT_STATUS, } from '@components/utils/constants'
 import fetcher from '@framework/fetcher'
 import { logError } from '@framework/utils/app-util'
-import { TRADE_IN_BASE_URL } from '@framework/utils/constants'
+import { BC_API_BASE_URL } from '@framework/utils/constants'
 
 export default function updateProductCondition( id: string, condition: string, cookies: any ) {
   async function updateProductConditionAsync() {
-    const url = new URL( `${TRADE_IN_GET_ASSESSMENT_STATUS}/${id}/submit`, TRADE_IN_BASE_URL )
+    const url = new URL( `${TRADE_IN_GET_ASSESSMENT_STATUS}/${id}/submit`, BC_API_BASE_URL )
 
     try {
       const response = await fetcher({
-        baseUrl: TRADE_IN_BASE_URL,
+        baseUrl: BC_API_BASE_URL,
         url: url.href,
         data: { condition: condition },
         method: 'PUT',

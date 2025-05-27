@@ -1,7 +1,7 @@
 import { TRADE_IN_GET_QUOTES } from '@components/utils/constants'
 import fetcher from '@framework/fetcher'
 import { logError } from '@framework/utils/app-util'
-import { TRADE_IN_BASE_URL } from '@framework/utils/constants'
+import { BC_API_BASE_URL } from '@framework/utils/constants'
 
 export default function cancelQuoteByCustomerStatus(
   id: string,
@@ -11,12 +11,12 @@ export default function cancelQuoteByCustomerStatus(
   async function cancelQuoteByCustomerStatusAsync() {
     const url = new URL(
       `${TRADE_IN_GET_QUOTES}/${id}/review`,
-      TRADE_IN_BASE_URL
+      BC_API_BASE_URL
     )
 
     try {
       const response = await fetcher({
-        baseUrl: TRADE_IN_BASE_URL,
+        baseUrl: BC_API_BASE_URL,
         url: url.href,
         data: { status: status }, // status is sent as a number
         method: 'PUT', // Changed from GET to POST to properly send a JSON payload

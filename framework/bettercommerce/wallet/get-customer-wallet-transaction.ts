@@ -1,7 +1,7 @@
 import { WALLET_GET_CUSTOMER_WALLET } from '@components/utils/constants';
 import fetcher from '@framework/fetcher';
 import { logError } from '@framework/utils/app-util';
-import { DIGITAL_WALLET_BASE_URL } from '@framework/utils/constants';
+import { BC_API_BASE_URL } from '@framework/utils/constants';
 
 export default function getCustomerWalletTransactionById(
   walletId: string,
@@ -12,7 +12,7 @@ export default function getCustomerWalletTransactionById(
     const url = `${WALLET_GET_CUSTOMER_WALLET}/${walletId}/transactions`
     try {
       const response: any = await fetcher({
-        baseUrl: DIGITAL_WALLET_BASE_URL,
+        baseUrl: BC_API_BASE_URL,
         url,
         method: 'GET',
         params: data,

@@ -117,5 +117,6 @@ module.exports = withCommerceConfig({
     FIND_ADDRESS_KEY: process.env.FIND_ADDRESS_KEY,
     KIT_BUILDER_API_URL: process.env.KIT_BUILDER_API_URL,
     ALLOW_UNAUTHORIZED_REQUESTS: process.env.ALLOW_UNAUTHORIZED_REQUESTS,
+    BC_API_BASE_URL: process.env.BC_API_BASE_URL
   },
 })
