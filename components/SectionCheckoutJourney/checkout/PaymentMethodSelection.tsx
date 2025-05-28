@@ -107,7 +107,20 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         )
       )
       const paymentMethods: any = tryParseJson(decrypt(response))
-      setPaymentMethods(paymentMethods)
+
+      if (featureToggle?.features?.enableSplitPayment) {
+
+        const filteredPaymentMethods = [...paymentMethods].filter((x: any) => {
+          if (basket?.isPartialPayment && !matchStrings(x?.systemName, PaymentMethodType.WALLET, true)) {
+            return false
+          }
+          return true
+        })
+        setPaymentMethods(filteredPaymentMethods)
+        return filteredPaymentMethods
+      } else {
+        setPaymentMethods(paymentMethods)
+      }
       return paymentMethods
     }
 
