@@ -126,12 +126,27 @@ const Summary = ({
               </dd>
             </div>
           }
+          {basket?.isPartialPayment && (
+            <div className="flex items-center justify-between pt-2 sm:pt-1 ">
+              <dt className="flex items-center text-green-600 font-14">
+                <span>Paid</span>
+              </dt>
+              <dd className="font-semibold text-green-600 text-md">
+                {`${basket?.currencySymbol}${basket?.paidAmount}`}
+              </dd>
+            </div>
+          )}
 
-          <div className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
+          <div className={`flex items-center items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
             <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
-            <dd className="font-bold text-black font-18">
-              {basket?.grandTotal?.formatted?.withTax}
-            </dd>
+            {basket?.isPartialPayment ? (
+              <span className="flex flex-col"> 
+                <dd className="text-sm text-black line-through">{basket?.grandTotal?.formatted?.withTax}</dd>
+                <dd className="font-bold text-black font-18">{basket?.currencySymbol}{(basket?.grandTotal?.raw?.withTax - basket?.paidAmount)}</dd>
+              </span>
+            ) : (
+              <dd className="font-bold text-black font-18">{basket?.grandTotal?.formatted?.withTax}</dd>
+            )}
           </div>
         </dl >
       </div >

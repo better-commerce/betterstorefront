@@ -276,9 +276,25 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         </dd>
                       </div>
                     )}
+                    {cartItems?.isPartialPayment && (
+                      <div className="flex items-center justify-between pt-2 sm:pt-1">
+                        <dt className="flex items-center text-black font-18">
+                          <span>Paid</span>
+                        </dt>
+                        <dd className="font-semibold text-black text-md">
+                          {`${cartItems?.currencySymbol}${cartItems?.paidAmount}`}
+                        </dd>
+                      </div>
+                    )}
                     <div className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
                       <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
-                      <dd className="text-xl font-bold text-black"> {data?.grandTotal?.formatted?.withTax} </dd>
+                      <dd className="text-xl font-bold text-black">
+                        {data?.isPartialPayment ? (
+                          <>{data?.currencySymbol}{(data?.grandTotal?.raw?.withTax - data?.paidAmount)}</>
+                        ) : (
+                          <>{data?.grandTotal?.formatted?.withTax}</>
+                        )}
+                      </dd>
                     </div>
                   </dl>
                 </div>
