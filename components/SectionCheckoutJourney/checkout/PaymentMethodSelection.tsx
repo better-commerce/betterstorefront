@@ -37,9 +37,10 @@ interface PaymentMethodSelectionProps {
   readonly hideOverlayLoaderState: any
   generateBasketId: any
   onPaymentMethodSelect: (method: any) => void
+  featureToggle: any
 }
 
-const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ basket, isApplePayScriptLoaded, uiContext, setAlert, selectedDeliveryMethod, onPaymentMethodSelect, setOverlayLoaderState, hideOverlayLoaderState, generateBasketId, }) => {
+const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ basket, isApplePayScriptLoaded, uiContext, setAlert, selectedDeliveryMethod, onPaymentMethodSelect, setOverlayLoaderState, hideOverlayLoaderState, generateBasketId, featureToggle }) => {
     const { recordAnalytics } = useAnalytics()
     const translate = useTranslation()
     const { shippingAddress, billingAddress }: any = basket || EmptyObject
@@ -331,7 +332,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                 <div className="flex flex-col w-full py-5 px-5 space-y-4">
 
                   {/* Enable partial payment for Wallet only */}
-                  {[PaymentMethodType.WALLET].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
+                  {featureToggle?.features?.enableSplitPayment && [PaymentMethodType.WALLET].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
                     <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} />
                   )}
 

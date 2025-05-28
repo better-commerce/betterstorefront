@@ -30,6 +30,7 @@ export class WalletPaymentButton extends BasePaymentButton {
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
     const { translate } = this.props
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
     if (uiContext?.user?.userId) {
       const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
       if (amountToBePaid <= 0) {
@@ -39,7 +40,7 @@ export class WalletPaymentButton extends BasePaymentButton {
 
       const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
       if (validateAmount) {
-        dispatchState({ type: 'SET_ERROR', payload: stringFormat(translate(validateAmount?.msg), { currencySymbol, paymentAmount: validateAmount?.amount }), })
+        dispatchState({ type: 'SET_ERROR', payload: stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount }), })
         return
       }
 

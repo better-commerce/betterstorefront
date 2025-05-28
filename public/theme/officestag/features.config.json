@@ -23,6 +23,7 @@
     "enableRakutenAnalytics": false,
     "enableMappAnalytics": false,
     "enableOmnilytics": true,
+    "enableSplitPayment": false,
     "enableHorizontalFilter": true,
     "enableCustomHomeWidget":true,
     "enableFullBanner":true,
