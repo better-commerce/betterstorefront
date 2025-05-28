@@ -54,10 +54,7 @@ const LoginOrGuest: React.FC<any> = ({
       .string()
       .min(8, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
       .max(24, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
-      .required(Messages.Validations.ResetPassword['PASSWORD_REQUIRED_MESSAGE'])
-      .matches(Messages.Validations.RegularExpressions.PASSWORD_VALIDATION, {
-        message: Messages.Validations.ResetPassword.PASSWORD_VALIDATION_MESSAGE,
-      }),
+      .required(Messages.Validations.ResetPassword['PASSWORD_REQUIRED_MESSAGE']),
   })
   const loginCheckoutFormik = useFormik({
     initialValues: {
