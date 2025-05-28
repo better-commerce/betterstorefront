@@ -39,6 +39,11 @@ export class WalletPaymentButton extends BasePaymentButton {
         const { data, error }: any = await callApi(config)
         const walletBalance = data?.data?.balance
         const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : this.props?.partialAmount
+        if (amountToBePaid <= 0) {
+          uiContext?.hideOverlayLoaderState()
+          dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
+          return
+        }
         if (amountToBePaid <= walletBalance) {
 
           uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })

@@ -599,6 +599,7 @@
             "freeText": "Darmowe",
             "additionalChargesText": "Dodatkowe opłaty",
             "taxText": "Podatek",
+            "paidText": "Opłacone",
             "youPayText": "Do zapłaty",
             "placeOrderBtnText": "Złóż zamówienie",
             "loseDeliveryText": "Wkrótce stracisz darmową dostawę!",
@@ -1377,7 +1378,8 @@
                 "notEnoughCreditErrorMsg": "Brak wystarczającego kredytu.",
                 "walletNotFoundErrorMsg": "Portfel nie został znaleziony.",
                 "notEnoughBalanceErrorMsg": "Niewystarczające środki.",
-                "paymentMethodNotSupportedErrorMsg": "Metoda płatności nie jest obsługiwana."
+                "paymentMethodNotSupportedErrorMsg": "Metoda płatności nie jest obsługiwana.",
+                "paymentAmountRequiredErrorMsg": "Wymagana jest kwota płatności."
             },
             "password": {
                 "passwordValidationMsg": "Hasło powinno mieć co najmniej 8 znaków i zawierać przynajmniej 1 dużą literę.",

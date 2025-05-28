@@ -599,6 +599,7 @@
             "freeText": "Zdarma",
             "additionalChargesText": "Další poplatky",
             "taxText": "Daň",
+            "paidText": "Zaplaceno",
             "youPayText": "Platíte",
             "placeOrderBtnText": "Zadat objednávku",
             "loseDeliveryText": "Brzy přijdete o bezplatnou dopravu!",
@@ -1376,7 +1377,8 @@
                 "paymentAlreadyCompletedErrorMsg": "Platba za váš košík byla již dokončena.",
                 "notEnoughCreditErrorMsg": "Není dostatek kreditů.",
                 "notEnoughBalanceErrorMsg": "Nedostatečný dostupný zůstatek.",
-                "paymentMethodNotSupportedErrorMsg": "Tento způsob platby není podporován."
+                "paymentMethodNotSupportedErrorMsg": "Tento způsob platby není podporován.",
+                "paymentAmountRequiredErrorMsg": "Částka platby je povinná."
             },
             "password": {
                 "passwordValidationMsg": "Heslo by mělo mít alespoň 8 znaků a alespoň 1 velké písmeno.",

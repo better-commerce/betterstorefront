@@ -599,6 +599,7 @@
             "freeText": "Gratis",
             "additionalChargesText": "Yderligere gebyrer",
             "taxText": "Moms",
+            "paidText": "Betalt",
             "youPayText": "Du betaler",
             "placeOrderBtnText": "Læg ordre",
             "loseDeliveryText": "Du er ved at miste gratis levering!",
@@ -1376,7 +1377,8 @@
                 "notEnoughCreditErrorMsg": "Ikke nok kredit tilgængelig.",
                 "walletNotFoundErrorMsg": "Pung ikke fundet.",
                 "notEnoughBalanceErrorMsg": "Ikke nok saldo tilgængelig.",
-                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden understøttes ikke."
+                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden understøttes ikke.",
+                "paymentAmountRequiredErrorMsg": "Betalingsbeløb er påkrævet."
             },
             "password": {
                 "passwordValidationMsg": "Adgangskode skal have mindst 8 tegn og mindst 1 stort bogstav.",

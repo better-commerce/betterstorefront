@@ -24,53 +24,79 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
         setInputValue(partialAmount === 0 ? '0' : partialAmount.toString())
     }, [partialAmount])
 
-    // Only allow digits, one dot, and control keys
-    const handlePartialKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const { key, currentTarget } = e
+    // Only allow digits, one dot, at most two decimals, and control keys
+    const handlePartialKeyDown = (e: React.KeyboardEvent<HTMLInputElement> | any) => {
+        const { key, currentTarget, ctrlKey, metaKey, selectionStart } = e;
 
-        if (e.ctrlKey || e.metaKey) return               // allow copy/paste etc.
-        if (['ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Tab'].includes(key)) return
+        // allow copy/paste, navigation, deletion, etc.
+        if (ctrlKey || metaKey) return;
+        if (['ArrowLeft', 'ArrowRight', 'Backspace', 'Delete', 'Tab'].includes(key))
+            return;
 
-        // Allow only one decimal point
-        if (key === '.' && currentTarget.value.includes('.')) {
-            e.preventDefault()
-            return
+        const value = currentTarget.value;
+        const dotIndex = value.indexOf('.');
+
+        // Only one decimal point
+        if (key === '.' && dotIndex !== -1) {
+            e.preventDefault();
+            return;
         }
 
-        // allow digits or one separator
+        // If typing a digit after the decimal, ensure no more than 2 decimals
+        if (/^[0-9]$/.test(key) && dotIndex >= 0 && typeof selectionStart === 'number') {
+            const decimalsCount = value.length - dotIndex - 1;
+            // if cursor is to the right of the '.', and already 2 decimals, block
+            if (selectionStart > dotIndex && decimalsCount >= 2) {
+                e.preventDefault();
+                return;
+            }
+        }
+
+        // finally, only allow digits or dot
         if (!/[0-9.]/.test(key)) {
-            e.preventDefault()
+            e.preventDefault();
         }
     }
 
-    // Handle input changes
+    // Handle input changes (paste, drag-drop, autocomplete, etc.)
     const handlePartialChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let val = e.target.value
+        let val = e.target.value;
 
-        // Handle leading decimal point
+        // If user just types ".", turn it into "0."
         if (val === '.') {
-            setInputValue('0.')
-            setPartialAmount(0)
-            return
-        }
-        
-        // Handle negative sign cases
-        if (val.startsWith('-')) {
-            val = val.substring(1)
+            setInputValue('0.');
+            setPartialAmount(0);
+            return;
         }
 
-        // Allow only valid number patterns
-        if (val === '' || /^[0-9]*\.?[0-9]*$/.test(val)) {
-            setInputValue(val)
-            
-            // Convert to number only if valid
+        // Strip any minus sign (we don't allow negs)
+        if (val.startsWith('-')) {
+            val = val.slice(1);
+        }
+
+        // Only allow up to two decimal places
+        // Acceptable patterns:
+        //   ""               (empty)
+        //   "123"            (integer)
+        //   "123."           (with dot, no decimals yet)
+        //   "123.4"          (one decimal)
+        //   "123.45"         (two decimals)
+        //   ".4"             (treated below as 0.4)
+        const partialPattern = /^(?:[0-9]+(?:\.[0-9]{0,2})?|\.[0-9]{0,2})$/;
+
+        if (val === '' || partialPattern.test(val)) {
+            setInputValue(val);
+
+            // update numeric value
             if (val === '' || val === '.') {
-                setPartialAmount(0)
+                setPartialAmount(0);
             } else {
-                setPartialAmount(parseFloat(val))
+                // leading "." → parseFloat handles it as 0.x
+                setPartialAmount(parseFloat(val));
             }
         }
     }
+
 
     useEffect(() => {
         if (partialAmount === payableAmount) {

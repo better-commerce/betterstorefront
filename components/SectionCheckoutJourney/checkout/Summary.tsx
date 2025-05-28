@@ -129,7 +129,7 @@ const Summary = ({
           {basket?.isPartialPayment && (
             <div className="flex items-center justify-between pt-2 sm:pt-1 ">
               <dt className="flex items-center text-green-600 font-14">
-                <span>Paid</span>
+                <span>{translate('label.orderSummary.paidText')}</span>
               </dt>
               <dd className="font-semibold text-green-600 text-md">
                 {`${basket?.currencySymbol}${basket?.paidAmount}`}

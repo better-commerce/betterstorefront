@@ -734,12 +734,12 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           </div>
                         )}
                         <div className="flex justify-between py-2 text-sm text-gray-900">
-                          <p className='text-sm'>{translate('label.orderSummary.taxText')}</p>
+                          <p className='text-sm'>translate('label.orderSummary.taxText')</p>
                           <p className='text-sm'>{cartItems.grandTotal?.formatted?.tax}</p>
                         </div>
                         {cartItems?.isPartialPayment && (
                           <div className="flex justify-between py-2 text-sm text-green-600">
-                            <p className='text-sm'>Paid</p>
+                            <p className='text-sm'>{translate('label.orderSummary.paidText')}</p>
                             <p className='text-sm'>{`${cartItems?.currencySymbol}${cartItems.paidAmount}`}</p>
                           </div>
                         )}

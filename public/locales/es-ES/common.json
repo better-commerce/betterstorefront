@@ -598,6 +598,7 @@
       "freeText": "Gratis",
       "additionalChargesText": "Cargos Adicionales",
       "taxText": "Impuesto",
+      "paidText": "Pagado",
       "youPayText": "Tú Pagas",
       "placeOrderBtnText": "Realizar Pedido",
       "loseDeliveryText": "¡Estás a punto de perder la Entrega Gratuita!",
@@ -1375,7 +1376,8 @@
         "notEnoughCreditErrorMsg": "No hay suficiente crédito disponible.",
         "walletNotFoundErrorMsg": "Cartera no encontrada.",
         "notEnoughBalanceErrorMsg": "Saldo insuficiente disponible.",
-        "paymentMethodNotSupportedErrorMsg": "El método de pago no es compatible."
+        "paymentMethodNotSupportedErrorMsg": "El método de pago no es compatible.",
+        "paymentAmountRequiredErrorMsg": "Se requiere el importe del pago."
       },
       "password": {
         "passwordValidationMsg": "La contraseña debe tener un mínimo de 8 caracteres y al menos 1 letra mayúscula.",

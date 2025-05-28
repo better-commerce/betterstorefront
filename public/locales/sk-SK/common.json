@@ -599,6 +599,7 @@
             "freeText": "Zdarma",
             "additionalChargesText": "Ďalšie poplatky",
             "taxText": "Daň",
+            "paidText": "Zaplaceno",
             "youPayText": "Zaplatíte",
             "placeOrderBtnText": "Odoslať objednávku",
             "loseDeliveryText": "Práve prichádzate o bezplatné doručenie!",
@@ -1377,7 +1378,8 @@
                 "notEnoughCreditErrorMsg": "Nedostatočný kredit.",
                 "walletNotFoundErrorMsg": "Peňaženka nebola nájdená.",
                 "notEnoughBalanceErrorMsg": "Nedostatočný zostatok.",
-                "paymentMethodNotSupportedErrorMsg": "Platobná metóda nie je podporovaná."
+                "paymentMethodNotSupportedErrorMsg": "Platobná metóda nie je podporovaná.",
+                "paymentAmountRequiredErrorMsg": "Je potrebná suma platby."
             },
             "password": {
                 "passwordValidationMsg": "Heslo by malo mať minimálne 8 znakov a aspoň 1 veľké písmeno.",
