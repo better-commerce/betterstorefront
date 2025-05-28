@@ -936,6 +936,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     generateBasketId,
     goToStep,
     deliveryTypeMethod,
+    featureToggle,
   }
 
   const renderCurrentStep = () => {

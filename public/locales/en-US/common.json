@@ -599,6 +599,7 @@
       "freeText": "Free",
       "additionalChargesText": "Additional charges",
       "taxText": "Tax",
+      "paidText": "Paid",
       "youPayText": "You pay",
       "placeOrderBtnText": "Place Order",
       "loseDeliveryText": "You're about to lose Free Delivery!",
@@ -1377,7 +1378,9 @@
         "notEnoughCreditErrorMsg": "Not enough credit available.",
         "walletNotFoundErrorMsg": "Wallet not found.",
         "notEnoughBalanceErrorMsg": "Not enough balance available.",
-        "paymentMethodNotSupportedErrorMsg": "Payment method is not supported."
+        "paymentMethodNotSupportedErrorMsg": "Payment method is not supported.",
+        "paymentAmountRequiredErrorMsg": "Payment amount is required.",
+        "paymentAmountCannotExceedErrorMsg": "Payment value cannot exceed {currencySymbol}{paymentAmount}."
       },
       "password": {
         "passwordValidationMsg": "Password should have a minimum of 8 characters and at least 1 uppercase letter.",

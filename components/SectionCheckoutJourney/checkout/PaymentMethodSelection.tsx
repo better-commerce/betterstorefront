@@ -5,7 +5,7 @@ import React, { useState, useEffect, useReducer, memo } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import Router from 'next/router'
-import { PaymentMethodType } from 'bc-payments-sdk'
+import { PaymentMethodType, PaymentSelectionType } from 'bc-payments-sdk'
 
 // Component Imports
 import { LoadingDots, useUI } from '@components/ui'
@@ -17,13 +17,7 @@ import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
 import { isClearPayPriceThresholdInvalid } from '@framework/utils/payment-util'
 import { Payments } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
-import {
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  EmptyObject,
-  EmptyString,
-  Messages,
-  NEXT_PAYMENT_METHODS_LIST,
-} from '@components/utils/constants'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY, EmptyObject, EmptyString, Messages, NEXT_PAYMENT_METHODS_LIST, } from '@components/utils/constants'
 import setSessionIdCookie from '@components/utils/setSessionId'
 import cartHandler from '@components/services/cart'
 import { Guid } from '@commerce/types'
@@ -31,6 +25,7 @@ import { decrypt, encrypt } from '@framework/utils/cipher'
 import { useTranslation } from '@commerce/utils/use-translation'
 import SaveB2BQuote from './SaveB2BQuote'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import PaymentTypeSelection from './PaymentTypeSelection'
 
 interface PaymentMethodSelectionProps {
   readonly basket: any
@@ -42,20 +37,10 @@ interface PaymentMethodSelectionProps {
   readonly hideOverlayLoaderState: any
   generateBasketId: any
   onPaymentMethodSelect: (method: any) => void
+  featureToggle: any
 }
 
-const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
-  ({
-    basket,
-    isApplePayScriptLoaded,
-    uiContext,
-    setAlert,
-    selectedDeliveryMethod,
-    onPaymentMethodSelect,
-    setOverlayLoaderState,
-    hideOverlayLoaderState,
-    generateBasketId,
-  }) => {
+const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ basket, isApplePayScriptLoaded, uiContext, setAlert, selectedDeliveryMethod, onPaymentMethodSelect, setOverlayLoaderState, hideOverlayLoaderState, generateBasketId, featureToggle }) => {
     const { recordAnalytics } = useAnalytics()
     const translate = useTranslation()
     const { shippingAddress, billingAddress }: any = basket || EmptyObject
@@ -63,22 +48,18 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
     const window: any = global.window
     const { user, basketId, setBasketId, setOrderId } = useUI()
     const { associateCart } = cartHandler()
-    const [paymentMethods, setPaymentMethods] = useState<
-      Array<any> | undefined
-    >(undefined)
+    const [paymentMethods, setPaymentMethods] = useState<Array<any> | undefined>(undefined)
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<any>()
     const [basketOrderInfo, setBasketOrderInfo] = useState<any>(undefined)
+    const [paymentType, setPaymentType] = useState('full')
+    const [partialAmount, setPartialAmount] = useState(0)
 
     const isBrowser = typeof window !== 'undefined'
     const INITIAL_STATE = {
       error: '',
       orderResponse: EmptyObject,
       showStripe: false,
-      isPaymentIntent: isBrowser
-        ? new URLSearchParams(window.location.search).get(
-          'payment_intent_client_secret'
-        )
-        : null,
+      isPaymentIntent: isBrowser ? new URLSearchParams(window.location.search).get( 'payment_intent_client_secret' ) : null,
       isPaymentWidgetActive: false,
     }
 
@@ -101,24 +82,15 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
     ) {
       switch (type) {
         case 'SET_ERROR': {
-          return {
-            ...state,
-            error: payload,
-          }
+          return { ...state, error: payload, }
         }
 
         case 'SET_ORDER_RESPONSE': {
-          return {
-            ...state,
-            orderResponse: payload,
-          }
+          return { ...state, orderResponse: payload, }
         }
 
         case 'TRIGGER_STRIPE': {
-          return {
-            ...state,
-            showStripe: payload,
-          }
+          return { ...state, showStripe: payload, }
         }
         default: {
           return state
@@ -131,13 +103,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
       const { data: response }: any = await axios.post(
         NEXT_PAYMENT_METHODS_LIST,
         encrypt(
-          JSON.stringify({
-            currencyCode: basket?.baseCurrency,
-            countryCode:
-              selectedAddress?.billingAddress?.countryCode ||
-              BETTERCOMMERCE_DEFAULT_COUNTRY,
-            basketId: basket?.id != Guid.empty ? basket?.id : basketId,
-          })
+          JSON.stringify({ currencyCode: basket?.baseCurrency, countryCode: selectedAddress?.billingAddress?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY, basketId: basket?.id != Guid.empty ? basket?.id : basketId, })
         )
       )
       const paymentMethods: any = tryParseJson(decrypt(response))
@@ -152,15 +118,10 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
      */
     const getMethods = (methods: Array<any>) => {
       return methods
-        ?.filter((x: any) =>
-          matchStrings(x?.systemName, PaymentMethodType.CHECKOUT, true)
-        )
+        ?.filter((x: any) => matchStrings(x?.systemName, PaymentMethodType.CHECKOUT, true))
         .concat(
           methods?.filter((x: any) => {
-            if (
-              matchStrings(x?.systemName, PaymentMethodType.CLEAR_PAY, true) &&
-              isClearPayPriceThresholdInvalid(basket?.grandTotal?.raw?.withTax)
-            ) {
+            if (matchStrings(x?.systemName, PaymentMethodType.CLEAR_PAY, true) && isClearPayPriceThresholdInvalid(basket?.grandTotal?.raw?.withTax)) {
               return
             }
             if (!matchStrings(x?.systemName, PaymentMethodType.CHECKOUT, true))
@@ -169,21 +130,15 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
         )
     }
 
-    const showPaymentOption = (method: any): boolean => {
-      if (
-        matchStrings(
-          method?.systemName,
-          PaymentMethodType.CHECKOUT_APPLE_PAY,
-          true
-        )
-      ) {
-        //return isApplePayScriptLoaded
-        return (
-          window?.ApplePaySession !== undefined &&
-          window?.ApplePaySession?.canMakePaymentsWithActiveCard(
-            Payments.APPLE_PAY_MERCHANT_ID
-          )
-        )
+    const showPaymentOption = (method: any, basket: any): boolean => {
+      if (basket?.isPartialPayment) {
+        if (matchStrings(method?.systemName, PaymentMethodType.WALLET, true)) {
+          return true
+        }
+        return false
+      } else if (matchStrings( method?.systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true)) {
+          //return isApplePayScriptLoaded
+          return (window?.ApplePaySession !== undefined && window?.ApplePaySession?.canMakePaymentsWithActiveCard( Payments.APPLE_PAY_MERCHANT_ID ))
       }
       return true
     }
@@ -236,15 +191,11 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
               ?.countryCode /*|| state.deliveryMethod.twoLetterIsoCode*/,
         },
         //selectedShipping: state.shippingMethod,
-        selectedShipping: basket?.shippingMethods?.find(
-          (x: any) => x?.id === basket?.shippingMethodId
-        ),
+        selectedShipping: basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId),
         selectedPayment: paymentMethod,
         storeId: EmptyString, //state.storeId,
 
-        Payment: {
-          orderAmount: basket?.grandTotal?.raw?.withTax,
-        },
+        Payment: { orderAmount: basket?.grandTotal?.raw?.withTax, },
       }
       /*const billingAddrId = await lookupAddressId(paymentOrderInfo.billingAddress)
     paymentOrderInfo.billingAddress.id = billingAddrId
@@ -274,16 +225,12 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
         const paymentMethods: any = await loadPaymentMethods()
 
         if (paymentMethods?.length) {
-          const defaultSelectedPaymentMethod = paymentMethods?.find(
-            (x: any) => x.isDefault
-          )
+          const defaultSelectedPaymentMethod = paymentMethods?.find((x: any) => x.isDefault)
           if (!defaultSelectedPaymentMethod) {
             const paymentMethod = getMethods(paymentMethods)[0]
             if (paymentMethod?.id) {
               setTimeout(() => {
-                const chk: any = document.querySelector(
-                  `input.pnl${paymentMethod?.systemName}`
-                )
+                const chk: any = document.querySelector(`input.pnl${paymentMethod?.systemName}`)
                 if (chk) {
                   chk.checked = true
                 }
@@ -293,9 +240,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
           } else {
             if (defaultSelectedPaymentMethod?.id) {
               setTimeout(() => {
-                const chk: any = document.querySelector(
-                  `input.pnl${defaultSelectedPaymentMethod?.systemName}`
-                )
+                const chk: any = document.querySelector(`input.pnl${defaultSelectedPaymentMethod?.systemName}`)
                 if (chk) {
                   chk.checked = true
                 }
@@ -314,13 +259,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
       }
     }, [selectedPaymentMethod])
 
-    const contactDetails: any = {
-      userId: user?.userId,
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      emailAddress: user?.email,
-      phoneNumber: user?.mobile || user?.telephone,
-    }
+    const contactDetails: any = { userId: user?.userId, firstName: user?.firstName, lastName: user?.lastName, emailAddress: user?.email, phoneNumber: user?.mobile || user?.telephone, }
 
     return paymentMethods ? (
       <>
@@ -336,54 +275,23 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                 >
                   {getMethods(paymentMethods)?.map((item: any, idx: number) => (
                     <>
-                      {showPaymentOption(item) && (
-                        <div
-                          key={idx}
-                          id={`pnl${item?.systemName}`}
-                          onClick={() => handleMethodSelection(item)}
-                          className={`${selectedPaymentMethod?.id === item?.id ? '' : ''
-                            }  pointer mb-0 flex justify-start flex-row`}
-                        >
+                      {showPaymentOption(item, basket) && (
+                        <div key={idx} id={`pnl${item?.systemName}`} onClick={() => handleMethodSelection(item)} className={`${selectedPaymentMethod?.id === item?.id ? '' : '' }  pointer mb-0 flex justify-start flex-row`} >
                           <div className="w-full mb-0">
                             <label className="custom-radio">
-                              <input
-                                className={`pnl${item?.systemName}`}
-                                id="debit"
-                                type="radio"
-                                name="payment"
-                                value=""
-                                defaultChecked={
-                                  selectedPaymentMethod?.id === item?.id
-                                }
-                              />
+                              <input className={`pnl${item?.systemName}`} id="debit" type="radio" name="payment" value="" defaultChecked={ selectedPaymentMethod?.id === item?.id } />
                               <div
                                 className={`items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}
                               >
                                 <div className="flex items-center justify-center text-span">
-                                  <i
-                                    className={`sprite-icons ${spriteIcon(
-                                      item?.systemName
-                                    )}`.trim()}
-                                  ></i>
-                                  {matchStrings(
-                                    item?.systemName,
-                                    PaymentMethodType.KLARNA,
-                                    true
-                                  ) ? (
+                                  <i className={`sprite-icons ${spriteIcon( item?.systemName )}`.trim()} ></i>
+                                  {matchStrings( item?.systemName, PaymentMethodType.KLARNA, true ) ? (
                                     <>
                                       <i className="sprite-icons"></i>
                                     </>
-                                  ) : matchStrings(
-                                    item?.systemName,
-                                    PaymentMethodType.COD,
-                                    true
-                                  ) ? (
+                                  ) : matchStrings(item?.systemName, PaymentMethodType.COD, true) ? (
                                     <i className="sprite-icons"></i>
-                                  ) : matchStrings(
-                                    item?.systemName,
-                                    PaymentMethodType.ACCOUNT_CREDIT,
-                                    true
-                                  ) ? (
+                                  ) : matchStrings(item?.systemName, PaymentMethodType.ACCOUNT_CREDIT, true) ? (
                                     <>
                                       <i className="sprite-icons icon-btn-accountcredit"></i>
                                       <span className="pl-2 capitalize font-12 dark:text-black">
@@ -391,11 +299,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                                         <span className="block">{translate('label.checkout.creditText')}</span>
                                       </span>
                                     </>
-                                  ) : matchStrings(
-                                    item?.systemName,
-                                    PaymentMethodType.CHEQUE,
-                                    true
-                                  ) ? (
+                                  ) : matchStrings(item?.systemName, PaymentMethodType.CHEQUE, true) ? (
                                     <>
                                       <i className="sprite-icons icon-btn-cheque"></i>
                                       <span className="pl-2 capitalize font-12 dark:text-black">
@@ -403,11 +307,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                                       </span>
                                     </>
                                   ) : (
-                                    matchStrings(
-                                      item?.systemName,
-                                      PaymentMethodType.CHECKOUT,
-                                      true
-                                    ) && (
+                                    matchStrings(item?.systemName, PaymentMethodType.CHECKOUT, true) && (
                                       <>
                                         <span className="pl-2 capitalize font-12 dark:text-black">
                                           {translate('label.checkout.debitCreditText')}{' '}
@@ -429,27 +329,18 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
             </div>
             <div>
               {selectedPaymentMethod?.id && basketOrderInfo && (
-                <>
+                <div className="flex flex-col w-full py-5 px-5 space-y-4">
+
+                  {/* Enable partial payment for Wallet only */}
+                  {featureToggle?.features?.enableSplitPayment && [PaymentMethodType.WALLET].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
+                    <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} />
+                  )}
+
                   <div className="flex flex-col justify-center chk-payment-btn w-full gap-2 pb-5 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
-                    <PaymentButton
-                      translate={translate}
-                      btnTitle={translate('common.label.confirmText')}
-                      paymentMethod={selectedPaymentMethod}
-                      basketOrderInfo={basketOrderInfo}
-                      uiContext={uiContext}
-                      dispatchState={dispatch}
-                      contactDetails={contactDetails}
-                      isApplePayScriptLoaded={isApplePayScriptLoaded}
-                      onScrollToSection={() => { }}
-                      recordAnalytics={recordAnalytics}
-                    />
+                    <PaymentButton translate={translate} btnTitle={translate('common.label.confirmText')} paymentMethod={selectedPaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatch} contactDetails={contactDetails} isApplePayScriptLoaded={isApplePayScriptLoaded} onScrollToSection={() => { }} recordAnalytics={recordAnalytics} paymentType={selectedPaymentMethod?.systemName?.toLowerCase() === PaymentMethodType.COD ? PaymentSelectionType.FULL : paymentType} partialAmount={partialAmount ? partialAmount : 0} />
                     {(state?.isPaymentWidgetActive ||
                       !!state?.isPaymentIntent) && (
-                        <PaymentWidget
-                          paymentMethod={selectedPaymentMethod}
-                          checkoutCallback={checkoutCallback}
-                          orderModelResponse={state?.orderResponse}
-                        />
+                        <PaymentWidget paymentMethod={selectedPaymentMethod} checkoutCallback={checkoutCallback} orderModelResponse={state?.orderResponse} />
                       )}
                     <SaveB2BQuote basket={basket} />
                   </div>
@@ -458,7 +349,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo(
                       {state?.error}
                     </h4>
                   )}
-                </>
+                </div>
               )}
             </div>
           </div>

@@ -12,6 +12,7 @@ import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { getPartialPaymentAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 interface BasketItem {
   id: string
   name: string
@@ -104,6 +105,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
     setBasketPromos(basketPromos)
     return basketPromos
   }
+  const partialPaymentAmount = getPartialPaymentAmount(data?.grandTotal?.raw?.withTax, data?.paidAmount)
 
   return (
     <>
@@ -276,9 +278,25 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         </dd>
                       </div>
                     )}
+                    {cartItems?.isPartialPayment && (
+                      <div className="flex items-center justify-between pt-2 sm:pt-1">
+                        <dt className="flex items-center text-black font-18">
+                          <span>{translate('label.orderSummary.paidText')}</span>
+                        </dt>
+                        <dd className="font-semibold text-black text-md">
+                          {`${cartItems?.currencySymbol}${cartItems?.paidAmount}`}
+                        </dd>
+                      </div>
+                    )}
                     <div className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
                       <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
-                      <dd className="text-xl font-bold text-black"> {data?.grandTotal?.formatted?.withTax} </dd>
+                      <dd className="text-xl font-bold text-black">
+                        {data?.isPartialPayment ? (
+                          <>{data?.currencySymbol}{partialPaymentAmount}</>
+                        ) : (
+                          <>{data?.grandTotal?.formatted?.withTax}</>
+                        )}
+                      </dd>
                     </div>
                   </dl>
                 </div>

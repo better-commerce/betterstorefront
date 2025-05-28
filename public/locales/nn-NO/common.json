@@ -599,6 +599,7 @@
             "freeText": "Gratis",
             "additionalChargesText": "Ekstra kostnader",
             "taxText": "Skatt",
+            "paidText": "Betald",
             "youPayText": "Du betaler",
             "placeOrderBtnText": "Plasser ordre",
             "loseDeliveryText": "Du mister gratis frakt!",
@@ -1377,7 +1378,9 @@
                 "notEnoughCreditErrorMsg": "Ikke nok kreditt tilgjengelig.",
                 "walletNotFoundErrorMsg": "Lommebok ikkje funnen.",
                 "notEnoughBalanceErrorMsg": "Ikkje nok saldo tilgjengeleg.",
-                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden støttes ikke."
+                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden støttes ikke.",
+                "paymentAmountRequiredErrorMsg": "Betalingsbeløp er påkrevd.",
+                "paymentAmountCannotExceedErrorMsg": "Betalingsverdien kan ikke overstige {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Passordet må ha minimum 8 tegn og minst 1 stor bokstav.",

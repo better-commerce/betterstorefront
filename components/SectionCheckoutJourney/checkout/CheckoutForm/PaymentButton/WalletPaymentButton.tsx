@@ -1,11 +1,11 @@
 // Component Imports
-import { IPaymentButtonProps } from './BasePaymentButton'
+import { IPartialPaymentProps, IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 import PaymentGatewayNotification from '@components/SectionCheckoutJourney/checkout/PaymentGatewayNotification'
 
 // Other Imports
 import { EmptyString, Messages, NEXT_WALLET_GET_BALANCE, } from '@components/utils/constants'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import { AxiosRequestConfig } from 'axios'
 import { RequestMethod } from 'bc-payments-sdk/dist/constants'
@@ -16,7 +16,7 @@ export class WalletPaymentButton extends BasePaymentButton {
    * CTor
    * @param props
    */
-  constructor(props: IPaymentButtonProps & IDispatchState) {
+  constructor(props: IPaymentButtonProps & IDispatchState & IPartialPaymentProps) {
     super(props)
     this.state = { isPaymentInitiated: false, paymentMethod: super.getPaymentMethod(props?.paymentMethod), walletBalance: 0, orderTotal: props?.basketOrderInfo?.basket?.grandTotal?.raw?.withTax, }
   }
@@ -30,7 +30,20 @@ export class WalletPaymentButton extends BasePaymentButton {
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
     const { translate } = this.props
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
     if (uiContext?.user?.userId) {
+      const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+      if (amountToBePaid <= 0) {
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
+        return
+      }
+
+      const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+      if (validateAmount) {
+        dispatchState({ type: 'SET_ERROR', payload: stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount }), })
+        return
+      }
+
       const userId = uiContext?.user?.userId
       uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.validatingAccountText'), })
       const walletId = uiContext?.user?.walletId
@@ -38,12 +51,11 @@ export class WalletPaymentButton extends BasePaymentButton {
         const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_BALANCE, method: RequestMethod.POST, data: { walletId }, }
         const { data, error }: any = await callApi(config)
         const walletBalance = data?.data?.balance
-        
-        if (basketOrderInfo?.basket?.grandTotal?.raw?.withTax <= walletBalance) {
+        if (amountToBePaid <= walletBalance) {
 
           uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
           
-          const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState, true)
+          const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState, false)
           if (orderResult?.success && orderResult?.result?.id) {
             uiContext?.hideOverlayLoaderState()
 
@@ -126,7 +138,7 @@ export class WalletPaymentButton extends BasePaymentButton {
         </div>
 
         {this.state.isPaymentInitiated && (
-          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} />
+          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} paymentType={this.props?.paymentType} partialAmount={(this.props?.partialAmount || 0)} />
         )}
       </>
     )

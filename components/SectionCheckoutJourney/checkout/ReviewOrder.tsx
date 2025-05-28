@@ -42,6 +42,7 @@ interface ReviewOrderProps {
   readonly generateBasketId: any
   goToStep: (step: string) => void
   deliveryTypeMethod: any
+  featureToggle: any
 }
 
 const ReviewOrder: React.FC<ReviewOrderProps> = ({
@@ -58,6 +59,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
   onEditAddressToggleView,
   goToStep,
   deliveryTypeMethod,
+  featureToggle,
 }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
@@ -201,6 +203,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
         hideOverlayLoaderState={hideOverlayLoaderState}
         generateBasketId={generateBasketId}
         onPaymentMethodSelect={onPaymentMethodSelect}
+        featureToggle={featureToggle}
       />
       {/*<button className='w-full mb-4 border border-black sm:mt-4 btn-primary-green' onClick={onPlaceOrder}>Place Order</button>*/}
     </>

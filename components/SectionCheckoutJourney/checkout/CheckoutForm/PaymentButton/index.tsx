@@ -7,7 +7,7 @@ import { PaymentMethodType } from 'bc-payments-sdk'
 // Component Imports
 import CODPaymentButton from './CODPaymentButton'
 import PayPalPaymentButton from './PayPalPaymentButton'
-import { IApplePaymentProps, IDispatchState, IPaymentButtonProps } from './BasePaymentButton'
+import { IApplePaymentProps, IDispatchState, IPartialPaymentProps, IPaymentButtonProps } from './BasePaymentButton'
 import { MasterCardPaymentButton } from './MasterCardPaymentButton'
 import CheckoutPaymentButton from './CheckoutPaymentButton'
 import StripePaymentButton from './StripePaymentButton'
@@ -27,7 +27,7 @@ import { Guid } from '@commerce/types'
  * @param props
  * @returns
  */
-const PaymentButton = (props: IPaymentButtonProps & IDispatchState & IApplePaymentProps) => {
+const PaymentButton = (props: IPaymentButtonProps & IDispatchState & IApplePaymentProps & IPartialPaymentProps) => {
   const { paymentMethod, scrollToBottomEnabled = true, onScrollToSection, uiContext } = props
   const { user } = uiContext
 

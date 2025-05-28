@@ -598,6 +598,7 @@
             "freeText": "Gratis",
             "additionalChargesText": "Extra kosten",
             "taxText": "Belasting",
+            "paidText": "Betaald",
             "youPayText": "Je betaalt",
             "placeOrderBtnText": "Bestelling Plaatsen",
             "loseDeliveryText": "Je staat op het punt Gratis Verzending te verliezen!",
@@ -1366,7 +1367,9 @@
                 "notEnoughCreditErrorMsg": "Niet genoeg tegoed beschikbaar.",
                 "walletNotFoundErrorMsg": "Portemonnee niet gevonden.",
                 "notEnoughBalanceErrorMsg": "Onvoldoende saldo beschikbaar.",
-                "paymentMethodNotSupportedErrorMsg": "Betalingsmethode wordt niet ondersteund."
+                "paymentMethodNotSupportedErrorMsg": "Betalingsmethode wordt niet ondersteund.",
+                "paymentAmountRequiredErrorMsg": "Betalingsbedrag is vereist.",
+                "paymentAmountCannotExceedErrorMsg": "Betalingswaarde mag niet hoger zijn dan {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Wachtwoord moet minimaal 8 tekens bevatten en ten minste 1 hoofdletter.",

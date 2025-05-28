@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 // Package Imports
 import Cookies from 'js-cookie'
 import Router from 'next/router'
+import { PaymentSelectionType } from 'bc-payments-sdk'
 
 // Other Imports
 import cartHandler from '@components/services/cart'
@@ -16,16 +17,33 @@ import { Cookie } from '@framework/utils/constants'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { EmptyString } from '@components/utils/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { IPartialPaymentProps } from '../CheckoutForm/PaymentButton/BasePaymentButton'
+import { decrypt } from '@framework/utils/cipher'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
 
-const PaymentGatewayNotification = (props: IGatewayPageProps) => {
+const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentProps) => {
   const { recordAnalytics } = useAnalytics()
   const orderInfo = getOrderInfo()
   const { associateCart } = cartHandler()
-  const { gateway, params, isCancelled, isCOD = false, config } = props
+  const { gateway, params, isCancelled, isCOD = false, config, paymentType = PaymentSelectionType.FULL, partialAmount = 0 } = props
   const { user, setCartItems, basketId, cartItems, setOrderId, orderId: uiOrderId, setBasketId, } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
+
+  const getCookies = (): Record<string, string> => {
+    return document.cookie.split('; ').filter(Boolean)
+      .reduce<Record<string, string>>((acc, cookieStr) => {
+        const [name, ...rest] = cookieStr.split('=')
+        // decode in case the value was URL-encoded
+
+        if (name === Cookie.Key.USER_TOKEN)
+          acc[decodeURIComponent(name)] = decrypt(decodeURIComponent(rest.join('=')))
+        else
+          acc[decodeURIComponent(name)] = decodeURIComponent(rest.join('='));
+        return acc
+      }, {})
+  }
+
 
   /**
    * Update order status.
@@ -38,7 +56,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
     let bankOfferDetails:
       | { voucherCode: string; offerCode: string; value: string; status: string; discountedTotal: number; }
       | undefined
-    const extras = { ...params, gateway: gateway, isCancelled: isCancelled, }
+      const extras = { ...params, gateway, isCancelled, paymentType, partialAmount, cookies: getCookies(), } // Pass paymentType & partialAmount information
 
     const paymentResponseRequest: any /*IPaymentProcessingData*/ = {
       isCOD: isCOD,
@@ -73,12 +91,10 @@ const PaymentGatewayNotification = (props: IGatewayPageProps) => {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     setTimeout(() => {
       asyncHandler(gateway, params, isCancelled)
     }, 500)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

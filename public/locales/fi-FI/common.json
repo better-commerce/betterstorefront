@@ -599,6 +599,7 @@
             "freeText": "Ilmainen",
             "additionalChargesText": "Lisämaksut",
             "taxText": "Vero",
+            "paidText": "Maksettu",
             "youPayText": "Maksettava",
             "placeOrderBtnText": "Tee tilaus",
             "loseDeliveryText": "Olet menettämässä ilmaisen toimituksen!",
@@ -1369,7 +1370,9 @@
                 "notEnoughCreditErrorMsg": "Ei tarpeeksi luottoa käytettävissä.",
                 "walletNotFoundErrorMsg": "Lompakkoa ei löytynyt.",
                 "notEnoughBalanceErrorMsg": "Riittämätön saldo käytettävissä.",
-                "paymentMethodNotSupportedErrorMsg": "Maksutapaa ei tueta."
+                "paymentMethodNotSupportedErrorMsg": "Maksutapaa ei tueta.",
+                "paymentAmountRequiredErrorMsg": "Maksun määrä on pakollinen.",
+                "paymentAmountCannotExceedErrorMsg": "Maksun arvo ei voi ylittää {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Salasanassa tulee olla vähintään 8 merkkiä ja ainakin 1 iso kirjain.",

@@ -9,13 +9,11 @@ import DefaultButton from '@components/ui/IndigoButton'
 
 // Other Imports
 import { convertOrder } from '@framework/utils/payment-util'
-import {
-  LocalStorage,
-} from '@components/utils/payment-constants'
+import { LocalStorage, } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo, parsePaymentMethods } from '@framework/utils/app-util'
 import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
-import { IPaymentInfo, PaymentStatus } from 'bc-payments-sdk'
+import { IPaymentInfo, PaymentSelectionType, PaymentStatus } from 'bc-payments-sdk'
 import { AnalyticsEventType } from '@components/services/analytics'
 
 export interface IPaymentButtonProps {
@@ -39,6 +37,11 @@ export interface IApplePaymentProps {
   onApplePayScriptLoaded?: any
 }
 
+export interface IPartialPaymentProps {
+  readonly paymentType?: string
+  readonly partialAmount?: number
+}
+
 export interface IAgeVerifyProps {
   readonly isAgeVerified: boolean
   onVerifyAge: any
@@ -57,7 +60,7 @@ interface IPaymentButton {
  * Abstract factory component for <PaymentButton>
  */
 export default abstract class BasePaymentButton
-  extends React.Component<IPaymentButtonProps & IApplePaymentProps & IDispatchState, any>
+  extends React.Component<IPaymentButtonProps & IApplePaymentProps & IPartialPaymentProps & IDispatchState, any>
   implements IPaymentButton {
   /**
    * Executes create order on CommerceHub for generic payment methods on storefront.
@@ -66,19 +69,10 @@ export default abstract class BasePaymentButton
    * @param dispatchState {Function} Method for dispatching state changes.
    * @returns { status: boolean, state: any, result?: any }
    */
-  public async confirmOrder(
-    paymentMethod: any,
-    data: any,
-    uiContext: any,
-    dispatchState: Function,
-    isCOD: boolean = false,
-    paymentInfo?: IPaymentInfo
-  ): Promise<{ status: boolean; state: any; result?: any }> {
+  public async confirmOrder(paymentMethod: any, data: any, uiContext: any, dispatchState: Function, isCOD: boolean = false, paymentInfo?: IPaymentInfo): Promise<{ status: boolean; state: any; result?: any }> {
     const { translate } = this.props
     try {
-      let convertOrderInput: any = !isCOD
-        ? this.getNonCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo)
-        : this.getCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo)
+      let convertOrderInput: any = !isCOD ? this.getNonCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo) : this.getCODConvertOrderPayload(paymentMethod, data, uiContext, paymentInfo)
       if (convertOrderInput?.basket) {
         convertOrderInput.basket = null
       }
@@ -86,79 +80,44 @@ export default abstract class BasePaymentButton
       if (orderResult?.message || orderResult?.errors?.length) {
         let errorResult
         if (orderResult?.errors?.length) {
-          errorResult = {
-            status: false,
-            state: { type: 'SET_ERROR', payload: orderResult?.errors[0] },
-            result: null,
-          }
+          errorResult = { status: false, state: { type: 'SET_ERROR', payload: orderResult?.errors[0] }, result: null, }
         } else {
           if (orderResult?.message === 'YourBag.Links.EmptyBag') {
-            errorResult = {
-              status: false,
-              state: {
-                type: 'SET_ERROR',
-                payload: translate('common.message.checkout.paymentAlreadyCompletedErrorMsg'),
-              },
-              result: null,
-            }
+            errorResult = { status: false, state: { type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAlreadyCompletedErrorMsg'), }, result: null, }
           } else {
-            errorResult = {
-              status: false,
-              state: { type: 'SET_ERROR', payload: orderResult?.message },
-              result: null,
-            }
+            errorResult = { status: false, state: { type: 'SET_ERROR', payload: orderResult?.message }, result: null, }
           }
         }
         return errorResult
       } else if (orderResult?.result?.id) {
-        dispatchState({
-          type: 'SET_ORDER_RESPONSE',
-          payload: orderResult?.result,
-        })
-        localStorage.setItem(
-          LocalStorage.Key.ORDER_RESPONSE,
-          JSON.stringify({
-            ...orderResult?.result,
-            ...{ basketId: data?.basketId },
-          })
-        )
+        dispatchState({ type: 'SET_ORDER_RESPONSE', payload: orderResult?.result, })
+        localStorage.setItem(LocalStorage.Key.ORDER_RESPONSE, JSON.stringify({ ...orderResult?.result, ...{ basketId: data?.basketId }, }))
 
+        const partialAmount = this.props?.partialAmount || 0
+        const orderAmount = orderResult?.result?.grandTotal?.raw?.withTax
+        const amountToBePaid = this.isFullPayment() ? orderAmount : partialAmount
         const orderModel = {
           ...convertOrderInput?.payment,
           id: orderResult?.result?.payment?.id,
           orderNo: orderResult?.result?.orderNo,
-          orderAmount: orderResult?.result?.grandTotal?.raw?.withTax,
-          paidAmount: orderResult?.result?.grandTotal?.raw?.withTax,
-          balanceAmount: '0.00',
+          orderAmount,
+          paidAmount: amountToBePaid,
+          balanceAmount: (partialAmount > 0) ? (orderAmount - partialAmount) : 0,
           isValid: true,
           paymentGatewayId: paymentMethod?.id,
           paymentGateway: paymentMethod?.systemName,
           paymentMethod: paymentMethod?.systemName,
           selectedPayment: paymentMethod,
         }
-        localStorage.setItem(
-          LocalStorage.Key.ORDER_PAYMENT,
-          JSON.stringify(orderModel)
-        )
+        localStorage.setItem(LocalStorage.Key.ORDER_PAYMENT, JSON.stringify(orderModel))
 
-        return {
-          status: true,
-          state: { type: 'TRIGGER_PAYMENT_WIDGET', payload: true },
-          result: orderResult,
-        }
+        return { status: true, state: { type: 'TRIGGER_PAYMENT_WIDGET', payload: true }, result: orderResult, }
       } else {
-        return {
-          status: false,
-          state: { type: 'SET_ERROR', payload: orderResult?.message },
-          result: orderResult,
-        }
+        return { status: false, state: { type: 'SET_ERROR', payload: orderResult?.message }, result: orderResult, }
       }
     } catch (error) {
       console.log(error)
-      return {
-        status: false,
-        state: null,
-      }
+      return { status: false, state: null, }
     }
   }
 
@@ -175,18 +134,7 @@ export default abstract class BasePaymentButton
    * @param param0 {IPaymentButtonProps & IDispatchState}
    * @returns {React.JSX.Element}
    */
-  public baseRender({
-    btnTitle,
-    paymentMethod,
-    basketOrderInfo,
-    uiContext,
-    dispatchState,
-    onPay,
-    disabled,
-    stripe = null,
-    stripeElements = null,
-    formId = null,
-  }: any) {
+  public baseRender({ btnTitle, paymentMethod, basketOrderInfo, uiContext, dispatchState, onPay, disabled, stripe = null, stripeElements = null, formId = null, }: any) {
     return (
       <DefaultButton
         // For the scenario where formId is provided, buttonType will be overridden to "submit"
@@ -219,66 +167,34 @@ export default abstract class BasePaymentButton
 
     let info: any = {}
     if (paymentInfo?.paymentInfo1) {
-      info = {
-        ...info,
-        paymentInfo1: paymentInfo?.paymentInfo1,
-      }
+      info = { ...info, paymentInfo1: paymentInfo?.paymentInfo1, }
     }
     if (paymentInfo?.paymentInfo2) {
-      info = {
-        ...info,
-        paymentInfo2: paymentInfo?.paymentInfo2,
-      }
+      info = { ...info, paymentInfo2: paymentInfo?.paymentInfo2, }
     }
     if (paymentInfo?.paymentInfo3) {
-      info = {
-        ...info,
-        paymentInfo3: paymentInfo?.paymentInfo3,
-      }
+      info = { ...info, paymentInfo3: paymentInfo?.paymentInfo3, }
     }
     if (paymentInfo?.paymentInfo4) {
-      info = {
-        ...info,
-        paymentInfo4: paymentInfo?.paymentInfo4,
-      }
+      info = { ...info, paymentInfo4: paymentInfo?.paymentInfo4, }
     }
     if (paymentInfo?.paymentInfo5) {
-      info = {
-        ...info,
-        paymentInfo5: paymentInfo?.paymentInfo5,
-      }
+      info = { ...info, paymentInfo5: paymentInfo?.paymentInfo5, }
     }
     if (paymentInfo?.paymentInfo6) {
-      info = {
-        ...info,
-        paymentInfo6: paymentInfo?.paymentInfo6,
-      }
+      info = { ...info, paymentInfo6: paymentInfo?.paymentInfo6, }
     }
     if (paymentInfo?.paymentInfo7) {
-      info = {
-        ...info,
-        paymentInfo7: paymentInfo?.paymentInfo7,
-      }
+      info = { ...info, paymentInfo7: paymentInfo?.paymentInfo7, }
     }
     if (paymentInfo?.paymentInfo8) {
-      info = {
-        ...info,
-        paymentInfo8: paymentInfo?.paymentInfo8,
-      }
+      info = { ...info, paymentInfo8: paymentInfo?.paymentInfo8, }
     }
     return info
   }
 
-  protected getCODConvertOrderPayload(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    paymentInfo?: IPaymentInfo
-  ) {
-    let additionalServiceCharge =
-      paymentMethod?.settings?.find((x: any) =>
-        matchStrings(x?.key, 'AdditionalServiceCharge', true)
-      )?.value || '0'
+  protected getCODConvertOrderPayload(paymentMethod: any, basketOrderInfo: any, uiContext: any, paymentInfo?: IPaymentInfo) {
+    let additionalServiceCharge = paymentMethod?.settings?.find((x: any) => matchStrings(x?.key, 'AdditionalServiceCharge', true))?.value || '0'
     if (basketOrderInfo) {
       basketOrderInfo = {
         ...basketOrderInfo,
@@ -286,10 +202,7 @@ export default abstract class BasePaymentButton
         ...{
           basket: {
             ...basketOrderInfo?.basket,
-            ...{
-              userId: uiContext?.user?.userId || EmptyString,
-              userEmail: uiContext?.user?.email || EmptyString,
-            },
+            ...{ userId: uiContext?.user?.userId || EmptyString, userEmail: uiContext?.user?.email || EmptyString, },
           },
         },
         ...{
@@ -344,16 +257,11 @@ export default abstract class BasePaymentButton
     return null
   }
 
-  protected getNonCODConvertOrderPayload(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    paymentInfo?: IPaymentInfo
-  ) {
-    let additionalServiceCharge =
-      paymentMethod?.settings?.find((x: any) =>
-        matchStrings(x?.key, 'AdditionalServiceCharge', true)
-      )?.value || '0'
+  protected getNonCODConvertOrderPayload(paymentMethod: any, basketOrderInfo: any, uiContext: any, paymentInfo?: IPaymentInfo) {
+    let additionalServiceCharge = paymentMethod?.settings?.find((x: any) => matchStrings(x?.key, 'AdditionalServiceCharge', true))?.value || '0'
+    //const partialAmount = this.props?.partialAmount || 0
+    const orderAmount = basketOrderInfo?.basket?.grandTotal?.raw?.withTax
+    //const amountToBePaid = this.isFullPayment() ? orderAmount : partialAmount
     if (basketOrderInfo) {
       basketOrderInfo = {
         ...basketOrderInfo,
@@ -361,10 +269,7 @@ export default abstract class BasePaymentButton
         ...{
           basket: {
             ...basketOrderInfo?.basket,
-            ...{
-              userId: uiContext?.user?.userId || EmptyString,
-              userEmail: uiContext?.user?.email || EmptyString,
-            },
+            ...{ userId: uiContext?.user?.userId || EmptyString, userEmail: uiContext?.user?.email || EmptyString, },
           },
         },
         ...{
@@ -374,6 +279,7 @@ export default abstract class BasePaymentButton
               id: null,
               cardNo: null,
               orderNo: 0,
+              orderAmount,
               paidAmount: 0.0,
               balanceAmount: 0.0,
               isValid: false,
@@ -423,11 +329,30 @@ export default abstract class BasePaymentButton
 
   protected getPaymentMethodSetting(paymentMethod: any, settingKey: string) {
     if (paymentMethod?.settings?.length) {
-      return (
-        paymentMethod?.settings?.find((x: any) =>
-          matchStrings(x?.key, settingKey, true)
-        )?.value || ''
-      )
+      return (paymentMethod?.settings?.find((x: any) => matchStrings(x?.key, settingKey, true) )?.value || '')
+    }
+    return null
+  }
+
+  protected isFullPayment(): boolean {
+    return (this.props?.paymentType === PaymentSelectionType.FULL)
+  }
+
+  protected isValidPaymentAmount(basketOrderInfo: any, { paymentType, partialAmount }: IPartialPaymentProps): string {
+
+    if (paymentType === PaymentSelectionType.PARTIAL) {
+
+      // If this is the first partial payment, then check if the partial amount is greater than order total
+      if (!basketOrderInfo?.basket?.isPartialPayment) {
+        if (partialAmount > basketOrderInfo?.basket?.grandTotal?.raw?.withTax) {
+          return { msg: 'common.message.checkout.paymentAmountCannotExceedErrorMsg', amount: basketOrderInfo?.basket?.grandTotal?.raw?.withTax }
+        }
+      } else {
+          const amountPayable = (basketOrderInfo?.basket?.grandTotal?.raw?.withTax - basketOrderInfo?.basket?.paidAmount)
+          if (partialAmount > amountPayable) {
+            return { msg: 'common.message.checkout.paymentAmountCannotExceedErrorMsg', amount: amountPayable }
+          }
+        }
     }
     return null
   }

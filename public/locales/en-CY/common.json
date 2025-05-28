@@ -599,6 +599,7 @@
         "freeText": "Δωρεάν",
         "additionalChargesText": "Επιπλέον Χρεώσεις",
         "taxText": "Φόρος",
+        "paidText": "Πληρωμένο",
         "youPayText": "Πληρώνετε",
         "placeOrderBtnText": "Τοποθέτηση Παραγγελίας",
         "loseDeliveryText": "Πρόκειται να χάσετε Δωρεάν Αποστολή!",
@@ -1317,7 +1318,9 @@
                 "notEnoughCreditErrorMsg": "Δεν υπάρχει αρκετή πίστωση.",
                 "walletNotFoundErrorMsg": "Το πορτοφόλι δεν βρέθηκε.",
                 "notEnoughBalanceErrorMsg": "Μη διαθέσιμο επαρκές υπόλοιπο.",
-                "paymentMethodNotSupportedErrorMsg": "Η μέθοδος πληρωμής δεν υποστηρίζεται."
+                "paymentMethodNotSupportedErrorMsg": "Η μέθοδος πληρωμής δεν υποστηρίζεται.",
+                "paymentAmountRequiredErrorMsg": "Απαιτείται ποσό πληρωμής.",
+                "paymentAmountCannotExceedErrorMsg": "Η τιμή πληρωμής δεν μπορεί να υπερβαίνει το {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες και τουλάχιστον 1 κεφαλαίο γράμμα.",

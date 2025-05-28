@@ -599,6 +599,7 @@
             "freeText": "Gratis",
             "additionalChargesText": "Tilläggsavgifter",
             "taxText": "Moms",
+            "paidText": "Betalt",
             "youPayText": "Du betalar",
             "placeOrderBtnText": "Lägg beställning",
             "loseDeliveryText": "Du är på väg att förlora fri leverans!",
@@ -1377,7 +1378,9 @@
                 "notEnoughCreditErrorMsg": "Inte tillräckligt med kredit.",
                 "walletNotFoundErrorMsg": "Plånbok hittades inte.",
                 "notEnoughBalanceErrorMsg": "Inte tillräckligt med saldo tillgängligt.",
-                "paymentMethodNotSupportedErrorMsg": "Betalningsmetoden stöds inte."
+                "paymentMethodNotSupportedErrorMsg": "Betalningsmetoden stöds inte.",
+                "paymentAmountRequiredErrorMsg": "Betalningsbelopp krävs.",
+                "paymentAmountCannotExceedErrorMsg": "Betalningsvärdet får inte överstiga {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Lösenordet måste vara minst 8 tecken långt och innehålla minst 1 versal.",

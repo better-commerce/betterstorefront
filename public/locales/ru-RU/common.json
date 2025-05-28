@@ -599,6 +599,7 @@
             "freeText": "Бесплатно",
             "additionalChargesText": "Дополнительные расходы",
             "taxText": "Налог",
+            "paidText": "Оплачено",
             "youPayText": "Вы платите",
             "placeOrderBtnText": "Оформить заказ",
             "loseDeliveryText": "Вы собираетесь потерять бесплатную доставку!",
@@ -1377,7 +1378,9 @@
                 "notEnoughCreditErrorMsg": "Недостаточно доступного кредита.",
                 "walletNotFoundErrorMsg": "Кошелёк не найден.",
                 "notEnoughBalanceErrorMsg": "Недостаточно средств.",
-                "paymentMethodNotSupportedErrorMsg": "Способ оплаты не поддерживается."
+                "paymentMethodNotSupportedErrorMsg": "Способ оплаты не поддерживается.",
+                "paymentAmountRequiredErrorMsg": "Требуется сумма платежа.",
+                "paymentAmountCannotExceedErrorMsg": "Сумма платежа не может превышать {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Пароль должен содержать минимум 8 символов и хотя бы одну заглавную букву.",
