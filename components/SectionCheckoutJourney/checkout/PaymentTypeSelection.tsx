@@ -124,7 +124,7 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
                         {type.name === PAYMENT_TYPES[0].name && (
                             <>
                                 {basket?.isPartialPayment ? (
-                                    <>{' - '}{`${partialPaymentAmount}`}</>
+                                    <>{' - '}{`${basket?.currencySymbol}${partialPaymentAmount}`}</>
                                 ) : (
                                     <>{' - '}{basket?.grandTotal?.formatted?.withTax}</>
                                 )}
