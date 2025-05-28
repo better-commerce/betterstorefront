@@ -1,3 +1,4 @@
+import { getPartialPaymentAmount } from "@components/cart/CartSidebarView/CartSidebarView"
 import { PaymentSelectionType } from "bc-payments-sdk"
 import { useEffect, useState } from "react"
 
@@ -104,7 +105,7 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
         }
     }, [partialAmount, payableAmount])
 
-    const partialPaymentAmount = Math.round((basket?.grandTotal?.raw?.withTax - basket?.paidAmount) * Math.pow(10, 2)) / Math.pow(10, 2)
+    const partialPaymentAmount = getPartialPaymentAmount(basket?.grandTotal?.raw?.withTax, basket?.paidAmount)
     return (
         <>
             {/* Payment Type Selection */}

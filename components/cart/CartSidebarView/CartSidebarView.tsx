@@ -30,6 +30,10 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { PAGE_TYPES } from '@components/withDataLayer'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
 
+export const getPartialPaymentAmount = (grandTotal: number, paidAmount: number) => {
+  return parseFloat((grandTotal - paidAmount).toFixed(2))
+}
+
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
@@ -481,7 +485,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }
   const isEmpty: boolean = cartItems?.lineItems?.length === 0
   const css = { maxWidth: '100%', height: 'auto' }
-  const partialPaymentAmount = Math.round((cartItems?.grandTotal?.raw?.withTax - cartItems?.paidAmount) * Math.pow(10, 2)) / Math.pow(10, 2)
+  const partialPaymentAmount = getPartialPaymentAmount(cartItems?.grandTotal?.raw?.withTax, cartItems?.paidAmount)
   function handleRedirectToPDP() { }
   return (
     <>

@@ -12,6 +12,7 @@ import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import { useTranslation } from '@commerce/utils/use-translation'
+import { getPartialPaymentAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 interface BasketItem {
   id: string
   name: string
@@ -104,7 +105,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
     setBasketPromos(basketPromos)
     return basketPromos
   }
-  const partialPaymentAmount = Math.round((data?.grandTotal?.raw?.withTax - data?.paidAmount) * Math.pow(10, 2)) / Math.pow(10, 2)
+  const partialPaymentAmount = getPartialPaymentAmount(data?.grandTotal?.raw?.withTax, data?.paidAmount)
 
   return (
     <>
