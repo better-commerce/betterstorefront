@@ -3,29 +3,16 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 
-const Summary = ({
-  basket,
-  groupedPromotions,
-  deviceInfo,
-  basketPromos,
-  getBasketPromos,
-  setBasket = () => { },
-  membership,
-}: any) => {
+const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBasketPromos, setBasket = () => { }, membership, }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
+
+  const partialPaymentAmount = Math.round((basket?.grandTotal?.raw?.withTax - basket?.paidAmount) * Math.pow(10, 2)) / Math.pow(10, 2)
   return (
     <>
       <div className="w-full px-4 sm:px-0">
         <div className="mt-4">
-          <PromotionInput
-            deviceInfo={deviceInfo}
-            basketPromos={basketPromos}
-            items={basket}
-            getBasketPromoses={getBasketPromos}
-            setBasket={setBasket}
-            membership={membership}
-          />
+          <PromotionInput deviceInfo={deviceInfo} basketPromos={basketPromos} items={basket} getBasketPromoses={getBasketPromos} setBasket={setBasket} membership={membership} />
         </div>
         <dl className="space-y-2 sm:space-y-2">
           <div
@@ -142,7 +129,7 @@ const Summary = ({
             {basket?.isPartialPayment ? (
               <span className="flex flex-col"> 
                 <dd className="text-sm text-black line-through">{basket?.grandTotal?.formatted?.withTax}</dd>
-                <dd className="font-bold text-black font-18">{basket?.currencySymbol}{(basket?.grandTotal?.raw?.withTax - basket?.paidAmount)}</dd>
+                <dd className="font-bold text-black font-18">{basket?.currencySymbol}{partialPaymentAmount}</dd>
               </span>
             ) : (
               <dd className="font-bold text-black font-18">{basket?.grandTotal?.formatted?.withTax}</dd>

@@ -481,6 +481,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }
   const isEmpty: boolean = cartItems?.lineItems?.length === 0
   const css = { maxWidth: '100%', height: 'auto' }
+  const partialPaymentAmount = Math.round((cartItems?.grandTotal?.raw?.withTax - cartItems?.paidAmount) * Math.pow(10, 2)) / Math.pow(10, 2)
   function handleRedirectToPDP() { }
   return (
     <>
@@ -748,7 +749,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           {cartItems?.isPartialPayment ? (
                             <span className="flex flex-col">
                               <p className="text-sm text-gray-600 link-button line-through"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
-                              <p className="font-20 link-button"> {' '} {cartItems?.currencySymbol}{(cartItems?.grandTotal?.raw?.withTax - cartItems?.paidAmount)}{' '} </p>
+                              <p className="font-20 link-button"> {' '} {cartItems?.currencySymbol}{partialPaymentAmount}{' '} </p>
                             </span>
                           ) : (
                             <p className="font-20 link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
@@ -767,7 +768,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                         }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
                           <span className='flex flex-col justify-start pl-5 text-left'>
                             {cartItems?.isPartialPayment ? (
-                              <span>{cartItems?.currencySymbol}{(cartItems?.grandTotal?.raw?.withTax - cartItems?.paidAmount)}</span>
+                              <span>{cartItems?.currencySymbol}{partialPaymentAmount}</span>
                             ) : (
                               <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
                             )}

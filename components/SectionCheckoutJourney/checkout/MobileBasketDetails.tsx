@@ -104,6 +104,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
     setBasketPromos(basketPromos)
     return basketPromos
   }
+  const partialPaymentAmount = Math.round((data?.grandTotal?.raw?.withTax - data?.paidAmount) * Math.pow(10, 2)) / Math.pow(10, 2)
 
   return (
     <>
@@ -290,7 +291,7 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                       <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
                       <dd className="text-xl font-bold text-black">
                         {data?.isPartialPayment ? (
-                          <>{data?.currencySymbol}{(data?.grandTotal?.raw?.withTax - data?.paidAmount)}</>
+                          <>{data?.currencySymbol}{partialPaymentAmount}</>
                         ) : (
                           <>{data?.grandTotal?.formatted?.withTax}</>
                         )}
