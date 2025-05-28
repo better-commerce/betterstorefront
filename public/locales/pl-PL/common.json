@@ -1379,7 +1379,8 @@
                 "walletNotFoundErrorMsg": "Portfel nie został znaleziony.",
                 "notEnoughBalanceErrorMsg": "Niewystarczające środki.",
                 "paymentMethodNotSupportedErrorMsg": "Metoda płatności nie jest obsługiwana.",
-                "paymentAmountRequiredErrorMsg": "Wymagana jest kwota płatności."
+                "paymentAmountRequiredErrorMsg": "Wymagana jest kwota płatności.",
+                "paymentAmountCannotExceedErrorMsg": "Wartość płatności nie może przekraczać {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Hasło powinno mieć co najmniej 8 znaków i zawierać przynajmniej 1 dużą literę.",

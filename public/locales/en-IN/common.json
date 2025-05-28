@@ -1379,7 +1379,8 @@
         "walletNotFoundErrorMsg": "Wallet not found.",
         "notEnoughBalanceErrorMsg": "Not enough balance available.",
         "paymentMethodNotSupportedErrorMsg": "Payment method is not supported.",
-        "paymentAmountRequiredErrorMsg": "Payment amount is required."
+        "paymentAmountRequiredErrorMsg": "Payment amount is required.",
+        "paymentAmountCannotExceedErrorMsg": "Payment value cannot exceed {currencySymbol}{paymentAmount}."
       },
       "password": {
         "passwordValidationMsg": "Password should have a minimum of 8 characters and at least 1 uppercase letter.",

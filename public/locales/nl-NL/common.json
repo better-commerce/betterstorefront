@@ -1368,7 +1368,8 @@
                 "walletNotFoundErrorMsg": "Portemonnee niet gevonden.",
                 "notEnoughBalanceErrorMsg": "Onvoldoende saldo beschikbaar.",
                 "paymentMethodNotSupportedErrorMsg": "Betalingsmethode wordt niet ondersteund.",
-                "paymentAmountRequiredErrorMsg": "Betalingsbedrag is vereist."
+                "paymentAmountRequiredErrorMsg": "Betalingsbedrag is vereist.",
+                "paymentAmountCannotExceedErrorMsg": "Betalingswaarde mag niet hoger zijn dan {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Wachtwoord moet minimaal 8 tekens bevatten en ten minste 1 hoofdletter.",

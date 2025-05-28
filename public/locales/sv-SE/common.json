@@ -1379,7 +1379,8 @@
                 "walletNotFoundErrorMsg": "Plånbok hittades inte.",
                 "notEnoughBalanceErrorMsg": "Inte tillräckligt med saldo tillgängligt.",
                 "paymentMethodNotSupportedErrorMsg": "Betalningsmetoden stöds inte.",
-                "paymentAmountRequiredErrorMsg": "Betalningsbelopp krävs."
+                "paymentAmountRequiredErrorMsg": "Betalningsbelopp krävs.",
+                "paymentAmountCannotExceedErrorMsg": "Betalningsvärdet får inte överstiga {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Lösenordet måste vara minst 8 tecken långt och innehålla minst 1 versal.",

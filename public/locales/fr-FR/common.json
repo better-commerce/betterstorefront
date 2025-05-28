@@ -1375,7 +1375,8 @@
         "walletNotFoundErrorMsg": "Portefeuille introuvable.",
         "notEnoughBalanceErrorMsg": "Solde insuffisant disponible.",
         "paymentMethodNotSupportedErrorMsg": "Le mode de paiement n'est pas pris en charge.",
-        "paymentAmountRequiredErrorMsg": "Le montant du paiement est requis."
+        "paymentAmountRequiredErrorMsg": "Le montant du paiement est requis.",
+        "paymentAmountCannotExceedErrorMsg": "La valeur du paiement ne peut pas dépasser {currencySymbol}{paymentAmount}."
       },
       "password": {
         "passwordValidationMsg": "Le mot de passe doit comporter au moins 8 caractères et au moins 1 lettre majuscule.",

@@ -1378,7 +1378,8 @@
                 "notEnoughCreditErrorMsg": "Není dostatek kreditů.",
                 "notEnoughBalanceErrorMsg": "Nedostatečný dostupný zůstatek.",
                 "paymentMethodNotSupportedErrorMsg": "Tento způsob platby není podporován.",
-                "paymentAmountRequiredErrorMsg": "Částka platby je povinná."
+                "paymentAmountRequiredErrorMsg": "Částka platby je povinná.",
+                "paymentAmountCannotExceedErrorMsg": "Hodnota platby nesmí přesáhnout {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Heslo by mělo mít alespoň 8 znaků a alespoň 1 velké písmeno.",

@@ -1284,7 +1284,8 @@
                 "walletNotFoundErrorMsg": "Portafoglio non trovato.",
                 "notEnoughBalanceErrorMsg": "Saldo insufficiente disponibile.",
                 "paymentMethodNotSupportedErrorMsg": "Metodo di pagamento non supportato.",
-                "paymentAmountRequiredErrorMsg": "Importo del pagamento obbligatorio."
+                "paymentAmountRequiredErrorMsg": "Importo del pagamento obbligatorio.",
+                "paymentAmountCannotExceedErrorMsg": "Il valore del pagamento non può superare {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "La password deve avere almeno 8 caratteri e almeno 1 lettera maiuscola.",

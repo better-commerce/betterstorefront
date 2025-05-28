@@ -1379,7 +1379,8 @@
                 "walletNotFoundErrorMsg": "Кошелёк не найден.",
                 "notEnoughBalanceErrorMsg": "Недостаточно средств.",
                 "paymentMethodNotSupportedErrorMsg": "Способ оплаты не поддерживается.",
-                "paymentAmountRequiredErrorMsg": "Требуется сумма платежа."
+                "paymentAmountRequiredErrorMsg": "Требуется сумма платежа.",
+                "paymentAmountCannotExceedErrorMsg": "Сумма платежа не может превышать {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Пароль должен содержать минимум 8 символов и хотя бы одну заглавную букву.",

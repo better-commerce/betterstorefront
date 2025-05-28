@@ -5,7 +5,7 @@ import PaymentGatewayNotification from '@components/SectionCheckoutJourney/check
 
 // Other Imports
 import { EmptyString, Messages, NEXT_WALLET_GET_BALANCE, } from '@components/utils/constants'
-import { matchStrings } from '@framework/utils/parse-util'
+import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import { AxiosRequestConfig } from 'axios'
 import { RequestMethod } from 'bc-payments-sdk/dist/constants'
@@ -31,6 +31,18 @@ export class WalletPaymentButton extends BasePaymentButton {
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
     const { translate } = this.props
     if (uiContext?.user?.userId) {
+      const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+      if (amountToBePaid <= 0) {
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
+        return
+      }
+
+      const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+      if (validateAmount) {
+        dispatchState({ type: 'SET_ERROR', payload: stringFormat(translate(validateAmount?.msg), { currencySymbol, paymentAmount: validateAmount?.amount }), })
+        return
+      }
+
       const userId = uiContext?.user?.userId
       uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.validatingAccountText'), })
       const walletId = uiContext?.user?.walletId
@@ -38,12 +50,6 @@ export class WalletPaymentButton extends BasePaymentButton {
         const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_BALANCE, method: RequestMethod.POST, data: { walletId }, }
         const { data, error }: any = await callApi(config)
         const walletBalance = data?.data?.balance
-        const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : this.props?.partialAmount
-        if (amountToBePaid <= 0) {
-          uiContext?.hideOverlayLoaderState()
-          dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
-          return
-        }
         if (amountToBePaid <= walletBalance) {
 
           uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
@@ -131,7 +137,7 @@ export class WalletPaymentButton extends BasePaymentButton {
         </div>
 
         {this.state.isPaymentInitiated && (
-          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} paymentType={this.props?.paymentType} partialAmount={this.props?.partialAmount} />
+          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} paymentType={this.props?.paymentType} partialAmount={(this.props?.partialAmount || 0)} />
         )}
       </>
     )

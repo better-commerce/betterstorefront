@@ -1379,7 +1379,8 @@
                 "walletNotFoundErrorMsg": "Carteira não encontrada.",
                 "notEnoughBalanceErrorMsg": "Saldo insuficiente disponível.",
                 "paymentMethodNotSupportedErrorMsg": "Método de pagamento não suportado.",
-                "paymentAmountRequiredErrorMsg": "O valor do pagamento é obrigatório."
+                "paymentAmountRequiredErrorMsg": "O valor do pagamento é obrigatório.",
+                "paymentAmountCannotExceedErrorMsg": "O valor do pagamento não pode exceder {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "A senha deve ter no mínimo 8 caracteres e pelo menos 1 letra maiúscula.",

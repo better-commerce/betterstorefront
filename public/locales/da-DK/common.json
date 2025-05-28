@@ -1378,7 +1378,8 @@
                 "walletNotFoundErrorMsg": "Pung ikke fundet.",
                 "notEnoughBalanceErrorMsg": "Ikke nok saldo tilgængelig.",
                 "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden understøttes ikke.",
-                "paymentAmountRequiredErrorMsg": "Betalingsbeløb er påkrævet."
+                "paymentAmountRequiredErrorMsg": "Betalingsbeløb er påkrævet.",
+                "paymentAmountCannotExceedErrorMsg": "Betalingsværdien kan ikke overstige {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Adgangskode skal have mindst 8 tegn og mindst 1 stort bogstav.",

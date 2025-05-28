@@ -337,4 +337,23 @@ export default abstract class BasePaymentButton
   protected isFullPayment(): boolean {
     return (this.props?.paymentType === PaymentSelectionType.FULL)
   }
+
+  protected isValidPaymentAmount(basketOrderInfo: any, { paymentType, partialAmount }: IPartialPaymentProps): string {
+
+    if (paymentType === PaymentSelectionType.PARTIAL) {
+
+      // If this is the first partial payment, then check if the partial amount is greater than order total
+      if (!basketOrderInfo?.basket?.isPartialPayment) {
+        if (partialAmount > basketOrderInfo?.basket?.grandTotal?.raw?.withTax) {
+          return { msg: 'common.message.checkout.paymentAmountCannotExceedErrorMsg', amount: basketOrderInfo?.basket?.grandTotal?.raw?.withTax }
+        }
+      } else {
+          const amountPayable = (basketOrderInfo?.basket?.grandTotal?.raw?.withTax - basketOrderInfo?.basket?.paidAmount)
+          if (partialAmount > amountPayable) {
+            return { msg: 'common.message.checkout.paymentAmountCannotExceedErrorMsg', amount: amountPayable }
+          }
+        }
+    }
+    return null
+  }
 }

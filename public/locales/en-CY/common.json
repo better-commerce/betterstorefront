@@ -1319,7 +1319,8 @@
                 "walletNotFoundErrorMsg": "Το πορτοφόλι δεν βρέθηκε.",
                 "notEnoughBalanceErrorMsg": "Μη διαθέσιμο επαρκές υπόλοιπο.",
                 "paymentMethodNotSupportedErrorMsg": "Η μέθοδος πληρωμής δεν υποστηρίζεται.",
-                "paymentAmountRequiredErrorMsg": "Απαιτείται ποσό πληρωμής."
+                "paymentAmountRequiredErrorMsg": "Απαιτείται ποσό πληρωμής.",
+                "paymentAmountCannotExceedErrorMsg": "Η τιμή πληρωμής δεν μπορεί να υπερβαίνει το {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες και τουλάχιστον 1 κεφαλαίο γράμμα.",

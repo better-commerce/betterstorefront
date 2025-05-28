@@ -1379,7 +1379,8 @@
                 "walletNotFoundErrorMsg": "Portofelul nu a fost găsit.",
                 "notEnoughBalanceErrorMsg": "Sold insuficient disponibil.",
                 "paymentMethodNotSupportedErrorMsg": "Metoda de plată nu este acceptată.",
-                "paymentAmountRequiredErrorMsg": "Suma plății este obligatorie."
+                "paymentAmountRequiredErrorMsg": "Suma plății este obligatorie.",
+                "paymentAmountCannotExceedErrorMsg": "Valoarea plății nu poate depăși {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Parola trebuie să aibă minimum 8 caractere și cel puțin 1 literă mare.",
