@@ -103,6 +103,8 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
             setPaymentType(PaymentSelectionType.FULL)
         }
     }, [partialAmount, payableAmount])
+
+    const partialPaymentAmount = Math.round((basket?.grandTotal?.raw?.withTax - basket?.paidAmount) * Math.pow(10, 2)) / Math.pow(10, 2)
     return (
         <>
             {/* Payment Type Selection */}
@@ -121,7 +123,7 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
                         {type.name === PAYMENT_TYPES[0].name && (
                             <>
                                 {basket?.isPartialPayment ? (
-                                    <>{' - '}{`${basket?.currencySymbol}${basket?.grandTotal?.raw?.withTax - basket?.paidAmount}`}</>
+                                    <>{' - '}{`${partialPaymentAmount}`}</>
                                 ) : (
                                     <>{' - '}{basket?.grandTotal?.formatted?.withTax}</>
                                 )}
