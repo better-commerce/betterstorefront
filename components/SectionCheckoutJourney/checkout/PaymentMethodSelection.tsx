@@ -129,10 +129,15 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         )
     }
 
-    const showPaymentOption = (method: any): boolean => {
-      if (matchStrings( method?.systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true )) {
-        //return isApplePayScriptLoaded
-        return (window?.ApplePaySession !== undefined && window?.ApplePaySession?.canMakePaymentsWithActiveCard( Payments.APPLE_PAY_MERCHANT_ID ))
+    const showPaymentOption = (method: any, basket: any): boolean => {
+      if (basket?.isPartialPayment) {
+        if (matchStrings(method?.systemName, PaymentMethodType.WALLET, true)) {
+          return true
+        }
+        return false
+      } else if (matchStrings( method?.systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true)) {
+          //return isApplePayScriptLoaded
+          return (window?.ApplePaySession !== undefined && window?.ApplePaySession?.canMakePaymentsWithActiveCard( Payments.APPLE_PAY_MERCHANT_ID ))
       }
       return true
     }
@@ -269,7 +274,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                 >
                   {getMethods(paymentMethods)?.map((item: any, idx: number) => (
                     <>
-                      {showPaymentOption(item) && (
+                      {showPaymentOption(item, basket) && (
                         <div key={idx} id={`pnl${item?.systemName}`} onClick={() => handleMethodSelection(item)} className={`${selectedPaymentMethod?.id === item?.id ? '' : '' }  pointer mb-0 flex justify-start flex-row`} >
                           <div className="w-full mb-0">
                             <label className="custom-radio">
