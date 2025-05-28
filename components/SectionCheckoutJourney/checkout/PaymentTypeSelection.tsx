@@ -35,9 +35,9 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
                         {type.name === PAYMENT_TYPES[0].name && (
                             <>
                                 {basket?.isPartialPayment ? (
-                                    <>{' '}{`(${basket?.currencySymbol}${basket?.grandTotal?.raw?.withTax - basket?.paidAmount})`}</>
+                                    <>{' - '}{`${basket?.currencySymbol}${basket?.grandTotal?.raw?.withTax - basket?.paidAmount}`}</>
                                 ) : (
-                                    <>{' '}{`(${basket?.grandTotal?.formatted?.withTax})`}</>
+                                    <>{' - '}{basket?.grandTotal?.formatted?.withTax}</>
                                 )}
                             </>
                         )}
