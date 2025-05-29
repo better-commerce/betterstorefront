@@ -63,7 +63,11 @@ const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentPr
       orderId: orderInfo?.orderResponse?.id,
       txnOrderId: getOrderId(orderInfo?.order),
       bankOfferDetails: bankOfferDetails,
-      extras,
+
+      /**
+       * Note: For PSPs paymentType ("full" | "partial") & partialAmount will be present in PSPs get order details response.
+       */
+      extras, 
     }
 
     const paymentResponseResult: any = await processPaymentResponse(gateway, paymentResponseRequest)

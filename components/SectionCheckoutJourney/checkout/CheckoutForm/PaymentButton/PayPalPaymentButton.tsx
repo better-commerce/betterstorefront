@@ -5,10 +5,10 @@ import React from 'react'
 import Router from 'next/router'
 import { withTranslation } from 'react-i18next'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
-import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions, } from '@paypal/paypal-js/types/components/buttons'
+import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions, OnClickActions, } from '@paypal/paypal-js/types/components/buttons'
 
 // Component Imports
-import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
+import BasePaymentButton, { IDispatchState, IPartialPaymentProps } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
 // Other Imports
@@ -16,7 +16,7 @@ import { BETTERCOMMERCE_DEFAULT_CURRENCY, EmptyString, Messages, } from '@compon
 import { PayPalOrderIntent } from '@framework/api/endpoints/payments/constants'
 import { getCurrency, getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { PaymentMethodType } from 'bc-payments-sdk'
-import { roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 const BUTTONS_DEFAULT_LAYOUT: any = {
@@ -31,7 +31,7 @@ class PayPalPaymentButton extends BasePaymentButton {
    * CTor
    * @param props
    */
-  constructor(props: IPaymentButtonProps & IDispatchState) {
+  constructor(props: IPaymentButtonProps & IDispatchState & IPartialPaymentProps) {
     super(props)
     this.state = {
       confirmed: false,
@@ -46,21 +46,28 @@ class PayPalPaymentButton extends BasePaymentButton {
    * @param uiContext {Object} Method for dispatching global ui state changes.
    * @param dispatchState {Function} Method for dispatching state changes.
    */
-  private async onPay(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    dispatchState: Function
-  ) {
+  private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
     const { translate }: any = this.props
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+
+    const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+    if (amountToBePaid <= 0) {
+      dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
+      return
+    }
+
+    const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+    if (validateAmount) {
+      dispatchState({ type: 'SET_ERROR', payload: stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount }), })
+      return
+    }
+
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
       super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.PAYPAL)
-      this.setState({
-        confirmed: true,
-      })
+      this.setState({ confirmed: true, })
       if (this.props?.paymentModeLoadedCallback) {
         setTimeout(() => {
           uiContext?.hideOverlayLoaderState()
@@ -102,10 +109,7 @@ class PayPalPaymentButton extends BasePaymentButton {
     const promise = new Promise<void>(async (resolve: any, reject: any) => {
       const orderDetails: any = await actions?.order?.capture()
       if (orderDetails?.id) {
-        const tokenId = orderDetails?.purchase_units[0]?.payments?.captures
-          ?.length
-          ? orderDetails?.purchase_units[0]?.payments?.captures[0]?.id
-          : ''
+        const tokenId = orderDetails?.purchase_units[0]?.payments?.captures ?.length ? orderDetails?.purchase_units[0]?.payments?.captures[0]?.id : ''
         const redirectUrl = `${this?.state?.paymentMethod?.notificationUrl}?orderId=${orderDetails?.id}&payerId=${orderDetails?.payer?.payer_id}&token=${tokenId}`
         Router.push(redirectUrl)
       }
@@ -119,11 +123,12 @@ class PayPalPaymentButton extends BasePaymentButton {
    * @returns
    */
   private getOrderInputPayload() {
-    const { translate }: any = this.props
+    const { translate, paymentType, partialAmount = 0 }: any = this.props
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     if (orderResult) {
       const orderId = orderResult?.id
+      const amountToBePaid = this.isFullPayment() ? orderResult?.grandTotal?.raw?.withTax : partialAmount
       const items = [
         {
           name: `Items for Order: ${orderId}; Basket: ${orderResult?.basketId}; OrderId: ${getOrderId(orderInfo?.order)}`,
@@ -134,15 +139,10 @@ class PayPalPaymentButton extends BasePaymentButton {
             ?.reduce((sum: number, current: number) => sum + current, 0),*/,
 
           // SKU field contains concatenated stock codes with item quantity in brackets i.e. "SKU1(2), SKU2(4), ..."
-          sku: orderResult?.items
-            ?.map((x: any) => `${x?.stockCode}(${x?.qty})`)
-            ?.join(', '),
+          sku: orderResult?.items ?.map((x: any) => `${x?.stockCode}(${x?.qty})`) ?.join(', '),
           description: EmptyString,
           category: 'DIGITAL_GOODS',
-          unit_amount: {
-            currency_code: orderResult?.currencyCode,
-            value: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
-          },
+          unit_amount: { currency_code: orderResult?.currencyCode, value: roundToDecimalPlaces(amountToBePaid), },
           tax: {
             currency_code: orderResult?.currencyCode,
             value: 0, //roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax),
@@ -158,18 +158,16 @@ class PayPalPaymentButton extends BasePaymentButton {
           items: items,
           amount: {
             currency_code: orderResult?.currencyCode,
-            value: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
+            value: roundToDecimalPlaces(amountToBePaid),
             breakdown: {
-              item_total: {
-                currency_code: orderResult?.currencyCode,
-                value: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
-              },
+              item_total: { currency_code: orderResult?.currencyCode, value: roundToDecimalPlaces(amountToBePaid), },
               tax_total: {
                 currency_code: orderResult?.currencyCode,
                 value: 0, //roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax),
               },
             },
           },
+          custom_id: JSON.stringify({ orderId, paymentType, partialAmount, }),
         },
       ]
 
@@ -205,15 +203,9 @@ class PayPalPaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any =
-      this.props
+    const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any = this.props
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
-    this.onPay(
-      this.state.paymentMethod,
-      basketOrderInfo,
-      uiContext,
-      dispatchState
-    )
+    this.onPay(this.state.paymentMethod, basketOrderInfo, uiContext, dispatchState)
   }
 
   /**
@@ -222,35 +214,32 @@ class PayPalPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { translate }: any = this.props
+    const { basketOrderInfo, translate, dispatchState }: any = this.props
     const currency = getCurrency()
-    const { dispatchState } = this.props
-    const clientId = super.getPaymentMethodSetting(
-      this?.state?.paymentMethod,
-      'accountcode'
-    )
+    const clientId = super.getPaymentMethodSetting(this?.state?.paymentMethod, 'accountcode')
     const isProduction = (process.env.NODE_ENV === 'production')
 
     return (
       <>
         {that.state.confirmed && (
-          <PayPalScriptProvider
-            options={{
-              'client-id': clientId,
-              currency: currency || BETTERCOMMERCE_DEFAULT_CURRENCY,
-            }}
-          >
-            <PayPalButtons
-              style={BUTTONS_DEFAULT_LAYOUT}
-              fundingSource={'paypal'}
-              createOrder={(
-                data: CreateOrderData,
-                actions: CreateOrderActions
-              ) => that.onCreateOrder(data, actions)}
-              onError={(error: any) => {
+          <PayPalScriptProvider options={{ 'client-id': clientId, currency: currency || BETTERCOMMERCE_DEFAULT_CURRENCY, }}>
+            <PayPalButtons style={BUTTONS_DEFAULT_LAYOUT} fundingSource={'paypal'} onClick={async (data: Record<string, unknown>, actions: OnClickActions) => {
+                dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+                const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+                if (amountToBePaid <= 0) {
+                  dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
+                  return actions.reject();
+                }
+
+                const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+                if (validateAmount) {
+                  dispatchState({ type: 'SET_ERROR', payload: stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount }), })
+                  return actions.reject();
+                }
+                return actions.resolve();
+              }} createOrder={(data: CreateOrderData, actions: CreateOrderActions) => that.onCreateOrder(data, actions)} onError={(error: any) => {
                 dispatchState({ type: 'SET_ERROR', payload: isProduction ? translate('common.message.requestCouldNotProcessErrorMsg') : JSON.stringify({ message: error?.message, stack: error?.stack }) })
-              }}
-              onApprove={(data: OnApproveData, actions: OnApproveActions) =>
+              }} onApprove={(data: OnApproveData, actions: OnApproveActions) =>
                 that.onApprove(data, actions)
               }
             />

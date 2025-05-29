@@ -82,6 +82,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     ) {
       switch (type) {
         case 'SET_ERROR': {
+          setAlert({ type: 'error', msg: payload })
           return { ...state, error: payload, }
         }
 
@@ -111,7 +112,9 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
       if (featureToggle?.features?.enableSplitPayment) {
 
         const filteredPaymentMethods = [...paymentMethods].filter((x: any) => {
-          if (basket?.isPartialPayment && !matchStrings(x?.systemName, PaymentMethodType.WALLET, true)) {
+
+          // Hide COD & Cheque if current basket contains partial payment.
+          if (basket?.isPartialPayment && [PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(x?.systemName?.toLowerCase())) {
             return false
           }
           return true
@@ -145,7 +148,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
 
     const showPaymentOption = (method: any, basket: any): boolean => {
       if (basket?.isPartialPayment) {
-        if (matchStrings(method?.systemName, PaymentMethodType.WALLET, true)) {
+        if (![PaymentMethodType.COD.toLocaleLowerCase(), PaymentMethodType.CHEQUE.toLocaleLowerCase()].includes(method?.systemName?.toLocaleLowerCase())) {
           return true
         }
         return false
@@ -344,8 +347,8 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
               {selectedPaymentMethod?.id && basketOrderInfo && (
                 <div className="flex flex-col w-full py-5 px-5 space-y-4">
 
-                  {/* Enable partial payment for Wallet only */}
-                  {featureToggle?.features?.enableSplitPayment && [PaymentMethodType.WALLET].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
+                  {/* Enable partial payment for all except COD & Cheque */}
+                  {featureToggle?.features?.enableSplitPayment && ![PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
                     <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} />
                   )}
 
@@ -355,13 +358,13 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                       !!state?.isPaymentIntent) && (
                         <PaymentWidget paymentMethod={selectedPaymentMethod} checkoutCallback={checkoutCallback} orderModelResponse={state?.orderResponse} />
                       )}
+                    {state?.error && (
+                      <h4 className="py-5 text-lg font-semibold text-red-500">
+                        {state?.error}
+                      </h4>
+                    )}
                     <SaveB2BQuote basket={basket} />
                   </div>
-                  {state?.error && (
-                    <h4 className="py-5 text-lg font-semibold text-red-500">
-                      {state?.error}
-                    </h4>
-                  )}
                 </div>
               )}
             </div>

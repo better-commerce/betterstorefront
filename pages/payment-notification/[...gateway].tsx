@@ -11,10 +11,7 @@ import PaymentGatewayNotification from '@components/SectionCheckoutJourney/check
 // Other Imports
 import { getItem } from '@components/utils/localStorage'
 import { EmptyString } from '@components/utils/constants'
-import {
-  PaymentMethodType,
-  PaymentMethodTypeId,
-} from 'bc-payments-sdk'
+import { PaymentMethodType, PaymentMethodTypeId, } from 'bc-payments-sdk'
 import { IGatewayPageProps } from 'framework/contracts/payment/IGatewayPageProps'
 import { LocalStorage } from '@components/utils/payment-constants'
 import { CARD_PAYMENT_3DS_ENABLED } from '@components/SectionCheckoutJourney/checkout/CheckoutForm/PaymentButton/CheckoutPaymentButton'
@@ -33,22 +30,13 @@ const GatewayPage = (props: IGatewayPageProps) => {
       payerId = orderResponse?.p?.c
     }
 
-    params = {
-      token: EmptyString,
-      orderId: orderId,
-      payerId: payerId,
-    }
+    params = { token: EmptyString, orderId: orderId, payerId: payerId, }
   }
 
   return (
     <>
       <Spinner />
-      <PaymentGatewayNotification
-        config={config}
-        gateway={gateway}
-        params={params}
-        isCancelled={isCancelled}
-      />
+      <PaymentGatewayNotification config={config} gateway={gateway} params={params} isCancelled={isCancelled} />
     </>
   )
 }
@@ -58,11 +46,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   let propParams: any
   const params: any = context?.query
   const gateway = params?.gateway?.length ? params?.gateway[0] : ''
-  const isCancelled =
-    params?.gateway?.length > 1
-      ? params?.gateway[1] === 'canceled'
-        ? true
-        : false
+  const isCancelled = params?.gateway?.length > 1
+      ? params?.gateway[1] === 'canceled' ? true : false
       : false
 
   switch (gateway) {
@@ -71,17 +56,11 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
       let orderId = ''
 
       if (!CARD_PAYMENT_3DS_ENABLED) {
-        payerId = !isCancelled
-          ? params?.PayerID || params?.payerID || params?.payerId
-          : ''
+        payerId = !isCancelled ? params?.PayerID || params?.payerID || params?.payerId : ''
         orderId = !isCancelled ? params?.orderId : ''
       }
 
-      propParams = {
-        token: EmptyString,
-        orderId: orderId,
-        payerId: payerId,
-      }
+      propParams = { token: EmptyString, orderId: orderId, payerId: payerId, }
       break
 
     case PaymentMethodType.PAYPAL:
