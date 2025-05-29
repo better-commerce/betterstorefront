@@ -29,6 +29,7 @@ import { groupCartItemsById } from '@components/utils/cart'
 import { round, sortBy } from 'lodash'
 import { ProductType } from '@framework/utils/enums'
 import { getPartialPaymentAmount } from '@components/cart/CartSidebarView/CartSidebarView'
+import { CURRENT_THEME } from '@components/utils/constants'
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
@@ -575,7 +576,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           </button>
                         </div>
                       </div>
-                      <div className="mt-2">
+                      <div className="mt-2  btn-hide-cut">
                         <div className="flow-root">
                           <ul role="list" className="px-4">
                             {userCartItems?.map((product: any, productIdx: number) => {
@@ -788,22 +789,45 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     )}
                     {cartItems?.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                        <Link href="/checkout" onClick={() => {
-                          handleClose()
-                          beginCheckout(cartItems)
-                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
-                          <span className='flex flex-col justify-start pl-5 text-left'>
-                            {cartItems?.isPartialPayment ? (
-                              <span>{cartItems?.currencySymbol}{partialPaymentAmount}</span>
-                            ) : (
-                              <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
-                            )}
-                            <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
-                          </span>
-                          <span className='flex items-center gap-2 pr-5'>
-                            <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
-                          </span>
-                        </Link>
+                        {CURRENT_THEME === 'ammega'? (
+                            <>
+                             <Link href="/cart" onClick={() => {
+                                handleClose()
+                                beginCheckout(cartItems)
+                              }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
+                                <span className='flex flex-col justify-start pl-5 text-left'>
+                                  {cartItems?.isPartialPayment ? (
+                                    <span>{cartItems?.currencySymbol}{partialPaymentAmount}</span>
+                                  ) : (
+                                    <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
+                                  )}
+                                  <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
+                                </span>
+                                <span className='flex items-center gap-2 pr-5'>
+                                  <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
+                                </span>
+                              </Link>
+                            </>
+                          ) : (
+                             <>
+                              <Link href="/checkout" onClick={() => {
+                                handleClose()
+                                beginCheckout(cartItems)
+                              }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
+                                <span className='flex flex-col justify-start pl-5 text-left'>
+                                  {cartItems?.isPartialPayment ? (
+                                    <span>{cartItems?.currencySymbol}{partialPaymentAmount}</span>
+                                  ) : (
+                                    <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
+                                  )}
+                                  <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
+                                </span>
+                                <span className='flex items-center gap-2 pr-5'>
+                                  <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
+                                </span>
+                              </Link>
+                             </>
+                          )}
                       </div>
                     }
                   </div>

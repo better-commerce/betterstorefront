@@ -40,7 +40,9 @@
     "enableBannerLogin":false,
     "enableInputLabel":false,
     "enablePCTopHeader":false,
-    "enableShortThankYouPage":false
+    "enableShortThankYouPage":false,
+    "enableCutBelt":true,
+    "enableCart":true
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":false },

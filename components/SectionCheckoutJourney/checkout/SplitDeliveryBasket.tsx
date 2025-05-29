@@ -11,6 +11,7 @@ import { stringToBoolean, tryParseJson } from "@framework/utils/parse-util"
 import axios from "axios"
 import { round, sortBy } from "lodash"
 import { useEffect, useState } from "react"
+import { CutBelt } from '@components/CutBelt'
 
 const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
   const allowSplitShipping = stringToBoolean(
@@ -352,6 +353,13 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
                         <div className='justify-end'><span className='flex flex-col font-semibold text-black'>Qty: {product?.qty}</span></div>
                          )}
                       </div>
+                      {CURRENT_THEME === 'ammega' &&
+                            <>
+                              <div className='text-left py-3'>
+                                <CutBelt size={Number(product?.size) || 5} productId={product?.productId} />
+                              </div>
+                            </>   
+                      }  
                     </div>
                   </div>
                 </div>

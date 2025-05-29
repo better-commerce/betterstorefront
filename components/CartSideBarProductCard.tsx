@@ -8,10 +8,12 @@ import { CartProductType, DeleteModalType } from '@components/utils/constants'
 import wishlistHandler from '@components/services/wishlist'
 import BundleProductCard from '@components/BundleProductCard'
 import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTextbox'
+import { CURRENT_THEME } from '@components/utils/constants'
 import { useEffect, useState } from 'react'
 import { LoadingDots, useUI } from '@components/ui'
+import { CutBelt } from '@components/CutBelt'
 
-export default function CartSideBarProductCard({ openModal, product, handleClose, handleItem, isIncludeVAT, getLineItemSizeWithoutSlug, handleRedirectToPDP, soldOutMessage, handleToggleEngravingModal, setItemClicked, insertToLocalWishlist, reValidateData, handleToggleOpenSizeChangeModal,maxBasketItemsCount,handleInputQuantity}: any) {
+export default function CartSideBarProductCard({ openModal, product, handleClose, handleItem, isIncludeVAT, getLineItemSizeWithoutSlug, handleRedirectToPDP, featureToggle, soldOutMessage, handleToggleEngravingModal, setItemClicked, insertToLocalWishlist, reValidateData, handleToggleOpenSizeChangeModal,maxBasketItemsCount,handleInputQuantity}: any) {
   const translate = useTranslation()
   const { isInWishList } = wishlistHandler()
   const css = { maxWidth: '100%', height: 'auto' }
@@ -21,7 +23,8 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
     setLoadingProduct(null)
   },[cartItems])
   return (
-    <div className={`grid items-start grid-cols-12 gap-1 py-4 ${product?.price?.raw?.withTax == 0 ? 'bg-green-100 border border-emerald-300 rounded-lg p-2' : 'bg-white border-b border-slate-200 p-2'}`}>
+    <>
+        <div className={`grid items-start grid-cols-12 gap-1 py-4 ${product?.price?.raw?.withTax == 0 ? 'bg-green-100 border border-emerald-300 rounded-lg p-2' : 'bg-white border-b border-slate-200 p-2'}`}>
       <div className="flex-shrink-0 col-span-3 overflow-hidden rounded-md">
         <Link href={`/${product?.slug}`}>
           <img width={100} height={100} style={css} src={generateUri(product?.image, 'h=300&fm=webp') || IMG_PLACEHOLDER} alt={product?.name || 'cart-image'} className="object-cover object-center w-full h-full" onClick={handleRedirectToPDP} />
@@ -102,7 +105,7 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
                     />
                   )}
                 </div>
-              )}
+              )} 
             </div>
           </div>
           <div className="">
@@ -164,7 +167,7 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
                   (matchStrings(soldOutMessage, 'sold out', true) ? (
                     <div className="flex flex-col col-span-12">
                       <div className="flex text-xs font-semibold text-left text-red-500">
-                        <span className="relative mr-1">
+                        <span className="relative mr-1 d-none-img">
                           <img alt="Sold Out" src="/assets/images/not-shipped-edd.svg" width={20} height={20} className="relative inline-block mr-1 top-2" />
                         </span>
                         <span className="mt-2">{soldOutMessage}</span>
@@ -212,6 +215,14 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
               </button>
             </div>
           )}
+           {CURRENT_THEME === 'ammega' &&
+            <>
+              <div className='text-left py-3'>
+                <CutBelt size={Number(product?.size) || 5} productId={product?.productId} product={product} />
+                <button type="button" id={`cutbelt-${product?.productId}`} className='hide-btn-section btn btn-default mt-2 !px-2 !py-2 !text-xs !border-gray-300 !text-gray-500'>Cut Belt</button>
+              </div>
+            </>   
+           }  
           {product?.children
             ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)
             ?.map((child: any, index: number) => (
@@ -220,5 +231,7 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
         </div>
       </div>
     </div>
+    </>
+    
   )
 }

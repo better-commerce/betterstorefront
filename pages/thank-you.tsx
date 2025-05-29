@@ -119,6 +119,10 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
     })
   }
 
+  useEffect(() => {
+    localStorage.setItem('cutBeltData', JSON.stringify([]))
+  },[])
+
   const handleCopyClick = async () => {
     try {
       await navigator.clipboard.writeText(referralLink)
