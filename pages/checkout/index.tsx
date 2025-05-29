@@ -400,6 +400,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     //   await updateCheckoutAddress({ billingAddress: basket?.billingAddress }, false)
     // }
 
+    if (basket?.isPartialPayment) {
+      redirectToStep = CheckoutStep.REVIEW
+    }
     if (redirectToStep) {
       return new Promise(() => {
         setSelectedAddress({
