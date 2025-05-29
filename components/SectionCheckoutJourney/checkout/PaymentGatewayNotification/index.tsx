@@ -25,7 +25,7 @@ const IS_RESPONSE_REDIRECT_ENABLED = true
 const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentProps) => {
   const { recordAnalytics } = useAnalytics()
   const orderInfo = getOrderInfo()
-  const { associateCart } = cartHandler()
+  const { associateCart, getCart } = cartHandler()
   const { gateway, params, isCancelled, isCOD = false, config, paymentType = PaymentSelectionType.FULL, partialAmount = 0 } = props
   const { user, setCartItems, basketId, cartItems, setOrderId, orderId: uiOrderId, setBasketId, } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
@@ -90,7 +90,11 @@ const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentPr
     } else if (paymentResponseResult === PaymentStatus.PENDING || paymentResponseResult === PaymentStatus.DECLINED) {
       setOrderId(paymentResponseRequest?.orderId)
       if (IS_RESPONSE_REDIRECT_ENABLED) {
-        setRedirectUrl(`/payment-failed`) // TODO: Show order failed screen.
+        const basketResult: any = await getCart({ basketId, })
+        if (basketResult?.isPartialPayment)
+          setRedirectUrl(`/checkout?step=review`)
+        else
+          setRedirectUrl(`/payment-failed`)
       }
     }
   }
