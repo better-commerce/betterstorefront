@@ -215,7 +215,11 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           await checkIfCNCBasketUpdated(addressList, basketRes)
         }
         new Promise(() => {
-          goToStep(CheckoutStep.ADDRESS)
+          if (basketRes?.isPartialPayment) {
+            goToStep(CheckoutStep.REVIEW)
+          } else {
+            goToStep(CheckoutStep.ADDRESS)
+          }
         })
       }
     }
