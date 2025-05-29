@@ -45,7 +45,9 @@
     "enableBannerLogin":true,
     "enableInputLabel":true,
     "enablePCTopHeader":true,
-    "enableShortThankYouPage":true
+    "enableShortThankYouPage":true,
+    "enableCutBelt":false,
+    "enableCart":false
   },
   "social":[
     { "name": "Facebook", "icon": "/images/socials/facebook-new.svg", "href": "https://www.facebook.com/ParkCameras", "enable":true },

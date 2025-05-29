@@ -2949,3 +2949,9 @@ word-break: break-word;
     background-color: rgba(0, 0, 0, 0.5);
     padding: 15px 20px;
 }
+.d-none-img{
+  display:none !important;
+}
+.btn-hide-cut .hide-btn-section {
+   display: none !important;
+}
