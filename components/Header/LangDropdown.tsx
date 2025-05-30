@@ -1,14 +1,12 @@
 "use client";
 
-import { Popover, Tab, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { GlobeAltIcon } from "@heroicons/react/24/outline";
-import { FC, Fragment, useCallback, useMemo } from "react";
-import { useTranslation as useTranslationText } from "@commerce/utils/use-translation";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { Cookie } from "@framework/utils/constants";
 import { useRouter } from "next/router";
+import { Popover, Tab, Transition } from "@headlessui/react";
+import { FC, Fragment, useCallback, useMemo } from "react";
+import { useTranslation as useTranslationText } from "@commerce/utils/use-translation";
+import { Cookie } from "@framework/utils/constants";
 import { getCurrency } from '@framework/utils/app-util'
 import { EmptyString } from "@components/utils/constants";
 
@@ -18,10 +16,6 @@ interface LangDropdownProps {
   readonly panelClassName?: string;
   readonly defaultLanguage?: string;
   readonly defaultCountry?: string;
-}
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(" ");
 }
 
 const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) => {
@@ -76,7 +70,7 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
   const Currencies = ({ close }: any) => {
     return (
       <div className="grid grid-cols-2 gap-7">
-        {currencies?.map((currency, index) => {
+        {currencies?.map((currency) => {
           return (
             <a key={currency?.currencyCode} href="#" onClick={() => onSelectCurrency({ currency, close })} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:text-black focus:outline-none focus-visible:ring focus-visible:ring-orange-500 border focus-visible:ring-opacity-50 ${currency?.currencyCode ? " dark:bg-gray-700" : "opacity-80"} ${isActiveCurrency(currency?.currencyCode) ? 'bg-sky-100 dark:bg-sky-100 border-sky-300 dark:border-sky-300 cursor-not-allowed select-none' : 'border-white dark:bg-white'} `}>
               <div className="flex items-center justify-start gap-1">
