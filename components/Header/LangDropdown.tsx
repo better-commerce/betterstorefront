@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import { Popover, Tab, Transition } from "@headlessui/react";
+import { Popover, Transition } from "@headlessui/react";
 import { FC, Fragment, useCallback, useMemo } from "react";
 import { useTranslation as useTranslationText } from "@commerce/utils/use-translation";
 import { Cookie } from "@framework/utils/constants";
@@ -48,8 +48,8 @@ const Languages = ({ close, defaultLanguage, defaultCountry, languages }: any) =
         </Link>
       ))}
     </div>
-  );
-};
+  )
+}
 
 const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], panelClassName = "", defaultLanguage = "", defaultCountry = "" }) => {
   const router = useRouter()
@@ -80,11 +80,10 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
                 </div>
               </div>
             </a>
-          )
-        })}
+          )})}
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div className="flex LangDropdown justify-normal">
@@ -123,6 +122,6 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
         )}
       </Popover>
     </div>
-  );
-};
+  )
+}
 export default LangDropdown;
