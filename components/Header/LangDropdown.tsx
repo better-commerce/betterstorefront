@@ -79,14 +79,12 @@ const LangDropdown: FC<LangDropdownProps> = ({ currencies = [], languages = [], 
         {currencies?.map((currency, index) => {
           return (
             <a key={currency?.currencyCode} href="#" onClick={() => onSelectCurrency({ currency, close })} className={`flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-sky-100 dark:text-black focus:outline-none focus-visible:ring focus-visible:ring-orange-500 border focus-visible:ring-opacity-50 ${currency?.currencyCode ? " dark:bg-gray-700" : "opacity-80"} ${isActiveCurrency(currency?.currencyCode) ? 'bg-sky-100 dark:bg-sky-100 border-sky-300 dark:border-sky-300 cursor-not-allowed select-none' : 'border-white dark:bg-white'} `}>
-              <>
-                <div className="flex items-center justify-start gap-1">
-                  <span className='flex items-center justify-center text-[16px] font-semibold text-black'>{currency?.currencySymbol}</span>
-                  <div className="flex flex-col gap-1">
-                    <p className="text-sm font-medium">{currency?.currencyCode}</p>
-                  </div>
+              <div className="flex items-center justify-start gap-1">
+                <span className='flex items-center justify-center text-[16px] font-semibold text-black'>{currency?.currencySymbol}</span>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-medium">{currency?.currencyCode}</p>
                 </div>
-              </>
+              </div>
             </a>
           )
         })}
