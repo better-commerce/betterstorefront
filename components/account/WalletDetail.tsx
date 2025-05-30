@@ -114,19 +114,19 @@ export default function WalletDetail() {
             </div>
           }
           <div className="w-full px-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between w-full">
               <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>My Wallet</h2>
               {walletEnabled &&
-                <div className="flex mb-6 w-60 sm:flex-col gap-2">
+                <div className="flex w-5/12 gap-2 mb-6">
                   <button
-                    className={`w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary ${bankAccountList?.length > 0 ? '' : '!cursor-not-allowed opacity-50'}`}
+                    className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-primary ${bankAccountList?.length > 0 ? '' : '!cursor-not-allowed opacity-50'}`}
                     onClick={() => setOpenTransferToBankModal(true)}
                     disabled={!(bankAccountList?.length > 0)}
                   >
                     Transfer To Bank
                   </button>
                   <button
-                    className={`w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary`}
+                    className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-primary`}
                     onClick={() => setOpenAddBankDetailsModal(true)}
                   >
                     Add Bank Details
@@ -153,7 +153,7 @@ export default function WalletDetail() {
               </div>
             }
             {walletEnabled ? (
-              <div className="w-full mx-auto bg-white">
+              <div className="w-full pb-10 mx-auto bg-white">
                 <div className="p-4 mb-6 text-center bg-gray-100 rounded-lg">
                   <h3 className="text-lg font-medium">Wallet Current Balance</h3>
                   <p className="text-3xl font-bold text-sky-500">{walletDetail?.currency == "GBP" ? '£' : ''}{walletDetail?.balance}</p>

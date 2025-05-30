@@ -278,7 +278,7 @@ export const NEXT_TRADE_IN_PACKING_SLIP = `/api/trade-in/get-packing-slip`
 export const NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS = `/api/deliveries/pickup-locations`
 
 //TRADE IN JOURNEY API ENDPOINTS
-export const TRADE_IN_MODULE_CODE=`tradein`
+export const TRADE_IN_MODULE_CODE=`TradeIn`
 export const TRADE_IN_GUEST_LOGIN = `/${TRADE_IN_MODULE_CODE}/customers/guest`
 export const TRADE_IN_LOGIN = `/${TRADE_IN_MODULE_CODE}/customers/authenticate`
 export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/${TRADE_IN_MODULE_CODE}/quotes`
@@ -307,13 +307,13 @@ export const NEXT_BANK_TRANSFER = '/api/wallet/bank-transfers/create'
 export const NEXT_CUSTOMER_BANK_CREATE = '/api/wallet/customer-bank/create'
 
 //TRADE IN JOURNEY API ENDPOINTS
-export const WALLET_MODULE_CODE=`wallet`
+export const WALLET_MODULE_CODE=`Wallet`
 export const WALLET_ENABLE_CUSTOMER_WALLET = `/${WALLET_MODULE_CODE}/wallets/enable`
 export const WALLET_GET_CUSTOMER_WALLET = `/${WALLET_MODULE_CODE}/wallets`
 export const WALLET_WALLET_ASSOCIATE_TO_CUSTOMER = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer`
-export const GET_CUSOMER_BANK_LIST = '/${WALLET_MODULE_CODE}/customer-bank'
-export const BANK_TRANSFER = '/${WALLET_MODULE_CODE}/bank-transfer'
-export const BANK_DETAILS = '/${WALLET_MODULE_CODE}/customer-bank'
+export const GET_CUSOMER_BANK_LIST = `/${WALLET_MODULE_CODE}/customer-bank`
+export const BANK_TRANSFER = `/${WALLET_MODULE_CODE}/bank-transfer`
+export const BANK_DETAILS = `/${WALLET_MODULE_CODE}/customer-bank`
 
 //CONSTANTS
 
