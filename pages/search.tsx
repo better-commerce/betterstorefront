@@ -457,7 +457,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.SEARCH })
-  const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 2, filters: [], freeText: '' }
+  const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
   const pageProps = await props.getPageProps({ allProductsDefaultState: { ...DEFAULT_STATE }, cookies: context?.req?.cookies })
 
   return {
