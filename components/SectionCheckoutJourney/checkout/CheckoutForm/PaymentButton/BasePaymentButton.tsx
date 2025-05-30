@@ -32,6 +32,9 @@ export interface IPaymentButtonProps {
   onScrollToSection?: any
   translate?: any
   recordAnalytics?: any
+  setPaymentType?: any
+  setPartialAmount?: any
+  paymentTypeSelectionCmp?: any
 }
 
 export interface IApplePaymentProps {
