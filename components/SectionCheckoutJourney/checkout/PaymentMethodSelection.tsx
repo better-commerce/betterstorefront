@@ -297,7 +297,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                 <div key={idx} id={`pnl${item?.systemName}`} onClick={() => handleMethodSelection(item)} className={`${selectedPaymentMethod?.id === item?.id ? '' : '' }  pointer mb-0 flex justify-start flex-row`} >
                   <div className="w-full mb-0">
                     <label className="custom-radio">
-                      <input className={`pnl${item?.systemName}`} id="debit" type="radio" name="payment" value="" defaultChecked={ selectedPaymentMethod?.id === item?.id } />
+                      <input className={`pnl${item?.systemName}`} id="debit" type="radio" name="payment" value="" defaultChecked={ selectedPaymentMethod?.id === item?.id } checked={ selectedPaymentMethod?.id === item?.id } />
                       <div className={`items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}>
                         <div className="flex items-center justify-center text-span">
                           <i className={`sprite-icons ${spriteIcon( item?.systemName )}`.trim()} ></i>

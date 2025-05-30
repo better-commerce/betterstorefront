@@ -223,10 +223,10 @@ class PayPalPaymentButton extends BasePaymentButton {
     setPaymentType(PaymentSelectionType.FULL)
     setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+    if (basketOrderInfo?.basket?.isPartialPayment && setSelectedPaymentMethod) {
+      setSelectedPaymentMethod(paymentMethod)
+    }
     setTimeout(() => {
-      if (basketOrderInfo?.basket?.isPartialPayment && setSelectedPaymentMethod) {
-        setSelectedPaymentMethod(paymentMethod)
-      }
       this.onPay(this.state.paymentMethod, basketOrderInfo, uiContext, dispatchState)  
     }, 500);
   }
