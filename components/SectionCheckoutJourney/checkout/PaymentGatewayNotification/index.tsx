@@ -118,7 +118,11 @@ const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentPr
   useEffect(() => {
     if (redirectUrl) {
       Router.replace(redirectUrl).then((() => {
-        hideOverlayLoaderState()
+        if (redirectUrl === "/checkout?step=review") {
+          Router.reload()
+        } else {
+          hideOverlayLoaderState()
+        }
       }))
     }
   }, [redirectUrl])

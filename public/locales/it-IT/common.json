@@ -84,6 +84,8 @@
             "addedText": "aggiunto",
             "noBasketAvailableText": "Nessun carrello disponibile, crea un nuovo",
             "totalAmountText": "Importo Totale",
+            "orderAmountText": "Importo Ordine",
+            "pendingOrderAmountText": "Importo in Sospeso",
             "checkoutBtnText": "Pagamento",
             "multipleCodesApplyText": "Puoi applicare più codici",
             "getItByText": "Ricevilo entro",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV richiesto",
                 "cvvInvalidText": "CVV non valido",
                 "chequeNoText": "Numero Assegno",
-                "chequeNumberLabelText": "Numero Assegno"
+                "chequeNumberLabelText": "Numero Assegno",
+                "enterAmountToPayLabelText": "Inserisci l'importo da pagare da {paymentMethodName}"
             }
         },
         "exchangeReason": {

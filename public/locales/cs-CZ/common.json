@@ -84,6 +84,9 @@
             "addedText": "přidáno",
             "noBasketAvailableText": "Žádný košík není k dispozici, vytvořte nový",
             "totalAmountText": "Celková částka",
+            "orderAmountText": "Částka objednávky",
+            "pendingOrderAmountText": "Čekající částka",
+            "totalItemsText": "Celkové položky",    
             "checkoutBtnText": "Pokladna",
             "multipleCodesApplyText": "Můžete použít více kódů",
             "getItByText": "Získejte to do",
@@ -246,7 +249,8 @@
             "cvvRequiredText": "CVV je povinné",
             "cvvInvalidText": "CVV je neplatné",
             "chequeNoText": "Číslo šeku",
-            "chequeNumberLabelText": "Číslo šeku"
+            "chequeNumberLabelText": "Číslo šeku",
+            "enterAmountToPayLabelText": "Zadejte částku k úhradě z {paymentMethodName}"
             }
         },
         "collection": {

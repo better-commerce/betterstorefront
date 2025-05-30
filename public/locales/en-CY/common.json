@@ -84,6 +84,8 @@
         "addedText": "προστέθηκε",
         "noBasketAvailableText": "Δεν υπάρχει καλάθι, παρακαλώ δημιουργήστε ένα νέο",
         "totalAmountText": "Συνολικό ποσό",
+        "orderAmountText": "Ποσό παραγγελίας",
+        "pendingOrderAmountText": "Εκκρεμές ποσό",
         "checkoutBtnText": "Ολοκλήρωση παραγγελίας",
         "multipleCodesApplyText": "Μπορείτε να εφαρμόσετε πολλαπλούς κωδικούς",
         "getItByText": "Πάρτε το μέχρι",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "Το CVV είναι απαιτούμενο",
         "cvvInvalidText": "Το CVV είναι άκυρο",
         "chequeNoText": "Αριθμός Επιταγής",
-        "chequeNumberLabelText": "Αριθμός Επιταγής"
+        "chequeNumberLabelText": "Αριθμός Επιταγής",
+        "enterAmountToPayLabelText": "Εισαγάγετε το ποσό προς πληρωμή από {paymentMethodName}"
         }
     },
     "collection": {

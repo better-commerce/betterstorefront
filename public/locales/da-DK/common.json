@@ -84,6 +84,8 @@
             "addedText": "tilføjet",
             "noBasketAvailableText": "Ingen kurv tilgængelig, opret venligst en ny",
             "totalAmountText": "Samlet beløb",
+            "orderAmountText": "Ordrebeløb",
+            "pendingOrderAmountText": "Afventende beløb",
             "checkoutBtnText": "Gå til betaling",
             "multipleCodesApplyText": "Du kan anvende flere koder",
             "getItByText": "Få det inden",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV er påkrævet",
                 "cvvInvalidText": "CVV er ugyldig",
                 "chequeNoText": "Checknummer",
-                "chequeNumberLabelText": "Checknummer"
+                "chequeNumberLabelText": "Checknummer",
+                "enterAmountToPayLabelText": "Indtast beløb, der skal betales fra {paymentMethodName}"
             }
         },
         "collection": {

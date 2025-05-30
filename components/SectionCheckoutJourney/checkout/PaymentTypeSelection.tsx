@@ -1,6 +1,7 @@
 import { getPartialPayableAmount } from "@components/cart/CartSidebarView/CartSidebarView"
 import { EmptyString } from "@components/utils/constants"
-import { PaymentSelectionType } from "bc-payments-sdk"
+import { stringFormat } from "@framework/utils/parse-util"
+import { PaymentMethodType, PaymentSelectionType } from "bc-payments-sdk"
 import { useEffect, useState } from "react"
 
 export enum SplitPaymentPrepaidValueType {
@@ -16,6 +17,8 @@ interface PaymentTypeSelectionProps {
     setPartialAmount: any
     basket: any
     dispatchState: any
+    translate: any
+    selectedPaymentMethod: any
 }
 
 const PAYMENT_TYPES = [
@@ -24,7 +27,7 @@ const PAYMENT_TYPES = [
 ]
 
 export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
-    const { paymentType, setPaymentType, partialAmount, payableAmount, setPartialAmount, basket, dispatchState } = props
+    const { paymentType, setPaymentType, partialAmount, payableAmount, setPartialAmount, basket, dispatchState, translate, selectedPaymentMethod } = props
     const [inputValue, setInputValue] = useState(partialAmount === 0 ? '0' : partialAmount.toString())
 
     // Sync input value when partialAmount changes externally
@@ -135,16 +138,16 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
                 </div>
                 <span className="flex items-center text-gray-700 mt-4 font-semibold">
                     {basket?.isPartialPayment ? (
-                        <>Pending Amount: {`${basket?.currencySymbol}${partialPaymentAmount}`}</>
+                        <>{translate('label.basket.pendingOrderAmountText')}{':'} {`${basket?.currencySymbol}${partialPaymentAmount}`}</>
                     ) : (
-                        <>Order Amount: {basket?.grandTotal?.formatted?.withTax}</>
+                        <>{translate('label.basket.orderAmountText')}{':'} {basket?.grandTotal?.formatted?.withTax}</>
                     )}
                 </span>
                 <div className="w-full flex justify-start items-center gap-2">
                 {/* Partial Payment Input */}
                 {paymentType === PaymentSelectionType.PARTIAL && (
                     <>
-                        <label className="font-semibold text-black text-sm">Enter amount to pay from your wallet</label>
+                        <label className="font-semibold text-black text-sm">{stringFormat(translate('label.checkout.payment.enterAmountToPayLabelText'), { paymentMethodName: selectedPaymentMethod?.systemName?.toLowerCase()})}</label>
                         <div className="">
                             <input type="text" inputMode="decimal" placeholder="Enter partial amount" value={inputValue} onKeyDown={handlePartialKeyDown} onChange={handlePartialChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-sky-800 focus:border-sky-800 placeholder-gray-400" />
                         </div>

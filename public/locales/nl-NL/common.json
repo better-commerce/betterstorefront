@@ -84,6 +84,8 @@
             "addedText": "toegevoegd",
             "noBasketAvailableText": "Geen mandje beschikbaar, maak een nieuw mandje aan",
             "totalAmountText": "Totaalbedrag",
+            "orderAmountText": "Orderbedrag",
+            "pendingOrderAmountText": "Openstaand bedrag",
             "checkoutBtnText": "Afrekenen",
             "multipleCodesApplyText": "Je kunt meerdere codes toepassen",
             "getItByText": "Krijg het vóór",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV is vereist",
                 "cvvInvalidText": "CVV is ongeldig",
                 "chequeNoText": "Cheque Nummer",
-                "chequeNumberLabelText": "Cheque Nummer"
+                "chequeNumberLabelText": "Cheque Nummer",
+                "enterAmountToPayLabelText": "Voer het te betalen bedrag in van {paymentMethodName}"
             }
         },
         "collection": {

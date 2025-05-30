@@ -84,6 +84,8 @@
       "addedText": "hinzugefügt",
       "noBasketAvailableText": "Kein Warenkorb verfügbar, bitte erstellen Sie einen neuen",
       "totalAmountText": "Gesamtbetrag",
+      "orderAmountText": "Bestellbetrag",
+      "pendingOrderAmountText": "Ausstehender Betrag",
       "checkoutBtnText": "Zur Kasse",
       "multipleCodesApplyText": "Sie können mehrere Codes anwenden",
       "getItByText": "Erhalten Sie es bis",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "CVC ist erforderlich",
         "cvvInvalidText": "CVC ist ungültig",
         "chequeNoText": "Schecknummer",
-        "chequeNumberLabelText": "Schecknummer"
+        "chequeNumberLabelText": "Schecknummer",
+        "enterAmountToPayLabelText": "Geben Sie den zu zahlenden Betrag von {paymentMethodName} ein"
       }
     },
     "collection": {

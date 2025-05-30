@@ -84,6 +84,8 @@
       "addedText": "added",
       "noBasketAvailableText":"No basket available, please create new one",
       "totalAmountText": "Total amount",
+      "orderAmountText": "Order Amount",
+      "pendingOrderAmountText": "Pending Amount",
       "checkoutBtnText": "Checkout",
       "multipleCodesApplyText": "You may apply mutliple codes",
       "getItByText": "Get it by",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "CVV is required",
         "cvvInvalidText": "CVV is invalid",
         "chequeNoText": "Cheque Number",
-        "chequeNumberLabelText": "Cheque Number"
+        "chequeNumberLabelText": "Cheque Number",
+        "enterAmountToPayLabelText": "Enter amount to pay from {paymentMethodName}"
       }
     },
     "collection": {

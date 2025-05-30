@@ -84,6 +84,8 @@
             "addedText": "tillagd",
             "noBasketAvailableText": "Ingen väska tillgänglig, skapa en ny",
             "totalAmountText": "Totalt belopp",
+            "orderAmountText": "Order Amount",
+            "pendingOrderAmountText": "Utestående belopp",
             "checkoutBtnText": "Kassa",
             "multipleCodesApplyText": "Du kan tillämpa flera koder",
             "getItByText": "Få det innan",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV krävs",
                 "cvvInvalidText": "CVV är ogiltigt",
                 "chequeNoText": "Checknummer",
-                "chequeNumberLabelText": "Checknummer"
+                "chequeNumberLabelText": "Checknummer",
+                "enterAmountToPayLabelText": "Ange belopp att betala från {paymentMethodName}"
             }
         },
         "collection": {

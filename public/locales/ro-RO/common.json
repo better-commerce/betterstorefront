@@ -84,6 +84,8 @@
             "addedText": "adăugat",
             "noBasketAvailableText": "Nu există coș disponibil, vă rugăm să creați unul nou",
             "totalAmountText": "Suma Totală",
+            "orderAmountText": "Suma Comenzii",
+            "pendingOrderAmountText": "Sumă Neplătită",
             "checkoutBtnText": "Finalizați Comanda",
             "multipleCodesApplyText": "Puteți aplica mai multe coduri",
             "getItByText": "Obțineți-l până la",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV este necesar",
                 "cvvInvalidText": "CVV este invalid",
                 "chequeNoText": "Număr cec",
-                "chequeNumberLabelText": "Număr cec"
+                "chequeNumberLabelText": "Număr cec",
+                "enterAmountToPayLabelText": "Introduceți suma de plată de la {paymentMethodName}"
             }
         },
         "collection": {

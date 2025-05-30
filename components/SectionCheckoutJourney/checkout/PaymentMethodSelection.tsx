@@ -345,7 +345,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     const paymentTypeSelectionCmp = (
       <>
         {selectedPaymentSplitPaymentEnabled && ![PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
-          <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} dispatchState={dispatch} />
+          <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} dispatchState={dispatch} translate={translate} selectedPaymentMethod={selectedPaymentMethod} />
         )}
       </>
     )

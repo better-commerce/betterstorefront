@@ -84,6 +84,8 @@
             "addedText": "lisätty",
             "noBasketAvailableText": "Ei koria saatavilla, luo uusi",
             "totalAmountText": "Kokonaissumma",
+            "orderAmountText": "Tilaussumma",
+            "pendingOrderAmountText": "Odotettava summa",
             "checkoutBtnText": "Kassalle",
             "multipleCodesApplyText": "Voit käyttää useita koodeja",
             "getItByText": "Saat sen",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV vaaditaan",
                 "cvvInvalidText": "CVV ei kelpaa",
                 "chequeNoText": "Sekkinumero",
-                "chequeNumberLabelText": "Sekkinumero"
+                "chequeNumberLabelText": "Sekkinumero",
+                "enterAmountToPayLabelText": "Anna maksettava määrä kohteesta {paymentMethodName}"
             }
         },
         "collection": {

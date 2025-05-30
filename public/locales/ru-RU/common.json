@@ -84,6 +84,8 @@
             "addedText": "добавлено",
             "noBasketAvailableText": "Нет доступной корзины, создайте новую",
             "totalAmountText": "Общая сумма",
+            "orderAmountText": "Сумма заказа",
+            "pendingOrderAmountText": "Ожидаемая сумма",
             "checkoutBtnText": "Оформить заказ",
             "multipleCodesApplyText": "Вы можете применить несколько кодов",
             "getItByText": "Получите это до",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV обязателен",
                 "cvvInvalidText": "CVV неверен",
                 "chequeNoText": "Номер чека",
-                "chequeNumberLabelText": "Номер чека"
+                "chequeNumberLabelText": "Номер чека",
+                "enterAmountToPayLabelText": "Введите сумму для оплаты с {paymentMethodName}"
             }
         },
         "collection": {

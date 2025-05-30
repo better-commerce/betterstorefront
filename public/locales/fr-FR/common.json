@@ -84,6 +84,8 @@
       "addedText": "ajouté",
       "noBasketAvailableText": "Aucun panier disponible, veuillez en créer un nouveau",
       "totalAmountText": "Montant total",
+      "orderAmountText": "Montant de la commande",
+      "pendingOrderAmountText": "Montant en attente",
       "checkoutBtnText": "Payer",
       "multipleCodesApplyText": "Vous pouvez appliquer plusieurs codes",
       "getItByText": "Recevez-le avant le",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "Le CVV est requis",
         "cvvInvalidText": "Le CVV n'est pas valide",
         "chequeNoText": "Numéro de chèque",
-        "chequeNumberLabelText": "Numéro de chèque"
+        "chequeNumberLabelText": "Numéro de chèque",
+        "enterAmountToPayLabelText": "Entrez le montant à payer depuis {paymentMethodName}"
       }
     },
     "collection": {
