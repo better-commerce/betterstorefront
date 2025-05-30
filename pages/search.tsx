@@ -35,7 +35,6 @@ export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SOR
 const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
 const PAGE_TYPE = PAGE_TYPES['Search']
 const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, FREE_TEXT } = ACTION_TYPES
-const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
 interface actionInterface {
   type?: string
   payload?: object | any
@@ -80,6 +79,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 
 function Search({ query, setEntities, recordEvent, deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const router = useRouter()
+  const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: router.query?.currentPage || 1, filters: [], freeText: '' }
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
@@ -457,6 +457,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const { locale } = context
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.SEARCH })
+  const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], freeText: '' }
   const pageProps = await props.getPageProps({ allProductsDefaultState: { ...DEFAULT_STATE }, cookies: context?.req?.cookies })
 
   return {
