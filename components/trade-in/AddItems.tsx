@@ -82,7 +82,7 @@ export default function AddItems({ products, images, onChangeSearch, nextStep, s
             <label className='text-lg font-semibold text-[#2d4d9c]'>Item {index + 1}</label>
             <span className='text-sm font-normal text-black'>Tell us about your item</span>
             {/* Remove Button - Only for additional items */}
-            {index > 0 && (
+            {items.length > 1 && (
               <button onClick={() => removeItem(index)} className="absolute right-0 top-4"> <TrashIcon className="w-5 h-5 text-gray-600 hover:text-red-500" /> </button>
             )}
             <div className="relative flex flex-col w-full">
