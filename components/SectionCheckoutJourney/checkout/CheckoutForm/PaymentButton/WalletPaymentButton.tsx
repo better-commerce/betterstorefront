@@ -10,6 +10,7 @@ import { Guid } from '@commerce/types'
 import { AxiosRequestConfig } from 'axios'
 import { PaymentSelectionType, RequestMethod } from 'bc-payments-sdk/dist/constants'
 import { callApi } from '@framework/utils/api-util'
+import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 
 export class WalletPaymentButton extends BasePaymentButton {
   /**
@@ -32,7 +33,8 @@ export class WalletPaymentButton extends BasePaymentButton {
     const { translate } = this.props
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
     if (uiContext?.user?.userId) {
-      const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+      
+      const amountToBePaid = this.isFullPayment() ? (basketOrderInfo?.basket?.isPartialPayment ? getPartialPayableAmount(basketOrderInfo?.basket?.grandTotal?.raw?.withTax, basketOrderInfo?.basket?.paidAmount) : basketOrderInfo?.basket?.grandTotal?.raw?.withTax) : (this.props?.partialAmount || 0)
       if (amountToBePaid <= 0) {
         dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
         return
