@@ -219,13 +219,11 @@ class PayPalPaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { paymentMethod, basketOrderInfo, uiContext, dispatchState, setPaymentType, setPartialAmount, setSelectedPaymentMethod }: any = this.props
+    const { basketOrderInfo, uiContext, dispatchState, setPaymentType, setPartialAmount }: any = this.props
     setPaymentType(PaymentSelectionType.FULL)
     setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
-    if (basketOrderInfo?.basket?.isPartialPayment && setSelectedPaymentMethod) {
-      setSelectedPaymentMethod(paymentMethod)
-    }
+    this.selectOtherPaymentMethodForPartialPayment()
     setTimeout(() => {
       this.onPay(this.state.paymentMethod, basketOrderInfo, uiContext, dispatchState)  
     }, 500);

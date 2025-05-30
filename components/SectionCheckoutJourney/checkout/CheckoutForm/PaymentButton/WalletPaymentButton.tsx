@@ -92,13 +92,11 @@ export class WalletPaymentButton extends BasePaymentButton {
    */
   public componentDidMount(): void {
     const that = this
-    const { uiContext, dispatchState, translate, basketOrderInfo, paymentMethod, setPaymentType, setPartialAmount, setSelectedPaymentMethod }: any = this.props
+    const { uiContext, dispatchState, translate, setPaymentType, setPartialAmount }: any = this.props
     setPaymentType(PaymentSelectionType.FULL)
     setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
-    if (basketOrderInfo?.basket?.isPartialPayment && setSelectedPaymentMethod) {
-      setSelectedPaymentMethod(paymentMethod)
-    }
+    this.selectOtherPaymentMethodForPartialPayment()
 
     const walletId = uiContext?.user?.walletId
     if (walletId && walletId !== Guid.empty) {

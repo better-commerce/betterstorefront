@@ -389,4 +389,11 @@ export default abstract class BasePaymentButton
     }
     return null
   }
+
+  protected selectOtherPaymentMethodForPartialPayment() {
+    const { basketOrderInfo, paymentMethod, setSelectedPaymentMethod }: any = this.props
+    if (basketOrderInfo?.basket?.isPartialPayment && setSelectedPaymentMethod) {
+      setSelectedPaymentMethod(paymentMethod)
+    }
+  }
 }
