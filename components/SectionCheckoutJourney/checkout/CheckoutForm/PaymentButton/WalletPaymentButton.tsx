@@ -33,7 +33,7 @@ export class WalletPaymentButton extends BasePaymentButton {
     const { translate } = this.props
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
     if (uiContext?.user?.userId) {
-      
+
       const amountToBePaid = this.isFullPayment() ? (basketOrderInfo?.basket?.isPartialPayment ? getPartialPayableAmount(basketOrderInfo?.basket?.grandTotal?.raw?.withTax, basketOrderInfo?.basket?.paidAmount) : basketOrderInfo?.basket?.grandTotal?.raw?.withTax) : (this.props?.partialAmount || 0)
       if (amountToBePaid <= 0) {
         dispatchState({ type: 'SET_ERROR', payload: translate('common.message.checkout.paymentAmountRequiredErrorMsg'), })
@@ -117,7 +117,7 @@ export class WalletPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext }: any = this.props
+    const { uiContext, setPaymentType, setPartialAmount, paymentTypeSelectionCmp }: any = this.props
     const orderTotalGrThAvailableBalance = (this?.state?.orderTotal > this?.state?.walletBalance)
 
     return (
@@ -133,6 +133,10 @@ export class WalletPaymentButton extends BasePaymentButton {
             </div>
           </dl>
 
+          <div className="flex mb-5 w-full">
+            {paymentTypeSelectionCmp}
+          </div>
+
 
           {this.baseRender({
             ...this?.props,
@@ -142,7 +146,7 @@ export class WalletPaymentButton extends BasePaymentButton {
         </div>
 
         {this.state.isPaymentInitiated && (
-          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} paymentType={this.props?.paymentType} partialAmount={(this.props?.partialAmount || 0)} />
+          <PaymentGatewayNotification isCOD={false} gateway={this.state?.paymentMethod?.systemName} params={{ token: EmptyString, orderId: EmptyString, payerId: EmptyString, }} isCancelled={false} paymentType={this.props?.paymentType} partialAmount={(this.props?.partialAmount || 0)} setPaymentType={setPaymentType} setPartialAmount={setPartialAmount} />
         )}
       </>
     )

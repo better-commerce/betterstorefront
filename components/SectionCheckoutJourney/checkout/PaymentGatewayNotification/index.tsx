@@ -28,7 +28,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentPr
   const translate = useTranslation()
   const orderInfo = getOrderInfo()
   const { associateCart, getCart } = cartHandler()
-  const { gateway, params, isCancelled, isCOD = false, config, paymentType = PaymentSelectionType.FULL, partialAmount = 0 } = props
+  const { gateway, params, isCancelled, isCOD = false, config, paymentType = PaymentSelectionType.FULL, partialAmount = 0, setPaymentType, setPartialAmount } = props
   const { user, setCartItems, basketId, cartItems, setOrderId, orderId: uiOrderId, setBasketId, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
 
@@ -93,10 +93,17 @@ const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentPr
       setOrderId(paymentResponseRequest?.orderId)
       if (IS_RESPONSE_REDIRECT_ENABLED) {
         const basketResult: any = await getCart({ basketId, })
-        if (basketResult?.isPartialPayment)
+        if (basketResult?.isPartialPayment) {
+          if (setPaymentType)
+            setPaymentType(PaymentSelectionType.FULL)
+
+          if (setPartialAmount)
+            setPartialAmount(0)
           setRedirectUrl(`/checkout?step=review`)
-        else
+        }
+        else {
           setRedirectUrl(`/payment-failed`)
+        }
       }
     }
   }

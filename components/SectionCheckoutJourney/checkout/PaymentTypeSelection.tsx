@@ -116,37 +116,41 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
     return (
         <>
             {/* Payment Type Selection */}
-            <div className="w-full space-y-2">
-                {PAYMENT_TYPES.map((type: any) => (
-                    <label key={type.value} className="flex items-center space-x-3">
-                        <input type="radio" name="paymentType" value={type.value} checked={paymentType === type.value} onChange={(e: any) => {
-                            dispatchState({ type: 'SET_ERROR', payload: EmptyString, })
-                            setPaymentType(e.target.value)
-                            if (e.target.value === PaymentSelectionType.FULL) {
-                                setPartialAmount(0)
-                                setInputValue('0')
-                            }
-                        }} className="form-radio h-5 w-5 text-sky-800 border-gray-300" />
+            <div className="flex flex-col gap-2 w-full">
+                <div className="w-full flex gap-4">
+                    {PAYMENT_TYPES.map((type: any) => (
+                        <label key={type.value} className="flex-col items-center space-x-3">
+                            <input type="radio" name="paymentType" value={type.value} checked={paymentType === type.value} onChange={(e: any) => {
+                                dispatchState({ type: 'SET_ERROR', payload: EmptyString, })
+                                setPaymentType(e.target.value)
+                                if (e.target.value === PaymentSelectionType.FULL) {
+                                    setPartialAmount(0)
+                                    setInputValue('0')
+                                }
+                            }} className="form-radio h-5 w-5 text-sky-800 border-gray-300" />
 
-                        <span className="text-gray-900 font-medium">{type.name}</span>
-                        {type.name === PAYMENT_TYPES[0].name && (
-                            <>
-                                {basket?.isPartialPayment ? (
-                                    <>{' - '}{`${basket?.currencySymbol}${partialPaymentAmount}`}</>
-                                ) : (
-                                    <>{' - '}{basket?.grandTotal?.formatted?.withTax}</>
-                                )}
-                            </>
-                        )}
-                    </label>
-                ))}
-                
+                            <span className="text-gray-900 font-medium">{type.name}</span>
+                        </label>
+                    ))}
+                </div>
+                <span className="flex items-center text-gray-700 mt-4 font-semibold">
+                    {basket?.isPartialPayment ? (
+                        <>Pending Amount: {`${basket?.currencySymbol}${partialPaymentAmount}`}</>
+                    ) : (
+                        <>Order Amount: {basket?.grandTotal?.formatted?.withTax}</>
+                    )}
+                </span>
+                <div className="w-full flex justify-start items-center gap-2">
                 {/* Partial Payment Input */}
                 {paymentType === PaymentSelectionType.PARTIAL && (
-                    <div className="mt-3">
-                        <input type="text" inputMode="decimal" placeholder="Enter partial amount" value={inputValue} onKeyDown={handlePartialKeyDown} onChange={handlePartialChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-sky-800 focus:border-sky-800 placeholder-gray-400" />
-                    </div>
+                    <>
+                        <label className="font-semibold text-black text-sm">Enter amount to pay from your wallet</label>
+                        <div className="">
+                            <input type="text" inputMode="decimal" placeholder="Enter partial amount" value={inputValue} onKeyDown={handlePartialKeyDown} onChange={handlePartialChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-sky-800 focus:border-sky-800 placeholder-gray-400" />
+                        </div>
+                    </>
                 )}
+                </div>
             </div>
         </>
     )

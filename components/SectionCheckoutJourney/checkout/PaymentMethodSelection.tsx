@@ -288,6 +288,68 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
 
     const contactDetails: any = { userId: user?.userId, firstName: user?.firstName, lastName: user?.lastName, emailAddress: user?.email, phoneNumber: user?.mobile || user?.telephone, }
 
+    const renderPaymentMethods = (paymentMethods: Array<any>) => {
+      return (
+        <div className={`grid grid-cols-2 sm:grid-cols-3 gap-3 sm:mt-2 mt-0`}>
+          {getMethods(paymentMethods)?.map((item: any, idx: number) => (
+            <>
+              {showPaymentOption(item, basket) && (
+                <div key={idx} id={`pnl${item?.systemName}`} onClick={() => handleMethodSelection(item)} className={`${selectedPaymentMethod?.id === item?.id ? '' : '' }  pointer mb-0 flex justify-start flex-row`} >
+                  <div className="w-full mb-0">
+                    <label className="custom-radio">
+                      <input className={`pnl${item?.systemName}`} id="debit" type="radio" name="payment" value="" defaultChecked={ selectedPaymentMethod?.id === item?.id } />
+                      <div className={`items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}>
+                        <div className="flex items-center justify-center text-span">
+                          <i className={`sprite-icons ${spriteIcon( item?.systemName )}`.trim()} ></i>
+                          {matchStrings( item?.systemName, PaymentMethodType.KLARNA, true ) ? (
+                            <i className="sprite-icons"></i>
+                          ) : matchStrings(item?.systemName, PaymentMethodType.COD, true) ? (
+                            <i className="sprite-icons"></i>
+                          ) : matchStrings(item?.systemName, PaymentMethodType.ACCOUNT_CREDIT, true) ? (
+                            <>
+                              <i className="sprite-icons icon-btn-accountcredit"></i>
+                              <span className="pl-2 capitalize font-12 dark:text-black">
+                                {translate('common.label.accountText')}{' '}
+                                <span className="block">{translate('label.checkout.creditText')}</span>
+                              </span>
+                            </>
+                          ) : matchStrings(item?.systemName, PaymentMethodType.CHEQUE, true) ? (
+                            <>
+                              <i className="sprite-icons icon-btn-cheque"></i>
+                              <span className="pl-2 capitalize font-12 dark:text-black">
+                                {translate('label.checkout.chequeText')}
+                              </span>
+                            </>
+                          ) : (
+                            matchStrings(item?.systemName, PaymentMethodType.CHECKOUT, true) && (
+                              <>
+                                <span className="pl-2 capitalize font-12 dark:text-black">
+                                  {translate('label.checkout.debitCreditText')}{' '}
+                                  <span className="block">{translate('label.checkout.cardText')}</span>
+                                </span>
+                              </>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              )}
+            </>
+          ))}
+        </div>
+      )
+    }
+
+    const paymentTypeSelectionCmp = (
+      <>
+        {selectedPaymentSplitPaymentEnabled && ![PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
+          <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} dispatchState={dispatch} />
+        )}
+      </>
+    )
+
     return paymentMethods ? (
       <>
         {paymentMethods?.length > 0 ? (
@@ -295,55 +357,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
             <div className="flex flex-col gap-2 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">{translate('label.checkout.paymentMethodsText')}</h5>
               <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none">
-                <div className={`grid grid-cols-2 sm:grid-cols-3 gap-3 sm:mt-2 mt-0`}>
-                  {getMethods(paymentMethods)?.map((item: any, idx: number) => (
-                    <>
-                      {showPaymentOption(item, basket) && (
-                        <div key={idx} id={`pnl${item?.systemName}`} onClick={() => handleMethodSelection(item)} className={`${selectedPaymentMethod?.id === item?.id ? '' : '' }  pointer mb-0 flex justify-start flex-row`} >
-                          <div className="w-full mb-0">
-                            <label className="custom-radio">
-                              <input className={`pnl${item?.systemName}`} id="debit" type="radio" name="payment" value="" defaultChecked={ selectedPaymentMethod?.id === item?.id } />
-                              <div className={`items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}>
-                                <div className="flex items-center justify-center text-span">
-                                  <i className={`sprite-icons ${spriteIcon( item?.systemName )}`.trim()} ></i>
-                                  {matchStrings( item?.systemName, PaymentMethodType.KLARNA, true ) ? (
-                                    <i className="sprite-icons"></i>
-                                  ) : matchStrings(item?.systemName, PaymentMethodType.COD, true) ? (
-                                    <i className="sprite-icons"></i>
-                                  ) : matchStrings(item?.systemName, PaymentMethodType.ACCOUNT_CREDIT, true) ? (
-                                    <>
-                                      <i className="sprite-icons icon-btn-accountcredit"></i>
-                                      <span className="pl-2 capitalize font-12 dark:text-black">
-                                        {translate('common.label.accountText')}{' '}
-                                        <span className="block">{translate('label.checkout.creditText')}</span>
-                                      </span>
-                                    </>
-                                  ) : matchStrings(item?.systemName, PaymentMethodType.CHEQUE, true) ? (
-                                    <>
-                                      <i className="sprite-icons icon-btn-cheque"></i>
-                                      <span className="pl-2 capitalize font-12 dark:text-black">
-                                        {translate('label.checkout.chequeText')}
-                                      </span>
-                                    </>
-                                  ) : (
-                                    matchStrings(item?.systemName, PaymentMethodType.CHECKOUT, true) && (
-                                      <>
-                                        <span className="pl-2 capitalize font-12 dark:text-black">
-                                          {translate('label.checkout.debitCreditText')}{' '}
-                                          <span className="block">{translate('label.checkout.cardText')}</span>
-                                        </span>
-                                      </>
-                                    )
-                                  )}
-                                </div>
-                              </div>
-                            </label>
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  ))}
-                </div>
+                {renderPaymentMethods(paymentMethods)}
               </div>
             </div>
             <div>
@@ -351,12 +365,13 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                 <div className="flex flex-col w-full py-5 px-5 space-y-4">
 
                   {/* Enable partial payment for all except COD & Cheque */}
-                  {selectedPaymentSplitPaymentEnabled && ![PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
-                    <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} dispatchState={dispatch} />
+                  {!matchStrings(selectedPaymentMethod?.systemName, PaymentMethodType.WALLET, true) && (
+                    <>{paymentTypeSelectionCmp}</>
                   )}
+                  
 
                   <div className="flex flex-col justify-center chk-payment-btn w-full gap-2 pb-5 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
-                    <PaymentButton translate={translate} btnTitle={translate('common.label.continueBtnText')} paymentMethod={selectedPaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatch} contactDetails={contactDetails} isApplePayScriptLoaded={isApplePayScriptLoaded} onScrollToSection={() => { }} recordAnalytics={recordAnalytics} paymentType={selectedPaymentMethod?.systemName?.toLowerCase() === PaymentMethodType.COD ? PaymentSelectionType.FULL : paymentType} partialAmount={partialAmount ? partialAmount : 0} prepaidValueType={selectedPaymentSplitPaymentPrepaidValueType} minPrepaidValue={selectedPaymentSplitPaymentMinimumPrepaidValue} setPaymentType={setPaymentType} setPartialAmount={setPartialAmount} />
+                    <PaymentButton translate={translate} btnTitle={translate('common.label.continueBtnText')} paymentMethod={selectedPaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatch} contactDetails={contactDetails} isApplePayScriptLoaded={isApplePayScriptLoaded} onScrollToSection={() => { }} recordAnalytics={recordAnalytics} paymentType={selectedPaymentMethod?.systemName?.toLowerCase() === PaymentMethodType.COD ? PaymentSelectionType.FULL : paymentType} partialAmount={partialAmount ? partialAmount : 0} prepaidValueType={selectedPaymentSplitPaymentPrepaidValueType} minPrepaidValue={selectedPaymentSplitPaymentMinimumPrepaidValue} setPaymentType={setPaymentType} setPartialAmount={setPartialAmount} paymentTypeSelectionCmp={paymentTypeSelectionCmp} />
                     {(state?.isPaymentWidgetActive ||
                       !!state?.isPaymentIntent) && (
                         <PaymentWidget paymentMethod={selectedPaymentMethod} checkoutCallback={checkoutCallback} orderModelResponse={state?.orderResponse} />
@@ -368,6 +383,13 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                     )}
                     <SaveB2BQuote basket={basket} />
                   </div>
+                </div>
+              )}
+
+              {(selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment && paymentType === PaymentSelectionType.PARTIAL) && (
+                <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none mb-6">
+                  <div className="w-full text-black font-semibold capitalize p-2">Pay Remaining amount using:</div>
+                  {renderPaymentMethods([...paymentMethods].filter((item) => item.id !== selectedPaymentMethod?.id))}
                 </div>
               )}
             </div>
