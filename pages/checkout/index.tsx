@@ -1,70 +1,43 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import Router, { useRouter } from 'next/router'
+import NextHead from 'next/head'
+import axios from 'axios'
+import cookie from 'cookie'
+import Link from 'next/link'
+import compact from 'lodash/compact'
+import size from 'lodash/size'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useUI, basketId as generateBasketId } from '@components/ui/context'
+import { AnalyticsEventType } from '@components/services/analytics'
+import { BETTERCOMMERCE_DEFAULT_COUNTRY, CURRENT_THEME, DeliveryType, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, NEXT_AUTHENTICATE, NEXT_BASKET_VALIDATE, NEXT_CLICK_AND_COLLECT_STORE_DELIVERY, NEXT_GET_CUSTOMER_DETAILS, NEXT_GUEST_CHECKOUT, NEXT_SHIPPING_ENDPOINT, NEXT_UPDATE_CHECKOUT2_ADDRESS, NEXT_UPDATE_DELIVERY_INFO, NEXT_UPDATE_SHIPPING, SITE_ORIGIN_URL, } from '@components/utils/constants'
+import { AlertType, CheckoutStep } from '@framework/utils/enums'
+import { isB2BUser, logError, loqateAddress, saveUserToken } from '@framework/utils/app-util'
+import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
+import { matchStrings, stringToBoolean, tryParseJson, } from '@framework/utils/parse-util'
+import { decrypt } from '@framework/utils/cipher'
+import { Guid } from '@commerce/types'
+import { Logo } from '@components/ui'
+import { GetServerSideProps } from 'next'
+import { useTranslation } from '@commerce/utils/use-translation'
+import { Cookie } from '@framework/utils/constants'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
+import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import CheckoutEmailHeader from '@components/SectionCheckoutJourney/CheckoutEmailHeader'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import cartHandler from '@components/services/cart'
 import LoginOrGuest from '@components/SectionCheckoutJourney/checkout/LoginOrGuest'
+import CheckoutLayoutV2 from '@components/Layout/CheckoutLayoutV2'
+import Spinner from '@components/ui/Spinner'
 import ShippingAddressForm from '@components/SectionCheckoutJourney/checkout/ShippingAddressForm'
 import BillingAddressForm from '@components/SectionCheckoutJourney/checkout/BillingAddressForm'
 import AddressBook from '@components/SectionCheckoutJourney/checkout/AddressBook'
 import DeliveryMethodSelection from '@components/SectionCheckoutJourney/checkout/DeliveryMethodSelection'
 import ReviewOrder from '@components/SectionCheckoutJourney/checkout/ReviewOrder'
 import BasketDetails from '@components/SectionCheckoutJourney/checkout/BasketDetails'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useUI, basketId as generateBasketId } from '@components/ui/context'
-import NextHead from 'next/head'
-import cookie from 'cookie'
-import {
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
-  CURRENT_THEME,
-  DeliveryType,
-  EmptyGuid,
-  EmptyObject,
-  EmptyString,
-  EngageEventTypes,
-  LOQATE_ADDRESS,
-  Messages,
-  NEXT_AUTHENTICATE,
-  NEXT_BASKET_VALIDATE,
-  NEXT_CLICK_AND_COLLECT_STORE_DELIVERY,
-  NEXT_GET_CUSTOMER_DETAILS,
-  NEXT_GUEST_CHECKOUT,
-  NEXT_SHIPPING_ENDPOINT,
-  NEXT_UPDATE_CHECKOUT2_ADDRESS,
-  NEXT_UPDATE_DELIVERY_INFO,
-  NEXT_UPDATE_SHIPPING,
-  SITE_ORIGIN_URL,
-} from '@components/utils/constants'
-import Spinner from '@components/ui/Spinner'
-import axios from 'axios'
-import { AlertType, CheckoutStep } from '@framework/utils/enums'
-import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import CheckoutLayoutV2 from '@components/Layout/CheckoutLayoutV2'
-import { isB2BUser, logError, loqateAddress, saveUserToken } from '@framework/utils/app-util'
-import { asyncHandler as addressHandler } from '@components/account/Address/AddressBook'
-import cartHandler from '@components/services/cart'
-import {
-  matchStrings,
-  stringToBoolean,
-  stringToNumber,
-  tryParseJson,
-} from '@framework/utils/parse-util'
-import Link from 'next/link'
-import { decrypt } from '@framework/utils/cipher'
-import { Guid } from '@commerce/types'
-import { Logo } from '@components/ui'
-import compact from 'lodash/compact'
-import size from 'lodash/size'
-import { GetServerSideProps } from 'next'
-import { useTranslation } from '@commerce/utils/use-translation'
-import { Cookie } from '@framework/utils/constants'
-import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
-import { getPagePropType, PagePropType } from '@framework/page-props'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
-import DeliveryTypeSelection from '@components/SectionCheckoutJourney/checkout/DeliveryTypeSelection'
-import CheckoutEmailHeader from '@components/SectionCheckoutJourney/CheckoutEmailHeader'
-import { AnalyticsEventType } from '@components/services/analytics'
-import useAnalytics from '@components/services/analytics/useAnalytics'
 
 export enum BasketStage {
   CREATED = 0,
@@ -76,59 +49,39 @@ export enum BasketStage {
   PLACED = 5,
 }
 
-
-const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, config, defaultDisplayMembership}: any) => {
+const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle, campaignData, allMembershipPlans, config, defaultDisplayMembership }: any) => {
   const { recordAnalytics } = useAnalytics()
+  const { getCart } = cartHandler()
+  const { getAddress, createAddress, updateAddress } = addressHandler()
   const router = useRouter()
   const uiContext: any = useUI()
-  const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState, } = useUI()
+  const translate = useTranslation()
+  const { isMobile, isIPadorTablet } = deviceInfo
+  const { isGuestUser, user, setAlert, setUser, setIsGuestUser, setIsGhostUser, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const [basket, setBasket] = useState<any>(undefined)
   const [isCheckoutStarted, setCheckoutStarted] = useState(false)
   const [appConfigData, setAppConfigData] = useState<any>()
-  const { isMobile, isIPadorTablet } = deviceInfo
-  const translate = useTranslation()
-  const { getAddress, createAddress, updateAddress } = addressHandler()
-  const { getCart } = cartHandler()
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
   const [selectedAddress, setSelectedAddress] = useState<any>(null)
   const [deliveryTypeMethod, setDeliveryTypeMethod] = useState<any>(null)
-  const [selectedDelivery, setSelectedDelivery] = useState<any>(null)
-  const [selectedDeliveryMethod, setSelectedDeliveryMethod] =
-    useState<any>(null)
+  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState<any>(null)
   const [currentStep, setCurrentStep] = useState<string>('')
   const [completedSteps, setCompletedSteps] = useState<string[]>([])
   const [addressList, setAddressList] = useState<any>(undefined)
   const [prevStep, setPrevStep] = useState<any>(CheckoutStep.ADDRESS)
-  const [isApplePayScriptLoaded, setIsApplePayScriptLoaded] =
-    useState<boolean>(false)
+  const [isApplePayScriptLoaded, setIsApplePayScriptLoaded] = useState<boolean>(false)
   const [editAddressValues, setEditAddressValues] = useState<any>(undefined)
   const [deliveryMethods, setDeliveryMethods] = useState(new Array<any>())
 
   const steps = [
-    {
-      key: 'address',
-      label: translate('label.checkout.informationText'),
-      shouldActiveOn: 'login,new-address,edit-address,billing-address',
-    },
+    { key: 'address', label: translate('label.checkout.informationText'), shouldActiveOn: 'login,new-address,edit-address,billing-address', },
     { key: 'delivery', label: translate('label.checkout.deliveryText'), shouldActiveOn: 'select-delivery-type' },
     { key: 'review', label: translate('label.checkout.paymentHeadingText'), shouldActiveOn: '' },
   ]
 
   const DELIVERY_METHODS_TYPE = [
-    {
-      id: 0,
-      title: 'Deliver',
-      content: translate('label.checkout.toChoiceAddressText'),
-      children: [],
-      type: [ DeliveryType.STANDARD_DELIVERY, DeliveryType.EXPRESS_DELIVERY ],
-    },
-    {
-      id: 1,
-      type: [ DeliveryType.COLLECT ],
-      title: 'Collect',
-      content: translate('common.label.inStoreUsingCollectPlusText'),
-      children: [],
-    },
+    { id: 0, title: 'Deliver', content: translate('label.checkout.toChoiceAddressText'), children: [], type: [DeliveryType.STANDARD_DELIVERY, DeliveryType.EXPRESS_DELIVERY], },
+    { id: 1, type: [DeliveryType.COLLECT], title: 'Collect', content: translate('common.label.inStoreUsingCollectPlusText'), children: [], },
   ]
 
   const getStepFromStage = (stage: number) => {
@@ -191,7 +144,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
   const asyncBasket = async () => {
     setOverlayLoaderState({ visible: true, message: 'Please wait...', backdropInvisible: true, })
-    
+
     const basketRes: any = await getBasket(basketId)
     if (isQuoteBasket(basketRes)) {
       let shippingAddress = basketRes?.shippingAddress
@@ -200,7 +153,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       await fetchAddress()
       await loadDeliveryMethods(shippingAddress, basketRes?.id)
       await updateCheckoutAddress({ shippingAddress, billingAddress }, true)
-      
+
       new Promise(() => {
         const step = getStepFromStage(BasketStage.SHIPPING_METHOD_SELECTED)
         goToStep(step)
@@ -611,7 +564,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           setSelectedAddress({ billingAddress: newAddressData, shippingAddress: newAddressData, })
         } else {
           // if billing addressId is different
-          if(basket?.billingAddress?.id !== basket?.shippingAddress?.id){
+          if (basket?.billingAddress?.id !== basket?.shippingAddress?.id) {
             await updateCheckoutAddress({ shippingAddress: newAddressData, billingAddress: basket?.billingAddress }, true)
             setSelectedAddress({ billingAddress: basket?.billingAddress, shippingAddress: newAddressData, })
           } else {
@@ -633,7 +586,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       goToStep(CheckoutStep.DELIVERY)
     } else {
       // if billing address exists
-      if(basket?.billingAddress?.id && (address?.isBilling || address?.useSameForBilling)){
+      if (basket?.billingAddress?.id && (address?.isBilling || address?.useSameForBilling)) {
         if (!isLoggedIn) {
           setCompletedSteps((prev) => [
             ...new Set([...prev, CheckoutStep.ADDRESS]),
@@ -663,7 +616,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const { isBilling, ...addressData } = newAddress
       if (size(addressData) > 0) {
         if (isBilling) {
-          prevAddrList[1] = {...addressData, isBilling:true }
+          prevAddrList[1] = { ...addressData, isBilling: true }
         } else {
           prevAddrList[0] = addressData
         }
@@ -1016,9 +969,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   const basketDetailsProps = {
     basket,
     setBasket,
-    deviceInfo, 
-    allMembershipPlans, 
-    defaultDisplayMembership, 
+    deviceInfo,
+    allMembershipPlans,
+    defaultDisplayMembership,
     refreshBasket,
     featureToggle,
     config
@@ -1188,7 +1141,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         <link rel="icon" type="image/png" sizes="16x16" href={`/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </NextHead>
-      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 park-seconday-bg-clr border-b border-gray-300 sm:py-4 checkout-header">
+      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 border-b border-gray-300 park-seconday-bg-clr sm:py-4 checkout-header">
         <div className="flex justify-between container-storefront gap-x-5 small-screen">
           <Link href="/" title="BetterStore" className="desktop-w-88 logo-link-chk pc-img-filter">
             <Logo />
@@ -1204,7 +1157,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
 
       {isMobile || isIPadorTablet ? (
         <div className="justify-start w-full bar">
-          <BasketDetails { ...basketDetailsProps }  />
+          <BasketDetails {...basketDetailsProps} />
         </div>
       ) : (
         <></>
@@ -1237,13 +1190,13 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         {isMobile || isIPadorTablet ? (
           <></>
         ) : (
-          <div className="justify-start min-h-screen p-6 bg-gray-100 park-primary-bg-clr border-gray-300 border-x basket-container top-14">
-            <BasketDetails  { ...basketDetailsProps } />
+          <div className="justify-start min-h-screen p-6 bg-gray-100 border-gray-300 park-primary-bg-clr border-x basket-container top-14">
+            <BasketDetails  {...basketDetailsProps} />
           </div>
         )}
       </div>
       <div className='flex flex-col w-full'>
-        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12}/>
+        <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
         <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
         <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
         <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
@@ -1259,7 +1212,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let basketId: any = cookies?.basketId
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.CHECKOUT })
   const pageProps = await props.getPageProps({ cookies: context?.req?.cookies })
-  
+
   return {
     props: {
       ...pageProps,
