@@ -2952,6 +2952,9 @@ word-break: break-word;
 .d-none-img{
   display:none !important;
 }
-.btn-hide-cut .hide-btn-section {
+.btn-hide-cut .hide-btn-section, .d--none-amm {
    display: none !important;
+}
+.margin-top-20-am{
+  margin-top:20px !important
 }

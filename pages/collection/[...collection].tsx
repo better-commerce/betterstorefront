@@ -641,7 +641,7 @@ function CollectionPage(props: any) {
         ))}
       </div>
       {!featureToggle.features?.enableForPCSite &&
-        <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white">
+        <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white margin-top-20-am">
           <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
             <li className='flex items-center text-10-mob sm:text-sm'>
               <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
@@ -692,8 +692,8 @@ function CollectionPage(props: any) {
               <>
                 {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
                   <>
-                  <div className="bg-transparent col-span-12 fixing-main-section dark:bg-white">
-                    <div className='container'>
+                  <div className="bg-transparent col-span-12 fixing-main-section dark:bg-white d--none-amm">
+                    <div className='container !px-0'>
                       <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
                             <li className='flex items-center text-10-mob sm:text-sm'>
                               <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
@@ -717,9 +717,9 @@ function CollectionPage(props: any) {
                     </>
                   }
                     <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'} ${featureToggle?.features?.enableForPCSite ? 'container' : ''}`}>
-                      {featureToggle.features?.enableForPCSite &&
-                        <>
-                            {renderFeaturedProduct()}
+                     {featureToggle.features?.enableForPCSite ? (
+                         <>
+                          {renderFeaturedProduct()}
                             <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
                             {isMobile ? (
                                 <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
@@ -741,8 +741,24 @@ function CollectionPage(props: any) {
                                 <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                               </div>
                             </div>
-                        </>
-                      }
+                         </>
+                        ) : (
+                          <>
+                            <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                            {isMobile ? (
+                                <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                              ) : (
+                                <>
+                                  {!featureToggle?.features?.enableHorizontalFilter ? (
+                                    <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                  ) : (
+                                    <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                  )}
+                                </>
+                              )}
+                          </div>
+                          </>
+                        )}
                       {isMobile ? null : (
                         !featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       )}
