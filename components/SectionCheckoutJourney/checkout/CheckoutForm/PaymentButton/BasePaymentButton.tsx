@@ -35,6 +35,7 @@ export interface IPaymentButtonProps {
   setPaymentType?: any
   setPartialAmount?: any
   paymentTypeSelectionCmp?: any
+  setSelectedPaymentMethod?: any
 }
 
 export interface IApplePaymentProps {
