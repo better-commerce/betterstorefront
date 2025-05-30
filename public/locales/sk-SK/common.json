@@ -1380,6 +1380,7 @@
                 "notEnoughBalanceErrorMsg": "Nedostatočný zostatok.",
                 "paymentMethodNotSupportedErrorMsg": "Platobná metóda nie je podporovaná.",
                 "paymentAmountRequiredErrorMsg": "Je potrebná suma platby.",
+                "paymentAmountMinValueErrorMsg": "Minimálna suma platby je {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Hodnota platby nesmie presiahnuť {currencySymbol}{paymentAmount}."
             },
             "password": {

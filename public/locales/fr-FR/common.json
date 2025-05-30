@@ -1376,6 +1376,7 @@
         "notEnoughBalanceErrorMsg": "Solde insuffisant disponible.",
         "paymentMethodNotSupportedErrorMsg": "Le mode de paiement n'est pas pris en charge.",
         "paymentAmountRequiredErrorMsg": "Le montant du paiement est requis.",
+        "paymentAmountMinValueErrorMsg": "Le montant minimum du paiement est de {currencySymbol}{paymentAmount}.",
         "paymentAmountCannotExceedErrorMsg": "La valeur du paiement ne peut pas dépasser {currencySymbol}{paymentAmount}."
       },
       "password": {

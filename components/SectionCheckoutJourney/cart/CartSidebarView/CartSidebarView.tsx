@@ -28,7 +28,7 @@ import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 import { groupCartItemsById } from '@components/utils/cart'
 import { round, sortBy } from 'lodash'
 import { ProductType } from '@framework/utils/enums'
-import { getPartialPaymentAmount } from '@components/cart/CartSidebarView/CartSidebarView'
+import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 import { CURRENT_THEME } from '@components/utils/constants'
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
@@ -543,7 +543,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     items = Object.values(groupCartItemsById(cartItems?.lineItems))
     setUserCartItems(items)
   }, [cartItems?.lineItems])
-  const partialPaymentAmount = getPartialPaymentAmount(cartItems?.grandTotal?.raw?.withTax, cartItems?.paidAmount)
+  const partialPaymentAmount = getPartialPayableAmount(cartItems?.grandTotal?.raw?.withTax, cartItems?.paidAmount)
 
   const css = { maxWidth: '100%', height: 'auto' }
     return (

@@ -1380,6 +1380,7 @@
                 "notEnoughBalanceErrorMsg": "Niewystarczające środki.",
                 "paymentMethodNotSupportedErrorMsg": "Metoda płatności nie jest obsługiwana.",
                 "paymentAmountRequiredErrorMsg": "Wymagana jest kwota płatności.",
+                "paymentAmountMinValueErrorMsg": "Minimalna kwota płatności to {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Wartość płatności nie może przekraczać {currencySymbol}{paymentAmount}."
             },
             "password": {

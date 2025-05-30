@@ -1369,6 +1369,7 @@
                 "notEnoughBalanceErrorMsg": "Onvoldoende saldo beschikbaar.",
                 "paymentMethodNotSupportedErrorMsg": "Betalingsmethode wordt niet ondersteund.",
                 "paymentAmountRequiredErrorMsg": "Betalingsbedrag is vereist.",
+                "paymentAmountMinValueErrorMsg": "Minimumbedrag voor betaling is {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Betalingswaarde mag niet hoger zijn dan {currencySymbol}{paymentAmount}."
             },
             "password": {

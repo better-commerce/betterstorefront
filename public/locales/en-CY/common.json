@@ -1320,6 +1320,7 @@
                 "notEnoughBalanceErrorMsg": "Μη διαθέσιμο επαρκές υπόλοιπο.",
                 "paymentMethodNotSupportedErrorMsg": "Η μέθοδος πληρωμής δεν υποστηρίζεται.",
                 "paymentAmountRequiredErrorMsg": "Απαιτείται ποσό πληρωμής.",
+                "paymentAmountMinValueErrorMsg": "Το ελάχιστο ποσό πληρωμής είναι {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Η τιμή πληρωμής δεν μπορεί να υπερβαίνει το {currencySymbol}{paymentAmount}."
             },
             "password": {

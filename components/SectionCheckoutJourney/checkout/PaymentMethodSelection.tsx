@@ -1,5 +1,5 @@
 // Base Imports
-import React, { useState, useEffect, useReducer, memo } from 'react'
+import React, { useState, useEffect, useReducer, memo, useMemo } from 'react'
 
 // Package Imports
 import axios from 'axios'
@@ -13,7 +13,7 @@ import PaymentWidget from '@components/SectionCheckoutJourney/checkout/PaymentWi
 import PaymentButton from '@components/SectionCheckoutJourney/checkout/CheckoutForm/PaymentButton'
 
 // Other Imports
-import { matchStrings, tryParseJson } from '@framework/utils/parse-util'
+import { matchStrings, stringToBoolean, tryParseJson } from '@framework/utils/parse-util'
 import { isClearPayPriceThresholdInvalid } from '@framework/utils/payment-util'
 import { Payments } from '@components/utils/payment-constants'
 import { Cookie } from '@framework/utils/constants'
@@ -53,6 +53,18 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     const [basketOrderInfo, setBasketOrderInfo] = useState<any>(undefined)
     const [paymentType, setPaymentType] = useState('full')
     const [partialAmount, setPartialAmount] = useState(0)
+
+    const selectedPaymentSplitPaymentEnabled = useMemo(() => {
+      return stringToBoolean(selectedPaymentMethod?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value) || false
+    }, [selectedPaymentMethod])
+
+    const selectedPaymentSplitPaymentPrepaidValueType = useMemo(() => {
+      return selectedPaymentMethod?.settings?.find((setting: any) => setting?.key === 'PrepaidValueType')?.value
+    }, [selectedPaymentMethod])
+
+    const selectedPaymentSplitPaymentMinimumPrepaidValue = useMemo(() => {
+      return parseFloat(selectedPaymentMethod?.settings?.find((setting: any) => setting?.key === 'MinimumPrepaidValue')?.value)
+    }, [selectedPaymentMethod])
 
     const isBrowser = typeof window !== 'undefined'
     const INITIAL_STATE = {
@@ -109,12 +121,12 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
       )
       const paymentMethods: any = tryParseJson(decrypt(response))
 
-      if (featureToggle?.features?.enableSplitPayment) {
+      if (basket?.isPartialPayment) {
 
         const filteredPaymentMethods = [...paymentMethods].filter((x: any) => {
 
           // Hide COD & Cheque if current basket contains partial payment.
-          if (basket?.isPartialPayment && [PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(x?.systemName?.toLowerCase())) {
+          if ([PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(x?.systemName?.toLowerCase())) {
             return false
           }
           return true
@@ -239,7 +251,6 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     useEffect(() => {
       const asyncHandler = async () => {
         const paymentMethods: any = await loadPaymentMethods()
-
         if (paymentMethods?.length) {
           const defaultSelectedPaymentMethod = paymentMethods?.find((x: any) => x.isDefault)
           if (!defaultSelectedPaymentMethod) {
@@ -282,13 +293,9 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         {paymentMethods?.length > 0 ? (
           <div className="">
             <div className="flex flex-col gap-2 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
-              <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">
-                {translate('label.checkout.paymentMethodsText')}
-              </h5>
+              <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">{translate('label.checkout.paymentMethodsText')}</h5>
               <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none">
-                <div
-                  className={`grid grid-cols-2 sm:grid-cols-3 gap-3 sm:mt-2 mt-0`}
-                >
+                <div className={`grid grid-cols-2 sm:grid-cols-3 gap-3 sm:mt-2 mt-0`}>
                   {getMethods(paymentMethods)?.map((item: any, idx: number) => (
                     <>
                       {showPaymentOption(item, basket) && (
@@ -296,15 +303,11 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                           <div className="w-full mb-0">
                             <label className="custom-radio">
                               <input className={`pnl${item?.systemName}`} id="debit" type="radio" name="payment" value="" defaultChecked={ selectedPaymentMethod?.id === item?.id } />
-                              <div
-                                className={`items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}
-                              >
+                              <div className={`items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm`}>
                                 <div className="flex items-center justify-center text-span">
                                   <i className={`sprite-icons ${spriteIcon( item?.systemName )}`.trim()} ></i>
                                   {matchStrings( item?.systemName, PaymentMethodType.KLARNA, true ) ? (
-                                    <>
-                                      <i className="sprite-icons"></i>
-                                    </>
+                                    <i className="sprite-icons"></i>
                                   ) : matchStrings(item?.systemName, PaymentMethodType.COD, true) ? (
                                     <i className="sprite-icons"></i>
                                   ) : matchStrings(item?.systemName, PaymentMethodType.ACCOUNT_CREDIT, true) ? (
@@ -348,12 +351,12 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                 <div className="flex flex-col w-full py-5 px-5 space-y-4">
 
                   {/* Enable partial payment for all except COD & Cheque */}
-                  {featureToggle?.features?.enableSplitPayment && ![PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
-                    <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} />
+                  {selectedPaymentSplitPaymentEnabled && ![PaymentMethodType.COD, PaymentMethodType.CHEQUE].includes(selectedPaymentMethod?.systemName?.toLowerCase())  && (
+                    <PaymentTypeSelection paymentType={paymentType} setPaymentType={setPaymentType} payableAmount={basket?.grandTotal?.raw?.withTax} partialAmount={partialAmount} setPartialAmount={setPartialAmount} basket={basket} dispatchState={dispatch} />
                   )}
 
                   <div className="flex flex-col justify-center chk-payment-btn w-full gap-2 pb-5 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
-                    <PaymentButton translate={translate} btnTitle={translate('common.label.confirmText')} paymentMethod={selectedPaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatch} contactDetails={contactDetails} isApplePayScriptLoaded={isApplePayScriptLoaded} onScrollToSection={() => { }} recordAnalytics={recordAnalytics} paymentType={selectedPaymentMethod?.systemName?.toLowerCase() === PaymentMethodType.COD ? PaymentSelectionType.FULL : paymentType} partialAmount={partialAmount ? partialAmount : 0} />
+                    <PaymentButton translate={translate} btnTitle={translate('common.label.continueBtnText')} paymentMethod={selectedPaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatch} contactDetails={contactDetails} isApplePayScriptLoaded={isApplePayScriptLoaded} onScrollToSection={() => { }} recordAnalytics={recordAnalytics} paymentType={selectedPaymentMethod?.systemName?.toLowerCase() === PaymentMethodType.COD ? PaymentSelectionType.FULL : paymentType} partialAmount={partialAmount ? partialAmount : 0} prepaidValueType={selectedPaymentSplitPaymentPrepaidValueType} minPrepaidValue={selectedPaymentSplitPaymentMinimumPrepaidValue} setPaymentType={setPaymentType} setPartialAmount={setPartialAmount} />
                     {(state?.isPaymentWidgetActive ||
                       !!state?.isPaymentIntent) && (
                         <PaymentWidget paymentMethod={selectedPaymentMethod} checkoutCallback={checkoutCallback} orderModelResponse={state?.orderResponse} />

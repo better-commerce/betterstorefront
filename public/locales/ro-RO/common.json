@@ -1380,6 +1380,7 @@
                 "notEnoughBalanceErrorMsg": "Sold insuficient disponibil.",
                 "paymentMethodNotSupportedErrorMsg": "Metoda de plată nu este acceptată.",
                 "paymentAmountRequiredErrorMsg": "Suma plății este obligatorie.",
+                "paymentAmountMinValueErrorMsg": "Suma minimă de plată este {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Valoarea plății nu poate depăși {currencySymbol}{paymentAmount}."
             },
             "password": {

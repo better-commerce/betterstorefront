@@ -1378,6 +1378,7 @@
         "notEnoughBalanceErrorMsg": "Nicht genügend Guthaben verfügbar.",
         "paymentMethodNotSupportedErrorMsg": "Zahlungsmethode wird nicht unterstützt.",
         "paymentAmountRequiredErrorMsg": "Zahlungsbetrag ist erforderlich.",
+        "paymentAmountMinValueErrorMsg": "Der Mindestzahlungsbetrag beträgt {currencySymbol}{paymentAmount}.",
         "paymentAmountCannotExceedErrorMsg": "Der Zahlungsbetrag darf {currencySymbol}{paymentAmount} nicht überschreiten."
       },
       "password": {

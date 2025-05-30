@@ -1380,6 +1380,7 @@
                 "notEnoughBalanceErrorMsg": "Недостаточно средств.",
                 "paymentMethodNotSupportedErrorMsg": "Способ оплаты не поддерживается.",
                 "paymentAmountRequiredErrorMsg": "Требуется сумма платежа.",
+                "paymentAmountMinValueErrorMsg": "Минимальная сумма платежа — {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Сумма платежа не может превышать {currencySymbol}{paymentAmount}."
             },
             "password": {

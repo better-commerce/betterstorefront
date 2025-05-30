@@ -1379,6 +1379,7 @@
                 "notEnoughBalanceErrorMsg": "Ikke nok saldo tilgængelig.",
                 "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden understøttes ikke.",
                 "paymentAmountRequiredErrorMsg": "Betalingsbeløb er påkrævet.",
+                "paymentAmountMinValueErrorMsg": "Minimumsbetalingsbeløbet er {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Betalingsværdien kan ikke overstige {currencySymbol}{paymentAmount}."
             },
             "password": {

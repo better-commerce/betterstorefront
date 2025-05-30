@@ -8,7 +8,7 @@ import { EmptyString, Messages, NEXT_WALLET_GET_BALANCE, } from '@components/uti
 import { matchStrings, stringFormat } from '@framework/utils/parse-util'
 import { Guid } from '@commerce/types'
 import { AxiosRequestConfig } from 'axios'
-import { RequestMethod } from 'bc-payments-sdk/dist/constants'
+import { PaymentSelectionType, RequestMethod } from 'bc-payments-sdk/dist/constants'
 import { callApi } from '@framework/utils/api-util'
 
 export class WalletPaymentButton extends BasePaymentButton {
@@ -90,7 +90,9 @@ export class WalletPaymentButton extends BasePaymentButton {
    */
   public componentDidMount(): void {
     const that = this
-    const { uiContext, dispatchState, translate }: any = this.props
+    const { uiContext, dispatchState, translate, setPaymentType, setPartialAmount }: any = this.props
+    setPaymentType(PaymentSelectionType.FULL)
+    setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
     const walletId = uiContext?.user?.walletId
     if (walletId && walletId !== Guid.empty) {

@@ -1372,6 +1372,7 @@
                 "notEnoughBalanceErrorMsg": "Riittämätön saldo käytettävissä.",
                 "paymentMethodNotSupportedErrorMsg": "Maksutapaa ei tueta.",
                 "paymentAmountRequiredErrorMsg": "Maksun määrä on pakollinen.",
+                "paymentAmountMinValueErrorMsg": "Minimimaksun määrä on {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Maksun arvo ei voi ylittää {currencySymbol}{paymentAmount}."
             },
             "password": {

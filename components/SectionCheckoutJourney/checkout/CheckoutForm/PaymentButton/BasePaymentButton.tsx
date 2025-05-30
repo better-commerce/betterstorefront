@@ -15,6 +15,8 @@ import { matchStrings } from '@framework/utils/parse-util'
 import { EmptyString, Messages } from '@components/utils/constants'
 import { IPaymentInfo, PaymentSelectionType, PaymentStatus } from 'bc-payments-sdk'
 import { AnalyticsEventType } from '@components/services/analytics'
+import { SplitPaymentPrepaidValueType } from '../../PaymentTypeSelection'
+import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -40,6 +42,8 @@ export interface IApplePaymentProps {
 export interface IPartialPaymentProps {
   readonly paymentType?: string
   readonly partialAmount?: number
+  readonly prepaidValueType?: string
+  readonly minPrepaidValue?: number
 }
 
 export interface IAgeVerifyProps {
@@ -340,16 +344,40 @@ export default abstract class BasePaymentButton
 
   protected isValidPaymentAmount(basketOrderInfo: any, { paymentType, partialAmount }: IPartialPaymentProps): any | null {
 
+    const { prepaidValueType, minPrepaidValue = 0, } = this.props
+
+    const validateMinPaymentAmount = (amountPaid: number, amountPayable: number) => {
+      if (prepaidValueType === SplitPaymentPrepaidValueType.PERCENTAGE) {
+        const minAmount = amountPayable * (minPrepaidValue / 100)
+        return (amountPaid >= minAmount) ? 0 : minAmount
+      } else if (prepaidValueType === SplitPaymentPrepaidValueType.PRICE) {
+        return (amountPaid >= minPrepaidValue) ? 0 : minPrepaidValue
+      }
+      return 0
+    }
+
     if (paymentType === PaymentSelectionType.PARTIAL) {
       const partialAmountInput = partialAmount ||0
 
       // If this is the first partial payment, then check if the partial amount is greater than order total
       if (!basketOrderInfo?.basket?.isPartialPayment) {
+
+        const minPaymentAmountNotMet = validateMinPaymentAmount(partialAmountInput, basketOrderInfo?.basket?.grandTotal?.raw?.withTax)
+        if (minPaymentAmountNotMet > 0) {
+          return { msg: 'common.message.checkout.paymentAmountMinValueErrorMsg', amount: minPaymentAmountNotMet }
+        }
+        
         if (partialAmountInput > basketOrderInfo?.basket?.grandTotal?.raw?.withTax) {
           return { msg: 'common.message.checkout.paymentAmountCannotExceedErrorMsg', amount: basketOrderInfo?.basket?.grandTotal?.raw?.withTax }
         }
       } else {
-          const amountPayable = (basketOrderInfo?.basket?.grandTotal?.raw?.withTax - basketOrderInfo?.basket?.paidAmount)
+          const amountPayable = getPartialPayableAmount(basketOrderInfo?.basket?.grandTotal?.raw?.withTax, basketOrderInfo?.basket?.paidAmount)
+
+          const minPaymentAmountNotMet = validateMinPaymentAmount(partialAmountInput, amountPayable)
+          if (minPaymentAmountNotMet > 0) {
+            return { msg: 'common.message.checkout.paymentAmountMinValueErrorMsg', amount: minPaymentAmountNotMet }
+          }
+
           if (partialAmountInput > amountPayable) {
             return { msg: 'common.message.checkout.paymentAmountCannotExceedErrorMsg', amount: amountPayable }
           }

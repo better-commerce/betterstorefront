@@ -1380,6 +1380,7 @@
                 "notEnoughBalanceErrorMsg": "Inte tillräckligt med saldo tillgängligt.",
                 "paymentMethodNotSupportedErrorMsg": "Betalningsmetoden stöds inte.",
                 "paymentAmountRequiredErrorMsg": "Betalningsbelopp krävs.",
+                "paymentAmountMinValueErrorMsg": "Minsta betalningsbelopp är {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Betalningsvärdet får inte överstiga {currencySymbol}{paymentAmount}."
             },
             "password": {

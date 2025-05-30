@@ -1379,6 +1379,7 @@
                 "notEnoughBalanceErrorMsg": "Nedostatečný dostupný zůstatek.",
                 "paymentMethodNotSupportedErrorMsg": "Tento způsob platby není podporován.",
                 "paymentAmountRequiredErrorMsg": "Částka platby je povinná.",
+                "paymentAmountMinValueErrorMsg": "Minimální částka platby je {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Hodnota platby nesmí přesáhnout {currencySymbol}{paymentAmount}."
             },
             "password": {

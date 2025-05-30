@@ -19,15 +19,17 @@ import { EmptyString } from '@components/utils/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { IPartialPaymentProps } from '../CheckoutForm/PaymentButton/BasePaymentButton'
 import { decrypt } from '@framework/utils/cipher'
+import { useTranslation } from '@commerce/utils/use-translation'
 
 const IS_RESPONSE_REDIRECT_ENABLED = true
 
 const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentProps) => {
   const { recordAnalytics } = useAnalytics()
+  const translate = useTranslation()
   const orderInfo = getOrderInfo()
   const { associateCart, getCart } = cartHandler()
   const { gateway, params, isCancelled, isCOD = false, config, paymentType = PaymentSelectionType.FULL, partialAmount = 0 } = props
-  const { user, setCartItems, basketId, cartItems, setOrderId, orderId: uiOrderId, setBasketId, } = useUI()
+  const { user, setCartItems, basketId, cartItems, setOrderId, orderId: uiOrderId, setBasketId, setOverlayLoaderState, hideOverlayLoaderState } = useUI()
   const [redirectUrl, setRedirectUrl] = useState<string>()
 
   const getCookies = (): Record<string, string> => {
@@ -100,6 +102,7 @@ const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentPr
   }
 
   useEffect(() => { 
+    setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
     setTimeout(() => {
       asyncHandler(gateway, params, isCancelled)
     }, 500)
@@ -107,7 +110,9 @@ const PaymentGatewayNotification = (props: IGatewayPageProps & IPartialPaymentPr
 
   useEffect(() => {
     if (redirectUrl) {
-      Router.replace(redirectUrl)
+      Router.replace(redirectUrl).then((() => {
+        hideOverlayLoaderState()
+      }))
     }
   }, [redirectUrl])
 

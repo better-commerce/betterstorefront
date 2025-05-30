@@ -1285,6 +1285,7 @@
                 "notEnoughBalanceErrorMsg": "Saldo insufficiente disponibile.",
                 "paymentMethodNotSupportedErrorMsg": "Metodo di pagamento non supportato.",
                 "paymentAmountRequiredErrorMsg": "Importo del pagamento obbligatorio.",
+                "paymentAmountMinValueErrorMsg": "L'importo minimo del pagamento è {currencySymbol}{paymentAmount}.",
                 "paymentAmountCannotExceedErrorMsg": "Il valore del pagamento non può superare {currencySymbol}{paymentAmount}."
             },
             "password": {

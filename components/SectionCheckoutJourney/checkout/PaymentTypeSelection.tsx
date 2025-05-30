@@ -1,6 +1,12 @@
-import { getPartialPaymentAmount } from "@components/cart/CartSidebarView/CartSidebarView"
+import { getPartialPayableAmount } from "@components/cart/CartSidebarView/CartSidebarView"
+import { EmptyString } from "@components/utils/constants"
 import { PaymentSelectionType } from "bc-payments-sdk"
 import { useEffect, useState } from "react"
+
+export enum SplitPaymentPrepaidValueType {
+    PERCENTAGE = 'Percent',
+    PRICE = 'Price',
+}
 
 interface PaymentTypeSelectionProps {
     paymentType: any
@@ -9,6 +15,7 @@ interface PaymentTypeSelectionProps {
     payableAmount: number
     setPartialAmount: any
     basket: any
+    dispatchState: any
 }
 
 const PAYMENT_TYPES = [
@@ -17,7 +24,7 @@ const PAYMENT_TYPES = [
 ]
 
 export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
-    const { paymentType, setPaymentType, partialAmount, payableAmount, setPartialAmount, basket } = props
+    const { paymentType, setPaymentType, partialAmount, payableAmount, setPartialAmount, basket, dispatchState } = props
     const [inputValue, setInputValue] = useState(partialAmount === 0 ? '0' : partialAmount.toString())
 
     // Sync input value when partialAmount changes externally
@@ -105,7 +112,7 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
         }
     }, [partialAmount, payableAmount])
 
-    const partialPaymentAmount = getPartialPaymentAmount(basket?.grandTotal?.raw?.withTax, basket?.paidAmount)
+    const partialPaymentAmount = getPartialPayableAmount(basket?.grandTotal?.raw?.withTax, basket?.paidAmount)
     return (
         <>
             {/* Payment Type Selection */}
@@ -113,6 +120,7 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
                 {PAYMENT_TYPES.map((type: any) => (
                     <label key={type.value} className="flex items-center space-x-3">
                         <input type="radio" name="paymentType" value={type.value} checked={paymentType === type.value} onChange={(e: any) => {
+                            dispatchState({ type: 'SET_ERROR', payload: EmptyString, })
                             setPaymentType(e.target.value)
                             if (e.target.value === PaymentSelectionType.FULL) {
                                 setPartialAmount(0)

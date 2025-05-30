@@ -2,13 +2,13 @@ import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInp
 import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
-import { getPartialPaymentAmount } from '@components/cart/CartSidebarView/CartSidebarView'
+import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 
 const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBasketPromos, setBasket = () => { }, membership, }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
 
-  const partialPaymentAmount = getPartialPaymentAmount(basket?.grandTotal?.raw?.withTax, basket?.paidAmount)
+  const partialPaymentAmount = getPartialPayableAmount(basket?.grandTotal?.raw?.withTax, basket?.paidAmount)
   return (
     <>
       <div className="w-full px-4 sm:px-0">

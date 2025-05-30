@@ -30,7 +30,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { PAGE_TYPES } from '@components/withDataLayer'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
 
-export const getPartialPaymentAmount = (grandTotal: number, paidAmount: number) => {
+export const getPartialPayableAmount = (grandTotal: number, paidAmount: number) => {
   return parseFloat((grandTotal - paidAmount).toFixed(2))
 }
 
@@ -485,7 +485,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }
   const isEmpty: boolean = cartItems?.lineItems?.length === 0
   const css = { maxWidth: '100%', height: 'auto' }
-  const partialPaymentAmount = getPartialPaymentAmount(cartItems?.grandTotal?.raw?.withTax, cartItems?.paidAmount)
+  const partialPaymentAmount = getPartialPayableAmount(cartItems?.grandTotal?.raw?.withTax, cartItems?.paidAmount)
   function handleRedirectToPDP() { }
   return (
     <>
