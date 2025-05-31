@@ -13,11 +13,12 @@ interface PaymentMethodOptionsProps {
   basket: any;
   getMethods: (methods: PaymentMethod[]) => PaymentMethod[];
   selectedPaymentMethod: PaymentMethod | null;
-  handleMethodSelection: (method: PaymentMethod) => void;
+  handleMethodSelection: (method: PaymentMethod, forPartialPayment?: boolean) => void;
   translate: (key: string) => string;
+  forPartialPayment?: boolean
 }
 
-export default function PaymentMethodOptions({ paymentMethods, basket, getMethods, selectedPaymentMethod, handleMethodSelection, translate, }: PaymentMethodOptionsProps) {
+export default function PaymentMethodOptions({ paymentMethods, basket, getMethods, selectedPaymentMethod, handleMethodSelection, translate, forPartialPayment= false }: PaymentMethodOptionsProps) {
   const window: any = global.window
   const methods = getMethods(paymentMethods) ?? [];
 
@@ -68,7 +69,7 @@ export default function PaymentMethodOptions({ paymentMethods, basket, getMethod
         const isSelected = selectedPaymentMethod?.id === item.id;
 
         return (
-          <div key={item.id} id={`pnl${item.systemName}`} onClick={() => handleMethodSelection(item)} className="pointer mb-0 flex justify-start flex-row" >
+          <div key={item.id} id={`pnl${item.systemName}`} onClick={() => handleMethodSelection(item, forPartialPayment)} className="pointer mb-0 flex justify-start flex-row" >
             <label className="custom-radio w-full mb-0">
               <input className={`pnl${item.systemName}`} type="radio" name="payment" checked={isSelected} readOnly />
               <div className="items-center justify-center w-full h-20 px-3 py-3 bg-white radio-btn orange-border gap-x-4 height-auto-rm">

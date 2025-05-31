@@ -54,6 +54,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     const [basketOrderInfo, setBasketOrderInfo] = useState<any>(undefined)
     const [paymentType, setPaymentType] = useState('full')
     const [partialAmount, setPartialAmount] = useState(0)
+    const [otherSelectedMethodForPartialPayment, setOtherSelectedMethodForPartialPayment] = useState<string>()
 
     const selectedPaymentSplitPaymentEnabled = useMemo(() => {
       return stringToBoolean(selectedPaymentMethod?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value) || false
@@ -159,8 +160,11 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         )
     }
 
-    const handleMethodSelection = (method: any) => {
+    const handleMethodSelection = (method: any, forPartialPayment = false) => {
       setSelectedPaymentMethod(method)
+      if (forPartialPayment) {
+        setOtherSelectedMethodForPartialPayment(method?.id)
+      }
     }
 
     const getPaymentOrderInfo = async (paymentMethod: any) => {
@@ -246,6 +250,13 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     }, [])
 
     useEffect(() => {
+      if (otherSelectedMethodForPartialPayment && otherSelectedMethodForPartialPayment !== Guid.empty) {
+        const filteredPaymentMethods = paymentMethods?.filter((x: any) => x.id === otherSelectedMethodForPartialPayment) || []
+        setPaymentMethods(filteredPaymentMethods)
+      }
+    }, [otherSelectedMethodForPartialPayment])
+
+    useEffect(() => {
       if (selectedPaymentMethod?.id || basket?.isPartialPayment) {
         getPaymentOrderInfo(selectedPaymentMethod)
       }
@@ -306,7 +317,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
               {(selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment && paymentType === PaymentSelectionType.PARTIAL) && (
                 <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none mb-6">
                   <div className="w-full text-black font-semibold capitalize p-2">Pay Remaining amount using:</div>
-                  {renderPaymentMethods([...paymentMethods].filter((item) => item.id !== selectedPaymentMethod?.id))}
+                  <PaymentMethodOptions paymentMethods={[...paymentMethods].filter((item: any) => item.id !== selectedPaymentMethod?.id)} basket={basket} getMethods={getMethods} selectedPaymentMethod={selectedPaymentMethod} handleMethodSelection={handleMethodSelection} translate={translate} forPartialPayment={true} />
                 </div>
               )}
               {/* Section to display REST of the payment methods when PARTIAL PAYMENT is already completed (ENDS) */}
