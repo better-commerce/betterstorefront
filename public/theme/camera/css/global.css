@@ -2973,3 +2973,6 @@ filter: invert(1);
 .button-section-cancel .button-cancel-bg-transparent{
   background: transparent !important;
 }
+.bg-ribbon-clr-succ.bg-ribbon-cancel{
+  background-color: #00890e !important;
+}
