@@ -159,42 +159,6 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         )
     }
 
-    const showPaymentOption = (method: any, basket: any): boolean => {
-      if (basket?.isPartialPayment) {
-        if (![PaymentMethodType.COD.toLocaleLowerCase(), PaymentMethodType.CHEQUE.toLocaleLowerCase()].includes(method?.systemName?.toLocaleLowerCase())) {
-          return true
-        }
-        return false
-      } else if (matchStrings( method?.systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true)) {
-          //return isApplePayScriptLoaded
-          return (window?.ApplePaySession !== undefined && window?.ApplePaySession?.canMakePaymentsWithActiveCard( Payments.APPLE_PAY_MERCHANT_ID ))
-      }
-      return true
-    }
-
-    const spriteIcon = (systemName: string) => {
-      if (matchStrings(systemName, PaymentMethodType.CHECKOUT, true)) {
-        return 'sprite-debit-lg'
-      } else if (matchStrings(systemName, PaymentMethodType.CLEAR_PAY, true)) {
-        return 'sprite-clearpay-xsm'
-      } else if (matchStrings(systemName, PaymentMethodType.PAYPAL, true)) {
-        return 'sprite-paypal-xsm'
-      } else if (matchStrings(systemName, PaymentMethodType.COD, true)) {
-        return 'sprite-cod'
-      } else if (matchStrings(systemName, PaymentMethodType.WALLET, true)) {
-        return 'sprite-wallet'
-      } else if (matchStrings(systemName, PaymentMethodType.KLARNA, true)) {
-        return 'sprite-klarna'
-      } else if (matchStrings(systemName, PaymentMethodType.STRIPE, true)) {
-        return 'sprite-stripe'
-      } else if (
-        matchStrings(systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true)
-      ) {
-        return 'sprite-apple-pay-sm'
-      }
-      return EmptyString
-    }
-
     const handleMethodSelection = (method: any) => {
       setSelectedPaymentMethod(method)
     }
@@ -304,20 +268,25 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
             <div className="flex flex-col gap-2 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">{translate('label.checkout.paymentMethodsText')}</h5>
               <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none">
-                <PaymentMethodOptions paymentMethods={paymentMethods} basket={basket} getMethods={getMethods} selectedPaymentMethod={selectedPaymentMethod} handleMethodSelection={handleMethodSelection} translate={translate} showPaymentOption={showPaymentOption} spriteIcon={spriteIcon} />
+
+                {/* Refactored, refined & simplified component to display clickable payment methods(STARTS) */}
+                <PaymentMethodOptions paymentMethods={paymentMethods} basket={basket} getMethods={getMethods} selectedPaymentMethod={selectedPaymentMethod} handleMethodSelection={handleMethodSelection} translate={translate} />
+                {/* Refactored, refined & simplified component to display clickable payment methods(ENDS) */}
               </div>
             </div>
             <div>
               {selectedPaymentMethod?.id && basketOrderInfo && (
                 <div className="flex flex-col w-full py-5 px-5 space-y-4">
 
-                  {/* Enable partial payment for all except COD & Cheque */}
+                  {/* EXCEPT for Wallet, Full & Partial Payment section is shown here(STARTS) */}
                   {!matchStrings(selectedPaymentMethod?.systemName, PaymentMethodType.WALLET, true) && (
                     <>{paymentTypeSelectionCmp}</>
                   )}
-                  
+                  {/* EXCEPT for Wallet, Full & Partial Payment section is shown here(ENDS) */}
 
                   <div className="flex flex-col justify-center chk-payment-btn w-full gap-2 pb-5 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
+
+                    {/* GENERIC Payment Button */}
                     <PaymentButton translate={translate} btnTitle={translate('common.label.continueBtnText')} paymentMethod={selectedPaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatch} contactDetails={contactDetails} isApplePayScriptLoaded={isApplePayScriptLoaded} onScrollToSection={() => { }} recordAnalytics={recordAnalytics} paymentType={selectedPaymentMethod?.systemName?.toLowerCase() === PaymentMethodType.COD ? PaymentSelectionType.FULL : paymentType} partialAmount={partialAmount ? partialAmount : 0} prepaidValueType={selectedPaymentSplitPaymentPrepaidValueType} minPrepaidValue={selectedPaymentSplitPaymentMinimumPrepaidValue} setPaymentType={setPaymentType} setPartialAmount={setPartialAmount} paymentTypeSelectionCmp={paymentTypeSelectionCmp} setSelectedPaymentMethod={setSelectedPaymentMethod} />
                     {(state?.isPaymentWidgetActive ||
                       !!state?.isPaymentIntent) && (
@@ -333,12 +302,14 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                 </div>
               )}
 
+              {/* Section to display REST of the payment methods when PARTIAL PAYMENT is already completed (STARTS) */}
               {(selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment && paymentType === PaymentSelectionType.PARTIAL) && (
                 <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none mb-6">
                   <div className="w-full text-black font-semibold capitalize p-2">Pay Remaining amount using:</div>
                   {renderPaymentMethods([...paymentMethods].filter((item) => item.id !== selectedPaymentMethod?.id))}
                 </div>
               )}
+              {/* Section to display REST of the payment methods when PARTIAL PAYMENT is already completed (ENDS) */}
             </div>
           </div>
         ) : (

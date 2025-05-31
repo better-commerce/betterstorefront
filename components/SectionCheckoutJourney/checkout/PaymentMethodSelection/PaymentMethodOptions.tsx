@@ -1,3 +1,4 @@
+import { EmptyString } from "@components/utils/constants";
 import { matchStrings } from "@framework/utils/parse-util";
 import { PaymentMethodType } from "bc-payments-sdk";
 
@@ -14,13 +15,47 @@ interface PaymentMethodOptionsProps {
   selectedPaymentMethod: PaymentMethod | null;
   handleMethodSelection: (method: PaymentMethod) => void;
   translate: (key: string) => string;
-  showPaymentOption: any;
-  spriteIcon: any;
 }
 
-export default function PaymentMethodOptions({ paymentMethods, basket, getMethods, selectedPaymentMethod, handleMethodSelection, translate, showPaymentOption, spriteIcon }: PaymentMethodOptionsProps) {
-    
+export default function PaymentMethodOptions({ paymentMethods, basket, getMethods, selectedPaymentMethod, handleMethodSelection, translate, }: PaymentMethodOptionsProps) {
+  const window: any = global.window
   const methods = getMethods(paymentMethods) ?? [];
+
+  const spriteIcon = (systemName: string) => {
+    if (matchStrings(systemName, PaymentMethodType.CHECKOUT, true)) {
+      return 'sprite-debit-lg'
+    } else if (matchStrings(systemName, PaymentMethodType.CLEAR_PAY, true)) {
+      return 'sprite-clearpay-xsm'
+    } else if (matchStrings(systemName, PaymentMethodType.PAYPAL, true)) {
+      return 'sprite-paypal-xsm'
+    } else if (matchStrings(systemName, PaymentMethodType.COD, true)) {
+      return 'sprite-cod'
+    } else if (matchStrings(systemName, PaymentMethodType.WALLET, true)) {
+      return 'sprite-wallet'
+    } else if (matchStrings(systemName, PaymentMethodType.KLARNA, true)) {
+      return 'sprite-klarna'
+    } else if (matchStrings(systemName, PaymentMethodType.STRIPE, true)) {
+      return 'sprite-stripe'
+    } else if (
+      matchStrings(systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true)
+    ) {
+      return 'sprite-apple-pay-sm'
+    }
+    return EmptyString
+  }
+
+  const showPaymentOption = (method: any, basket: any): boolean => {
+    if (basket?.isPartialPayment) {
+      if (![PaymentMethodType.COD.toLocaleLowerCase(), PaymentMethodType.CHEQUE.toLocaleLowerCase()].includes(method?.systemName?.toLocaleLowerCase())) {
+        return true
+      }
+      return false
+    } else if (matchStrings( method?.systemName, PaymentMethodType.CHECKOUT_APPLE_PAY, true)) {
+        //return isApplePayScriptLoaded
+        return (window?.ApplePaySession !== undefined && window?.ApplePaySession?.canMakePaymentsWithActiveCard( Payments.APPLE_PAY_MERCHANT_ID ))
+    }
+    return true
+  }
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:mt-2 mt-0">
