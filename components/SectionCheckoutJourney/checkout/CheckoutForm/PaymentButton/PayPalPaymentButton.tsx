@@ -18,7 +18,6 @@ import { getCurrency, getOrderId, getOrderInfo } from '@framework/utils/app-util
 import { PaymentMethodType, PaymentSelectionType } from 'bc-payments-sdk'
 import { roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
-import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 
 const BUTTONS_DEFAULT_LAYOUT: any = {
   layout: 'vertical',
@@ -144,7 +143,7 @@ class PayPalPaymentButton extends BasePaymentButton {
     const orderResult: any = orderInfo?.orderResponse
     if (orderResult) {
       const orderId = orderResult?.id
-      const amountToBePaid = this.isFullPayment() ? (basketOrderInfo?.basket?.isPartialPayment ? getPartialPayableAmount(orderResult?.grandTotal?.raw?.withTax, basketOrderInfo?.basket?.paidAmount) : orderResult?.grandTotal?.raw?.withTax) : partialAmount
+      const amountToBePaid = this.isFullPayment() ? (basketOrderInfo?.basket?.isPartialPayment ? basketOrderInfo?.basket?.partialPayableAmount?.raw : orderResult?.grandTotal?.raw?.withTax) : partialAmount
       const items = [
         {
           name: `Items for Order: ${orderId}; Basket: ${orderResult?.basketId}; OrderId: ${getOrderId(orderInfo?.order)}`,

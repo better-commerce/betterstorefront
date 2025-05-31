@@ -16,7 +16,6 @@ import { EmptyString, Messages } from '@components/utils/constants'
 import { IPaymentInfo, PaymentSelectionType, PaymentStatus } from 'bc-payments-sdk'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { SplitPaymentPrepaidValueType } from '../../PaymentTypeSelection'
-import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 
 export interface IPaymentButtonProps {
   readonly paymentMethod: any | null
@@ -375,7 +374,7 @@ export default abstract class BasePaymentButton
           return { msg: 'common.message.checkout.paymentAmountCannotExceedErrorMsg', amount: basketOrderInfo?.basket?.grandTotal?.raw?.withTax }
         }
       } else {
-          const amountPayable = getPartialPayableAmount(basketOrderInfo?.basket?.grandTotal?.raw?.withTax, basketOrderInfo?.basket?.paidAmount)
+          const amountPayable = basketOrderInfo?.basket?.partialPayableAmount?.raw
 
           const minPaymentAmountNotMet = validateMinPaymentAmount(partialAmountInput, amountPayable)
           if (minPaymentAmountNotMet > 0) {
@@ -395,5 +394,14 @@ export default abstract class BasePaymentButton
     if (basketOrderInfo?.basket?.isPartialPayment && setSelectedPaymentMethod) {
       setSelectedPaymentMethod(paymentMethod)
     }
+  }
+
+  protected isAlreadyUsedForPartialPayment(): boolean {
+    const { basketOrderInfo, paymentMethod } = this.props
+    if (basketOrderInfo?.basket?.isPartialPayment) {
+      const paymentInfo = basketOrderInfo?.basket?.partialPaidMethods?.find((x: any) => x?.toLowerCase() === paymentMethod?.systemName?.toLowerCase())
+      return (paymentInfo != null)
+    }
+    return false
   }
 }

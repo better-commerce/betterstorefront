@@ -1,4 +1,3 @@
-import { getPartialPayableAmount } from "@components/cart/CartSidebarView/CartSidebarView"
 import { EmptyString } from "@components/utils/constants"
 import { stringFormat } from "@framework/utils/parse-util"
 import { PaymentMethodType, PaymentSelectionType } from "bc-payments-sdk"
@@ -108,6 +107,11 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
         }
     }
 
+    useEffect(() => {
+        if (basket?.isPartialPayment) {
+            setPaymentType(PaymentSelectionType.PARTIAL)
+        }
+    }, [basket?.isPartialPayment])
 
     useEffect(() => {
         if (partialAmount === payableAmount) {
@@ -115,45 +119,49 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
         }
     }, [partialAmount, payableAmount])
 
-    const partialPaymentAmount = getPartialPayableAmount(basket?.grandTotal?.raw?.withTax, basket?.paidAmount)
     return (
         <>
             {/* Payment Type Selection */}
             <div className="flex flex-col gap-2 w-full">
-                <div className="w-full flex gap-4">
-                    {PAYMENT_TYPES.map((type: any) => (
-                        <label key={type.value} className="flex-col items-center space-x-3">
-                            <input type="radio" name="paymentType" value={type.value} checked={paymentType === type.value} onChange={(e: any) => {
-                                dispatchState({ type: 'SET_ERROR', payload: EmptyString, })
-                                setPaymentType(e.target.value)
-                                if (e.target.value === PaymentSelectionType.FULL) {
-                                    setPartialAmount(0)
-                                    setInputValue('0')
-                                }
-                            }} className="form-radio h-5 w-5 text-sky-800 border-gray-300" />
-
-                            <span className="text-gray-900 font-medium">{type.name}</span>
-                        </label>
-                    ))}
-                </div>
+                {!basket?.isPartialPayment && (
+                    <div className="w-full flex gap-4">
+                        {PAYMENT_TYPES.map((type: any) => (
+                            <label key={type.value} className="flex-col items-center space-x-3">
+                                <input type="radio" name="paymentType" value={type.value} checked={paymentType === type.value} onChange={(e: any) => {
+                                    dispatchState({ type: 'SET_ERROR', payload: EmptyString, })
+                                    setPaymentType(e.target.value)
+                                    if (e.target.value === PaymentSelectionType.FULL) {
+                                        setPartialAmount(0)
+                                        setInputValue('0')
+                                    }
+                                }} className="form-radio h-5 w-5 text-sky-800 border-gray-300" />
+    
+                                <span className="text-gray-900 font-medium">{type.name}</span>
+                            </label>
+                        ))}
+                    </div>
+                )}
                 <span className="flex items-center text-gray-700 mt-4 font-semibold">
                     {basket?.isPartialPayment ? (
-                        <>{translate('label.basket.pendingOrderAmountText')}{':'} {`${basket?.currencySymbol}${partialPaymentAmount}`}</>
+                        <>{translate('label.basket.pendingOrderAmountText')}{':'} {basket?.partialPayableAmount?.formatted}</>
                     ) : (
                         <>{translate('label.basket.orderAmountText')}{':'} {basket?.grandTotal?.formatted?.withTax}</>
                     )}
                 </span>
-                <div className="w-full flex justify-start items-center gap-2">
-                {/* Partial Payment Input */}
-                {paymentType === PaymentSelectionType.PARTIAL && (
-                    <>
-                        <label className="font-semibold text-black text-sm">{stringFormat(translate('label.checkout.payment.enterAmountToPayLabelText'), { paymentMethodName: selectedPaymentMethod?.systemName?.toLowerCase()})}</label>
-                        <div className="">
-                            <input type="text" inputMode="decimal" placeholder="Enter partial amount" value={inputValue} onKeyDown={handlePartialKeyDown} onChange={handlePartialChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-sky-800 focus:border-sky-800 placeholder-gray-400" />
-                        </div>
-                    </>
+
+                {!basket?.isPartialPayment && (
+                    <div className="w-full flex justify-start items-center gap-2">
+                        {/* Partial Payment Input */}
+                        {paymentType === PaymentSelectionType.PARTIAL && (
+                            <>
+                                <label className="font-semibold text-black text-sm">{stringFormat(translate('label.checkout.payment.enterAmountToPayLabelText'), { paymentMethodName: selectedPaymentMethod?.systemName?.toLowerCase()})}</label>
+                                <div className="">
+                                    <input type="text" inputMode="decimal" placeholder="Enter partial amount" value={inputValue} onKeyDown={handlePartialKeyDown} onChange={handlePartialChange} className="w-full p-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-sky-800 focus:border-sky-800 placeholder-gray-400" />
+                                </div>
+                            </>
+                        )}
+                    </div>
                 )}
-                </div>
             </div>
         </>
     )

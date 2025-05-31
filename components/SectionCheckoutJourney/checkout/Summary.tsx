@@ -2,13 +2,11 @@ import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInp
 import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
-import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 
 const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBasketPromos, setBasket = () => { }, membership, }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
 
-  const partialPaymentAmount = getPartialPayableAmount(basket?.grandTotal?.raw?.withTax, basket?.paidAmount)
   return (
     <>
       <div className="w-full px-4 sm:px-0">
@@ -114,15 +112,19 @@ const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBaske
               </dd>
             </div>
           }
-          {basket?.isPartialPayment && (
-            <div className="flex items-center justify-between pt-2 sm:pt-1 ">
-              <dt className="flex items-center text-green-600 font-14">
-                <span>{translate('label.orderSummary.paidText')}</span>
-              </dt>
-              <dd className="font-semibold text-green-600 text-md">
-                {`${basket?.currencySymbol}${basket?.paidAmount}`}
-              </dd>
-            </div>
+          {(basket?.isPartialPayment && basket?.partialPayments?.length > 0) && (
+            <>
+              {basket?.partialPayments?.map((payment: any, idx: number) => (
+                <div key={idx} className="flex items-center justify-between pt-2 sm:pt-1 ">
+                  <dt className="flex items-center text-green-600 font-14">
+                    <span>{translate('label.orderSummary.paidText')}{`(${payment?.method})`}</span>
+                  </dt>
+                  <dd className="font-semibold text-green-600 text-md">
+                    {payment?.paidAmount?.formatted}
+                  </dd>
+                </div>
+              ))}
+            </>
           )}
 
           <div className={`flex items-center items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
@@ -130,7 +132,7 @@ const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBaske
             {basket?.isPartialPayment ? (
               <span className="flex flex-col"> 
                 <dd className="text-sm text-black line-through">{basket?.grandTotal?.formatted?.withTax}</dd>
-                <dd className="font-bold text-black font-18">{basket?.currencySymbol}{partialPaymentAmount}</dd>
+                <dd className="font-bold text-black font-18">{basket?.partialPayableAmount?.formatted}</dd>
               </span>
             ) : (
               <dd className="font-bold text-black font-18">{basket?.grandTotal?.formatted?.withTax}</dd>

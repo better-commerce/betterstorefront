@@ -28,7 +28,6 @@ import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 import { groupCartItemsById } from '@components/utils/cart'
 import { round, sortBy } from 'lodash'
 import { ProductType } from '@framework/utils/enums'
-import { getPartialPayableAmount } from '@components/cart/CartSidebarView/CartSidebarView'
 import { CURRENT_THEME } from '@components/utils/constants'
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
@@ -543,7 +542,6 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
     items = Object.values(groupCartItemsById(cartItems?.lineItems))
     setUserCartItems(items)
   }, [cartItems?.lineItems])
-  const partialPaymentAmount = getPartialPayableAmount(cartItems?.grandTotal?.raw?.withTax, cartItems?.paidAmount)
 
   const css = { maxWidth: '100%', height: 'auto' }
     return (
@@ -764,18 +762,22 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <p className='text-sm'>{cartItems?.grandTotal?.formatted?.tax}</p>
                           </div>
                         }
-                        {cartItems?.isPartialPayment && (
-                          <div className="flex justify-between py-2 text-sm text-green-600">
-                            <p className='text-sm'>{translate('label.orderSummary.paidText')}</p>
-                            <p className='text-sm'>{`${cartItems?.currencySymbol}${cartItems?.paidAmount}`}</p>
-                          </div>
+                        {(cartItems?.isPartialPayment && cartItems?.partialPayments?.length > 0) && (
+                          <>
+                            {cartItems?.partialPayments?.map((payment: any, index: number) => (
+                              <div key={index} className="flex justify-between py-2 text-sm text-green-600">
+                                <p className='text-sm'>{translate('label.orderSummary.paidText')}{`(${payment?.method})`}</p>
+                                <p className='text-sm'>{payment?.paidAmount?.formatted}</p>
+                              </div>
+                            ))}
+                          </>
                         )}
                         <div className="flex justify-between items-center py-4 font-bold text-gray-900 font-20">
                           <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
                           {cartItems?.isPartialPayment ? (
                             <span className="flex flex-col">
                               <p className="text-sm text-gray-600 link-button line-through"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
-                              <p className="font-20 link-button"> {' '} {cartItems?.currencySymbol}{partialPaymentAmount}{' '} </p>
+                              <p className="font-20 link-button"> {' '} {cartItems?.partialPayableAmount?.formatted}{' '} </p>
                             </span>
                           ) : (
                             <p className="font-20 link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
@@ -797,7 +799,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                               }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
                                 <span className='flex flex-col justify-start pl-5 text-left'>
                                   {cartItems?.isPartialPayment ? (
-                                    <span>{cartItems?.currencySymbol}{partialPaymentAmount}</span>
+                                    <span>{cartItems?.partialPayableAmount?.formatted}</span>
                                   ) : (
                                     <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
                                   )}
@@ -816,7 +818,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                               }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
                                 <span className='flex flex-col justify-start pl-5 text-left'>
                                   {cartItems?.isPartialPayment ? (
-                                    <span>{cartItems?.currencySymbol}{partialPaymentAmount}</span>
+                                    <span>{cartItems?.partialPayableAmount?.formatted}</span>
                                   ) : (
                                     <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
                                   )}

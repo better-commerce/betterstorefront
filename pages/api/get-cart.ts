@@ -19,9 +19,19 @@ async function getCartApiMiddleware(req: any, res: any) {
       if (orderResult?.payments?.length) {
         const partialPayments = orderResult?.payments?.filter((x: any) => x?.isPartialPaymentEnabled)
         if (partialPayments?.length) {
-          response.isPartialPayment = (partialPayments?.length > 0)
-          const totalOrderPartiallyPaid = partialPayments?.reduce((sum: any, x: any) => sum + x.paidAmount, 0) || 0
-          response.paidAmount = totalOrderPartiallyPaid
+          response.isPartialPayment = (partialPayments?.length > 0) // Set [isPartialPayment] in basket
+          const totalOrderPartiallyPaidAmount = partialPayments?.reduce((sum: any, x: any) => sum + x.paidAmount, 0) || 0
+          response.paidAmount = totalOrderPartiallyPaidAmount // Set [paidAmount] in basket
+
+          const partialPayableAmount = parseFloat((orderResult?.grandTotal?.raw?.withTax - totalOrderPartiallyPaidAmount).toFixed(2))
+          response.partialPayableAmount = { raw: partialPayableAmount, formatted: `${orderResult?.currencySymbol}${partialPayableAmount}` } // Set [partialPayableAmount] in basket
+
+          const filteredPartialPaidPayments = partialPayments?.filter((x: any) => x?.isPartialPaymentEnabled && x?.paidAmount > 0 && x?.orderAmount === orderResult?.grandTotal?.raw?.withTax) || [] 
+          const partialPaidPayments = filteredPartialPaidPayments?.map((x: any) => ({ method: x?.paymentGateway, paidAmount: { raw: x?.paidAmount, formatted: `${orderResult?.currencySymbol}${x?.paidAmount}` } }))
+          response.partialPayments = partialPaidPayments
+
+          const partialPaidPaymentMethods = filteredPartialPaidPayments?.map((x: any) => x?.paymentGateway)
+          response.partialPaidMethods = [...new Set(partialPaidPaymentMethods)] // Set [partialPaidPaymentMethods] in basket
         }
       }
 

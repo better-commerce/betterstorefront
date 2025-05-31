@@ -281,10 +281,10 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     }, [])
 
     useEffect(() => {
-      if (selectedPaymentMethod?.id) {
+      if (selectedPaymentMethod?.id || basket?.isPartialPayment) {
         getPaymentOrderInfo(selectedPaymentMethod)
       }
-    }, [selectedPaymentMethod])
+    }, [selectedPaymentMethod, basket?.isPartialPayment])
 
     const contactDetails: any = { userId: user?.userId, firstName: user?.firstName, lastName: user?.lastName, emailAddress: user?.email, phoneNumber: user?.mobile || user?.telephone, }
 
