@@ -152,7 +152,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                           <Button
                             variant='slim'
                             onClick={closeModal}
-                            className='!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200'
+                            className='!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200 button-cancel-bg-transparent'
                           >
                            {translate('common.label.donotCancelText')}
                           </Button>

@@ -40,7 +40,7 @@ function TradeInDetailPage() {
   useAnalytics(AnalyticsEventType.CUSTOMER_PROFILE_VIEWED, loggedInEventData)
 
   return ( 
-    <div className={'bg-white dark:bg-transparent'}>
+    <div className={'bg-white dark:bg-transparent pb-8'}>
      <TradeInDetail/>
     </div> )
   }

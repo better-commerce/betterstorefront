@@ -2970,3 +2970,6 @@ filter: invert(1);
     overflow:visible !important;
   }
 }
+.button-section-cancel .button-cancel-bg-transparent{
+  background: transparent !important;
+}

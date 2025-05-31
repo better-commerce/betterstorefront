@@ -44,7 +44,7 @@ function Wallet() {
 
 
   return (
-    <div className={'bg-white dark:bg-transparent'}>
+    <div className={'bg-white dark:bg-transparent pb-8'}>
       <WalletDetail />
     </div>)
 }

@@ -85,7 +85,7 @@ function MyOrders({ deviceInfo }: any) {
   }, [b2bUsers])
 
   return (
-    <div className={'orders bg-white dark:bg-transparent'}>
+    <div className={'orders bg-white dark:bg-transparent pb-8'}>
       <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Orders </h1>
       <B2BOrders deviceInfo={deviceInfo} isShowDetailedOrder={isShowDetailedOrder} setIsShowDetailedOrder={setIsShowDetailedOrder} isAdmin={isAdmin} userOrderIdMap={userOrderIdMap} />
     </div>
