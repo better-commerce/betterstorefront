@@ -283,7 +283,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
               <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none">
 
                 {/* Refactored, refined & simplified component to display clickable payment methods(STARTS) */}
-                <PaymentMethodOptions paymentMethods={paymentMethodOptions} basket={basket} getMethods={getMethods} selectedPaymentMethod={selectedPaymentMethod} handleMethodSelection={handleMethodSelection} translate={translate} />
+                <PaymentMethodOptions paymentMethods={paymentMethodOptions || []} basket={basket} getMethods={getMethods} selectedPaymentMethod={selectedPaymentMethod} handleMethodSelection={handleMethodSelection} translate={translate} />
                 {/* Refactored, refined & simplified component to display clickable payment methods(ENDS) */}
               </div>
             </div>
