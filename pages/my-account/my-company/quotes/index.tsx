@@ -55,7 +55,7 @@ function MyQuotes() {
 
 
   return (
-    <div className={'orders bg-white dark:bg-transparent'}>     
+    <div className={'orders bg-white dark:bg-transparent pb-8'}>     
       <B2BQuotes quotes={b2bQuotes} />
     </div>)
 }

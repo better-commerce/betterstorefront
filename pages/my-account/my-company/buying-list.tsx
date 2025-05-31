@@ -90,7 +90,7 @@ function BuyingList({ deviceInfo }: any) {
   }, [b2bUsers])
 
   return (
-    <div className={'orders bg-white dark:bg-transparent'}>      
+    <div className={'orders bg-white dark:bg-transparent pb-8'}>      
       <B2BBaskets />
     </div>
   )

@@ -45,7 +45,7 @@ function MyAccount() {
 
 
   return ( 
-    <div className={'orders bg-white dark:bg-transparent'}>
+    <div className={'orders bg-white dark:bg-transparent pb-8'}>
       <MyDetails/>
     </div> )
   }

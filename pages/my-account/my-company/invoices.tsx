@@ -100,7 +100,7 @@ function MyInvoices({ deviceInfo }: any) {
   }
 
   return (
-    <div className={'orders bg-white dark:bg-transparent'}>
+    <div className={'orders bg-white dark:bg-transparent pb-8'}>
       <div>
         <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Invoices </h1>
         {isLoading ? (
