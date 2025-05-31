@@ -111,10 +111,10 @@ export default function AddItems({ products, images, onChangeSearch, nextStep, s
                 const selectedProductIds = items.map((i: any) => i?.selectedProductData?.id).filter(Boolean);
 
                 // Filter products that are NOT already selected
-                let filteredProducts = (products || []).filter((p: any) => p?.name?.toLowerCase().includes(item?.searchTerm?.toLowerCase()) && !selectedProductIds.includes(p.id));
-
+                let filteredProducts = (products || []).filter((p: any) => p?.name?.toLowerCase().includes(item?.searchTerm?.toLowerCase()));
+                
                 // If no products are found, use the dummy product with searched text
-                if (!products || filteredProducts.length === 0) {
+                if (!products) {
                   filteredProducts = noProduct.map((dummy) => ({
                     ...dummy,
                     name: item?.searchTerm,
