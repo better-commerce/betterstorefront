@@ -2976,3 +2976,6 @@ filter: invert(1);
 .bg-ribbon-clr-succ.bg-ribbon-cancel{
   background-color: #00890e !important;
 }
+.bg-ribbon-clr-succ.bg-ribbon-cancel .text-succ-white{
+color: #fff !important;
+}
