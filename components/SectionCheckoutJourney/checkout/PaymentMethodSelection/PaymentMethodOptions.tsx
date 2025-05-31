@@ -1,4 +1,5 @@
 import { EmptyString } from "@components/utils/constants";
+import { Payments } from "@components/utils/payment-constants";
 import { matchStrings } from "@framework/utils/parse-util";
 import { PaymentMethodType } from "bc-payments-sdk";
 
