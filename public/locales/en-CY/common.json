@@ -1264,6 +1264,7 @@
             "userAlreadyExistsErrorMsg": "Ο χρήστης υπάρχει ήδη",
             "tokenInvalidErrorMsg": "Ωχ! Το token είναι άκυρο",
             "tokenExpiredErrorMsg": "Ωχ! Το token έχει λήξει ή είναι άκυρο",
+            "sessionExpiredErrorMsg": "Η συνεδρία σας έχει λήξει. Παρακαλώ συνδεθείτε ξανά.",
             "companyNotFoundErrorMsg": "Η εταιρεία δεν βρέθηκε.",
             "cartItemMaxAddedErrorMsg": "Το όριο του καλαθιού έχει φτάσει. Παρακαλώ αφαιρέστε κάποια αντικείμενα και προσπαθήστε ξανά.",
             "addressAddedSuccessfullyMsg": "Η νέα διεύθυνση προστέθηκε με επιτυχία",

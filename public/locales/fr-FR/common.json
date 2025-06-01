@@ -1321,6 +1321,7 @@
       "userAlreadyExistsErrorMsg": "L'utilisateur existe déjà",
       "tokenInvalidErrorMsg": "Oups ! Le jeton n'est pas valide",
       "tokenExpiredErrorMsg": "Oups ! Le jeton a expiré ou est invalide",
+      "sessionExpiredErrorMsg": "Votre session a expiré. Veuillez vous reconnecter.",
       "companyNotFoundErrorMsg": "Entreprise non trouvée.",
       "cartItemMaxAddedErrorMsg": "Limite d'articles dans le panier atteinte. Veuillez supprimer certains articles et réessayer.",
       "addressAddedSuccessfullyMsg": "Nouvelle adresse ajoutée avec succès",

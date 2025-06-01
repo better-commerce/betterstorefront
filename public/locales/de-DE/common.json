@@ -1323,6 +1323,7 @@
       "userAlreadyExistsErrorMsg": "Benutzer existiert bereits",
       "tokenInvalidErrorMsg": "Hoppla! Token ist ungültig",
       "tokenExpiredErrorMsg": "Hoppla! Token ist abgelaufen oder ungültig",
+      "sessionExpiredErrorMsg": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
       "companyNotFoundErrorMsg": "Unternehmen nicht gefunden.",
       "cartItemMaxAddedErrorMsg": "Maximale Anzahl von Warenkorbartikeln erreicht. Bitte entfernen Sie einige Artikel und versuchen Sie es erneut.",
       "addressAddedSuccessfullyMsg": "Neue Adresse erfolgreich hinzugefügt",

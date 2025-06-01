@@ -1324,6 +1324,7 @@
             "userAlreadyExistsErrorMsg": "Användare finns redan",
             "tokenInvalidErrorMsg": "Oj! Token är ogiltig",
             "tokenExpiredErrorMsg": "Oj! Token är utgången eller ogiltig",
+            "sessionExpiredErrorMsg": "Din session har utgått. Vänligen logga in igen.",
             "companyNotFoundErrorMsg": "Företag inte hittat.",
             "cartItemMaxAddedErrorMsg": "Maximalt antal varor i kundvagnen nått. Vänligen ta bort några varor och försök igen.",
             "addressAddedSuccessfullyMsg": "Ny adress tillagd framgångsrikt",

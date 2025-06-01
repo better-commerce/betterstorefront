@@ -1324,6 +1324,7 @@
             "userAlreadyExistsErrorMsg": "Používateľ už existuje",
             "tokenInvalidErrorMsg": "Ups! Token je neplatný",
             "tokenExpiredErrorMsg": "Ups! Token je expirovaný alebo neplatný",
+            "sessionExpiredErrorMsg": "Vaša sešia bola expirovaná. Skúste to znova prihlasitie.",
             "companyNotFoundErrorMsg": "Spoločnosť nebola nájdená.",
             "cartItemMaxAddedErrorMsg": "Limit počtu položiek v košíku bol dosiahnutý. Odstráňte niektoré položky a skúste to znova.",
             "addressAddedSuccessfullyMsg": "Nová adresa bola úspešne pridaná",

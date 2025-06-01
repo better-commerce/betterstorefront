@@ -1313,6 +1313,7 @@
             "userAlreadyExistsErrorMsg": "Gebruiker bestaat al",
             "tokenInvalidErrorMsg": "Oeps! Token is ongeldig",
             "tokenExpiredErrorMsg": "Oeps! Token is verlopen of ongeldig",
+            "sessionExpiredErrorMsg": "Je sessie is verlopen. Log alsjeblieft opnieuw in.",
             "companyNotFoundErrorMsg": "Bedrijf niet gevonden.",
             "cartItemMaxAddedErrorMsg": "Maximale limiet voor winkelwagentjes bereikt. Verwijder enkele items en probeer het opnieuw.",
             "addressAddedSuccessfullyMsg": "Nieuw adres succesvol toegevoegd",

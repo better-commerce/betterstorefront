@@ -1229,6 +1229,7 @@
             "userAlreadyExistsErrorMsg": "L'utente esiste già",
             "tokenInvalidErrorMsg": "Oops! Il token non è valido",
             "tokenExpiredErrorMsg": "Oops! Il token è scaduto o non valido",
+            "sessionExpiredErrorMsg": "La tua sessione è scaduta. Effettua nuovamente l'accesso.",
             "companyNotFoundErrorMsg": "Azienda non trovata.",
             "cartItemMaxAddedErrorMsg": "Limite massimo di articoli nel carrello raggiunto. Rimuovi alcuni articoli e riprova.",
             "addressAddedSuccessfullyMsg": "Nuovo indirizzo aggiunto con successo",

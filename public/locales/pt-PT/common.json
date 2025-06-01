@@ -1324,6 +1324,7 @@
             "userAlreadyExistsErrorMsg": "Usuário já existe",
             "tokenInvalidErrorMsg": "Ops! O token é inválido",
             "tokenExpiredErrorMsg": "Ops! O token expirou ou é inválido",
+            "sessionExpiredErrorMsg": "Sua sessão expirou. Por favor, logue novamente.",
             "companyNotFoundErrorMsg": "Empresa não encontrada.",
             "cartItemMaxAddedErrorMsg": "Limite de itens do carrinho atingido. Por favor, remova alguns itens e tente novamente.",
             "addressAddedSuccessfullyMsg": "Novo endereço adicionado com sucesso",

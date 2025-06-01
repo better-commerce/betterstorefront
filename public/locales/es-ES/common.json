@@ -1323,6 +1323,7 @@
       "userAlreadyExistsErrorMsg": "El usuario ya existe",
       "tokenInvalidErrorMsg": "¡Ups! El token no es válido",
       "tokenExpiredErrorMsg": "¡Ups! El token ha caducado o no es válido",
+      "sessionExpiredErrorMsg": "Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.",
       "companyNotFoundErrorMsg": "Empresa no encontrada.",
       "cartItemMaxAddedErrorMsg": "Se ha alcanzado el límite máximo de artículos en el carrito. Por favor, elimina algunos artículos e inténtalo de nuevo.",
       "addressAddedSuccessfullyMsg": "Nueva dirección añadida exitosamente",

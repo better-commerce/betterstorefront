@@ -1324,6 +1324,7 @@
             "userAlreadyExistsErrorMsg": "Пользователь уже существует",
             "tokenInvalidErrorMsg": "Упс! Токен недействителен",
             "tokenExpiredErrorMsg": "Упс! Токен истек или недействителен",
+            "sessionExpiredErrorMsg": "Ваша сессия истекла. Пожалуйста, войдите снова.",
             "companyNotFoundErrorMsg": "Компания не найдена.",
             "cartItemMaxAddedErrorMsg": "Достигнут предел товаров в корзине. Пожалуйста, удалите некоторые товары и попробуйте снова.",
             "addressAddedSuccessfullyMsg": "Новый адрес успешно добавлен",

@@ -15,6 +15,10 @@ import { AnalyticsEventType } from "@components/services/analytics";
 import useAnalytics from "@components/services/analytics/useAnalytics";
 import { isMicrosite } from "@commerce/utils/uri-util";
 import NavigationRows from "@components/shared/Navigation/NavigationRows";
+import { AlertType } from "@framework/utils/enums";
+import { Cookie } from "@framework/utils/constants";
+import { Guid } from "@commerce/types";
+import Cookies from "js-cookie";
 const SearchBar = dynamic(() => import('@components/shared/Search/SearchBar'))
 const AvatarDropdown = dynamic(() => import('@components/Header/AvatarDropdown'))
 const LangDropdown = dynamic(() => import('@components/Header/LangDropdown'))
@@ -35,10 +39,11 @@ interface Props {
 }
 
 const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, currencies, languages, defaultLanguage, defaultCountry, deviceInfo, maxBasketItemsCount, onIncludeVATChanged, keywords, pluginConfig = [], featureToggle, locale }) => {
+  const translate = useTranslation()
   const { recordAnalytics } = useAnalytics()
   const b2bSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'B2BSettings', true))?.configKeys || []
   const b2bEnabled = b2bSettings?.length ? stringToBoolean(b2bSettings?.find((x: any) => x?.key === 'B2BSettings.EnableB2B')?.value) : false
-  const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems, openLoginSideBar } = useUI()
+  const { setShowSearchBar, openBulkAdd, isGuestUser, user, wishListItems, openLoginSideBar, deleteUser, setAlert } = useUI()
   const { isMobile, isIPadorTablet } = deviceInfo
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -47,6 +52,12 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
   const [delayEffect, setDelayEffect] = useState(false)
   useEffect(() => {
     setDelayEffect(true)
+  }, [])
+  useEffect(() => {
+    if (user && user?.userId && user?.userId !== Guid.empty && !Cookies?.get(Cookie.Key.SITE_USER_ID)) {
+      deleteUser({ isSilentLogout: true })
+      router.push(`/my-account/login?reason=session_expired`).then(() => setAlert({ type: AlertType.ERROR, message: translate("common.message.sessionExpiredErrorMsg") }))
+    }
   }, [])
   useEffect(() => {
     const handleScroll = () => {
@@ -94,7 +105,6 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
     }
   }
   const renderContent = () => {
-    const translate = useTranslation()
     return (
       <>
         <div className={`top-0 td-header bg-header-clr fixed inset-x-0 z-20 w-full py-2 border-b theme-container sm:py-0 bg-white/90 backdrop-blur-lg border-slate-100 dark:border-gray-700/30 dark:bg-gray-900/90 dark:bg-white`}>

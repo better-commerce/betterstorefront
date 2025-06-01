@@ -1324,6 +1324,7 @@
             "userAlreadyExistsErrorMsg": "Bruker finnes allerede",
             "tokenInvalidErrorMsg": "Oops! Token er ugyldig",
             "tokenExpiredErrorMsg": "Oops! Token er utløpt eller ugyldig",
+            "sessionExpiredErrorMsg": "Økten din har utløpt. Vennligst logg inn på nytt.",
             "companyNotFoundErrorMsg": "Firma ble ikke funnet.",
             "cartItemMaxAddedErrorMsg": "Handlekurvgrensene er nådd. Vennligst fjern noen varer og prøv igjen.",
             "addressAddedSuccessfullyMsg": "Ny adresse ble lagt til vellykket",

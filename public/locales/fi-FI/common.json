@@ -1316,6 +1316,7 @@
             "userAlreadyExistsErrorMsg": "Käyttäjä on jo olemassa",
             "tokenInvalidErrorMsg": "Ups! Tunnus ei ole kelvollinen",
             "tokenExpiredErrorMsg": "Ups! Tunnus on vanhentunut tai ei kelvollinen",
+            "sessionExpiredErrorMsg": "Istuntosi on vanhentunut. Kirjaudu sisään uudelleen.",
             "companyNotFoundErrorMsg": "Yritystä ei löytynyt.",
             "cartItemMaxAddedErrorMsg": "Ostoskoriin on lisätty maksimi määrä tuotteita. Poista joitain tuotteita ja yritä uudelleen.",
             "addressAddedSuccessfullyMsg": "Uusi osoite lisätty onnistuneesti",

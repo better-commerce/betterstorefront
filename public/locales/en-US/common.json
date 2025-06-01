@@ -1324,6 +1324,7 @@
       "userAlreadyExistsErrorMsg": "User already exists",
       "tokenInvalidErrorMsg": "Woops! Token is invalid",
       "tokenExpiredErrorMsg": "Woops! Token is expired or invalid",
+      "sessionExpiredErrorMsg": "Your session has expired. Please login again.",
       "companyNotFoundErrorMsg": "Company not found.",
       "cartItemMaxAddedErrorMsg": "Cart item limit reached. Please remove some items and try again.",
       "addressAddedSuccessfullyMsg": "New address added successfully",

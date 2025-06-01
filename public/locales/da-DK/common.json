@@ -1323,6 +1323,7 @@
             "userAlreadyExistsErrorMsg": "Bruger eksisterer allerede",
             "tokenInvalidErrorMsg": "Ups! Token er ugyldigt",
             "tokenExpiredErrorMsg": "Ups! Token er udløbet eller ugyldigt",
+            "sessionExpiredErrorMsg": "Din session er udløbet. Log venligst ind igen.",
             "companyNotFoundErrorMsg": "Virksomhed ikke fundet.",
             "cartItemMaxAddedErrorMsg": "Kurvgrænse for varer er nået. Fjern venligst nogle varer og prøv igen.",
             "addressAddedSuccessfullyMsg": "Ny adresse blev tilføjet med succes",

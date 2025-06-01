@@ -1324,6 +1324,7 @@
             "userAlreadyExistsErrorMsg": "Utilizatorul există deja",
             "tokenInvalidErrorMsg": "Ups! Token invalid",
             "tokenExpiredErrorMsg": "Ups! Token expirat sau invalid",
+            "sessionExpiredErrorMsg": "Sesiunea a expirat. Va rugam sa va relogati.",
             "companyNotFoundErrorMsg": "Compania nu a fost găsită.",
             "cartItemMaxAddedErrorMsg": "Limita de produse adăugate în coș a fost atinsă. Vă rugăm să eliminați unele produse și încercați din nou.",
             "addressAddedSuccessfullyMsg": "Adresa nouă a fost adăugată cu succes",

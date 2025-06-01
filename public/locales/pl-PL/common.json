@@ -1324,6 +1324,7 @@
             "userAlreadyExistsErrorMsg": "Użytkownik już istnieje",
             "tokenInvalidErrorMsg": "Ups! Token jest nieprawidłowy",
             "tokenExpiredErrorMsg": "Ups! Token wygasł lub jest nieprawidłowy",
+            "sessionExpiredErrorMsg": "Twoja sesja wygasła. Proszę zalogować się ponownie.",
             "companyNotFoundErrorMsg": "Firma nie znaleziona.",
             "cartItemMaxAddedErrorMsg": "Osiągnięto limit przedmiotów w koszyku. Proszę usunąć niektóre przedmioty i spróbować ponownie.",
             "addressAddedSuccessfullyMsg": "Nowy adres został pomyślnie dodany",
