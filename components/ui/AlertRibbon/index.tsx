@@ -39,7 +39,7 @@ const AlertRibbon: FC = () => {
         <div></div>
         <div className="justify-center">
           <h4 className={`font-14 font-medium btn_text_white ${ alertRibbon?.type == 'cancel' ? 'text-[#c10000] text-succ-white' : 'text-[#fff]' }`} >
-            {alertRibbon?.msg}
+            {alertRibbon?.msg || alertRibbon?.message}
           </h4>
         </div>
         <div>
