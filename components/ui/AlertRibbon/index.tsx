@@ -35,10 +35,10 @@ const AlertRibbon: FC = () => {
       //leaveFrom="translate-y-0"
       //leaveTo="-translate-y-full"
     >
-      <div aria-label="alert-ribbon" className={`${color( alertRibbon?.type )} justify-between flex w-auto rounded-full px-4 py-2 text-center align-center fixed top-[80px] right-2 z-[9999999]`} >
+      <div aria-label="alert-ribbon" className={`${color( alertRibbon?.type )} bg-ribbon-clr-succ justify-between flex w-auto rounded-full px-4 py-2 text-center align-center fixed top-[80px] right-2 z-[9999999]`} >
         <div></div>
         <div className="justify-center">
-          <h4 className={`font-14 font-medium btn_text_white ${ alertRibbon?.type == 'cancel' ? 'text-[#c10000]' : 'text-[#fff]' }`} >
+          <h4 className={`font-14 font-medium btn_text_white ${ alertRibbon?.type == 'cancel' ? 'text-[#c10000] text-succ-white' : 'text-[#fff]' }`} >
             {alertRibbon?.msg}
           </h4>
         </div>
