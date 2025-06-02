@@ -422,6 +422,13 @@ export default function TradeInDetail() {
               </tfoot>
             </table>
           </div>
+          <div className='flex items-center justify-start gap-1 mt-4 ml-1'>
+            <input type='checkbox' name="pre-sign-agreement" className='w-4 h-4 border border-gray-300 rounded' checked={tradeDetail?.value?.agreementPreSigned} />
+            <span className='text-sm italic font-normal text-gray-600'>
+              By checking this box, you approve the auto-acceptance of the quote if the price is greater than or equal to the quoted price.
+            </span>
+          </div>
+          
           {tradeDetail?.value?.street != "" && tradeDetail?.value?.street != null &&
             <div className={`p-4 text-left border rounded shadow-lg cursor-pointer bg-white mt-6`}>
               <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
