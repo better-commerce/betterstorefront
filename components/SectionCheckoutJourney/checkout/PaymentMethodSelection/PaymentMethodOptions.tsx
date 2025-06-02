@@ -96,7 +96,7 @@ export default function PaymentMethodOptions({ paymentMethods, basket, getMethod
  */
 const PaymentLabel: React.FC<{ systemName: string, translate: (key: string) => string }> = ({ systemName, translate }) => {
   // If it’s KLARNA or COD, you were just rendering a blank <i className="sprite-icons" />
-  if (matchStrings(systemName, PaymentMethodType.KLARNA, true) || matchStrings(systemName, PaymentMethodType.COD, true)) {
+  if (matchStrings(systemName, PaymentMethodType.KLARNA, true) || matchStrings(systemName, PaymentMethodType.COD, true) || matchStrings(systemName, PaymentMethodType.CLEAR_PAY, true)) {
     return <i className="sprite-icons" />;
   }
 

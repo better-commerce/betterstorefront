@@ -123,7 +123,7 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
         <>
             {/* Payment Type Selection */}
             <div className="flex flex-col gap-2 w-full">
-                {!basket?.isPartialPayment && (
+                {(!basket?.isPartialPayment || (basket?.isPartialPayment && !(basket?.partialPaidMethods || [])?.includes(selectedPaymentMethod?.systemName))) && (
                     <div className="w-full flex gap-4">
                         {PAYMENT_TYPES.map((type: any) => (
                             <label key={type.value} className="flex-col items-center space-x-3">
@@ -149,7 +149,7 @@ export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
                     )}
                 </span>
 
-                {!basket?.isPartialPayment && (
+                {(!basket?.isPartialPayment || (basket?.isPartialPayment && !(basket?.partialPaidMethods || [])?.includes(selectedPaymentMethod?.systemName))) && (
                     <div className="w-full flex justify-start items-center gap-2">
                         {/* Partial Payment Input */}
                         {paymentType === PaymentSelectionType.PARTIAL && (

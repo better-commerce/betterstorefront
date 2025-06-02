@@ -263,8 +263,8 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     }, [selectedPaymentMethod, basket?.isPartialPayment])
 
     const contactDetails: any = { userId: user?.userId, firstName: user?.firstName, lastName: user?.lastName, emailAddress: user?.email, phoneNumber: user?.mobile || user?.telephone, }
-    const paymentMethodOptions = useMemo(() => selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment ? [...(paymentMethods || [])].filter((item: any) => item.id === selectedPaymentMethod?.id) : paymentMethods, [paymentMethods, basket, selectedPaymentSplitPaymentEnabled])
-    const splitPaymentMethodOptions = useMemo(() => [...(paymentMethods || [])].filter((item: any) => item.id !== selectedPaymentMethod?.id), [paymentMethods, selectedPaymentMethod])
+    const paymentMethodOptions = useMemo(() => selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment ? [...(paymentMethods || [])].filter((item: any) => (item.id === selectedPaymentMethod?.id || stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false'))) : paymentMethods, [paymentMethods, basket, selectedPaymentSplitPaymentEnabled])
+    const splitPaymentMethodOptions = useMemo(() => [...(paymentMethods || [])].filter((item: any) => item.id !== selectedPaymentMethod?.id && !stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false')), [paymentMethods, selectedPaymentMethod])
 
     const paymentTypeSelectionCmp = (
       <>
@@ -316,7 +316,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
               )}
 
               {/* Section to display REST of the payment methods when PARTIAL PAYMENT is already completed (STARTS) */}
-              {(selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment && paymentType === PaymentSelectionType.PARTIAL) && (
+              {(selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment && paymentType === PaymentSelectionType.PARTIAL && (basket?.partialPaidMethods || [])?.includes(selectedPaymentMethod?.systemName)) && (
                 <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none mb-6">
                   <div className="w-full text-black font-semibold capitalize p-2">Pay Remaining amount using:</div>
                   <PaymentMethodOptions paymentMethods={splitPaymentMethodOptions} basket={basket} getMethods={getMethods} selectedPaymentMethod={selectedPaymentMethod} handleMethodSelection={handleMethodSelection} translate={translate} forPartialPayment={true} />
