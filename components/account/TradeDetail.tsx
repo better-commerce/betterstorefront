@@ -199,6 +199,7 @@ export default function TradeInDetail() {
   };
   const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus);
   const canCancelTradeIn = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted", "QuoteExpired"].includes(itemStatus);
+  const canUpdateShippingAddress = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted",].includes(itemStatus) && !tradeDetail?.value?.street
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
     <div className="flex items-center justify-start gap-2">
       <img src={product?.parentProductImageUrl} className="inline-block w-auto h-16 border border-gray-300 rounded-md shadow" alt={product?.parentProductName} />
@@ -428,7 +429,11 @@ export default function TradeInDetail() {
               By checking this box, you approve the auto-acceptance of the quote if the price is greater than or equal to the quoted price.
             </span>
           </div>
-          
+          {canUpdateShippingAddress(tradeDetail?.value?.status) && <button
+            onClick={() => router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}`)}
+            className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full mt-3">
+            Continue  <ChevronRightIcon className="w-5 h-5" />
+          </button>}
           {tradeDetail?.value?.street != "" && tradeDetail?.value?.street != null &&
             <div className={`p-4 text-left border rounded shadow-lg cursor-pointer bg-white mt-6`}>
               <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
