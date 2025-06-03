@@ -15,10 +15,8 @@ import { PaymentMethodType } from 'bc-payments-sdk'
 import { Payments } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo, sanitizeAmount, } from '@framework/utils/app-util'
 import { createOneTimePaymentOrder, initPayment, } from '@framework/utils/payment-util'
-import {
-  BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, Messages,
-} from '@components/utils/constants'
-import { roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, Messages, } from '@components/utils/constants'
+import { roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 declare const Klarna: any
@@ -30,12 +28,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
    */
   constructor(props: IPaymentButtonProps & IDispatchState) {
     super(props)
-    this.state = {
-      confirmed: false,
-      formLoaded: false,
-      clientSession: null,
-      paymentMethod: super.getPaymentMethod(props?.paymentMethod),
-    }
+    this.state = { confirmed: false, formLoaded: false, clientSession: null, paymentMethod: super.getPaymentMethod(props?.paymentMethod), }
   }
 
   /**
@@ -47,6 +40,21 @@ class KlarnaPaymentButton extends BasePaymentButton {
    */
   private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
     const { translate }: any = this.props
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+    const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+    if (amountToBePaid <= 0) {
+      const errMsg = translate('common.message.checkout.paymentAmountRequiredErrorMsg')
+      dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+      return
+    }
+
+    const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+    if (validateAmount) {
+      const errorMsg = stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount })
+      dispatchState({ type: 'SET_ERROR', payload: errorMsg, })
+      return
+    }
+
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
     const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
@@ -58,10 +66,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
       const orderInput = this.getOrderInputPayload(uiContext)
       const clientResult: any = await initPayment(this.state?.paymentMethod?.systemName, orderInput)
       if (clientResult?.session_id) {
-        this.setState({
-          confirmed: true,
-          clientSession: clientResult,
-        })
+        this.setState({ confirmed: true, clientSession: clientResult, })
 
         if (this.props?.paymentModeLoadedCallback) {
           setTimeout(() => {
@@ -124,11 +129,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
         city: basketOrderInfo?.billingAddress?.city,
         region: basketOrderInfo?.billingAddress?.state,
         phone: uiContext?.user?.mobile || basketOrderInfo?.billingAddress?.phoneNo,
-        country:
-          basketOrderInfo?.billingAddress?.countryCode ||
-          Cookies.get(Cookie.Key.COUNTRY) ||
-          BETTERCOMMERCE_COUNTRY ||
-          BETTERCOMMERCE_DEFAULT_COUNTRY,
+        country: basketOrderInfo?.billingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
       },
       shipping_address: {
         given_name: basketOrderInfo?.shippingAddress?.firstName || EmptyString,
@@ -141,11 +142,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
         city: basketOrderInfo?.shippingAddress?.city,
         region: basketOrderInfo?.shippingAddress?.state,
         phone: uiContext?.user?.mobile || basketOrderInfo?.shippingAddress?.phoneNo,
-        country:
-          basketOrderInfo?.shippingAddress?.countryCode ||
-          Cookies.get(Cookie.Key.COUNTRY) ||
-          BETTERCOMMERCE_COUNTRY ||
-          BETTERCOMMERCE_DEFAULT_COUNTRY,
+        country: basketOrderInfo?.shippingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
       },
       /*customer: {
                 //date_of_birth: ,
@@ -154,9 +151,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
 
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.authorizingPaymentText'), })
     Klarna.Payments.authorize(
-      {
-        payment_method_category: PaymentMethodType.KLARNA,
-      },
+      { payment_method_category: PaymentMethodType.KLARNA, },
       authorizeInput,
       (authorizeResult: any) => {
         if (authorizeResult?.error?.invalid_fields?.length) {
@@ -176,11 +171,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
               city: basketOrderInfo?.billingAddress?.city,
               region: basketOrderInfo?.billingAddress?.state,
               phone: uiContext?.user?.mobile || basketOrderInfo?.billingAddress?.phoneNo,
-              country:
-                basketOrderInfo?.billingAddress?.countryCode ||
-                Cookies.get(Cookie.Key.COUNTRY) ||
-                BETTERCOMMERCE_COUNTRY ||
-                BETTERCOMMERCE_DEFAULT_COUNTRY,
+              country: basketOrderInfo?.billingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
             },
             shipping_address: {
               given_name: basketOrderInfo?.shippingAddress?.firstName || EmptyString,
@@ -193,11 +184,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
               city: basketOrderInfo?.shippingAddress?.city,
               region: basketOrderInfo?.shippingAddress?.state,
               phone: uiContext?.user?.mobile || basketOrderInfo?.shippingAddress?.phoneNo,
-              country:
-                basketOrderInfo?.shippingAddress?.countryCode ||
-                Cookies.get(Cookie.Key.COUNTRY) ||
-                BETTERCOMMERCE_COUNTRY ||
-                BETTERCOMMERCE_DEFAULT_COUNTRY,
+              country: basketOrderInfo?.shippingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
             },
             authorizationToken: authorizeResult?.authorization_token,
             /*merchant_urls: {
@@ -210,22 +197,14 @@ class KlarnaPaymentButton extends BasePaymentButton {
           createOneTimePaymentOrder(gatewayName, createOrderInput).then((paymentOrderResult: any) => {
             if (paymentOrderResult?.order_id) {
               uiContext?.hideOverlayLoaderState()
-              Router.push(
-                `${returnUrl}?orderId=${paymentOrderResult?.order_id}&fraudStatus=${paymentOrderResult?.fraud_status}`
-              )
+              Router.push(`${returnUrl}?orderId=${paymentOrderResult?.order_id}&fraudStatus=${paymentOrderResult?.fraud_status}`)
             } else {
               uiContext?.hideOverlayLoaderState()
-              dispatchState({
-                type: 'SET_ERROR',
-                payload: translate('common.message.requestCouldNotProcessErrorMsg'),
-              })
+              dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
             }
           }).catch((error: any) => {
             uiContext?.hideOverlayLoaderState()
-            dispatchState({
-              type: 'SET_ERROR',
-              payload: translate('common.message.requestCouldNotProcessErrorMsg'),
-            })
+            dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
           })
         } else if (authorizeResult?.approved && authorizeResult?.show_form) {
         } else {
@@ -244,20 +223,13 @@ class KlarnaPaymentButton extends BasePaymentButton {
     const { uiContext, dispatchState, t: translate }: any = this.props
     const clientToken = this.state?.clientSession?.client_token
     if (clientToken) {
-      Klarna.Payments.init({
-        client_token: clientToken,
-      })
+      Klarna.Payments.init({ client_token: clientToken, })
 
       setTimeout(() => {
         Klarna.Payments.load(
-          {
-            container: '#klarna-payments-container',
-            payment_method_category: PaymentMethodType.KLARNA,
-          },
+          { container: '#klarna-payments-container', payment_method_category: PaymentMethodType.KLARNA, },
           (result: any) => {
-            that.setState({
-              formLoaded: true,
-            })
+            that.setState({ formLoaded: true, })
             uiContext?.hideOverlayLoaderState()
           }
         )
@@ -276,25 +248,19 @@ class KlarnaPaymentButton extends BasePaymentButton {
 
     const shippingMethodId = uiContext?.cartItems?.shippingMethodId
     const shippingCountry = uiContext?.cartItems?.shippingMethods?.find((x: any) => x?.id === shippingMethodId)?.countryCode || EmptyString
-    const { translate }: any = this.props
+    const { translate, basketOrderInfo, paymentType, partialAmount = 0 }: any = this.props
 
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     if (orderResult) {
       const orderId = orderResult?.id
+      const amountToBePaid = this.isFullPayment() ? (basketOrderInfo?.basket?.isPartialPayment ? basketOrderInfo?.basket?.partialPayableAmount?.raw : orderResult?.grandTotal?.raw?.withTax) : partialAmount
       return {
         intent: 'buy',
-        purchase_country:
-          shippingCountry ||
-          Cookies.get(Cookie.Key.COUNTRY) ||
-          BETTERCOMMERCE_COUNTRY ||
-          BETTERCOMMERCE_DEFAULT_COUNTRY,
+        purchase_country: shippingCountry || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
         purchase_currency: orderResult?.currencyCode,
-        locale:
-          Cookies.get(Cookie.Key.COUNTRY) ||
-          BETTERCOMMERCE_LANGUAGE ||
-          BETTERCOMMERCE_DEFAULT_LANGUAGE,
-        order_amount: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
+        locale: Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_LANGUAGE || BETTERCOMMERCE_DEFAULT_LANGUAGE,
+        order_amount: roundToDecimalPlaces(amountToBePaid),
         order_tax_amount: 0, //roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax),
         order_lines: [
           {
@@ -308,9 +274,9 @@ class KlarnaPaymentButton extends BasePaymentButton {
             quantity: 1, /*orderResult?.items
               ?.map((x: any) => x?.qty)
               ?.reduce((sum: number, current: number) => sum + current, 0),*/
-            unit_price: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
+            unit_price: roundToDecimalPlaces(amountToBePaid),
             tax_rate: 0, //parseFloat((((orderResult?.grandTotal?.raw?.withTax - orderResult?.grandTotal?.raw?.withoutTax) / orderResult?.grandTotal?.raw?.withTax) * 100.0).toFixed(2)),
-            total_amount: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
+            total_amount: roundToDecimalPlaces(amountToBePaid),
             total_discount_amount: 0,
             total_tax_amount: 0, //roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax),
             image_url: orderResult?.items?.length
@@ -321,6 +287,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
               : EmptyString,
           },
         ],
+        merchant_data: JSON.stringify({ orderId, paymentType, partialAmount, }),
       }
     }
   }
@@ -343,29 +310,22 @@ class KlarnaPaymentButton extends BasePaymentButton {
     return (
       <>
         {!this.state.confirmed ? (
-          <div>
-            <p className="text-muted pb-10">
-              {translate('label.checkout.payLaterWithKlarnaText')}
-            </p>
-            {this.baseRender({
-              ...this?.props,
-              ...{
-                onPay: async (
-                  paymentMethod: any,
-                  basketOrderInfo: any,
-                  uiContext: any,
-                  dispatchState: Function
-                ) =>
-                  await that.onPay(
-                    that.state.paymentMethod,
-                    basketOrderInfo,
-                    uiContext,
-                    dispatchState
-                  ),
-                btnTitle: translate('label.checkout.payLaterWithKlarnaBtnText'),
-              },
-            })}
-          </div>
+          <>
+            {!this.isAlreadyUsedForPartialPayment() && (
+              <div>
+                <p className="text-muted pb-10">
+                  {translate('label.checkout.payLaterWithKlarnaText')}
+                </p>
+                {this.baseRender({
+                  ...this?.props,
+                  ...{
+                    onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onPay(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
+                    btnTitle: translate('label.checkout.payLaterWithKlarnaBtnText'),
+                  },
+                })}
+              </div>
+            )}
+          </>
         ) : (
           <>
             <div>
@@ -374,28 +334,13 @@ class KlarnaPaymentButton extends BasePaymentButton {
                 this.baseRender({
                   ...this?.props,
                   ...{
-                    onPay: async (
-                      paymentMethod: any,
-                      basketOrderInfo: any,
-                      uiContext: any,
-                      dispatchState: Function
-                    ) =>
-                      await that.onCapturePayment(
-                        paymentMethod,
-                        basketOrderInfo,
-                        uiContext,
-                        dispatchState
-                      ),
+                    onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onCapturePayment(paymentMethod, basketOrderInfo, uiContext, dispatchState),
                     btnTitle: translate('label.checkout.payText'),
                   },
                 })}
             </div>
 
-            <Script
-              src={Payments.KLARNA_FRAMES_SCRIPT_SRC_V1}
-              strategy="lazyOnload"
-              onReady={() => that.onScriptReady()}
-            />
+            <Script src={Payments.KLARNA_FRAMES_SCRIPT_SRC_V1} strategy="lazyOnload" onReady={() => that.onScriptReady()} />
           </>
         )}
       </>

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import axios from 'axios'
 import { FC } from 'react'
-import { useUI } from '@components/ui/context'
+import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
 import { matchStrings, stringFormat, tryParseJson, } from '@framework/utils/parse-util'
 import useCart from '@components/services/cart'
@@ -10,7 +10,7 @@ import { XMarkIcon, CheckCircleIcon, ArrowRightIcon } from '@heroicons/react/24/
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, SITE_ORIGIN_URL, BASKET_PROMO_TYPES, } from '@components/utils/constants'
-import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, resetBasket, } from '@framework/utils/app-util'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/Layout/Layout'
@@ -29,11 +29,12 @@ import { groupCartItemsById } from '@components/utils/cart'
 import { round, sortBy } from 'lodash'
 import { ProductType } from '@framework/utils/enums'
 import { CURRENT_THEME } from '@components/utils/constants'
+import Cookies from 'js-cookie'
 const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
-  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, setBasketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
@@ -151,8 +152,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }, [basketId, cartItems])
 
   const handleCartItems = async () => {
-    const items = await getCart({ basketId })
-    setCartItems(items)
+    const items: any = await getCart({ basketId })
+    if (items?.isPartialPayment && items?.partialPayableAmount?.raw === 0) {
+      resetBasket(setBasketId, generateBasketId)
+      setCartItems({ lineItems: [] })
+    } else {
+      setCartItems(items)
+    }
   }
 
   const handleCartItemsLoadAsync = async () => {
