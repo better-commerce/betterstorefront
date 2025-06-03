@@ -7,7 +7,7 @@ import Loader from "@components/Loader";
 import { logError } from "@framework/utils/app-util";
 import { useRouter } from 'next/router'
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_AMEND_PRODUCT, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
+import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_AMEND_PRODUCT, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatus, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
 import AmendProductModal from "./AmendProduct";
@@ -198,7 +198,8 @@ export default function TradeInDetail() {
       .trim();
   };
   const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus);
-  const canCancelTradeIn = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted", "QuoteExpired"].includes(itemStatus);
+  const canCancelTradeIn = (itemStatus: QuoteStatus) => [QuoteStatus.AwaitingQuotation, QuoteStatus.Quoted, QuoteStatus.QuoteAccepted, QuoteStatus.QuoteExpired].includes(itemStatus);
+  const canUpdateShippingAddress = (itemStatus: QuoteStatus) => [QuoteStatus.AwaitingQuotation, QuoteStatus.Quoted, QuoteStatus.QuoteAccepted].includes(itemStatus) && !tradeDetail?.value?.street
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
     <div className="flex items-center justify-start gap-2">
       <img src={product?.parentProductImageUrl} className="inline-block w-auto h-16 border border-gray-300 rounded-md shadow" alt={product?.parentProductName} />
@@ -428,7 +429,11 @@ export default function TradeInDetail() {
               By checking this box, you approve the auto-acceptance of the quote if the price is greater than or equal to the quoted price.
             </span>
           </div>
-          
+          {canUpdateShippingAddress(tradeDetail?.value?.status) && <button
+            onClick={() => router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}`)}
+            className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full mt-3">
+            Continue  <ChevronRightIcon className="w-5 h-5" />
+          </button>}
           {tradeDetail?.value?.street != "" && tradeDetail?.value?.street != null &&
             <div className={`p-4 text-left border rounded shadow-lg cursor-pointer bg-white mt-6`}>
               <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
