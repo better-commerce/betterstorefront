@@ -544,6 +544,25 @@ function CollectionPage(props: any) {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
+      {!featureToggle.features?.enableForPCSite &&
+        <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white margin-top-20-am">
+          <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+              </Link>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+              </span>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+            </li>
+          </ol>
+        </div>
+      }
       <div className='flex flex-col dark:bg-white fixing-main-section'>
         {props?.customInfo3 == 'vertical' && (
           <>
@@ -620,8 +639,9 @@ function CollectionPage(props: any) {
             </div>
           </>
         )}
-        {props?.customInfo3 == 'Horizontal' || (props?.customInfo3 == 'horizontal' && props?.images?.length > 0 && (
-          <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0" >
+       {(props?.customInfo3?.toLowerCase() === 'horizontal' && props?.images?.length > 0) && (
+        <div className={`${CURRENT_THEME === 'ammega' ? 'container' : 'w-full'}`}>
+          <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
             {props?.images?.map((img: any, idx: number) => (
               <SwiperSlide key={`horizontal-slider-${idx}`}>
                 <Link href={img.link || '#'}>
@@ -638,27 +658,9 @@ function CollectionPage(props: any) {
               </SwiperSlide>
             ))}
           </Swiper>
-        ))}
-      </div>
-      {!featureToggle.features?.enableForPCSite &&
-        <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white margin-top-20-am">
-          <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
-                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
-              </Link>
-            </li>
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
-                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-              </span>
-            </li>
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
-            </li>
-          </ol>
         </div>
-      }
+        )}
+      </div>
       <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 collection-full-container' : ' pt-5 header-space'} container mx-auto bg-transparent sm:pb-24 dark:bg-white`}>
         {!featureToggle.features?.enableForPCSite &&
           <>
