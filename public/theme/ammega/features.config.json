@@ -7,7 +7,7 @@
     "enableStoreLocator": false,
     "enableStoreStockCheck": false,
     "enableCollectDeliveryOption": false,
-    "enableEngage":true,
+    "enableEngage":false,
     "enableMyStoreFeature": false,
     "enableAddToBagPlp": true,
     "enableMembership": false,
