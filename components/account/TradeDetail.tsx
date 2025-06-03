@@ -7,7 +7,7 @@ import Loader from "@components/Loader";
 import { logError } from "@framework/utils/app-util";
 import { useRouter } from 'next/router'
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_AMEND_PRODUCT, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
+import { AssessmentStatusType, EmptyGuid, NEXT_TRADE_IN_AMEND_PRODUCT, NEXT_TRADE_IN_GET_ASSESSMENT_STATUS, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER, NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, QuoteItemStatusType, QuoteStatus, QuoteStatusType, TradeInItemCondition, UNCHANGEABLE_STATUSES } from "@components/utils/constants";
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
 import AmendProductModal from "./AmendProduct";
@@ -198,8 +198,8 @@ export default function TradeInDetail() {
       .trim();
   };
   const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus);
-  const canCancelTradeIn = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted", "QuoteExpired"].includes(itemStatus);
-  const canUpdateShippingAddress = (itemStatus: string) => ["AwaitingQuotation", "Quoted", "QuoteAccepted",].includes(itemStatus) && !tradeDetail?.value?.street
+  const canCancelTradeIn = (itemStatus: QuoteStatus) => [QuoteStatus.AwaitingQuotation, QuoteStatus.Quoted, QuoteStatus.QuoteAccepted, QuoteStatus.QuoteExpired].includes(itemStatus);
+  const canUpdateShippingAddress = (itemStatus: QuoteStatus) => [QuoteStatus.AwaitingQuotation, QuoteStatus.Quoted, QuoteStatus.QuoteAccepted].includes(itemStatus) && !tradeDetail?.value?.street
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
     <div className="flex items-center justify-start gap-2">
       <img src={product?.parentProductImageUrl} className="inline-block w-auto h-16 border border-gray-300 rounded-md shadow" alt={product?.parentProductName} />
