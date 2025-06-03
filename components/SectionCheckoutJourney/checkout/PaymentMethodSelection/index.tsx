@@ -263,7 +263,32 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     }, [selectedPaymentMethod, basket?.isPartialPayment])
 
     const contactDetails: any = { userId: user?.userId, firstName: user?.firstName, lastName: user?.lastName, emailAddress: user?.email, phoneNumber: user?.mobile || user?.telephone, }
-    const paymentMethodOptions = useMemo(() => selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment ? [...(paymentMethods || [])].filter((item: any) => (item.id === selectedPaymentMethod?.id || stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false'))) : paymentMethods, [paymentMethods, basket, selectedPaymentSplitPaymentEnabled])
+    const paymentMethodOptions = useMemo(() => {
+      
+      // If at least one partial payment is applied on the current basket
+      if (selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment) {
+
+        // Filter-in partial payment methods supported by the current system
+        const partialPaymentMethods = [...(paymentMethods || [])].filter((item: any) => (item.id === selectedPaymentMethod?.id || stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false'))) || []
+
+        // Find all the eligible partial payment methods by filtering-out the already paid partial payment method(s)
+        const eligiblePartialPaymentMethods = partialPaymentMethods?.filter((item: any) => !basket?.partialPaidMethods?.includes(item?.systemName)) || []
+
+        // If there are any eligible partial payment methods (with which payment is not yet taken up), return them
+        if (eligiblePartialPaymentMethods?.length > 0) {
+          return eligiblePartialPaymentMethods
+        }
+
+        // Else, filter-in the last paid partial payment method
+        const lastPartialPaidMethod = basket?.partialPaidMethods?.[basket?.partialPaidMethods?.length - 1]
+
+        // Return this last paid partial payment method, so that pay using other payment methods is visible to the user for further (last partial) payment
+        return partialPaymentMethods?.filter((item: any) => item?.systemName?.toLowerCase() === lastPartialPaidMethod?.toLowerCase()) || []
+      }
+      
+      // Else, return payment methods as usual
+      return paymentMethods
+    }, [paymentMethods, basket, selectedPaymentSplitPaymentEnabled])
     const splitPaymentMethodOptions = useMemo(() => [...(paymentMethods || [])].filter((item: any) => item.id !== selectedPaymentMethod?.id && !stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false')), [paymentMethods, selectedPaymentMethod])
 
     const paymentTypeSelectionCmp = (

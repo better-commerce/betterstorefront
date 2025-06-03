@@ -102,9 +102,8 @@ class ClearPayPaymentButton extends BasePaymentButton {
                 // The token is now ready to be captured from your server backend.
                 requestPayment(that.state?.paymentMethod?.systemName, { token: event?.data?.orderToken, })
                   .then((captureResult: any) => {
-                    uiContext?.hideOverlayLoaderState()
                     if (captureResult?.id) {
-                      Router.push(`${redirectionUrl}?orderId=${captureResult?.id}&token=${captureResult?.token}&status=${captureResult?.status}`)
+                      Router.push(`${redirectionUrl}?orderId=${captureResult?.id}&token=${captureResult?.token}&status=${captureResult?.status}`).then(() => uiContext?.hideOverlayLoaderState())
                     }
                   })
                   .catch((error: any) => {
@@ -114,6 +113,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
               } else {
                 // The consumer cancelled the payment or close the popup window.
                 AfterPay.close()
+                uiContext?.hideOverlayLoaderState()
               }
             }
             AfterPay.transfer({ token: clientResult?.token })
@@ -121,7 +121,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
             AfterPay.close()
             dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
           }
-          uiContext?.hideOverlayLoaderState()
+          //uiContext?.hideOverlayLoaderState()
         }).catch((error: any) => {
           uiContext?.hideOverlayLoaderState()
           dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })

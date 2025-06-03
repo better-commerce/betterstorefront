@@ -17,7 +17,7 @@ async function getCartApiMiddleware(req: any, res: any) {
       const { result: orderResult }: any = await getOrderDetails()(response?.orderId, req?.cookies)
       
       if (orderResult?.payments?.length) {
-        const partialPayments = orderResult?.payments?.filter((x: any) => x?.isPartialPaymentEnabled)
+        const partialPayments = orderResult?.payments?.filter((x: any) => x?.isPartialPaymentEnabled)?.map((x: any) => ({ ...x, paidAmount: (x?.orderAmount === x?.paidAmount) && x?.paymentInfo9 ? parseFloat(x?.paymentInfo9) : x?.paidAmount }))
         if (partialPayments?.length) {
           response.isPartialPayment = (partialPayments?.length > 0) // Set [isPartialPayment] in basket
           const totalOrderPartiallyPaidAmount = partialPayments?.reduce((sum: any, x: any) => sum + x.paidAmount, 0) || 0

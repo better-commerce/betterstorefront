@@ -121,12 +121,14 @@ class PayPalPaymentButton extends BasePaymentButton {
    * @returns
    */
   private onApprove(data: OnApproveData, actions: OnApproveActions) {
+    const { translate, uiContext } = this.props
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
     const promise = new Promise<void>(async (resolve: any, reject: any) => {
       const orderDetails: any = await actions?.order?.capture()
       if (orderDetails?.id) {
         const tokenId = orderDetails?.purchase_units[0]?.payments?.captures ?.length ? orderDetails?.purchase_units[0]?.payments?.captures[0]?.id : ''
         const redirectUrl = `${this?.state?.paymentMethod?.notificationUrl}?orderId=${orderDetails?.id}&payerId=${orderDetails?.payer?.payer_id}&token=${tokenId}`
-        Router.push(redirectUrl)
+        Router.push(redirectUrl).then(() => uiContext?.hideOverlayLoaderState())
       }
       resolve()
     })
