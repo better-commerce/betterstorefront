@@ -96,7 +96,9 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     ) {
       switch (type) {
         case 'SET_ERROR': {
-          setAlert({ type: 'error', msg: payload })
+          if (payload) {
+            setAlert({ type: 'error', msg: payload })
+          }
           return { ...state, error: payload, }
         }
 
