@@ -46,7 +46,8 @@
     "enablePCTopHeader":true,
     "enableShortThankYouPage":true,
     "enableCutBelt":false,
-    "enableCart":false
+    "enableCart":false,
+    "defaultCheckoutRoute":"/checkout"
   },
   "social":[
     { "name": "Facebook", "icon": "/images/socials/facebook-new.svg", "href": "https://www.facebook.com/ParkCameras", "enable":true },

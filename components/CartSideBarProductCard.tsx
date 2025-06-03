@@ -215,13 +215,11 @@ export default function CartSideBarProductCard({ openModal, product, handleClose
               </button>
             </div>
           )}
-           {CURRENT_THEME === 'ammega' &&
-            <>
-              <div className='text-left py-3'>
-                <CutBelt size={Number(product?.size) || 5} productId={product?.productId} product={product} />
-                <button type="button" id={`cutbelt-${product?.productId}`} className='hide-btn-section btn btn-default mt-2 !px-2 !py-2 !text-xs !border-gray-300 !text-gray-500'>Cut Belt</button>
-              </div>
-            </>   
+           {featureToggle?.features?.enableCutBelt &&
+            <div className='text-left py-3'>
+              <CutBelt size={Number(product?.size) || 5} productId={product?.productId} product={product} />
+              <button type="button" id={`cutbelt-${product?.productId}`} className='hide-btn-section btn btn-default mt-2 !px-2 !py-2 !text-xs !border-gray-300 !text-gray-500'>Cut Belt</button>
+            </div>
            }  
           {product?.children
             ?.filter((item: any) => item?.itemType !== CartProductType.ENGRAVING)

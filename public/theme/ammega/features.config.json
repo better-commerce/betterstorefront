@@ -41,7 +41,8 @@
     "enablePCTopHeader":false,
     "enableShortThankYouPage":false,
     "enableCutBelt":true,
-    "enableCart":true
+    "enableCart":true,
+    "defaultCheckoutRoute":"/cart"
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":false },
