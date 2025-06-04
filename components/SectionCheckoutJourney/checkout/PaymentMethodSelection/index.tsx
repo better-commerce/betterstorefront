@@ -222,7 +222,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     useEffect(() => {
       const asyncHandler = async () => {
         const paymentMethods: any = await loadPaymentMethods()
-        if (paymentMethods?.length) {
+        if (paymentMethods?.length && !basket?.isPartialPayment) {
           const defaultSelectedPaymentMethod = paymentMethods?.find((x: any) => x.isDefault)
           if (!defaultSelectedPaymentMethod) {
             const paymentMethod = getMethods(paymentMethods)[0]
@@ -268,10 +268,10 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     const paymentMethodOptions = useMemo(() => {
       
       // If at least one partial payment is applied on the current basket
-      if (selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment) {
+      if (/*selectedPaymentSplitPaymentEnabled &&*/ basket?.isPartialPayment) {
 
         // Filter-in partial payment methods supported by the current system
-        const partialPaymentMethods = [...(paymentMethods || [])].filter((item: any) => (item.id === selectedPaymentMethod?.id || stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false'))) || []
+        const partialPaymentMethods = [...(paymentMethods || [])].filter((item: any) => (/*item.id === selectedPaymentMethod?.id ||*/ stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false'))) || []
 
         // Find all the eligible partial payment methods by filtering-out the already paid partial payment method(s)
         const eligiblePartialPaymentMethods = partialPaymentMethods?.filter((item: any) => !basket?.partialPaidMethods?.includes(item?.systemName)) || []
@@ -300,6 +300,19 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         )}
       </>
     )
+
+    useEffect(() => {
+      if (basket?.isPartialPayment && paymentMethodOptions?.length && !selectedPaymentMethod) {
+        setSelectedPaymentMethod(paymentMethodOptions[0])
+      }
+    }, [basket?.isPartialPayment, paymentMethodOptions])
+
+    useEffect(() => {
+      if (!selectedPaymentSplitPaymentEnabled && partialAmount === 0) {
+        setPaymentType(PaymentSelectionType.FULL)
+        setPartialAmount(basket?.partialPayableAmount?.raw)
+      }
+    }, [selectedPaymentSplitPaymentEnabled, partialAmount])
 
     return paymentMethods ? (
       <>

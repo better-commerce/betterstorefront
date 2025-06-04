@@ -26,7 +26,7 @@ const PAYMENT_TYPES = [
 ]
 
 export default function PaymentTypeSelection(props: PaymentTypeSelectionProps) {
-    const { paymentType, setPaymentType, partialAmount, payableAmount, setPartialAmount, basket, dispatchState, translate, selectedPaymentMethod } = props
+    const { paymentType, setPaymentType, partialAmount = 0, payableAmount, setPartialAmount, basket, dispatchState, translate, selectedPaymentMethod } = props
     const [inputValue, setInputValue] = useState(partialAmount === 0 ? '0' : partialAmount.toString())
 
     // Sync input value when partialAmount changes externally

@@ -196,8 +196,7 @@ class KlarnaPaymentButton extends BasePaymentButton {
 
           createOneTimePaymentOrder(gatewayName, createOrderInput).then((paymentOrderResult: any) => {
             if (paymentOrderResult?.order_id) {
-              uiContext?.hideOverlayLoaderState()
-              Router.push(`${returnUrl}?orderId=${paymentOrderResult?.order_id}&fraudStatus=${paymentOrderResult?.fraud_status}`)
+              Router.push(`${returnUrl}?orderId=${paymentOrderResult?.order_id}&fraudStatus=${paymentOrderResult?.fraud_status}`).then(() => uiContext?.hideOverlayLoaderState())
             } else {
               uiContext?.hideOverlayLoaderState()
               dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
