@@ -6,7 +6,7 @@ import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react'
 import { withTranslation } from 'react-i18next'
 
 // Component Imports
-import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
+import BasePaymentButton, { IDispatchState, IPartialPaymentProps } from '../BasePaymentButton'
 import { IPaymentButtonProps } from '../BasePaymentButton'
 
 // Other Imports
@@ -28,7 +28,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
    * CTor
    * @param props
    */
-  constructor(props: IPaymentButtonProps & IDispatchState) {
+  constructor(props: IPaymentButtonProps & IDispatchState & IPartialPaymentProps) {
     super(props)
     this.state = {
       confirmed: false,

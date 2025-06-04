@@ -117,6 +117,12 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     const [state, dispatch]: any = useReducer<any>(reducer, INITIAL_STATE)
 
     const loadPaymentMethods = async () => {
+
+      if (basket?.isPartialPayment && (basket?.partialPayableAmount?.raw || 0) <= 0) {
+        setPaymentMethods([])
+        return []
+      }
+
       const { data: response }: any = await axios.post(
         NEXT_PAYMENT_METHODS_LIST,
         encrypt(
@@ -124,7 +130,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         )
       )
       const paymentMethods: any = tryParseJson(decrypt(response))
-
+      
       if (basket?.isPartialPayment) {
 
         const filteredPaymentMethods = [...paymentMethods].filter((x: any) => {
@@ -274,10 +280,13 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
         const partialPaymentMethods = [...(paymentMethods || [])].filter((item: any) => (/*item.id === selectedPaymentMethod?.id ||*/ stringToBoolean(item?.settings?.find((setting: any) => setting?.key === 'EnableSplitPayment')?.value || 'false'))) || []
 
         // Find all the eligible partial payment methods by filtering-out the already paid partial payment method(s)
-        const eligiblePartialPaymentMethods = partialPaymentMethods?.filter((item: any) => !basket?.partialPaidMethods?.includes(item?.systemName)) || []
+        const eligiblePartialPaymentMethods = (paymentMethods || [])?.filter((item: any) => !basket?.partialPaidMethods?.includes(item?.systemName)) || []
 
-        // If there are any eligible partial payment methods (with which payment is not yet taken up), return them
-        if (eligiblePartialPaymentMethods?.length > 0) {
+        // Check if all the partial payment methods are exhausted
+        const areAllPartialPaymentMethodsExhausted = [...partialPaymentMethods?.map((x: any) => x?.systemName)].sort().join(',') === [...basket?.partialPaidMethods].sort().join(',')
+
+        // If not all partial payment methods are exhausted, return the eligible partial payment methods
+        if (!areAllPartialPaymentMethodsExhausted && eligiblePartialPaymentMethods?.length > 0) {
           return eligiblePartialPaymentMethods
         }
 
