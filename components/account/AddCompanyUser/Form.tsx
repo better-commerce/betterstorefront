@@ -12,13 +12,17 @@ const formInitialValues = {
   email: '',
   password: '',
   confirmPassword: '',
+  role: '',
+  zone: '',
+  branch: '',
+  countryCode: ''
 }
 
 const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
 
-export default function AddCompanyUserForm({ type = 'addCompanyUser', isLoginSidebarOpen, onSubmit = () => {}, btnText = 'Add New User' }: any) {
+export default function AddCompanyUserForm({ type = 'addCompanyUser', companyDetails = {}, countries = [], hierarchy = [], isLoginSidebarOpen, onSubmit = () => {}, btnText = 'Add New User' }: any) {
   const translate = useTranslation()
   const addUserSchema = Yup.object({
     firstName: Yup.string().required(),
@@ -31,9 +35,13 @@ export default function AddCompanyUserForm({ type = 'addCompanyUser', isLoginSid
         translate('label.myAccount.passwordMustMatchText')
       )
       .required(),
+    role: Yup.string().required('Role is required').notOneOf([''], 'Please select a role'),
+    zone: Yup.string().required('Zone is required').notOneOf([''], 'Please select a zone'),
+    branch: Yup.string().required('Branch is required').notOneOf([''], 'Please select a branch'),
+    countryCode: Yup.string().required('Country is required').notOneOf([''], 'Please select a country'),
   })
 
-  const addCompanyUserConfig = useAddCompanyUserConfig ()
+  const addCompanyUserConfig = useAddCompanyUserConfig(countries, hierarchy)
 
   const VALUES_MAP: any = {
     addCompanyUser: {

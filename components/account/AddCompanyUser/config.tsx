@@ -1,5 +1,25 @@
 import { useTranslation } from '@commerce/utils/use-translation'
-export const useAddCompanyUserConfig = () => {
+
+export interface IHierarchy {
+  companyId: string;
+  id: string;
+  name: string;
+  parentId: string;
+  type: number;
+  typeLabel: string;
+}
+
+enum HierarchyType {
+  Country = 1,
+  Zone = 2,
+  Branch = 3
+}
+
+export interface ICountry {
+  itemText: string
+  itemValue: string
+}
+export const useAddCompanyUserConfig = (countries: Array<ICountry> = [], hierarchy: Array<IHierarchy> = []) => {
   const translate = useTranslation()
   return [
     {
@@ -16,7 +36,6 @@ export const useAddCompanyUserConfig = () => {
     },
     {
       key: 'email',
-      id: 'email',
       name: 'email',
       label: translate('label.addressBook.emailText'),
       type: 'email',
@@ -35,31 +54,38 @@ export const useAddCompanyUserConfig = () => {
       placeholder: translate('label.myAccount.confirmPasswordText'),
     },
     {
+      key: 'countryCode',
+      label: 'Country',
+      type: 'select',
+      options: countries?.map((country: ICountry) => ({ value: country?.itemValue, label: country?.itemText })),
+      placeholder: 'Select a country',
+    },
+    {
+      key: 'zone',
+      label: 'Zone',
+      // label: translate('common.label.mobileNumText'),
+      type: 'select',
+      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Zone)?.map((item: IHierarchy) => ({ value: item?.name, label: item?.name })),
+      placeholder: 'Select a zone',
+    },
+    {
+      key: 'branch',
+      label: 'Branch',
+      // label: translate('common.label.mobileNumText'),
+      type: 'select',
+      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Branch)?.map((item: IHierarchy) => ({ value: item?.name, label: item?.name })),
+      placeholder: 'Select a branch',
+    },
+    {
       key: 'role',
       label: 'Role',
       type: 'select',
       options: [
-        { value: '1', label: 'Admin' },
-        { value: '2', label: 'Sales user' },
-        { value: '3', label: 'User' },
+        { value: 'Branch head', label: 'Branch head' },
+        { value: 'Zonal head', label: 'Zonal head' },
+        { value: 'Order head', label: 'Order head' },
       ],
       placeholder: 'Select a role',
-    },
-    {
-      key: 'mobileNumber',
-      id: 'mobileNumber',
-      name: 'mobileNumber',
-      label: translate('common.label.mobileNumText'),
-      type: 'phone',
-      placeholder: translate('common.label.mobileNumText'),
-    },
-    {
-      key: 'phoneNumber',
-      id: 'phoneNumber',
-      name: 'phoneNumber',
-      label: translate('label.b2b.phoneNumberText'),
-      type: 'phone',
-      placeholder: translate('label.b2b.phoneNumberText'),
     },
   ]
 }

@@ -5,22 +5,25 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 
-import Form from '@components/account/AddCompanyUser/Form'
+import AddCompanyUserForm from '@components/account/AddCompanyUser/Form'
 import { useUI } from '@components/ui'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { NEXT_CREATE_CUSTOMER,} from '@components/utils/constants'
 import { AlertType, UserRoleType } from '@framework/utils/enums'
 import Layout from '@components/Layout/Layout'
+import { ICountry, IHierarchy } from './config'
 
 interface IAddNewUserModalProps {
   readonly isOpen: boolean
   readonly btnTitle: string
   companyDetails: any
   closeModal: () => void
+  hierarchy: IHierarchy[]
+  countries: ICountry[]
 }
 
 const AddNewUserModal = (props: IAddNewUserModalProps) => {
-  const { isOpen, closeModal, companyDetails } = props
+  const { isOpen, closeModal, companyDetails, hierarchy = [], countries = [] } = props
   const translate = useTranslation()
   const { setAlert }= useUI()
   const router = useRouter()
@@ -31,11 +34,12 @@ const AddNewUserModal = (props: IAddNewUserModalProps) => {
       lastName: values?.lastName ?? '',
       email: values?.email ?? '',
       password: values?.password,
-      telephone: values.phoneNumber,
-      mobile: values.mobileNumber,
       companyName: companyDetails?.companyName ?? '',
       companyCode: companyDetails?.companyCode ?? '',
-      companyUserRole: values.role ?? UserRoleType.ADMIN,
+      companyUserRole: values.role ?? '',
+      zone: values.zone ?? '',
+      branch : values.branch ?? '',
+      countryCode: values.countryCode ?? '',
     }
 
     try {
@@ -73,7 +77,7 @@ const AddNewUserModal = (props: IAddNewUserModalProps) => {
                         </div>
                       </div>
                       <div className="p-0 px-2 py-2 mx-2 my-4 overflow-y-auto sm:p-0 sm:px-2">
-                        <Form type="addCompanyUser" onSubmit={onAddCompanyUser} btnText={translate('label.myAccount.addNewUserText')} />
+                        <AddCompanyUserForm type="addCompanyUser" hierarchy={hierarchy} countries={countries} companyDetails={companyDetails} onSubmit={onAddCompanyUser} btnText={translate('label.myAccount.addNewUserText')} />
                       </div>
                     </div>
                   </Dialog.Panel>
