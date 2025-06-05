@@ -478,7 +478,15 @@
             "noLookbookAvaiableText": "Nessun Lookbook disponibile",
             "shopTheLookText": "Compra il look",
             "confirmPasswordText": "Conferma la password",
-            "addNewUserText": "Aggiungi nuovo utente"
+            "addNewUserText": "Aggiungi nuovo utente",
+            "roleRequiredText": "Il ruolo è obbligatorio",
+            "selectRoleText": "Seleziona un ruolo",
+            "zoneRequiredText": "La zona è obbligatoria",
+            "selectZoneText": "Seleziona una zona",
+            "branchRequiredText": "La filiale è obbligatoria",
+            "selectBranchText": "Seleziona una filiale",
+            "countryRequiredText": "Il paese è obbligatorio",
+            "selectCountryText": "Seleziona un paese",
         },
         "navBar": {
             "currencyText": "Valuta",

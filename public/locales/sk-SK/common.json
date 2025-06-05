@@ -508,7 +508,15 @@
             "noLookbookAvaiableText": "Žiadny lookbook k dispozícii",
             "shopTheLookText": "Nakúpte vzhľad",
             "confirmPasswordText": "Potvrdiť heslo",
-            "addNewUserText": "Pridať nového používateľa"
+            "addNewUserText": "Pridať nového používateľa",
+            "roleRequiredText": "Úloha je povinná",
+            "selectRoleText": "Vyberte úlohu",
+            "zoneRequiredText": "Zóna je povinná",
+            "selectZoneText": "Vyberte zónu",
+            "branchRequiredText": "Filiala je povinná",
+            "selectBranchText": "Vyberte filialu",
+            "countryRequiredText": "Štát je povinný",
+            "selectCountryText": "Vyberte štát"
         },
         "navBar": {
             "currencyText": "Mena",

@@ -508,7 +508,15 @@
         "noLookbookAvaiableText": "Δεν Διαθέτουμε Lookbook",
         "shopTheLookText": "Αγοράστε το look",
         "confirmPasswordText": "Επιβεβαίωση Κωδικού",
-        "addNewUserText": "Προσθήκη νέου χρήστη"
+        "addNewUserText": "Προσθήκη νέου χρήστη",
+        "roleRequiredText": "Ο ρόλος είναι υποχρεωτικός",
+        "selectRoleText": "Παρακαλούμε επιλέξτε έναν ρόλο",
+        "zoneRequiredText": "Η περιοχή είναι υποχρεωτική",
+        "selectZoneText": "Παρακαλούμε επιλέξτε μια περιοχή",
+        "branchRequiredText": "Η θυρίδα είναι υποχρεωτική",
+        "selectBranchText": "Παρακαλούμε επιλέξτε μια θυρίδα",
+        "countryRequiredText": "Η χώρα είναι υποχρεωτική",
+        "selectCountryText": "Παρακαλούμε επιλέξτε μια χώρα"
     },
     "navBar": {
         "currencyText": "Νόμισμα",

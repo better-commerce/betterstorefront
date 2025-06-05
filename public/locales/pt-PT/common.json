@@ -508,7 +508,15 @@
             "noLookbookAvaiableText": "Nenhum Lookbook Disponível",
             "shopTheLookText": "Compre o Look",
             "confirmPasswordText": "Confirmar Senha",
-            "addNewUserText": "Adicionar novo usuário"
+            "addNewUserText": "Adicionar novo usuário",
+            "roleRequiredText": "O papel é obrigatório",
+            "selectRoleText": "Selecione um papel",
+            "zoneRequiredText": "A zona é obrigatória",
+            "selectZoneText": "Selecione uma zona",
+            "branchRequiredText": "A filial é obrigatória",
+            "selectBranchText": "Selecione uma filial",
+            "countryRequiredText": "O país é obrigatório",
+            "selectCountryText": "Selecione um país",
         },
         "navBar": {
             "currencyText": "Moeda",

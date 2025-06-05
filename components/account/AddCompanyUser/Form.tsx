@@ -22,26 +22,26 @@ const COMPONENTS_MAP: any = {
   CustomCheckbox: (props: any) => <Checkbox {...props} />,
 }
 
-export default function AddCompanyUserForm({ type = 'addCompanyUser', companyDetails = {}, countries = [], hierarchy = [], isLoginSidebarOpen, onSubmit = () => {}, btnText = 'Add New User' }: any) {
+export default function AddCompanyUserForm({ type = 'addCompanyUser', hierarchy = [], isLoginSidebarOpen, onSubmit = () => {}, btnText = 'Add New User' }: any) {
   const translate = useTranslation()
   const addUserSchema = Yup.object({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    email: Yup.string().required(),
-    password: Yup.string().min(8).max(24).required(),
+    firstName: Yup.string().required(translate('label.myAccount.rfq.firstNameRequired')),
+    lastName: Yup.string().required(translate('label.myAccount.rfq.lastNameRequired')),
+    email: Yup.string().required(translate('label.myAccount.rfq.emailRequired')).email(translate('label.myAccount.rfq.emailInvalid')),
+    password: Yup.string().min(8).max(24).required(translate('common.message.password.passwordRequiredMsg')),
     confirmPassword: Yup.string()
-      .oneOf(
-        [Yup.ref('password')],
-        translate('label.myAccount.passwordMustMatchText')
-      )
-      .required(),
-    role: Yup.string().required('Role is required').notOneOf([''], 'Please select a role'),
-    zone: Yup.string().required('Zone is required').notOneOf([''], 'Please select a zone'),
-    branch: Yup.string().required('Branch is required').notOneOf([''], 'Please select a branch'),
-    countryCode: Yup.string().required('Country is required').notOneOf([''], 'Please select a country'),
+    .oneOf(
+      [Yup.ref('password')],
+      translate('label.myAccount.passwordMustMatchText')
+    )
+    .required(translate('common.message.password.confirmRequiredMsg')),
+    role: Yup.string().required(translate('label.myAccount.roleRequiredText')).notOneOf([''], translate('label.myAccount.selectRoleText')),
+    zone: Yup.string().required(translate('label.myAccount.zoneRequiredText')).notOneOf([''], translate('label.myAccount.selectZoneText')),
+    branch: Yup.string().required(translate('label.myAccount.branchRequiredText')).notOneOf([''], translate('label.myAccount.selectBranchText')),
+    countryCode: Yup.string().required(translate('label.myAccount.countryRequiredText')).notOneOf([''], translate('label.myAccount.selectCountryText')),
   })
 
-  const addCompanyUserConfig = useAddCompanyUserConfig(countries, hierarchy)
+  const addCompanyUserConfig = useAddCompanyUserConfig(hierarchy)
 
   const VALUES_MAP: any = {
     addCompanyUser: {

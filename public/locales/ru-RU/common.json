@@ -508,7 +508,15 @@
             "noLookbookAvaiableText": "Нет доступных lookbook",
             "shopTheLookText": "Купить образ",
             "confirmPasswordText": "Подтвердите пароль",
-            "addNewUserText": "Добавить нового пользователя"
+            "addNewUserText": "Добавить нового пользователя",
+            "roleRequiredText": "Требуется указать роль",
+            "selectRoleText": "Пожалуйста, выберите роль",
+            "zoneRequiredText": "Требуется указать зону",
+            "selectZoneText": "Пожалуйста, выберите зону",
+            "branchRequiredText": "Требуется указать филиал",
+            "selectBranchText": "Пожалуйста, выберите филиал",
+            "countryRequiredText": "Требуется указать страну",
+            "selectCountryText": "Пожалуйста, выберите страну",
         },
         "navBar": {
             "currencyText": "Валюта",

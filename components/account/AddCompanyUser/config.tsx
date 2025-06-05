@@ -19,7 +19,7 @@ export interface ICountry {
   itemText: string
   itemValue: string
 }
-export const useAddCompanyUserConfig = (countries: Array<ICountry> = [], hierarchy: Array<IHierarchy> = []) => {
+export const useAddCompanyUserConfig = (hierarchy: Array<IHierarchy> = []) => {
   const translate = useTranslation()
   return [
     {
@@ -57,7 +57,7 @@ export const useAddCompanyUserConfig = (countries: Array<ICountry> = [], hierarc
       key: 'countryCode',
       label: 'Country',
       type: 'select',
-      options: countries?.map((country: ICountry) => ({ value: country?.itemValue, label: country?.itemText })),
+      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Country)?.map((item: IHierarchy) => ({ value: item?.name, label: item?.name })),
       placeholder: 'Select a country',
     },
     {

@@ -77,7 +77,7 @@ const AddNewUserModal = (props: IAddNewUserModalProps) => {
                         </div>
                       </div>
                       <div className="p-0 px-2 py-2 mx-2 my-4 overflow-y-auto sm:p-0 sm:px-2">
-                        <AddCompanyUserForm type="addCompanyUser" hierarchy={hierarchy} countries={countries} companyDetails={companyDetails} onSubmit={onAddCompanyUser} btnText={translate('label.myAccount.addNewUserText')} />
+                        <AddCompanyUserForm type="addCompanyUser" hierarchy={hierarchy} onSubmit={onAddCompanyUser} btnText={translate('label.myAccount.addNewUserText')} />
                       </div>
                     </div>
                   </Dialog.Panel>

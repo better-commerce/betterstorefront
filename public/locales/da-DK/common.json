@@ -508,7 +508,15 @@
             "noLookbookAvaiableText": "Ingen Lookbook tilgængelig",
             "shopTheLookText": "Shop looket",
             "confirmPasswordText": "Bekræft adgangskode",
-            "addNewUserText": "Tilføj ny bruger"
+            "addNewUserText": "Tilføj ny bruger",
+            "roleRequiredText": "Rolle er påkrævet",
+            "selectRoleText": "Vælg en rolle",
+            "zoneRequiredText": "Zone er påkrævet",
+            "selectZoneText": "Vælg en zone",
+            "branchRequiredText": "Filial er påkrævet",
+            "selectBranchText": "Vælg en filial",
+            "countryRequiredText": "Land er påkrævet",
+            "selectCountryText": "Vælg et land",
         },
         "navBar": {
             "currencyText": "Valuta",

@@ -507,7 +507,15 @@
             "noLookbookAvaiableText": "Geen lookbook beschikbaar",
             "shopTheLookText": "Shop de look",
             "confirmPasswordText": "Bevestig wachtwoord",
-            "addNewUserText": "Nieuwe gebruiker toevoegen"
+            "addNewUserText": "Nieuwe gebruiker toevoegen",
+            "roleRequiredText": "Rol is verplicht",
+            "selectRoleText": "Selecteer een rol",
+            "zoneRequiredText": "Zone is verplicht",
+            "selectZoneText": "Selecteer een zone",
+            "branchRequiredText": "Vestiging is verplicht",
+            "selectBranchText": "Selecteer een vestiging",
+            "countryRequiredText": "Land is verplicht",
+            "selectCountryText": "Selecteer een land",
         },
         "navBar": {
             "currencyText": "Munteenheid",

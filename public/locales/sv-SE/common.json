@@ -508,7 +508,15 @@
             "noLookbookAvaiableText": "Inget lookbook tillgängligt",
             "shopTheLookText": "Shoppa looken",
             "confirmPasswordText": "Bekräfta lösenord",
-            "addNewUserText": "Lägg till ny användare"
+            "addNewUserText": "Lägg till ny användare",
+            "roleRequiredText": "Roll krävs",
+            "selectRoleText": "Välj en roll",
+            "zoneRequiredText": "Zon krävs",
+            "selectZoneText": "Välj en zon",
+            "branchRequiredText": "Filial krävs",
+            "selectBranchText": "Välj en filial",
+            "countryRequiredText": "Land krävs",
+            "selectCountryText": "Välj ett land",
         },
         "navBar": {
             "currencyText": "Valuta",

@@ -508,7 +508,15 @@
             "noLookbookAvaiableText": "Ingen Lookbook tilgjengeleg",
             "shopTheLookText": "Kjøp stilen",
             "confirmPasswordText": "Bekreft passord",
-            "addNewUserText": "Legg til ny brukar"
+            "addNewUserText": "Legg til ny brukar",
+            "roleRequiredText": "Role is required",
+            "selectRoleText": "Vel ein rolle",
+            "zoneRequiredText": "Zon er påkravd",
+            "selectZoneText": "Vel ein zon",
+            "branchRequiredText": "Filial er påkravd",
+            "selectBranchText": "Vel ein filial",
+            "countryRequiredText": "Land er påkravd",
+            "selectCountryText": "Vel ein land"
         },
         "navBar": {
             "currencyText": "Valuta",

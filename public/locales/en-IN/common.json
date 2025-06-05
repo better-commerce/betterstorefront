@@ -508,7 +508,15 @@
       "noLookbookAvaiableText": "No Lookbook Available",
       "shopTheLookText": "Shop the look",
       "confirmPasswordText": "Confirm Password",
-      "addNewUserText": "Add New User"
+      "addNewUserText": "Add New User",
+      "roleRequiredText": "Role is required",
+      "selectRoleText": "Please select a role",
+      "zoneRequiredText": "Zone is required",
+      "selectZoneText": "Please select a zone",
+      "branchRequiredText": "Branch is required",
+      "selectBranchText": "Please select a branch",
+      "countryRequiredText": "Country is required",
+      "selectCountryText": "Please select a country"
     },
     "navBar": {
       "currencyText": "Currency",
