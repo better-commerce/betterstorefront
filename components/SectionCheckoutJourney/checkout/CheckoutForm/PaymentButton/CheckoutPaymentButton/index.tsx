@@ -1,7 +1,7 @@
 // Package Imports
 import Script from 'next/script'
 import Router from 'next/router'
-import { CheckoutPaymentSourceType, CheckoutPaymentType, CheckoutPaymentRequest, PaymentMethodTypeId, PaymentMethodType, } from 'bc-payments-sdk'
+import { CheckoutPaymentSourceType, CheckoutPaymentType, CheckoutPaymentRequest, PaymentMethodTypeId, PaymentMethodType, PaymentSelectionType, } from 'bc-payments-sdk'
 import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react'
 import { withTranslation } from 'react-i18next'
 
@@ -226,7 +226,9 @@ class CheckoutPaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { dispatchState }: any = this.props
+    const { dispatchState, setPaymentType, setPartialAmount }: any = this.props
+    setPaymentType(PaymentSelectionType.FULL)
+    setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
 
     if (this.props?.paymentModeLoadedCallback) {

@@ -210,7 +210,9 @@ class ClearPayPaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { dispatchState }: any = this.props
+    const { dispatchState, setPaymentType, setPartialAmount }: any = this.props
+    setPaymentType(PaymentSelectionType.FULL)
+    setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
   }
 
