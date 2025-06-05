@@ -516,7 +516,7 @@
       "branchRequiredText": "Filiale ist erforderlich",
       "selectBranchText": "Bitte wählen Sie eine Filiale aus",
       "countryRequiredText": "Land ist erforderlich",
-      "selectCountryText": "Bitte wählen Sie ein Land aus",
+      "selectCountryText": "Bitte wählen Sie ein Land aus"
     },
     "navBar": {
       "currencyText": "Währung",

@@ -515,7 +515,7 @@
       "branchRequiredText": "La sucursal es obligatoria",
       "selectBranchText": "Por favor seleccione una sucursal",
       "countryRequiredText": "El país es obligatorio",
-      "selectCountryText": "Por favor seleccione un país",
+      "selectCountryText": "Por favor seleccione un país"
     },
     "navBar": {
       "currencyText": "Moneda",

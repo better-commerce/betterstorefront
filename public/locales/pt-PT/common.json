@@ -516,7 +516,7 @@
             "branchRequiredText": "A filial é obrigatória",
             "selectBranchText": "Selecione uma filial",
             "countryRequiredText": "O país é obrigatório",
-            "selectCountryText": "Selecione um país",
+            "selectCountryText": "Selecione um país"
         },
         "navBar": {
             "currencyText": "Moeda",

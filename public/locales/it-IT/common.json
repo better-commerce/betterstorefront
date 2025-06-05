@@ -486,7 +486,7 @@
             "branchRequiredText": "La filiale è obbligatoria",
             "selectBranchText": "Seleziona una filiale",
             "countryRequiredText": "Il paese è obbligatorio",
-            "selectCountryText": "Seleziona un paese",
+            "selectCountryText": "Seleziona un paese"
         },
         "navBar": {
             "currencyText": "Valuta",

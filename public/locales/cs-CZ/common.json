@@ -517,7 +517,7 @@
             "branchRequiredText": "Pobočka je povinná",
             "selectBranchText": "Vyberte pobočku",
             "countryRequiredText": "Země je povinná",
-            "selectCountryText": "Vyberte zemi",
+            "selectCountryText": "Vyberte zemi"
         },
         "navBar": {
             "currencyText": "Měna",

@@ -516,7 +516,7 @@
             "branchRequiredText": "Oddział jest wymagany",
             "selectBranchText": "Wybierz oddział",
             "countryRequiredText": "Kraj jest wymagany",
-            "selectCountryText": "Wybierz kraj",
+            "selectCountryText": "Wybierz kraj"
         },
         "navBar": {
             "currencyText": "Waluta",

@@ -516,7 +516,7 @@
             "branchRequiredText": "Требуется указать филиал",
             "selectBranchText": "Пожалуйста, выберите филиал",
             "countryRequiredText": "Требуется указать страну",
-            "selectCountryText": "Пожалуйста, выберите страну",
+            "selectCountryText": "Пожалуйста, выберите страну"
         },
         "navBar": {
             "currencyText": "Валюта",

@@ -516,7 +516,7 @@
             "branchRequiredText": "Filial krävs",
             "selectBranchText": "Välj en filial",
             "countryRequiredText": "Land krävs",
-            "selectCountryText": "Välj ett land",
+            "selectCountryText": "Välj ett land"
         },
         "navBar": {
             "currencyText": "Valuta",

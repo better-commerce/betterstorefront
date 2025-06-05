@@ -516,7 +516,7 @@
             "branchRequiredText": "Filial er påkrævet",
             "selectBranchText": "Vælg en filial",
             "countryRequiredText": "Land er påkrævet",
-            "selectCountryText": "Vælg et land",
+            "selectCountryText": "Vælg et land"
         },
         "navBar": {
             "currencyText": "Valuta",

@@ -514,7 +514,7 @@
       "branchRequiredText": "La succursale est requise",
       "selectBranchText": "Veuillez sélectionner une succursale",
       "countryRequiredText": "Le pays est requis",
-      "selectCountryText": "Veuillez sélectionner un pays",
+      "selectCountryText": "Veuillez sélectionner un pays"
     },
     "navBar": {
       "currencyText": "Devise",

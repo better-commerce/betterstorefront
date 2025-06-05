@@ -516,7 +516,7 @@
       "branchRequiredText": "Branch is required",
       "selectBranchText": "Please select a branch",
       "countryRequiredText": "Country is required",
-      "selectCountryText": "Please select a country",
+      "selectCountryText": "Please select a country"
     },
     "navBar": {
       "currencyText": "Currency",
