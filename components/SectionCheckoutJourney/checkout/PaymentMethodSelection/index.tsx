@@ -317,9 +317,11 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
     }, [basket?.isPartialPayment, paymentMethodOptions])
 
     useEffect(() => {
-      if (!selectedPaymentSplitPaymentEnabled && partialAmount === 0) {
+      if (!selectedPaymentSplitPaymentEnabled) {
         setPaymentType(PaymentSelectionType.FULL)
-        setPartialAmount(basket?.partialPayableAmount?.raw)
+        if (partialAmount === 0) {
+          setPartialAmount(basket?.partialPayableAmount?.raw)
+        }
       }
     }, [selectedPaymentSplitPaymentEnabled, partialAmount])
 
