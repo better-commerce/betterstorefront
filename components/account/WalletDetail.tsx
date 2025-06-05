@@ -76,7 +76,7 @@ export default function WalletDetail() {
       const config: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS, method: RequestMethod.POST, data: { walletId, page, pageSize: 10, sortBy, sortDescending, filters }, }
       const { data: transactionsResult }: any = await callApi(config)
       setWalletTransaction(transactionsResult?.data);
-      const bankConfig: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_BANKS, method: RequestMethod.POST, data: { walletId, page, pageSize: 10, sortBy, sortDescending, filters }, }
+      const bankConfig: AxiosRequestConfig = { url: NEXT_WALLET_GET_CUSTOMER_BANKS, method: RequestMethod.POST, data: { walletId, page: 1, pageSize: 1000, sortBy, sortDescending, filters }, }
       const { data: bankResult }: any = await callApi(bankConfig)
       setBankAccountList(bankResult?.data?.items)
       setPaginationState((prev: any) => ({
