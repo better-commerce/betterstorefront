@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA обязательна",
                 "ETA": "ETA",
                 "assignToRequired": "Назначено обязательно",
-                "productRequired": "Необходимо хотя бы одно товар"
+                "productRequired": "Необходимо хотя бы одно товар",
+                "branchText": "Филиал",
+                "zoneText": "Зона",
+                "roleAdminText": "Администратор",
+                "roleSalesUserText": "Пользователь продаж",
+                "roleUserText": "Пользователь",
+                "roleBranchHeadText": "Руководитель филиала",
+                "roleZonalHeadText": "Руководитель зоны",
+                "roleOrderCreatorText": "Создатель заказов",
+                "selectCountryText": "Выберите страну",
+                "selectZoneText": "Выберите зону",
+                "selectBranchText": "Выберите филиал",
+                "selectRoleText": "Выберите роль"
             },
             "myDetailsHeadingText": "Мой профиль",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Название Банка",
             "AccountNoText": "Номер Счета",
             "sortCodeText": "Сортировочный Код",
-            "walletDisabledMessage": "Кошелек отключен. Включите его для просмотра баланса и операций."
+            "walletDisabledMessage": "Кошелек отключен. Включите его для просмотра баланса и операций.",
+            "roleRequiredText": "Требуется указать роль",
+            "selectRoleText": "Пожалуйста, выберите роль",
+            "zoneRequiredText": "Требуется указать зону",
+            "selectZoneText": "Пожалуйста, выберите зону",
+            "branchRequiredText": "Требуется указать филиал",
+            "selectBranchText": "Пожалуйста, выберите филиал",
+            "countryRequiredText": "Требуется указать страну",
+            "selectCountryText": "Пожалуйста, выберите страну"
         },
         "navBar": {
             "currencyText": "Валюта",

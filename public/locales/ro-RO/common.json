@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA este obligatoriu",
                 "ETA": "ETA",
                 "assignToRequired": "Atribuit lui este obligatoriu",
-                "productRequired": "Este necesar cel puțin un produs"
+                "productRequired": "Este necesar cel puțin un produs",
+                "branchText": "Sucursală",
+                "zoneText": "Zonă",
+                "roleAdminText": "Administrator",
+                "roleSalesUserText": "Utilizator de vânzări",
+                "roleUserText": "Utilizator",
+                "roleBranchHeadText": "Șef de sucursală",
+                "roleZonalHeadText": "Șef de zonă",
+                "roleOrderCreatorText": "Creator de comenzi",
+                "selectCountryText": "Selectați o țară",
+                "selectZoneText": "Selectați o zonă",
+                "selectBranchText": "Selectați o sucursală",
+                "selectRoleText": "Selectați un rol"
             },
             "myDetailsHeadingText": "Profilul meu",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Numele Băncii",
             "AccountNoText": "Nr. Cont",
             "sortCodeText": "Cod de Sortare",
-            "walletDisabledMessage": "Portofelul este dezactivat. Activați-l pentru a vedea soldul și tranzacțiile."
+            "walletDisabledMessage": "Portofelul este dezactivat. Activați-l pentru a vedea soldul și tranzacțiile.",
+            "roleRequiredText": "Rolul este obligatoriu",
+            "selectRoleText": "Selectează un rol",
+            "zoneRequiredText": "Zona este obligatorie",
+            "selectZoneText": "Selectează o zonă",
+            "branchRequiredText": "Filiala este obligatorie",
+            "selectBranchText": "Selectează o filială",
+            "countryRequiredText": "Țara este obligatorie",
+            "selectCountryText": "Selectează o țară"
         },
         "navBar": {
             "currencyText": "Valută",

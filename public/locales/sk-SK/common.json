@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA je povinné",
                 "ETA": "ETA",
                 "assignToRequired": "Priradené k je povinné",
-                "productRequired": "Vyžaduje sa aspoň jeden produkt"
+                "productRequired": "Vyžaduje sa aspoň jeden produkt",
+                "branchText": "Pobočka",
+                "zoneText": "Zóna",
+                "roleAdminText": "Administrátor",
+                "roleSalesUserText": "Používateľ predaja",
+                "roleUserText": "Používateľ",
+                "roleBranchHeadText": "Vedúci pobočky",
+                "roleZonalHeadText": "Vedúci zóny",
+                "roleOrderCreatorText": "Vytvorca objednávok",
+                "selectCountryText": "Vyberte krajinu",
+                "selectZoneText": "Vyberte zónu",
+                "selectBranchText": "Vyberte pobočku",
+                "selectRoleText": "Vyberte roli"
             },
             "myDetailsHeadingText": "Môj profil",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Názov Banky",
             "AccountNoText": "Č. Účtu",
             "sortCodeText": "Sortovací Kód",
-            "walletDisabledMessage": "Peňaženka je deaktivovaná. Aktivujte ju, aby ste videli zostatok a transakcie."
+            "walletDisabledMessage": "Peňaženka je deaktivovaná. Aktivujte ju, aby ste videli zostatok a transakcie.",
+            "roleRequiredText": "Úloha je povinná",
+            "selectRoleText": "Vyberte úlohu",
+            "zoneRequiredText": "Zóna je povinná",
+            "selectZoneText": "Vyberte zónu",
+            "branchRequiredText": "Filiala je povinná",
+            "selectBranchText": "Vyberte filialu",
+            "countryRequiredText": "Štát je povinný",
+            "selectCountryText": "Vyberte štát"
         },
         "navBar": {
             "currencyText": "Mena",

@@ -463,7 +463,19 @@
                 "validUntilRequired": "Forventet leveringstid er påkrævet",
                 "ETA": "Forventet leveringstid",
                 "assignToRequired": "Tildeling er påkrævet",
-                "productRequired": "Mindst ét produkt er påkrævet"
+                "productRequired": "Mindst ét produkt er påkrævet",
+                "branchText": "Filial",
+                "zoneText": "Zone",
+                "roleAdminText": "Admin",
+                "roleSalesUserText": "Salgsperson",
+                "roleUserText": "Bruger",
+                "roleBranchHeadText": "Filialleder",
+                "roleZonalHeadText": "Zoneleder",
+                "roleOrderCreatorText": "Ordreoprettelse",
+                "selectCountryText": "Vælg et land",
+                "selectZoneText": "Vælg en zone",
+                "selectBranchText": "Vælg en filial",
+                "selectRoleText": "Vælg en rolle"
             },
             "myDetailsHeadingText": "Min profil",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Banknavn",
             "AccountNoText": "Kontonr.",
             "sortCodeText": "Sorteringskode",
-            "walletDisabledMessage": "Pung er deaktiveret. Aktivér den for at se saldo og transaktioner."
+            "walletDisabledMessage": "Pung er deaktiveret. Aktivér den for at se saldo og transaktioner.",
+            "roleRequiredText": "Rolle er påkrævet",
+            "selectRoleText": "Vælg en rolle",
+            "zoneRequiredText": "Zone er påkrævet",
+            "selectZoneText": "Vælg en zone",
+            "branchRequiredText": "Filial er påkrævet",
+            "selectBranchText": "Vælg en filial",
+            "countryRequiredText": "Land er påkrævet",
+            "selectCountryText": "Vælg et land"
         },
         "navBar": {
             "currencyText": "Valuta",

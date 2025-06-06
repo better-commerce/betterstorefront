@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA on pakollinen",
                 "ETA": "ETA",
                 "assignToRequired": "Määritetty käyttäjä on pakollinen",
-                "productRequired": "Vähintään yksi tuote on pakollinen"
+                "productRequired": "Vähintään yksi tuote on pakollinen",
+                "branchText": "Haara",
+                "zoneText": "Alue",
+                "roleAdminText": "Ylläpitäjä",
+                "roleSalesUserText": "Myyntikäyttäjä",
+                "roleUserText": "Käyttäjä",
+                "roleBranchHeadText": "Haaran johtaja",
+                "roleZonalHeadText": "Alueen johtaja",
+                "roleOrderCreatorText": "Tilausluoja",
+                "selectCountryText": "Valitse maa",
+                "selectZoneText": "Valitse alue",
+                "selectBranchText": "Valitse haara",
+                "selectRoleText": "Valitse rooli"
             },
             "myDetailsHeadingText": "Profiilini",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Pankin Nimi",
             "AccountNoText": "Tilinro.",
             "sortCodeText": "Järjestelykoodi",
-            "walletDisabledMessage": "Lompakko on pois käytöstä. Ota se käyttöön nähdäksesi saldon ja tapahtumat."
+            "walletDisabledMessage": "Lompakko on pois käytöstä. Ota se käyttöön nähdäksesi saldon ja tapahtumat.",
+            "roleRequiredText": "Rooli vaaditaan",
+            "selectRoleText": "Valitse rooli",
+            "zoneRequiredText": "Vyöhyke vaaditaan",
+            "selectZoneText": "Valitse vyöhyke",
+            "branchRequiredText": "Toimipiste vaaditaan",
+            "selectBranchText": "Valitse toimipiste",
+            "countryRequiredText": "Maa vaaditaan",
+            "selectCountryText": "Valitse maa"
         },
         "navBar": {
             "currencyText": "Valuutta",

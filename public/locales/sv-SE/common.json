@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA är obligatorisk",
                 "ETA": "ETA",
                 "assignToRequired": "Tilldelad till är obligatorisk",
-                "productRequired": "Minst en produkt är obligatorisk"
+                "productRequired": "Minst en produkt är obligatorisk",
+                "branchText": "Filial",
+                "zoneText": "Zon",
+                "roleAdminText": "Administratör",
+                "roleSalesUserText": "Säljare",
+                "roleUserText": "Användare",
+                "roleBranchHeadText": "Filialchef",
+                "roleZonalHeadText": "Zonchef",
+                "roleOrderCreatorText": "Beställningscreator",
+                "selectCountryText": "Välj ett land",
+                "selectZoneText": "Välj en zon",
+                "selectBranchText": "Välj en filial",
+                "selectRoleText": "Välj en roll"
             },
             "myDetailsHeadingText": "Min profil",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Banknamn",
             "AccountNoText": "Kontonr.",
             "sortCodeText": "Sorteringskod",
-            "walletDisabledMessage": "Plånboken är inaktiverad. Aktivera den för att se saldo och transaktioner."
+            "walletDisabledMessage": "Plånboken är inaktiverad. Aktivera den för att se saldo och transaktioner.",
+            "roleRequiredText": "Roll krävs",
+            "selectRoleText": "Välj en roll",
+            "zoneRequiredText": "Zon krävs",
+            "selectZoneText": "Välj en zon",
+            "branchRequiredText": "Filial krävs",
+            "selectBranchText": "Välj en filial",
+            "countryRequiredText": "Land krävs",
+            "selectCountryText": "Välj ett land"
         },
         "navBar": {
             "currencyText": "Valuta",

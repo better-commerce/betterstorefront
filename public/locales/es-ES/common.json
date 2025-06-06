@@ -462,7 +462,19 @@
         "poNumberRequired": "El Número de Pedido es obligatorio",
         "validUntilRequired": "El campo No Enviar Después de es obligatorio",
         "assignToRequired": "El campo Asignado a es obligatorio",
-        "productRequired": "Se requiere al menos un producto"
+        "productRequired": "Se requiere al menos un producto",
+        "branchText": "Sucursal",
+        "zoneText": "Zona",
+        "roleAdminText": "Administrador",
+        "roleSalesUserText": "Usuario de Ventas",
+        "roleUserText": "Usuario",
+        "roleBranchHeadText": "Jefe de Sucursal",
+        "roleZonalHeadText": "Jefe de Zona",
+        "roleOrderCreatorText": "Creador de Pedidos",
+        "selectCountryText": "Seleccionar un país",
+        "selectZoneText": "Seleccionar una zona",
+        "selectBranchText": "Seleccionar una sucursal",
+        "selectRoleText": "Seleccionar un rol"
       },
       "myDetailsHeadingText": "Mis Profile",
       "tradeInText":"Trade In",
@@ -528,7 +540,15 @@
       "bankNameText": "Nombre del Banco",
       "AccountNoText": "Nº de Cuenta",
       "sortCodeText": "Código de Sorteo",
-      "walletDisabledMessage": "El monedero está deshabilitado. Actívelo para ver el saldo y las transacciones."
+      "walletDisabledMessage": "El monedero está deshabilitado. Actívelo para ver el saldo y las transacciones.",
+      "roleRequiredText": "El rol es obligatorio",
+      "selectRoleText": "Por favor seleccione un rol",
+      "zoneRequiredText": "La zona es obligatoria",
+      "selectZoneText": "Por favor seleccione una zona",
+      "branchRequiredText": "La sucursal es obligatoria",
+      "selectBranchText": "Por favor seleccione una sucursal",
+      "countryRequiredText": "El país es obligatorio",
+      "selectCountryText": "Por favor seleccione un país"
     },
     "navBar": {
       "currencyText": "Moneda",

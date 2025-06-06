@@ -463,7 +463,19 @@
             "validUntilRequired":"Απαιτείται ETA",
             "ETA": "ETA",
             "assignToRequired": "Απαιτείται ο Ανατεθείς",
-            "productRequired": "Απαιτείται τουλάχιστον ένα προϊόν"
+            "productRequired": "Απαιτείται τουλάχιστον ένα προϊόν",
+            "branchText": "Θυρίδα",
+            "zoneText": "Περιοχή",
+            "roleAdminText": "Admin",
+            "roleSalesUserText": "Sales User",
+            "roleUserText": "User",
+            "roleBranchHeadText": "Branch Head",
+            "roleZonalHeadText": "Zonal Head",
+            "roleOrderCreatorText": "Order Creator",
+            "selectCountryText": "Select a country",
+            "selectZoneText": "Select a zone",
+            "selectBranchText": "Select a branch",
+            "selectRoleText": "Select a role"
         },
         "myDetailsHeadingText": "Το Προφίλ Μου",
         "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
         "bankNameText": "Όνομα Τράπεζας",
         "AccountNoText": "Αριθμός Λογαριασμού",
         "sortCodeText": "Κωδικός Ταξινόμησης",
-        "walletDisabledMessage": "Το πορτοφόλι είναι απενεργοποιημένο. Ενεργοποιήστε το για να δείτε το υπόλοιπο και τις συναλλαγές."
+        "walletDisabledMessage": "Το πορτοφόλι είναι απενεργοποιημένο. Ενεργοποιήστε το για να δείτε το υπόλοιπο και τις συναλλαγές.",
+        "roleRequiredText": "Ο ρόλος είναι υποχρεωτικός",
+        "selectRoleText": "Παρακαλούμε επιλέξτε έναν ρόλο",
+        "zoneRequiredText": "Η περιοχή είναι υποχρεωτική",
+        "selectZoneText": "Παρακαλούμε επιλέξτε μια περιοχή",
+        "branchRequiredText": "Η θυρίδα είναι υποχρεωτική",
+        "selectBranchText": "Παρακαλούμε επιλέξτε μια θυρίδα",
+        "countryRequiredText": "Η χώρα είναι υποχρεωτική",
+        "selectCountryText": "Παρακαλούμε επιλέξτε μια χώρα"
     },
     "navBar": {
         "currencyText": "Νόμισμα",

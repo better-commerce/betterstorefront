@@ -462,7 +462,19 @@
         "poNumberRequired": "Le Numéro de Commande est requis",
         "validUntilRequired": "Le champ Ne Pas Expédier Après est requis",
         "assignToRequired": "Le champ Attribué à est requis",
-        "productRequired": "Au moins un produit est requis"
+        "productRequired": "Au moins un produit est requis",
+        "branchText": "Succursale",
+        "zoneText": "Zone",
+        "roleAdminText": "Administrateur",
+        "roleSalesUserText": "Utilisateur des ventes",
+        "roleUserText": "Utilisateur",
+        "roleBranchHeadText": "Chef de succursale",
+        "roleZonalHeadText": "Chef de zone",
+        "roleOrderCreatorText": "Créateur de commandes",
+        "selectCountryText": "Sélectionner un pays",
+        "selectZoneText": "Sélectionner une zone",
+        "selectBranchText": "Sélectionner une succursale",
+        "selectRoleText": "Sélectionner un rôle"
       },
       "": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",
@@ -527,7 +539,15 @@
       "bankNameText": "Nom de la Banque",
       "AccountNoText": "N° de Compte",
       "sortCodeText": "Code Banque",
-      "walletDisabledMessage": "Le portefeuille est désactivé. Activez-le pour voir le solde et les transactions."
+      "walletDisabledMessage": "Le portefeuille est désactivé. Activez-le pour voir le solde et les transactions.",
+      "roleRequiredText": "Le rôle est requis",
+      "selectRoleText": "Veuillez sélectionner un rôle",
+      "zoneRequiredText": "La zone est requise",
+      "selectZoneText": "Veuillez sélectionner une zone",
+      "branchRequiredText": "La succursale est requise",
+      "selectBranchText": "Veuillez sélectionner une succursale",
+      "countryRequiredText": "Le pays est requis",
+      "selectCountryText": "Veuillez sélectionner un pays"
     },
     "navBar": {
       "currencyText": "Devise",

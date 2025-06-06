@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA er påkravd",
                 "ETA": "ETA",
                 "assignToRequired": "Tildelt til er påkravd",
-                "productRequired": "Minst eitt produkt er påkravd"
+                "productRequired": "Minst eitt produkt er påkravd",
+                "branchText": "Avdeling",
+                "zoneText": "Sone",
+                "roleAdminText": "Administratør",
+                "roleSalesUserText": "Salgsbruker",
+                "roleUserText": "Bruker",
+                "roleBranchHeadText": "Avdelingsleder",
+                "roleZonalHeadText": "Soneleder",
+                "roleOrderCreatorText": "Ordreoppretter",
+                "selectCountryText": "Velg et land",
+                "selectZoneText": "Velg en sone",
+                "selectBranchText": "Velg en avdeling",
+                "selectRoleText": "Velg en rolle"
             },
             "myDetailsHeadingText": "Min profil",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Banknavn",
             "AccountNoText": "Kontonr.",
             "sortCodeText": "Sorteringskode",
-            "walletDisabledMessage": "Lommebok er deaktivert. Aktiver den for å se saldo og transaksjoner."
+            "walletDisabledMessage": "Lommebok er deaktivert. Aktiver den for å se saldo og transaksjoner.",
+            "roleRequiredText": "Role is required",
+            "selectRoleText": "Vel ein rolle",
+            "zoneRequiredText": "Zon er påkravd",
+            "selectZoneText": "Vel ein zon",
+            "branchRequiredText": "Filial er påkravd",
+            "selectBranchText": "Vel ein filial",
+            "countryRequiredText": "Land er påkravd",
+            "selectCountryText": "Vel ein land"
         },
         "navBar": {
             "currencyText": "Valuta",

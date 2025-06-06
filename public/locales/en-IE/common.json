@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA is required",
                 "ETA": "ETA",
                 "assignToRequired": "Assigned To is required",
-                "productRequired": "At least one product is required"
+                "productRequired": "At least one product is required",
+                "branchText": "Branch",
+                "zoneText": "Zone",
+                "roleAdminText": "Admin",
+                "roleSalesUserText": "Sales User",
+                "roleUserText": "User",
+                "roleBranchHeadText": "Branch Head",
+                "roleZonalHeadText": "Zonal Head",
+                "roleOrderCreatorText": "Order Creator",
+                "selectCountryText": "Select a country",
+                "selectZoneText": "Select a zone",
+                "selectBranchText": "Select a branch",
+                "selectRoleText": "Select a role"
             },
             "myDetailsHeadingText": "My Profile",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Bank Name",
             "AccountNoText": "Account No.",
             "sortCodeText": "Sort Code",
-            "walletDisabledMessage": "Wallet is disabled. Enable it to view balance and transactions."
+            "walletDisabledMessage": "Wallet is disabled. Enable it to view balance and transactions.",
+            "roleRequiredText": "Role is required",
+            "selectRoleText": "Please select a role",
+            "zoneRequiredText": "Zone is required",
+            "selectZoneText": "Please select a zone",
+            "branchRequiredText": "Branch is required",
+            "selectBranchText": "Please select a branch",
+            "countryRequiredText": "Country is required",
+            "selectCountryText": "Please select a country"
         },
         "navBar": {
             "currencyText": "Currency",

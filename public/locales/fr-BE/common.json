@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA is required",
                 "ETA": "ETA",
                 "assignToRequired": "Assigned To is required",
-                "productRequired": "At least one product is required"
+                "productRequired": "At least one product is required",
+                "branchText": "Succursale",
+                "zoneText": "Zone",
+                "roleAdminText": "Administrateur",
+                "roleSalesUserText": "Utilisateur des ventes",
+                "roleUserText": "Utilisateur",
+                "roleBranchHeadText": "Chef de succursale",
+                "roleZonalHeadText": "Chef de zone",
+                "roleOrderCreatorText": "Créateur de commandes",
+                "selectCountryText": "Sélectionner un pays",
+                "selectZoneText": "Sélectionner une zone",
+                "selectBranchText": "Sélectionner une succursale",
+                "selectRoleText": "Sélectionner un rôle"
             },
             "myDetailsHeadingText": "My Profile",
             "tradeInText":"Trade In",
@@ -529,7 +541,15 @@
             "bankNameText": "Nom de la Banque",
             "AccountNoText": "N° de Compte",
             "sortCodeText": "Code de Tri",
-            "walletDisabledMessage": "Le portefeuille est désactivé. Activez-le pour voir le solde et les transactions."
+            "walletDisabledMessage": "Le portefeuille est désactivé. Activez-le pour voir le solde et les transactions.",
+            "roleRequiredText": "Role is required",
+            "selectRoleText": "Please select a role",
+            "zoneRequiredText": "Zone is required",
+            "selectZoneText": "Please select a zone",
+            "branchRequiredText": "Branch is required",
+            "selectBranchText": "Please select a branch",
+            "countryRequiredText": "Country is required",
+            "selectCountryText": "Please select a country"
         },
         "navBar": {
             "currencyText": "Currency",
