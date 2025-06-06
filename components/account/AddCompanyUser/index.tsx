@@ -19,11 +19,10 @@ interface IAddNewUserModalProps {
   companyDetails: any
   closeModal: () => void
   hierarchy: IHierarchy[]
-  countries: ICountry[]
 }
 
 const AddNewUserModal = (props: IAddNewUserModalProps) => {
-  const { isOpen, closeModal, companyDetails, hierarchy = [], countries = [] } = props
+  const { isOpen, closeModal, companyDetails, hierarchy = [], } = props
   const translate = useTranslation()
   const { setAlert }= useUI()
   const router = useRouter()
@@ -39,7 +38,8 @@ const AddNewUserModal = (props: IAddNewUserModalProps) => {
       companyUserRole: values.role ?? '',
       zone: values.zone ?? '',
       branch : values.branch ?? '',
-      countryCode: values.countryCode ?? '',
+      country: values.country ?? '',
+      CompanyHierarchyId: values.branch ?? '',
     }
 
     try {

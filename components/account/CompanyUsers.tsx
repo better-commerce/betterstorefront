@@ -12,7 +12,6 @@ function CompanyUsers({ users }: any) {
   const translate = useTranslation()
   const [isAddNewUserModalOpen, setIsAddNewUserModalOpen] = useState(false)
   const [hierarchy, setHierarchy] = useState<Array<IHierarchy>>([])
-  const [countries, setCountries] = useState<Array<ICountry>>([])
   const [companyDetails, setCompanyDetails] = useState<any>(null)
   const { user } = useUI()
   
@@ -23,11 +22,11 @@ function CompanyUsers({ users }: any) {
 
     const fetchCompanyHierarchy = async () => {
       try {
-        let { data: company } = await axios.post(NEXT_B2B_GET_COMPANY_HIERARCHY, {
+        let { data: companyHierarchy } = await axios.post(NEXT_B2B_GET_COMPANY_HIERARCHY, {
           companyId: companyDetails?.companyId,
         })
-        if (company?.items?.length > 0) {
-          setHierarchy(company?.items)
+        if (companyHierarchy?.items?.length > 0) {
+          setHierarchy(companyHierarchy?.items)
         } else {
           setHierarchy([])
         }
@@ -35,22 +34,10 @@ function CompanyUsers({ users }: any) {
         setHierarchy([])
       }
     }
-    const fetchCountries = async () => {
-      try {
-        const { data }: any = await axios.post(NEXT_GET_COUNTRIES)
-        if (data?.result?.length > 0) {
-          setCountries(data?.result)
-        } else {
-          setCountries([])
-        }
-      } catch (error) {
-        setCountries([])
-      }
-    }
         
     useEffect(() => {
       async function fetchData() {
-        await Promise.all([getCompanyDetails(), fetchCompanyHierarchy(), fetchCountries()])
+        await Promise.all([getCompanyDetails(), fetchCompanyHierarchy()])
       }
       fetchData()
     }, [])
@@ -104,7 +91,7 @@ function CompanyUsers({ users }: any) {
         </div>
       )}
       {isAddNewUserModalOpen && 
-        <AddNewUserModal isOpen={isAddNewUserModalOpen} closeModal={toggelAddNewUserModal} hierarchy={hierarchy} countries={countries} companyDetails={companyDetails} btnTitle={translate('label.myAccount.addNewUserText')} />
+        <AddNewUserModal isOpen={isAddNewUserModalOpen} closeModal={toggelAddNewUserModal} hierarchy={hierarchy} companyDetails={companyDetails} btnTitle={translate('label.myAccount.addNewUserText')} />
       }
     </section>
   )

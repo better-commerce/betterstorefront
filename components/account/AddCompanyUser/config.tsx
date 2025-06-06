@@ -54,8 +54,8 @@ export const useAddCompanyUserConfig = (hierarchy: Array<IHierarchy> = []) => {
       placeholder: translate('label.myAccount.confirmPasswordText'),
     },
     {
-      key: 'countryCode',
-      label: 'Country',
+      key: 'country',
+      label: translate('label.checkout.countryText'),
       type: 'select',
       options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Country)?.map((item: IHierarchy) => ({ value: item?.name, label: item?.name })),
       placeholder: 'Select a country',
@@ -65,7 +65,7 @@ export const useAddCompanyUserConfig = (hierarchy: Array<IHierarchy> = []) => {
       label: 'Zone',
       // label: translate('common.label.mobileNumText'),
       type: 'select',
-      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Zone)?.map((item: IHierarchy) => ({ value: item?.name, label: item?.name })),
+      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Zone)?.map((item: IHierarchy) => ({ value: item.id, label: item?.name })),
       placeholder: 'Select a zone',
     },
     {
@@ -73,12 +73,12 @@ export const useAddCompanyUserConfig = (hierarchy: Array<IHierarchy> = []) => {
       label: 'Branch',
       // label: translate('common.label.mobileNumText'),
       type: 'select',
-      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Branch)?.map((item: IHierarchy) => ({ value: item?.name, label: item?.name })),
+      options: [],
       placeholder: 'Select a branch',
     },
     {
       key: 'role',
-      label: 'Role',
+      label: translate('label.myAccount.rfq.role'),
       type: 'select',
       options: [
         { value: '1', label: 'Admin' },

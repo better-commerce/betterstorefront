@@ -4,7 +4,7 @@ import { B2B_COMPANY_HIERARCHY, EmptyObject } from '@components/utils/constants'
 
 export default function useCompanyHierarchy() {
   return async function handler(companyId: any, cookies = EmptyObject) {
-    const url = `${B2B_COMPANY_HIERARCHY}${companyId}/company`
+    const url = `${B2B_COMPANY_HIERARCHY}?filters[companyid]=${companyId}`
     try {
       // const url = `company-hierarchy?filters[companyid]=${companyId}`;
       // const response: any = await fetcher({
