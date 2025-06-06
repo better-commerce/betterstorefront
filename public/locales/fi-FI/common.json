@@ -478,7 +478,7 @@
                 "selectRoleText": "Valitse rooli"
             },
             "myDetailsHeadingText": "Profiilini",
-            "tradeInText":"Trade In",
+            "tradeInText": "Kauppatilaisuus",
             "editYourDetailsText": "Päivitä tietosi, jotta tilisi on ajan tasalla.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Hups! Virhe palautusten noudossa."
@@ -549,7 +549,8 @@
             "branchRequiredText": "Toimipiste vaaditaan",
             "selectBranchText": "Valitse toimipiste",
             "countryRequiredText": "Maa vaaditaan",
-            "selectCountryText": "Valitse maa"
+            "selectCountryText": "Valitse maa",
+            "iAmIntrestedInText": "Olen kiinnostunut"
         },
         "navBar": {
             "currencyText": "Valuutta",

@@ -478,7 +478,7 @@
                 "selectRoleText": "Vælg en rolle"
             },
             "myDetailsHeadingText": "Min profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Byttehandel",
             "editYourDetailsText": "Du kan frit redigere dine oplysninger nedenfor, så din konto er fuldt opdateret.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Fejl under hentning af returneringer"
@@ -549,7 +549,8 @@
             "branchRequiredText": "Filial er påkrævet",
             "selectBranchText": "Vælg en filial",
             "countryRequiredText": "Land er påkrævet",
-            "selectCountryText": "Vælg et land"
+            "selectCountryText": "Vælg et land",
+            "iAmIntrestedInText": "Jeg er interesseret i"
         },
         "navBar": {
             "currencyText": "Valuta",

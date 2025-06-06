@@ -269,6 +269,9 @@
             "exchangeConfirmText": "Sei sicuro di voler cambiare questo articolo?",
             "dontExchangeText": "Non cambiare"
         },
+        "common":{
+            "myAccountText": "Il Mio Account"
+        },
         "filters": {
             "clearAllText": "Pulisci tutto",
             "filtersText": "Filtri",
@@ -448,7 +451,7 @@
                 "selectRoleText": "Selezionare un ruolo"
             },
             "myDetailsHeadingText": "Il Mio Profilo",
-            "tradeInText":"Trade In",
+            "tradeInText":"Permuta",
             "editYourDetailsText": "Sentiti libero di modificare i tuoi dettagli qui sotto per tenere il tuo account sempre aggiornato.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ops! Errore nel recupero dei resi"
@@ -519,7 +522,8 @@
             "branchRequiredText": "La filiale è obbligatoria",
             "selectBranchText": "Seleziona una filiale",
             "countryRequiredText": "Il paese è obbligatorio",
-            "selectCountryText": "Seleziona un paese"
+            "selectCountryText": "Seleziona un paese",
+            "iAmIntrestedInText": "Sono interessato a"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -1049,6 +1053,7 @@
             "expandText": "Espandi",
             "collapseText": "Riduci",
             "youtubeVideoPlayerAltText": "Lettore video YouTube",
+            "logOutText": "Esci",
             "removeText": "Rimuovi",
             "defaultText": "Predefinito",
             "editText": "Modifica",

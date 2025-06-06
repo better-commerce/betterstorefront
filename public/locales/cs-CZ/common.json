@@ -479,7 +479,7 @@
             "selectRoleText": "Vyberte roli"
             },
             "myDetailsHeadingText": "Můj profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Výměna",
             "editYourDetailsText": "Neváhejte upravit jakékoli své údaje níže, aby váš účet byl zcela aktuální.",
             "myOrders": {
             "fetchReturnsErrorMsg": "Ups! Chyba při získávání vratek"
@@ -550,7 +550,8 @@
             "branchRequiredText": "Pobočka je povinná",
             "selectBranchText": "Vyberte pobočku",
             "countryRequiredText": "Země je povinná",
-            "selectCountryText": "Vyberte zemi"
+            "selectCountryText": "Vyberte zemi",
+            "iAmIntrestedInText": "Mám zájem o"
         },
         "navBar": {
             "currencyText": "Měna",

@@ -479,7 +479,7 @@
 
             },
             "myDetailsHeadingText": "Mój profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Wymiana",
             "editYourDetailsText": "Możesz edytować poniższe dane, aby zaktualizować swoje konto.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Wystąpił błąd podczas pobierania zwrotów"
@@ -550,7 +550,8 @@
             "branchRequiredText": "Oddział jest wymagany",
             "selectBranchText": "Wybierz oddział",
             "countryRequiredText": "Kraj jest wymagany",
-            "selectCountryText": "Wybierz kraj"
+            "selectCountryText": "Wybierz kraj",
+            "iAmIntrestedInText": "Jestem zainteresowany"
         },
         "navBar": {
             "currencyText": "Waluta",

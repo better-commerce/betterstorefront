@@ -548,7 +548,9 @@
             "branchRequiredText": "Vestiging is verplicht",
             "selectBranchText": "Selecteer een vestiging",
             "countryRequiredText": "Land is verplicht",
-            "selectCountryText": "Selecteer een land"
+            "selectCountryText": "Selecteer een land",
+            "iAmIntrestedInText": "Ik ben geïnteresseerd in",
+            "tradeInText": "Inruilen"
         },
         "navBar": {
             "currencyText": "Munteenheid",

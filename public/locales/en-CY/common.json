@@ -478,7 +478,7 @@
             "selectRoleText": "Select a role"
         },
         "myDetailsHeadingText": "Το Προφίλ Μου",
-        "tradeInText":"Trade In",
+        "tradeInText": "Αλλαγή",
         "editYourDetailsText": "Μπορείτε να επεξεργαστείτε οποιοδήποτε από τα παρακάτω στοιχεία για να ενημερώσετε πλήρως τον λογαριασμό σας.",
         "myOrders": {
             "fetchReturnsErrorMsg": "Ωχ! Σφάλμα κατά την ανάκτηση των επιστροφών"
@@ -549,7 +549,8 @@
         "branchRequiredText": "Η θυρίδα είναι υποχρεωτική",
         "selectBranchText": "Παρακαλούμε επιλέξτε μια θυρίδα",
         "countryRequiredText": "Η χώρα είναι υποχρεωτική",
-        "selectCountryText": "Παρακαλούμε επιλέξτε μια χώρα"
+        "selectCountryText": "Παρακαλούμε επιλέξτε μια χώρα",
+        "iAmIntrestedInText": "Ενδιαφέρομαι για"
     },
     "navBar": {
         "currencyText": "Νόμισμα",

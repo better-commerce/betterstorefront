@@ -478,6 +478,7 @@
       },
       "": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",
+      "tradeInText": "Reprise",
       "myOrders": {
         "fetchReturnsErrorMsg": "Oups ! Erreur lors de la récupération des retours"
       },
@@ -547,7 +548,8 @@
       "branchRequiredText": "La succursale est requise",
       "selectBranchText": "Veuillez sélectionner une succursale",
       "countryRequiredText": "Le pays est requis",
-      "selectCountryText": "Veuillez sélectionner un pays"
+      "selectCountryText": "Veuillez sélectionner un pays",
+      "iAmIntrestedInText": "Je suis intéressé par"
     },
     "navBar": {
       "currencyText": "Devise",

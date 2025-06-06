@@ -478,7 +478,7 @@
                 "selectRoleText": "Выберите роль"
             },
             "myDetailsHeadingText": "Мой профиль",
-            "tradeInText":"Trade In",
+            "tradeInText":"Обмен",
             "editYourDetailsText": "Не стесняйтесь редактировать любые данные, чтобы ваш аккаунт был актуален.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Упс! Ошибка при получении возвратов"
@@ -549,7 +549,8 @@
             "branchRequiredText": "Требуется указать филиал",
             "selectBranchText": "Пожалуйста, выберите филиал",
             "countryRequiredText": "Требуется указать страну",
-            "selectCountryText": "Пожалуйста, выберите страну"
+            "selectCountryText": "Пожалуйста, выберите страну",
+            "iAmIntrestedInText": "Я заинтересован в"
         },
         "navBar": {
             "currencyText": "Валюта",

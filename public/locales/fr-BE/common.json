@@ -478,7 +478,7 @@
                 "selectRoleText": "Sélectionner un rôle"
             },
             "myDetailsHeadingText": "My Profile",
-            "tradeInText":"Trade In",
+            "tradeInText": "Reprise",
             "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Woops! Error fetching returns"
@@ -549,7 +549,8 @@
             "branchRequiredText": "Branch is required",
             "selectBranchText": "Please select a branch",
             "countryRequiredText": "Country is required",
-            "selectCountryText": "Please select a country"
+            "selectCountryText": "Please select a country",
+            "iAmIntrestedInText": "Je suis intéressé par"
         },
         "navBar": {
             "currencyText": "Currency",

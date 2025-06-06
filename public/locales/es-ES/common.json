@@ -477,7 +477,7 @@
         "selectRoleText": "Seleccionar un rol"
       },
       "myDetailsHeadingText": "Mis Profile",
-      "tradeInText":"Trade In",
+      "tradeInText": "Compraventa",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",
       "myOrders": {
         "fetchReturnsErrorMsg": "¡Vaya! Error al recuperar devoluciones"
@@ -548,7 +548,8 @@
       "branchRequiredText": "La sucursal es obligatoria",
       "selectBranchText": "Por favor seleccione una sucursal",
       "countryRequiredText": "El país es obligatorio",
-      "selectCountryText": "Por favor seleccione un país"
+      "selectCountryText": "Por favor seleccione un país",
+      "iAmIntrestedInText": "Estoy interesado en"
     },
     "navBar": {
       "currencyText": "Moneda",

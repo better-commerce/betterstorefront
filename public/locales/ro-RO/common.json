@@ -478,7 +478,7 @@
                 "selectRoleText": "Selectați un rol"
             },
             "myDetailsHeadingText": "Profilul meu",
-            "tradeInText":"Trade In",
+            "tradeInText":"Schimb",
             "editYourDetailsText": "Simte-te liber să editezi orice detalii pentru a-ți actualiza contul.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Eroare la preluarea retururilor"
@@ -549,7 +549,8 @@
             "branchRequiredText": "Filiala este obligatorie",
             "selectBranchText": "Selectează o filială",
             "countryRequiredText": "Țara este obligatorie",
-            "selectCountryText": "Selectează o țară"
+            "selectCountryText": "Selectează o țară",
+            "iAmIntrestedInText": "Sunt interesat de"
         },
         "navBar": {
             "currencyText": "Valută",

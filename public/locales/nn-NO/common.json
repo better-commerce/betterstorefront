@@ -478,7 +478,7 @@
                 "selectRoleText": "Velg en rolle"
             },
             "myDetailsHeadingText": "Min profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Innbytte",
             "editYourDetailsText": "Følgjeleg til å redigere nokre av detaljane dine nedanfor for at kontoen din skal vere heilt oppdatert.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oisann! Det oppstod ein feil ved henting av returar"
@@ -549,7 +549,8 @@
             "branchRequiredText": "Filial er påkravd",
             "selectBranchText": "Vel ein filial",
             "countryRequiredText": "Land er påkravd",
-            "selectCountryText": "Vel ein land"
+            "selectCountryText": "Vel ein land",
+            "iAmIntrestedInText": "Eg er interessert i"
         },
         "navBar": {
             "currencyText": "Valuta",

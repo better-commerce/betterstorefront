@@ -478,7 +478,7 @@
         "selectRoleText": "Rolle auswählen"
       },
       "myDetailsHeadingText": "Meine Profile",
-      "tradeInText":"Trade In",
+      "tradeInText":"Inzahlungnahme",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Hoppla! Fehler beim Abrufen von Rücksendungen"
@@ -549,7 +549,8 @@
       "branchRequiredText": "Filiale ist erforderlich",
       "selectBranchText": "Bitte wählen Sie eine Filiale aus",
       "countryRequiredText": "Land ist erforderlich",
-      "selectCountryText": "Bitte wählen Sie ein Land aus"
+      "selectCountryText": "Bitte wählen Sie ein Land aus",
+      "iAmIntrestedInText": "Ich interessiere mich für"
     },
     "navBar": {
       "currencyText": "Währung",

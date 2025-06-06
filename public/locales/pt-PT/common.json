@@ -478,7 +478,7 @@
                 "selectRoleText": "Selecione um papel"
             },
             "myDetailsHeadingText": "Meu Perfil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Troca",
             "editYourDetailsText": "Fique à vontade para editar qualquer um dos seus dados abaixo para que sua conta esteja totalmente atualizada.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ops! Erro ao buscar devoluções"
@@ -549,7 +549,8 @@
             "branchRequiredText": "A filial é obrigatória",
             "selectBranchText": "Selecione uma filial",
             "countryRequiredText": "O país é obrigatório",
-            "selectCountryText": "Selecione um país"
+            "selectCountryText": "Selecione um país",
+            "iAmIntrestedInText": "Estou interessado em"
         },
         "navBar": {
             "currencyText": "Moeda",

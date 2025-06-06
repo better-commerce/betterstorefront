@@ -478,7 +478,7 @@
                 "selectRoleText": "Välj en roll"
             },
             "myDetailsHeadingText": "Min profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Inbytesköp",
             "editYourDetailsText": "Känn dig fri att redigera dina uppgifter nedan så att ditt konto är helt uppdaterat.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oj! Fel vid hämtning av returer"
@@ -549,7 +549,8 @@
             "branchRequiredText": "Filial krävs",
             "selectBranchText": "Välj en filial",
             "countryRequiredText": "Land krävs",
-            "selectCountryText": "Välj ett land"
+            "selectCountryText": "Välj ett land",
+            "iAmIntrestedInText": "Jag är intresserad av"
         },
         "navBar": {
             "currencyText": "Valuta",
