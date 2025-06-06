@@ -464,7 +464,19 @@
             "validUntilRequired": "ETA je povinné",
             "ETA": "ETA",
             "assignToRequired": "Přiřadit k je povinné",
-            "productRequired": "Je vyžadován alespoň jeden produkt"
+            "productRequired": "Je vyžadován alespoň jeden produkt",
+            "branchText": "Pobočka",
+            "zoneText": "Zóna",
+            "roleAdminText": "Admin",
+            "roleSalesUserText": "Prodejní uživatel",
+            "roleUserText": "Uživatel",
+            "roleBranchHeadText": "Hlavní pobočka",
+            "roleZonalHeadText": "Hlavní zóna",
+            "roleOrderCreatorText": "Vytvořitel objednávky",
+            "selectCountryText": "Vyberte zemi",
+            "selectZoneText": "Vyberte zónu",
+            "selectBranchText": "Vyberte pobočku",
+            "selectRoleText": "Vyberte roli"
             },
             "myDetailsHeadingText": "Můj profil",
             "tradeInText":"Trade In",
@@ -509,7 +521,15 @@
             "noLookbookAvaiableText": "Žádný Lookbook k dispozici",
             "shopTheLookText": "Nakupujte vzhled",
             "confirmPasswordText": "Potvrďte heslo",
-            "addNewUserText": "Přidat nového uživatele"
+            "addNewUserText": "Přidat nového uživatele",
+            "roleRequiredText": "Role je povinná",
+            "selectRoleText": "Vyberte roli",
+            "zoneRequiredText": "Zóna je povinná",
+            "selectZoneText": "Vyberte zónu",
+            "branchRequiredText": "Pobočka je povinná",
+            "selectBranchText": "Vyberte pobočku",
+            "countryRequiredText": "Země je povinná",
+            "selectCountryText": "Vyberte zemi"
         },
         "navBar": {
             "currencyText": "Měna",

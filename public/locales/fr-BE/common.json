@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA is required",
                 "ETA": "ETA",
                 "assignToRequired": "Assigned To is required",
-                "productRequired": "At least one product is required"
+                "productRequired": "At least one product is required",
+                "branchText": "Succursale",
+                "zoneText": "Zone",
+                "roleAdminText": "Administrateur",
+                "roleSalesUserText": "Utilisateur des ventes",
+                "roleUserText": "Utilisateur",
+                "roleBranchHeadText": "Chef de succursale",
+                "roleZonalHeadText": "Chef de zone",
+                "roleOrderCreatorText": "Créateur de commandes",
+                "selectCountryText": "Sélectionner un pays",
+                "selectZoneText": "Sélectionner une zone",
+                "selectBranchText": "Sélectionner une succursale",
+                "selectRoleText": "Sélectionner un rôle"
             },
             "myDetailsHeadingText": "My Profile",
             "tradeInText":"Trade In",
@@ -508,7 +520,15 @@
             "noLookbookAvaiableText": "No Lookbook Available",
             "shopTheLookText": "Shop the look",
             "confirmPasswordText": "Confirm Password",
-            "addNewUserText": "Add New User"
+            "addNewUserText": "Add New User",
+            "roleRequiredText": "Role is required",
+            "selectRoleText": "Please select a role",
+            "zoneRequiredText": "Zone is required",
+            "selectZoneText": "Please select a zone",
+            "branchRequiredText": "Branch is required",
+            "selectBranchText": "Please select a branch",
+            "countryRequiredText": "Country is required",
+            "selectCountryText": "Please select a country"
         },
         "navBar": {
             "currencyText": "Currency",

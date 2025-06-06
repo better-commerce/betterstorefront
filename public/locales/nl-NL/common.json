@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA is verplicht",
                 "ETA": "ETA",
                 "assignToRequired": "Toewijzen aan is verplicht",
-                "productRequired": "Ten minste één product is verplicht"
+                "productRequired": "Ten minste één product is verplicht",
+                "branchText": "Vestiging",
+                "zoneText": "Zone",
+                "roleAdminText": "Beheerder",
+                "roleSalesUserText": "Verkoopgebruiker",
+                "roleUserText": "Gebruiker",
+                "roleBranchHeadText": "Vestigingshoofd",
+                "roleZonalHeadText": "Zonehoofd",
+                "roleOrderCreatorText": "Bestelcreator",
+                "selectCountryText": "Selecteer een land",
+                "selectZoneText": "Selecteer een zone",
+                "selectBranchText": "Selecteer een vestiging",
+                "selectRoleText": "Selecteer een rol"
             },
             "myDetailsHeadingText": "Mijn profiel",
             "editYourDetailsText": "Voel je vrij om je gegevens hieronder te bewerken zodat je account volledig up-to-date is.",
@@ -507,7 +519,15 @@
             "noLookbookAvaiableText": "Geen lookbook beschikbaar",
             "shopTheLookText": "Shop de look",
             "confirmPasswordText": "Bevestig wachtwoord",
-            "addNewUserText": "Nieuwe gebruiker toevoegen"
+            "addNewUserText": "Nieuwe gebruiker toevoegen",
+            "roleRequiredText": "Rol is verplicht",
+            "selectRoleText": "Selecteer een rol",
+            "zoneRequiredText": "Zone is verplicht",
+            "selectZoneText": "Selecteer een zone",
+            "branchRequiredText": "Vestiging is verplicht",
+            "selectBranchText": "Selecteer een vestiging",
+            "countryRequiredText": "Land is verplicht",
+            "selectCountryText": "Selecteer een land"
         },
         "navBar": {
             "currencyText": "Munteenheid",

@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA é obrigatório",
                 "ETA": "ETA",
                 "assignToRequired": "Atribuído a é obrigatório",
-                "productRequired": "Pelo menos um produto é obrigatório"
+                "productRequired": "Pelo menos um produto é obrigatório",
+                "branchText": "Sucursal",
+                "zoneText": "Zona",
+                "roleAdminText": "Administrador",
+                "roleSalesUserText": "Utilizador de vendas",
+                "roleUserText": "Utilizador",
+                "roleBranchHeadText": "Chefe de sucursal",
+                "roleZonalHeadText": "Chefe de zona",
+                "roleOrderCreatorText": "Criador de pedidos",
+                "selectCountryText": "Selecione um país",
+                "selectZoneText": "Selecione uma zona",
+                "selectBranchText": "Selecione uma sucursal",
+                "selectRoleText": "Selecione um papel"
             },
             "myDetailsHeadingText": "Meu Perfil",
             "tradeInText":"Trade In",
@@ -508,7 +520,15 @@
             "noLookbookAvaiableText": "Nenhum Lookbook Disponível",
             "shopTheLookText": "Compre o Look",
             "confirmPasswordText": "Confirmar Senha",
-            "addNewUserText": "Adicionar novo usuário"
+            "addNewUserText": "Adicionar novo usuário",
+            "roleRequiredText": "O papel é obrigatório",
+            "selectRoleText": "Selecione um papel",
+            "zoneRequiredText": "A zona é obrigatória",
+            "selectZoneText": "Selecione uma zona",
+            "branchRequiredText": "A filial é obrigatória",
+            "selectBranchText": "Selecione uma filial",
+            "countryRequiredText": "O país é obrigatório",
+            "selectCountryText": "Selecione um país"
         },
         "navBar": {
             "currencyText": "Moeda",

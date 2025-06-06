@@ -463,7 +463,19 @@
                 "validUntilRequired": "ETA är obligatorisk",
                 "ETA": "ETA",
                 "assignToRequired": "Tilldelad till är obligatorisk",
-                "productRequired": "Minst en produkt är obligatorisk"
+                "productRequired": "Minst en produkt är obligatorisk",
+                "branchText": "Filial",
+                "zoneText": "Zon",
+                "roleAdminText": "Administratör",
+                "roleSalesUserText": "Säljare",
+                "roleUserText": "Användare",
+                "roleBranchHeadText": "Filialchef",
+                "roleZonalHeadText": "Zonchef",
+                "roleOrderCreatorText": "Beställningscreator",
+                "selectCountryText": "Välj ett land",
+                "selectZoneText": "Välj en zon",
+                "selectBranchText": "Välj en filial",
+                "selectRoleText": "Välj en roll"
             },
             "myDetailsHeadingText": "Min profil",
             "tradeInText":"Trade In",
@@ -508,7 +520,15 @@
             "noLookbookAvaiableText": "Inget lookbook tillgängligt",
             "shopTheLookText": "Shoppa looken",
             "confirmPasswordText": "Bekräfta lösenord",
-            "addNewUserText": "Lägg till ny användare"
+            "addNewUserText": "Lägg till ny användare",
+            "roleRequiredText": "Roll krävs",
+            "selectRoleText": "Välj en roll",
+            "zoneRequiredText": "Zon krävs",
+            "selectZoneText": "Välj en zon",
+            "branchRequiredText": "Filial krävs",
+            "selectBranchText": "Välj en filial",
+            "countryRequiredText": "Land krävs",
+            "selectCountryText": "Välj ett land"
         },
         "navBar": {
             "currencyText": "Valuta",
