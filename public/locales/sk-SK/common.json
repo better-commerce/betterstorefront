@@ -478,7 +478,7 @@
                 "selectRoleText": "Vyberte roli"
             },
             "myDetailsHeadingText": "Môj profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Výmena",
             "editYourDetailsText": "Neváhajte upravit akékoľvek údaje nižšie, aby bol váš účet úplne aktuálny.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oops! Chyba pri získavaní vrátení"
@@ -521,6 +521,27 @@
             "shopTheLookText": "Nakúpte vzhľad",
             "confirmPasswordText": "Potvrdiť heslo",
             "addNewUserText": "Pridať nového používateľa",
+            "myTradeInText": "Môj Trade In",
+            "quoteText": "Ponuka",
+            "createdText": "Vytvorené",
+            "tradeInSectionFeedbackMessage": "Dúfame, že sa vám páči naša nová sekcia Trade In na našej webovej stránke. Stále pracujeme na vylepšeniach, ale ak si všimnete niečo, čo nefunguje podľa očakávaní, pošlite nám e-mail so snímkami obrazovky (ak je to možné) na",
+            "queryEmailInstruction": "Ak máte otázku, pošlite e-mail na",
+            "myWalletText": "Moja Peňaženka",
+            "walletActivationMessage": "Počkajte prosím, kým aktivujeme vašu peňaženku a vygenerujeme informácie o peňaženke.",
+            "transferToBankText": "Previesť do Banky",
+            "addBankDetailsText": "Pridať Bankové Údaje",
+            "enableWalletText": "Povoliť Peňaženku",
+            "walletCurrentBalanceText": "Aktuálny Zostatok Peňaženky",
+            "walletTransactionHistoryText": "História Transakcií Peňaženky",
+            "dateText": "Dátum",
+            "amountText": "Suma",
+            "referenceText": "Referencia",
+            "noTransactionHistoryMessage": "História transakcií nie je k dispozícii.",
+            "bankTransferHistoryText": "História Bankových Prevodov",
+            "bankNameText": "Názov Banky",
+            "AccountNoText": "Č. Účtu",
+            "sortCodeText": "Sortovací Kód",
+            "walletDisabledMessage": "Peňaženka je deaktivovaná. Aktivujte ju, aby ste videli zostatok a transakcie.",
             "roleRequiredText": "Úloha je povinná",
             "selectRoleText": "Vyberte úlohu",
             "zoneRequiredText": "Zóna je povinná",
@@ -528,7 +549,8 @@
             "branchRequiredText": "Filiala je povinná",
             "selectBranchText": "Vyberte filialu",
             "countryRequiredText": "Štát je povinný",
-            "selectCountryText": "Vyberte štát"
+            "selectCountryText": "Vyberte štát",
+            "iAmIntrestedInText": "Mám záujem o"
         },
         "navBar": {
             "currencyText": "Mena",

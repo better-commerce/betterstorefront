@@ -478,7 +478,7 @@
                 "selectRoleText": "Valitse rooli"
             },
             "myDetailsHeadingText": "Profiilini",
-            "tradeInText":"Trade In",
+            "tradeInText": "Kauppatilaisuus",
             "editYourDetailsText": "Päivitä tietosi, jotta tilisi on ajan tasalla.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Hups! Virhe palautusten noudossa."
@@ -521,6 +521,27 @@
             "shopTheLookText": "Shoppaile tyyli",
             "confirmPasswordText": "Vahvista salasana",
             "addNewUserText": "Lisää uusi käyttäjä",
+            "myTradeInText": "Oma Trade In",
+            "quoteText": "Tarjous",
+            "createdText": "Luotu",
+            "tradeInSectionFeedbackMessage": "Toivottavasti pidät uudesta Trade In -osiosta verkkosivustollamme. Teemme parhaillaan parannuksia, mutta jos huomaat jotain, mikä ei toimi odotetulla tavalla, lähetä meille sähköpostia kuvakaappauksilla (jos mahdollista) osoitteeseen",
+            "queryEmailInstruction": "Jos sinulla on kysyttävää, lähetä sähköpostia osoitteeseen",
+            "myWalletText": "Lompakkoni",
+            "walletActivationMessage": "Odota hetki, aktivoimme lompakkosi ja luomme lompakontiedot.",
+            "transferToBankText": "Siirrä Pankkiin",
+            "addBankDetailsText": "Lisää Pankkitiedot",
+            "enableWalletText": "Ota Lompakko Käyttöön",
+            "walletCurrentBalanceText": "Lompakon Nykyinen Saldo",
+            "walletTransactionHistoryText": "Lompakon Tapahtumahistoria",
+            "dateText": "Päivämäärä",
+            "amountText": "Määrä",
+            "referenceText": "Viite",
+            "noTransactionHistoryMessage": "Tapahtumahistoriaa ei ole saatavilla.",
+            "bankTransferHistoryText": "Pankkisiirtohistoria",
+            "bankNameText": "Pankin Nimi",
+            "AccountNoText": "Tilinro.",
+            "sortCodeText": "Järjestelykoodi",
+            "walletDisabledMessage": "Lompakko on pois käytöstä. Ota se käyttöön nähdäksesi saldon ja tapahtumat.",
             "roleRequiredText": "Rooli vaaditaan",
             "selectRoleText": "Valitse rooli",
             "zoneRequiredText": "Vyöhyke vaaditaan",
@@ -528,7 +549,8 @@
             "branchRequiredText": "Toimipiste vaaditaan",
             "selectBranchText": "Valitse toimipiste",
             "countryRequiredText": "Maa vaaditaan",
-            "selectCountryText": "Valitse maa"
+            "selectCountryText": "Valitse maa",
+            "iAmIntrestedInText": "Olen kiinnostunut"
         },
         "navBar": {
             "currencyText": "Valuutta",

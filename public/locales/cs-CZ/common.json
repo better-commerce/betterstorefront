@@ -479,7 +479,7 @@
             "selectRoleText": "Vyberte roli"
             },
             "myDetailsHeadingText": "Můj profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Výměna",
             "editYourDetailsText": "Neváhejte upravit jakékoli své údaje níže, aby váš účet byl zcela aktuální.",
             "myOrders": {
             "fetchReturnsErrorMsg": "Ups! Chyba při získávání vratek"
@@ -522,6 +522,27 @@
             "shopTheLookText": "Nakupujte vzhled",
             "confirmPasswordText": "Potvrďte heslo",
             "addNewUserText": "Přidat nového uživatele",
+            "myTradeInText": "Můj Trade In",
+            "quoteText": "Nabídka",
+            "createdText": "Vytvořeno",
+            "tradeInSectionFeedbackMessage": "Doufáme, že se vám líbí nová sekce Trade In na našem webu. Stále pracujeme na vylepšeních, ale pokud narazíte na něco, co nefunguje podle očekávání, pošlete nám prosím e-mail se screenshoty (pokud je to možné) na",
+            "queryEmailInstruction": "Pokud máte dotaz, zašlete e-mail na",
+            "myWalletText": "Moje Peněženka",
+            "walletActivationMessage": "Počkejte prosím, aktivujeme vaši peněženku a generujeme informace o peněžence.",
+            "transferToBankText": "Převod na Banku",
+            "addBankDetailsText": "Přidat Bankovní Údaje",
+            "enableWalletText": "Povolit Peněženku",
+            "walletCurrentBalanceText": "Aktuální Zůstatek Peněženky",
+            "walletTransactionHistoryText": "Historie Transakcí Peněženky",
+            "dateText": "Datum",
+            "amountText": "Částka",
+            "referenceText": "Odkaz",
+            "noTransactionHistoryMessage": "Historie transakcí není k dispozici.",
+            "bankTransferHistoryText": "Historie Bankovních Převodů",
+            "bankNameText": "Název Banky",
+            "AccountNoText": "Č. Účtu",
+            "sortCodeText": "Kód Banky",
+            "walletDisabledMessage": "Peněženka je deaktivována. Pro zobrazení zůstatku a transakcí ji povolte.",
             "roleRequiredText": "Role je povinná",
             "selectRoleText": "Vyberte roli",
             "zoneRequiredText": "Zóna je povinná",
@@ -529,7 +550,8 @@
             "branchRequiredText": "Pobočka je povinná",
             "selectBranchText": "Vyberte pobočku",
             "countryRequiredText": "Země je povinná",
-            "selectCountryText": "Vyberte zemi"
+            "selectCountryText": "Vyberte zemi",
+            "iAmIntrestedInText": "Mám zájem o"
         },
         "navBar": {
             "currencyText": "Měna",

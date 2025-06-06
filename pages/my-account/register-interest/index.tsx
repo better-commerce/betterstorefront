@@ -26,6 +26,7 @@ function InterestProducts() {
   const router = useRouter()
   const { Customer } = EVENTS_MAP.ENTITY_TYPES
   const { removeFromProductInterest } = productInterestHandler()
+  const translate = useTranslation()
   const removeProductInterest = async (productId: any) => {
     removeFromProductInterest(
       user?.userId,
@@ -77,7 +78,7 @@ function InterestProducts() {
 
   return (
     <>
-      <h1 className='text-xl font-normal sm:text-2xl dark:text-black'>I'm Interested In</h1>
+      <h1 className='text-xl font-normal sm:text-2xl dark:text-black'>{translate('label.myAccount.iAmIntrestedInText')}</h1>
       <div className='grid grid-cols-4 gap-4 my-2 bg-white dark:bg-transparent sm:my-6'>
         {interestProducts ? (
           <>

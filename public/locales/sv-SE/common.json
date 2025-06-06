@@ -478,7 +478,7 @@
                 "selectRoleText": "Välj en roll"
             },
             "myDetailsHeadingText": "Min profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Inbytesköp",
             "editYourDetailsText": "Känn dig fri att redigera dina uppgifter nedan så att ditt konto är helt uppdaterat.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oj! Fel vid hämtning av returer"
@@ -521,6 +521,27 @@
             "shopTheLookText": "Shoppa looken",
             "confirmPasswordText": "Bekräfta lösenord",
             "addNewUserText": "Lägg till ny användare",
+            "myTradeInText": "Min Trade In",
+            "quoteText": "Offert",
+            "createdText": "Skapad",
+            "tradeInSectionFeedbackMessage": "Vi hoppas att du gillar vår nya Trade In-sektion på vår webbplats. Vi arbetar fortfarande med förbättringar, men om du upptäcker något som inte fungerar som förväntat, vänligen skicka oss ett e-postmeddelande med skärmdumpar (om möjligt) till",
+            "queryEmailInstruction": "Om du har en fråga, vänligen skicka ett e-postmeddelande till",
+            "myWalletText": "Min Plånbok",
+            "walletActivationMessage": "Vänligen vänta medan vi aktiverar din plånbok och genererar plånboksinformation.",
+            "transferToBankText": "Överför till Bank",
+            "addBankDetailsText": "Lägg till Bankuppgifter",
+            "enableWalletText": "Aktivera Plånbok",
+            "walletCurrentBalanceText": "Plånbokens Nuvarande Saldo",
+            "walletTransactionHistoryText": "Plånbokens Transaktionshistorik",
+            "dateText": "Datum",
+            "amountText": "Belopp",
+            "referenceText": "Referens",
+            "noTransactionHistoryMessage": "Ingen transaktionshistorik tillgänglig.",
+            "bankTransferHistoryText": "Banköverföringshistorik",
+            "bankNameText": "Banknamn",
+            "AccountNoText": "Kontonr.",
+            "sortCodeText": "Sorteringskod",
+            "walletDisabledMessage": "Plånboken är inaktiverad. Aktivera den för att se saldo och transaktioner.",
             "roleRequiredText": "Roll krävs",
             "selectRoleText": "Välj en roll",
             "zoneRequiredText": "Zon krävs",
@@ -528,7 +549,8 @@
             "branchRequiredText": "Filial krävs",
             "selectBranchText": "Välj en filial",
             "countryRequiredText": "Land krävs",
-            "selectCountryText": "Välj ett land"
+            "selectCountryText": "Välj ett land",
+            "iAmIntrestedInText": "Jag är intresserad av"
         },
         "navBar": {
             "currencyText": "Valuta",

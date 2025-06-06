@@ -477,7 +477,7 @@
         "selectRoleText": "Seleccionar un rol"
       },
       "myDetailsHeadingText": "Mis Profile",
-      "tradeInText":"Trade In",
+      "tradeInText": "Compraventa",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",
       "myOrders": {
         "fetchReturnsErrorMsg": "¡Vaya! Error al recuperar devoluciones"
@@ -520,6 +520,27 @@
       "shopTheLookText": "Compra el look",
       "confirmPasswordText": "Confirmar Contraseña",
       "addNewUserText": "Agregar nuevo usuario",
+      "myTradeInText": "Mi Trade In",
+      "quoteText": "Presupuesto",
+      "createdText": "Creado",
+      "tradeInSectionFeedbackMessage": "Esperamos que te guste nuestra nueva sección de Trade In en nuestro sitio web. Todavía estamos trabajando en mejoras, pero si ves algo que no funciona como se esperaba, envíanos un correo electrónico con capturas de pantalla (si es posible) a",
+      "queryEmailInstruction": "Si tienes alguna consulta, envía un correo electrónico a",
+      "myWalletText": "Mi Monedero",
+      "walletActivationMessage": "Por favor espere mientras activamos su monedero y generamos la información del monedero.",
+      "transferToBankText": "Transferir al Banco",
+      "addBankDetailsText": "Añadir Datos Bancarios",
+      "enableWalletText": "Habilitar Monedero",
+      "walletCurrentBalanceText": "Saldo Actual del Monedero",
+      "walletTransactionHistoryText": "Historial de Transacciones del Monedero",
+      "dateText": "Fecha",
+      "amountText": "Cantidad",
+      "referenceText": "Referencia",
+      "noTransactionHistoryMessage": "No hay historial de transacciones disponible.",
+      "bankTransferHistoryText": "Historial de Transferencias Bancarias",
+      "bankNameText": "Nombre del Banco",
+      "AccountNoText": "Nº de Cuenta",
+      "sortCodeText": "Código de Sorteo",
+      "walletDisabledMessage": "El monedero está deshabilitado. Actívelo para ver el saldo y las transacciones.",
       "roleRequiredText": "El rol es obligatorio",
       "selectRoleText": "Por favor seleccione un rol",
       "zoneRequiredText": "La zona es obligatoria",
@@ -527,7 +548,8 @@
       "branchRequiredText": "La sucursal es obligatoria",
       "selectBranchText": "Por favor seleccione una sucursal",
       "countryRequiredText": "El país es obligatorio",
-      "selectCountryText": "Por favor seleccione un país"
+      "selectCountryText": "Por favor seleccione un país",
+      "iAmIntrestedInText": "Estoy interesado en"
     },
     "navBar": {
       "currencyText": "Moneda",

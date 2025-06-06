@@ -478,7 +478,7 @@
                 "selectRoleText": "Vælg en rolle"
             },
             "myDetailsHeadingText": "Min profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Byttehandel",
             "editYourDetailsText": "Du kan frit redigere dine oplysninger nedenfor, så din konto er fuldt opdateret.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Fejl under hentning af returneringer"
@@ -521,6 +521,27 @@
             "shopTheLookText": "Shop looket",
             "confirmPasswordText": "Bekræft adgangskode",
             "addNewUserText": "Tilføj ny bruger",
+            "myTradeInText": "Min Trade In",
+            "quoteText": "Tilbud",
+            "createdText": "Oprettet",
+            "tradeInSectionFeedbackMessage": "Vi håber du kan lide vores nye Trade In-sektion på hjemmesiden. Vi arbejder stadig på forbedringer, men hvis du oplever noget, der ikke fungerer som forventet, bedes du sende os en e-mail med skærmbilleder (hvis muligt) til",
+            "queryEmailInstruction": "Hvis du har en forespørgsel, bedes du sende en e-mail til",
+            "myWalletText": "Min Pung",
+            "walletActivationMessage": "Vent venligst mens vi aktiverer din pung og genererer punginformation.",
+            "transferToBankText": "Overfør til Bank",
+            "addBankDetailsText": "Tilføj Bankoplysninger",
+            "enableWalletText": "Aktivér Pung",
+            "walletCurrentBalanceText": "Pungens Nuværende Saldo",
+            "walletTransactionHistoryText": "Pungens Transaktionshistorik",
+            "dateText": "Dato",
+            "amountText": "Beløb",
+            "referenceText": "Reference",
+            "noTransactionHistoryMessage": "Ingen transaktionshistorik tilgængelig.",
+            "bankTransferHistoryText": "Bankoverførsel Historik",
+            "bankNameText": "Banknavn",
+            "AccountNoText": "Kontonr.",
+            "sortCodeText": "Sorteringskode",
+            "walletDisabledMessage": "Pung er deaktiveret. Aktivér den for at se saldo og transaktioner.",
             "roleRequiredText": "Rolle er påkrævet",
             "selectRoleText": "Vælg en rolle",
             "zoneRequiredText": "Zone er påkrævet",
@@ -528,7 +549,8 @@
             "branchRequiredText": "Filial er påkrævet",
             "selectBranchText": "Vælg en filial",
             "countryRequiredText": "Land er påkrævet",
-            "selectCountryText": "Vælg et land"
+            "selectCountryText": "Vælg et land",
+            "iAmIntrestedInText": "Jeg er interesseret i"
         },
         "navBar": {
             "currencyText": "Valuta",

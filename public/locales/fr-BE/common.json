@@ -478,7 +478,7 @@
                 "selectRoleText": "Sélectionner un rôle"
             },
             "myDetailsHeadingText": "My Profile",
-            "tradeInText":"Trade In",
+            "tradeInText": "Reprise",
             "editYourDetailsText": "Feel free to edit any of your details below so your account is totally up to date.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Woops! Error fetching returns"
@@ -521,6 +521,27 @@
             "shopTheLookText": "Shop the look",
             "confirmPasswordText": "Confirm Password",
             "addNewUserText": "Add New User",
+            "myTradeInText": "My Trade In",
+            "quoteText": "Quote",
+            "createdText": "Created",
+            "tradeInSectionFeedbackMessage": "We hope you like our new Trade In section of our website. We're still working on improvements, but if you spot something that's not working as expected, please send us an email with screenshots (if possible) to",
+            "queryEmailInstruction": "If you have a query, please email",
+            "myWalletText": "Mon Portefeuille",
+            "walletActivationMessage": "Veuillez patienter pendant que nous activons votre portefeuille et générons les informations du portefeuille.",
+            "transferToBankText": "Transférer vers la Banque",
+            "addBankDetailsText": "Ajouter les Détails Bancaires",
+            "enableWalletText": "Activer le Portefeuille",
+            "walletCurrentBalanceText": "Solde Actuel du Portefeuille",
+            "walletTransactionHistoryText": "Historique des Transactions du Portefeuille",
+            "dateText": "Date",
+            "amountText": "Montant",
+            "referenceText": "Référence",
+            "noTransactionHistoryMessage": "Aucun historique de transaction disponible.",
+            "bankTransferHistoryText": "Historique des Transferts Bancaires",
+            "bankNameText": "Nom de la Banque",
+            "AccountNoText": "N° de Compte",
+            "sortCodeText": "Code de Tri",
+            "walletDisabledMessage": "Le portefeuille est désactivé. Activez-le pour voir le solde et les transactions.",
             "roleRequiredText": "Role is required",
             "selectRoleText": "Please select a role",
             "zoneRequiredText": "Zone is required",
@@ -528,7 +549,8 @@
             "branchRequiredText": "Branch is required",
             "selectBranchText": "Please select a branch",
             "countryRequiredText": "Country is required",
-            "selectCountryText": "Please select a country"
+            "selectCountryText": "Please select a country",
+            "iAmIntrestedInText": "Je suis intéressé par"
         },
         "navBar": {
             "currencyText": "Currency",

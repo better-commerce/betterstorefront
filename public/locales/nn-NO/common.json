@@ -478,7 +478,7 @@
                 "selectRoleText": "Velg en rolle"
             },
             "myDetailsHeadingText": "Min profil",
-            "tradeInText":"Trade In",
+            "tradeInText":"Innbytte",
             "editYourDetailsText": "Følgjeleg til å redigere nokre av detaljane dine nedanfor for at kontoen din skal vere heilt oppdatert.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oisann! Det oppstod ein feil ved henting av returar"
@@ -521,6 +521,27 @@
             "shopTheLookText": "Kjøp stilen",
             "confirmPasswordText": "Bekreft passord",
             "addNewUserText": "Legg til ny brukar",
+            "myTradeInText": "Min Trade In",
+            "quoteText": "Tilbud",
+            "createdText": "Opprettet",
+            "tradeInSectionFeedbackMessage": "Vi håper du liker vår nye Trade In-seksjon på nettsiden vår. Vi jobber fortsatt med forbedringer, men hvis du oppdager noe som ikke fungerer som forventet, vennligst send oss en e-post med skjermbilder (hvis mulig) til",
+            "queryEmailInstruction": "Hvis du har en forespørsel, vennligst send en e-post til",
+            "myWalletText": "Min Lommebok",
+            "walletActivationMessage": "Vennligst vent mens vi aktiverer lommeboken din og genererer lommebokinformasjon.",
+            "transferToBankText": "Overfør til Bank",
+            "addBankDetailsText": "Legg til Bankdetaljer",
+            "enableWalletText": "Aktiver Lommebok",
+            "walletCurrentBalanceText": "Lommebokens nåværende saldo",
+            "walletTransactionHistoryText": "Lommeboktransaksjonshistorikk",
+            "dateText": "Dato",
+            "amountText": "Beløp",
+            "referenceText": "Referanse",
+            "noTransactionHistoryMessage": "Ingen transaksjonshistorikk tilgjengelig.",
+            "bankTransferHistoryText": "Bankoverføringshistorikk",
+            "bankNameText": "Banknavn",
+            "AccountNoText": "Kontonr.",
+            "sortCodeText": "Sorteringskode",
+            "walletDisabledMessage": "Lommebok er deaktivert. Aktiver den for å se saldo og transaksjoner.",
             "roleRequiredText": "Role is required",
             "selectRoleText": "Vel ein rolle",
             "zoneRequiredText": "Zon er påkravd",
@@ -528,7 +549,8 @@
             "branchRequiredText": "Filial er påkravd",
             "selectBranchText": "Vel ein filial",
             "countryRequiredText": "Land er påkravd",
-            "selectCountryText": "Vel ein land"
+            "selectCountryText": "Vel ein land",
+            "iAmIntrestedInText": "Eg er interessert i"
         },
         "navBar": {
             "currencyText": "Valuta",

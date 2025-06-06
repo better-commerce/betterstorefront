@@ -478,7 +478,7 @@
         "selectRoleText": "Rolle auswählen"
       },
       "myDetailsHeadingText": "Meine Profile",
-      "tradeInText":"Trade In",
+      "tradeInText":"Inzahlungnahme",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Hoppla! Fehler beim Abrufen von Rücksendungen"
@@ -521,6 +521,27 @@
       "shopTheLookText": "Shoppen Sie den Look",
       "confirmPasswordText": "Passwort bestätigen",
       "addNewUserText": "Neuen Benutzer hinzufügen",
+      "myTradeInText": "Mein Trade In",
+      "quoteText": "Angebot",
+      "createdText": "Erstellt",
+      "tradeInSectionFeedbackMessage": "Wir hoffen, Ihnen gefällt unser neuer Trade In-Bereich auf unserer Website. Wir arbeiten noch an Verbesserungen, aber wenn Sie etwas entdecken, das nicht wie erwartet funktioniert, senden Sie uns bitte eine E-Mail mit Screenshots (wenn möglich) an",
+      "queryEmailInstruction": "Wenn Sie eine Frage haben, senden Sie bitte eine E-Mail an",
+      "myWalletText": "Mein Wallet",
+      "walletActivationMessage": "Bitte warten Sie, während wir Ihr Wallet aktivieren und Wallet-Informationen generieren.",
+      "transferToBankText": "Auf Bankkonto überweisen",
+      "addBankDetailsText": "Bankdaten hinzufügen",
+      "enableWalletText": "Wallet aktivieren",
+      "walletCurrentBalanceText": "Aktueller Wallet-Saldo",
+      "walletTransactionHistoryText": "Wallet-Transaktionsverlauf",
+      "dateText": "Datum",
+      "amountText": "Betrag",
+      "referenceText": "Referenz",
+      "noTransactionHistoryMessage": "Kein Transaktionsverlauf verfügbar.",
+      "bankTransferHistoryText": "Banküberweisungsverlauf",
+      "bankNameText": "Bankname",
+      "AccountNoText": "Kontonr.",
+      "sortCodeText": "Bankleitzahl",
+      "walletDisabledMessage": "Wallet ist deaktiviert. Aktivieren Sie es, um Kontostand und Transaktionen anzuzeigen.",
       "roleRequiredText": "Rolle ist erforderlich",
       "selectRoleText": "Bitte wählen Sie eine Rolle aus",
       "zoneRequiredText": "Zone ist erforderlich",
@@ -528,7 +549,8 @@
       "branchRequiredText": "Filiale ist erforderlich",
       "selectBranchText": "Bitte wählen Sie eine Filiale aus",
       "countryRequiredText": "Land ist erforderlich",
-      "selectCountryText": "Bitte wählen Sie ein Land aus"
+      "selectCountryText": "Bitte wählen Sie ein Land aus",
+      "iAmIntrestedInText": "Ich interessiere mich für"
     },
     "navBar": {
       "currencyText": "Währung",

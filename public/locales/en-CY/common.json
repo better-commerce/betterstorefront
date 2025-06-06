@@ -478,7 +478,7 @@
             "selectRoleText": "Select a role"
         },
         "myDetailsHeadingText": "Το Προφίλ Μου",
-        "tradeInText":"Trade In",
+        "tradeInText": "Αλλαγή",
         "editYourDetailsText": "Μπορείτε να επεξεργαστείτε οποιοδήποτε από τα παρακάτω στοιχεία για να ενημερώσετε πλήρως τον λογαριασμό σας.",
         "myOrders": {
             "fetchReturnsErrorMsg": "Ωχ! Σφάλμα κατά την ανάκτηση των επιστροφών"
@@ -521,6 +521,27 @@
         "shopTheLookText": "Αγοράστε το look",
         "confirmPasswordText": "Επιβεβαίωση Κωδικού",
         "addNewUserText": "Προσθήκη νέου χρήστη",
+        "myTradeInText": "Η Αλλαγή Μου",
+        "quoteText": "Προσφορά",
+        "createdText": "Δημιουργήθηκε",
+        "tradeInSectionFeedbackMessage": "Ελπίζουμε να σας αρέσει η νέα μας ενότητα Αλλαγής στον ιστότοπό μας. Συνεχίζουμε να βελτιώνουμε, αλλά αν παρατηρήσετε κάτι που δεν λειτουργεί όπως θα έπρεπε, παρακαλώ στείλτε μας email με στιγμιότυπα οθόνης (αν είναι δυνατόν) στην διεύθυνση",
+        "queryEmailInstruction": "Αν έχετε κάποιο ερώτημα, παρακαλώ στείλτε email στην διεύθυνση",
+        "myWalletText": "Το Πορτοφόλι Μου",
+        "walletActivationMessage": "Παρακαλώ περιμένετε ενώ ενεργοποιούμε το πορτοφόλι σας και δημιουργούμε τις πληροφορίες του πορτοφολιού.",
+        "transferToBankText": "Μεταφορά στην Τράπεζα",
+        "addBankDetailsText": "Προσθήκη Τραπεζικών Στοιχείων",
+        "enableWalletText": "Ενεργοποίηση Πορτοφολιού",
+        "walletCurrentBalanceText": "Τρέχουσα Υπόλοιπο Πορτοφολιού",
+        "walletTransactionHistoryText": "Ιστορικό Συναλλαγών Πορτοφολιού",
+        "dateText": "Ημερομηνία",
+        "amountText": "Ποσό",
+        "referenceText": "Αναφορά",
+        "noTransactionHistoryMessage": "Δεν υπάρχει ιστορικό συναλλαγών.",
+        "bankTransferHistoryText": "Ιστορικό Τραπεζικών Μεταφορών",
+        "bankNameText": "Όνομα Τράπεζας",
+        "AccountNoText": "Αριθμός Λογαριασμού",
+        "sortCodeText": "Κωδικός Ταξινόμησης",
+        "walletDisabledMessage": "Το πορτοφόλι είναι απενεργοποιημένο. Ενεργοποιήστε το για να δείτε το υπόλοιπο και τις συναλλαγές.",
         "roleRequiredText": "Ο ρόλος είναι υποχρεωτικός",
         "selectRoleText": "Παρακαλούμε επιλέξτε έναν ρόλο",
         "zoneRequiredText": "Η περιοχή είναι υποχρεωτική",
@@ -528,7 +549,8 @@
         "branchRequiredText": "Η θυρίδα είναι υποχρεωτική",
         "selectBranchText": "Παρακαλούμε επιλέξτε μια θυρίδα",
         "countryRequiredText": "Η χώρα είναι υποχρεωτική",
-        "selectCountryText": "Παρακαλούμε επιλέξτε μια χώρα"
+        "selectCountryText": "Παρακαλούμε επιλέξτε μια χώρα",
+        "iAmIntrestedInText": "Ενδιαφέρομαι για"
     },
     "navBar": {
         "currencyText": "Νόμισμα",

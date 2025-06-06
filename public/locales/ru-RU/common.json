@@ -478,7 +478,7 @@
                 "selectRoleText": "Выберите роль"
             },
             "myDetailsHeadingText": "Мой профиль",
-            "tradeInText":"Trade In",
+            "tradeInText":"Обмен",
             "editYourDetailsText": "Не стесняйтесь редактировать любые данные, чтобы ваш аккаунт был актуален.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Упс! Ошибка при получении возвратов"
@@ -521,6 +521,27 @@
             "shopTheLookText": "Купить образ",
             "confirmPasswordText": "Подтвердите пароль",
             "addNewUserText": "Добавить нового пользователя",
+            "myTradeInText": "Мой Trade In",
+            "quoteText": "Предложение",
+            "createdText": "Создано",
+            "tradeInSectionFeedbackMessage": "Мы надеемся, что вам понравится наш новый раздел Trade In на нашем сайте. Мы все еще работаем над улучшениями, но если вы заметите что-то, что не работает должным образом, пожалуйста, отправьте нам электронное письмо со скриншотами (если возможно) на",
+            "queryEmailInstruction": "Если у вас есть вопрос, пожалуйста, отправьте письмо на",
+            "myWalletText": "Мой Кошелек",
+            "walletActivationMessage": "Пожалуйста, подождите, пока мы активируем ваш кошелек и сгенерируем информацию о кошельке.",
+            "transferToBankText": "Перевести в Банк",
+            "addBankDetailsText": "Добавить Банковские Реквизиты",
+            "enableWalletText": "Включить Кошелек",
+            "walletCurrentBalanceText": "Текущий Баланс Кошелька",
+            "walletTransactionHistoryText": "История Операций Кошелька",
+            "dateText": "Дата",
+            "amountText": "Сумма",
+            "referenceText": "Ссылка",
+            "noTransactionHistoryMessage": "История операций недоступна.",
+            "bankTransferHistoryText": "История Банковских Переводов",
+            "bankNameText": "Название Банка",
+            "AccountNoText": "Номер Счета",
+            "sortCodeText": "Сортировочный Код",
+            "walletDisabledMessage": "Кошелек отключен. Включите его для просмотра баланса и операций.",
             "roleRequiredText": "Требуется указать роль",
             "selectRoleText": "Пожалуйста, выберите роль",
             "zoneRequiredText": "Требуется указать зону",
@@ -528,7 +549,8 @@
             "branchRequiredText": "Требуется указать филиал",
             "selectBranchText": "Пожалуйста, выберите филиал",
             "countryRequiredText": "Требуется указать страну",
-            "selectCountryText": "Пожалуйста, выберите страну"
+            "selectCountryText": "Пожалуйста, выберите страну",
+            "iAmIntrestedInText": "Я заинтересован в"
         },
         "navBar": {
             "currencyText": "Валюта",

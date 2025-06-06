@@ -269,6 +269,9 @@
             "exchangeConfirmText": "Sei sicuro di voler cambiare questo articolo?",
             "dontExchangeText": "Non cambiare"
         },
+        "common":{
+            "myAccountText": "Il Mio Account"
+        },
         "filters": {
             "clearAllText": "Pulisci tutto",
             "filtersText": "Filtri",
@@ -448,7 +451,7 @@
                 "selectRoleText": "Selezionare un ruolo"
             },
             "myDetailsHeadingText": "Il Mio Profilo",
-            "tradeInText":"Trade In",
+            "tradeInText":"Permuta",
             "editYourDetailsText": "Sentiti libero di modificare i tuoi dettagli qui sotto per tenere il tuo account sempre aggiornato.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ops! Errore nel recupero dei resi"
@@ -491,6 +494,27 @@
             "shopTheLookText": "Compra il look",
             "confirmPasswordText": "Conferma la password",
             "addNewUserText": "Aggiungi nuovo utente",
+            "myTradeInText": "Il mio Trade In",
+            "quoteText": "Preventivo",
+            "createdText": "Creato",
+            "tradeInSectionFeedbackMessage": "Speriamo ti piaccia la nostra nuova sezione Trade In sul nostro sito web. Stiamo ancora lavorando a miglioramenti, ma se noti qualcosa che non funziona come previsto, inviaci un'e-mail con screenshot (se possibile) a",
+            "queryEmailInstruction": "Se hai una domanda, invia un'e-mail a",
+            "myWalletText": "Il Mio Portafoglio",
+            "walletActivationMessage": "Attendi mentre attiviamo il tuo portafoglio e generiamo le informazioni del portafoglio.",
+            "transferToBankText": "Trasferisci alla Banca",
+            "addBankDetailsText": "Aggiungi Dettagli Bancari",
+            "enableWalletText": "Abilita Portafoglio",
+            "walletCurrentBalanceText": "Saldo Attuale del Portafoglio",
+            "walletTransactionHistoryText": "Cronologia Transazioni del Portafoglio",
+            "dateText": "Data",
+            "amountText": "Importo",
+            "referenceText": "Riferimento",
+            "noTransactionHistoryMessage": "Nessuna cronologia transazioni disponibile.",
+            "bankTransferHistoryText": "Cronologia Bonifici Bancari",
+            "bankNameText": "Nome della Banca",
+            "AccountNoText": "Conto N.",
+            "sortCodeText": "Codice di Ordinamento",
+            "walletDisabledMessage": "Il portafoglio è disabilitato. Abilitalo per visualizzare il saldo e le transazioni.",
             "roleRequiredText": "Il ruolo è obbligatorio",
             "selectRoleText": "Seleziona un ruolo",
             "zoneRequiredText": "La zona è obbligatoria",
@@ -498,7 +522,8 @@
             "branchRequiredText": "La filiale è obbligatoria",
             "selectBranchText": "Seleziona una filiale",
             "countryRequiredText": "Il paese è obbligatorio",
-            "selectCountryText": "Seleziona un paese"
+            "selectCountryText": "Seleziona un paese",
+            "iAmIntrestedInText": "Sono interessato a"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -1028,6 +1053,7 @@
             "expandText": "Espandi",
             "collapseText": "Riduci",
             "youtubeVideoPlayerAltText": "Lettore video YouTube",
+            "logOutText": "Esci",
             "removeText": "Rimuovi",
             "defaultText": "Predefinito",
             "editText": "Modifica",

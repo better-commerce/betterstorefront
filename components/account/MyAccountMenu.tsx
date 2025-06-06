@@ -237,8 +237,8 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
     if (featureToggle?.features?.enableTradeIn) {
       newConfig.push({
         type: 'tab',
-        text: "I'm Interested In",
-        mtext: "I'm Interested In",
+        text: translate('label.myAccount.iAmIntrestedInText'),
+        mtext: translate('label.myAccount.iAmIntrestedInText'),
         props: 'register-interest',
         head: <HandThumbUpIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
         href: '/my-account/register-interest',
@@ -248,8 +248,8 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
     if (featureToggle?.features?.enableTradeIn) {
       newConfig.push({
         type: 'tab',
-        text: 'Trade In',
-        mtext: 'Trade In',
+        text: translate('label.myAccount.tradeInText'),
+        mtext: translate('label.myAccount.tradeInText'),
         props: 'tradein',
         head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
         href: '/my-account/tradein',
@@ -259,8 +259,8 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
     if (allowEnableWallet) {
       newConfig.push({
         type: 'tab',
-        text: 'My Wallet',
-        mtext: 'My Wallet',
+        text: translate('label.myAccount.myWalletText'),
+        mtext: translate('label.myAccount.myWalletText'),
         props: 'wallet',
         head: <WalletIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
         href: '/my-account/wallet',
