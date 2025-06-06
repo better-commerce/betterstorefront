@@ -10,11 +10,14 @@ import { logError } from "@framework/utils/app-util";
 import moment from "moment";
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
+import { useTranslation } from "@commerce/utils/use-translation";
 const Pagination = dynamic(() => import('@components/Product/Pagination'))
 
 export default function TradeInTable() {
   const [isLoading, setIsLoading] = useState(false)
   const [tradeList, setTradeList] = useState<any>([])
+  const translate = useTranslation()
+  
   const statusClasses: Record<string, string> = {
     // QuoteStatus
     AwaitingQuotation: "bg-gray-100 border-gray-500 text-gray-500",
@@ -92,7 +95,7 @@ export default function TradeInTable() {
   return (
     <div className="w-full px-6">
       {isLoading && <Loader />}
-      <h2 className="text-xl font-normal sm:text-2xl dark:text-black">My Trade In</h2>
+      <h2 className="text-xl font-normal sm:text-2xl dark:text-black">{translate('label.myAccount.myTradeInText')}</h2>
       <div className="mt-4 overflow-x-auto">
         {tradeList?.items?.length > 0 ? (
           <>
@@ -100,10 +103,10 @@ export default function TradeInTable() {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700 border">Quote</th>
-                    <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Status</th>
-                    <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Total</th>
-                    <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">Created</th>
+                    <th className="px-4 py-2 text-sm font-semibold text-left text-gray-700 border">{translate('label.myAccount.quoteText')}</th>
+                    <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">{translate('label.orderDetails.statusText')}</th>
+                    <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">{translate('label.orderSummary.totalText')}</th>
+                    <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border">{translate('label.myAccount.createdText')}</th>
                     <th className="px-4 py-2 text-sm font-semibold text-right text-gray-700 border"></th>
                   </tr>
                 </thead>
@@ -122,7 +125,7 @@ export default function TradeInTable() {
                       <td className="px-4 py-2 text-sm text-right border">
                         {moment(new Date(item.created)).format(DATE_FORMAT)}</td>
                       <td className="px-4 py-2 text-right border">
-                        <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">View Details</Link>
+                        <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">{translate('common.label.viewDetailsText')}</Link>
                       </td>
                     </tr>
                   ))}
@@ -131,16 +134,16 @@ export default function TradeInTable() {
             </div>
             {tradeList?.items?.length > 20 && <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected + 1 || 1)} pageCount={paginationState.pageCount} />}
             <p className="mt-6 text-xs text-left text-gray-600">
-              We hope you like our new Trade In section of our website. We're still working on improvements, but if you spot something that's not working as expected, please send us an email with screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
-              If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
+              {translate('label.myAccount.tradeInSectionFeedbackMessage')} <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
+              {translate('label.myAccount.queryEmailInstruction')} <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
             </p>
           </>
         ) : (
           <div className="flex flex-col justify-center gap-4 text-center">
             <h3 className="py-4 text-2xl font-semibold text-center text-gray-600">No Trade Available.</h3>
             <p className="mt-6 text-xs text-left text-gray-600">
-              We hope you like our new Trade In section of our website. We're still working on improvements, but if you spot something that’s not working as expected, please send us an email with screenshots (if possible) to <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
-              If you have a query, please email <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
+              {translate('label.myAccount.tradeInSectionFeedbackMessage')} <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
+              {translate('label.myAccount.queryEmailInstruction')} <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.
             </p>
           </div>
         )}

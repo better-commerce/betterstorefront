@@ -13,6 +13,7 @@ import { RequestMethod } from 'bc-payments-sdk/dist/constants';
 import moment from 'moment';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from "react";
+import { useTranslation } from "@commerce/utils/use-translation";
 const Pagination = dynamic(() => import('@components/Product/Pagination'))
 export default function WalletDetail() {
   const [walletEnabled, setWalletEnabled] = useState(false);
@@ -29,7 +30,7 @@ export default function WalletDetail() {
   const [bankTransfersPaginationState, setBankTransfersPaginationState] = useState<any>({ pageNumber: 1, pageSize: 1, sortBy: 'created_on', sortDescending: true, pageCount: 1 })
   const [openTransferToBankModal, setOpenTransferToBankModal] = useState(false)
   const [openAddBankDetailsModal, setOpenAddBankDetailsModal] = useState(false)
-
+  const translate = useTranslation()
   const { user, setUser } = useUI()
   const handleEnableWallet = async () => {
     setIsLoading(true);
@@ -126,7 +127,7 @@ export default function WalletDetail() {
       <div className='flex flex-col w-full px-6'>
         <div className='flex flex-col items-center justify-center gap-5 py-10'>
           <LoadingDots />
-          <span className='text-2xl font-semibold text-gray-600'>Please wait while we activate your wallet and generate wallet information.</span>
+          <span className='text-2xl font-semibold text-gray-600'>{translate('label.myAccount.walletActivationMessage')}</span>
         </div>
       </div>
     ) : (
@@ -139,7 +140,7 @@ export default function WalletDetail() {
           }
           <div className="w-full px-6">
             <div className="flex items-center justify-between w-full">
-              <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>My Wallet</h2>
+              <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>{translate('label.myAccount.myWalletText')}</h2>
               {walletEnabled &&
                 <div className="flex w-5/12 gap-2 mb-6">
                   <button
@@ -147,13 +148,13 @@ export default function WalletDetail() {
                     onClick={() => setOpenTransferToBankModal(true)}
                     disabled={!(bankAccountList?.length > 0)}
                   >
-                    Transfer To Bank
+                    {translate('label.myAccount.transferToBankText')}
                   </button>
                   <button
                     className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-primary`}
                     onClick={() => setOpenAddBankDetailsModal(true)}
                   >
-                    Add Bank Details
+                    {translate('label.myAccount.addBankDetailsText')}
                   </button>
                 </div>}
             </div>
@@ -168,7 +169,7 @@ export default function WalletDetail() {
                         }
                       }}
                       className="sr-only" />
-                    <span className="text-sm font-normal text-black">Enable Wallet</span>
+                    <span className="text-sm font-normal text-black">{translate('label.myAccount.enableWalletText')}</span>
                     <div className={`relative w-[47px] h-[22px] transition-all ${walletEnabled ? "bg-emerald-500 border-emerald-800" : "bg-gray-300 border-gray-800"} rounded-full border`}>
                       <div className={`absolute w-[20px] h-[20px] rounded-full shadow-md top-0 left-0 transform transition-all ${walletEnabled ? "translate-x-6 bg-white" : "bg-gray-800"}`}></div>
                     </div>
@@ -179,10 +180,10 @@ export default function WalletDetail() {
             {walletEnabled ? (
               <div className="w-full pb-10 mx-auto bg-white">
                 <div className="p-4 mb-6 text-center bg-gray-100 rounded-lg">
-                  <h3 className="text-lg font-medium">Wallet Current Balance</h3>
+                  <h3 className="text-lg font-medium">{translate('label.myAccount.walletCurrentBalanceText')}</h3>
                   <p className="text-3xl font-bold text-sky-500">{walletDetail?.currency == "GBP" ? '£' : ''}{walletDetail?.balance}</p>
                 </div>
-                <h3 className="mb-3 text-lg font-medium">Wallet Transaction History</h3>
+                <h3 className="mb-3 text-lg font-medium">{translate('label.myAccount.walletTransactionHistoryText')}</h3>
                 {isLoadingTransactions && <Loader />}
                 {walletTransactions?.items?.length > 0 ? (
                   <>
@@ -190,10 +191,10 @@ export default function WalletDetail() {
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                           <tr className="bg-gray-200">
-                            <th className="p-2 font-semibold text-left border font-sm">Date</th>
-                            <th className="p-2 font-semibold text-left border font-sm">Type</th>
-                            <th className="p-2 font-semibold text-left border font-sm">Reference</th>
-                            <th className="p-2 font-semibold text-right border font-sm">Amount</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.dateText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.product.specifications.typeText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.referenceText')}</th>
+                            <th className="p-2 font-semibold text-right border font-sm">{translate('label.myAccount.amountText')}</th>
                           </tr>
                         </thead>
                         <tbody className='bg-white divide-y divide-gray-200'>
@@ -220,12 +221,12 @@ export default function WalletDetail() {
                   <>
                     <div className="flex flex-col justify-center w-full py-10">
                       <WalletIcon className="w-10 h-10 mx-auto text-gray-300" />
-                      <h4 className="text-xl font-semibold text-center text-gray-300">No Transaction history available.</h4>
+                      <h4 className="text-xl font-semibold text-center text-gray-300">{translate('label.myAccount.noTransactionHistoryMessage')}</h4>
                     </div>
                   </>
                 )}
 
-                <h3 className="mb-3 text-lg font-medium">Bank Transfer History</h3>
+                <h3 className="mb-3 text-lg font-medium">{translate('label.myAccount.bankTransferHistoryText')}</h3>
                 {isLoadingBankTransactions && <Loader />}
                 {bankTransferTransactions?.items?.length > 0 ? (
                   <>
@@ -233,12 +234,12 @@ export default function WalletDetail() {
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                           <tr className="bg-gray-200">
-                            <th className="p-2 font-semibold text-left border font-sm">Date</th>
-                            <th className="p-2 font-semibold text-left border font-sm">Bank Name</th>
-                            <th className="p-2 font-semibold text-left border font-sm">Account No.</th>
-                            <th className="p-2 font-semibold text-left border font-sm">Status</th>
-                            <th className="p-2 font-semibold text-left border font-sm">Sort Code</th>
-                            <th className="p-2 font-semibold text-right border font-sm">Amount</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.dateText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.bankNameText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.AccountNoText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.orderDetails.statusText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.sortCodeText')}</th>
+                            <th className="p-2 font-semibold text-right border font-sm">{translate('label.myAccount.amountText')}</th>
                           </tr>
                         </thead>
                         <tbody className='bg-white divide-y divide-gray-200'>
@@ -267,7 +268,7 @@ export default function WalletDetail() {
                   <>
                     <div className="flex flex-col justify-center w-full py-10">
                       <WalletIcon className="w-10 h-10 mx-auto text-gray-300" />
-                      <h4 className="text-xl font-semibold text-center text-gray-300">No Transaction history available.</h4>
+                      <h4 className="text-xl font-semibold text-center text-gray-300">{translate('label.myAccount.noTransactionHistoryMessage')}</h4>
                     </div>
                   </>
                 )}
@@ -276,7 +277,7 @@ export default function WalletDetail() {
             ) : (
               <div className="flex flex-col justify-center w-full py-10">
                 <WalletIcon className="w-20 h-20 mx-auto text-gray-300" />
-                <h4 className="text-xl font-semibold text-center text-gray-300">Wallet is disabled. Enable it to view balance and transactions.</h4>
+                <h4 className="text-xl font-semibold text-center text-gray-300">{translate('label.myAccount.walletDisabledMessage')}</h4>
               </div>
             )}
           </div>
