@@ -181,7 +181,7 @@ export default function WalletDetail() {
               <div className="w-full pb-10 mx-auto bg-white">
                 <div className="p-4 mb-6 text-center bg-gray-100 rounded-lg">
                   <h3 className="text-lg font-medium">{translate('label.myAccount.walletCurrentBalanceText')}</h3>
-                  <p className="text-3xl font-bold text-sky-500">{walletDetail?.currency == "GBP" ? '£' : ''}{walletDetail?.balance}</p>
+                  <p className="text-3xl font-bold text-sky-500">{walletDetail?.formattedBalance}</p>
                 </div>
                 <h3 className="mb-3 text-lg font-medium">{translate('label.myAccount.walletTransactionHistoryText')}</h3>
                 {isLoadingTransactions && <Loader />}
