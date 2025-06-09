@@ -2970,6 +2970,9 @@ filter: invert(1);
     overflow:visible !important;
   }
 }
+.mobile-visible svg{
+color :#000 !important; 
+}
 .button-section-cancel .button-cancel-bg-transparent{
   background: transparent !important;
 }
@@ -2979,3 +2982,30 @@ filter: invert(1);
 .bg-ribbon-clr-succ.bg-ribbon-cancel .text-succ-white{
 color: #fff !important;
 }
+.pc-overflow-auto{
+  overflow-y: auto !important;
+}
+
+.customScrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.customScrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* For Firefox */
+.customScrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+} 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { MagnifyingGlassIcon, StarIcon, XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -18,9 +18,10 @@ import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
 import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-
+import usePreventScroll from 'hooks/usePreventScroll'
 export default function Search(props: any) {
   const { recordAnalytics } = useAnalytics()
+  usePreventScroll(); // Prevent scroll when search is open
   const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, searchDefaultSortBy } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
@@ -29,7 +30,6 @@ export default function Search(props: any) {
   const [path, setCurrentPath] = useState(Router.asPath)
   const translate = useTranslation()
   const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
-
   useEffect(() => {
     const fetchItems = async () => {
       setIsLoading(true)
@@ -89,7 +89,7 @@ export default function Search(props: any) {
             </div>
           </div>
         </div>
-        <div className={`${featureToggle?.features?.enableForPCSite ? 'grid grid-cols-1 sm:mx-0 md:grid-cols-1 px-3 sm:px-4 lg:grid-cols-1 mt-2' : 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-10'} w-full sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10`}>
+        <div className={`${featureToggle?.features?.enableForPCSite ? 'grid grid-cols-1 sm:mx-0 md:grid-cols-1 px-3 sm:px-4 lg:grid-cols-1 mt-2' : 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-10'} w-full sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 max-panel-search overflow-y-scroll pc-overflow-auto max-h-[70vh] pb-10 customScrollbar`}>
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
@@ -105,10 +105,10 @@ export default function Search(props: any) {
             <>
               {products?.map((product: any, idx: number) => {
                 return (
-                  <div className={`grid grid-cols-12 border border-gray-200`} key={`search-${idx}`}>
+                  <Link  href={`/${product.slug}`} className={`grid grid-cols-12 border border-gray-200 pc-grid`} key={`search-${idx}`}>
                     <div className='items-center justify-center col-span-4'>
                       <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden group">
-                        <Link href={`/${product.slug}`} className="block">
+                        <div className="block">
                           <div className="flex w-full"
                             onClick={() => {
                               if (inputValue) {
@@ -118,7 +118,7 @@ export default function Search(props: any) {
                             }}>
                             <img src={generateUri(product?.image, 'h=170&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-top w-auto h-[180px] mx-auto" alt={product?.name} />
                           </div>
-                        </Link>
+                        </div>
                         <div className={CLASSES}>
                           <ProductTag product={product} />
                         </div>
@@ -147,7 +147,7 @@ export default function Search(props: any) {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 )
               })}
             </>
