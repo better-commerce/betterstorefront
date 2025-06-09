@@ -2458,7 +2458,6 @@ margin-bottom: 10px;
   .bg-header-clr .header-nav-font{
     color: #fff;
     text-transform: capitalize !important;
-    border-radius: 15px 15px 0px 0 !important;
     font-weight: 300 !important;
     font-size: 13px !important;
   }
@@ -2466,12 +2465,10 @@ margin-bottom: 10px;
     color: #000000;
     font-weight: 300 !important;
     text-transform: capitalize !important;
-    border-radius: 15px 15px 0px 0 !important;
     font-size: 13px !important;
   }
   .bg-header-clr .header-nav-font:hover{
     color: var(--btn-bg-primary) !important;
-    border-radius: 15px 15px 0px 0 !important;
     font-weight: 400 !important;
   }
 .bg-header-nav-clr{
@@ -3009,3 +3006,20 @@ color: #fff !important;
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
 } 
+.border-link-bottom{
+  border-bottom:1px solid #D9D9D9 !important;
+}
+.border-top-link{
+  border-top:1px solid #D9D9D9 !important
+}
+.mid-mega-container{
+  max-width: 980px !important;
+  width: 100% !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box;
+}
+.menu-banner-image img{
+  height: 170px !important;
+}
