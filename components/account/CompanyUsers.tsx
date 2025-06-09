@@ -18,13 +18,13 @@ function CompanyUsers({ users }: any) {
   const getCompanyDetails = useCallback(async () => {
     const response: any = await axios.post(NEXT_B2B_GET_COMPANY_DETAILS, { userId: user?.userId })
     setCompanyDetails(response?.data || {})
+    fetchCompanyHierarchy(response?.data?.companyId)
   }, [user?.userId]) 
 
-    const fetchCompanyHierarchy = async () => {
+    const fetchCompanyHierarchy = async (companyId: string) => {
       try {
-        let { data: companyHierarchy } = await axios.post(NEXT_B2B_GET_COMPANY_HIERARCHY, {
-          companyId: companyDetails?.companyId,
-        })
+        if(!companyId) return
+        const { data: companyHierarchy } = await axios.post(NEXT_B2B_GET_COMPANY_HIERARCHY, { companyId })
         if (companyHierarchy?.items?.length > 0) {
           setHierarchy(companyHierarchy?.items)
         } else {
@@ -37,7 +37,7 @@ function CompanyUsers({ users }: any) {
         
     useEffect(() => {
       async function fetchData() {
-        await Promise.all([getCompanyDetails(), fetchCompanyHierarchy()])
+        await getCompanyDetails()
       }
       fetchData()
     }, [])
