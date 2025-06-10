@@ -753,7 +753,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
         {!isEmpty && !isSplitDelivery && (
           <>
             <div className="relative mt-4 sm:mt-6 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16 basket-panel">
-              <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>          
+              <section aria-labelledby="cart-heading" className={`lg:col-span-7 basket-cart-items`}>
                 {userCartItems?.map((product: any, productIdx: number) => {
                   let soldOutMessage = ''
                   const saving = (isIncludeVAT ? product?.listPrice?.raw?.withTax : product?.listPrice?.raw?.withoutTax) - (isIncludeVAT ? product?.price?.raw?.withTax : product?.price?.raw?.withoutTax)
@@ -816,6 +816,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                         reValidateData={reValidateData}
                         soldOutMessage={soldOutMessage}
                         getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                        featureToggle={featureToggle}
                       />
                       {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                         (child: any, idx: number) => (
@@ -834,6 +835,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                             soldOutMessage={soldOutMessage}
                             getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                             key={idx}
+                            featureToggle={featureToggle}
                           />
                         )
                       )}
@@ -973,6 +975,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                 reValidateData={reValidateData}
                                 soldOutMessage={soldOutMessage}
                                 getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                                featureToggle={featureToggle}
                               />
                               {product?.itemType !== ProductType.BUNDLE && product.children?.map((child: any, idx: number) => (
                                 <CartSideBarProductCard
@@ -990,6 +993,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                   soldOutMessage={soldOutMessage}
                                   getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                   key={idx}
+                                  featureToggle={featureToggle}
                                 />
                               ))}
                             </>

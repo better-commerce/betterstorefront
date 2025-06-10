@@ -12,7 +12,6 @@ export default function getCustomerTrades(cookies?: any, params?:any) {
         baseUrl: BC_API_BASE_URL,
         url: url.href,
         method: 'GET',
-
         cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
       })

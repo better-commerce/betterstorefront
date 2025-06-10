@@ -552,7 +552,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }, [cartItems?.lineItems])
 
   const css = { maxWidth: '100%', height: 'auto' }
-    return (
+  return (
     <>
       <Transition.Root show={cartSidebarOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 overflow-hidden z-99" onClose={handleClose} >
@@ -582,7 +582,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           </button>
                         </div>
                       </div>
-                      <div className="mt-2  btn-hide-cut">
+                      <div className="mt-2 btn-hide-cut">
                         <div className="flow-root">
                           <ul role="list" className="px-4">
                             {userCartItems?.map((product: any, productIdx: number) => {
@@ -668,6 +668,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                     soldOutMessage={soldOutMessage}
                                     getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                     insertToLocalWishlist={insertToLocalWishlist}
+                                    featureToggle={featureToggle}
                                   />
                                   {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                                     (child: any, idx: number) => (
@@ -693,6 +694,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                         }
                                         key={idx}
                                         insertToLocalWishlist={insertToLocalWishlist}
+                                        featureToggle={featureToggle}
                                       />
                                     )
                                   )}
@@ -780,11 +782,11 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             ))}
                           </>
                         )}
-                        <div className="flex justify-between items-center py-4 font-bold text-gray-900 font-20">
+                        <div className="flex items-center justify-between py-4 font-bold text-gray-900 font-20">
                           <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
                           {cartItems?.isPartialPayment ? (
                             <span className="flex flex-col">
-                              <p className="text-sm text-gray-600 link-button line-through"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
+                              <p className="text-sm text-gray-600 line-through link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
                               <p className="font-20 link-button"> {' '} {cartItems?.partialPayableAmount?.formatted}{' '} </p>
                             </span>
                           ) : (
