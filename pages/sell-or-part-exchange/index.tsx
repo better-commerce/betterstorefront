@@ -5,7 +5,7 @@ import NextHead from 'next/head'
 import { useCallback, useEffect, useState } from 'react'
 import axios, { AxiosRequestConfig } from 'axios'
 import type { GetStaticPropsContext } from 'next'
-import { EmptyGuid, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_PRODUCTS, SITE_ORIGIN_URL, TradeInSteps } from '@components/utils/constants'
+import { EmptyGuid, NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_SHIPPING_METHODS, NEXT_TRADE_IN_PRODUCTS, SITE_ORIGIN_URL, TradeInSteps } from '@components/utils/constants'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 
@@ -184,13 +184,21 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
     updateQueryParams(router, {}, ["quoteId"]);
   };
 
-  const fetchUpdatedQuoteDetails = async (quoteId: any) => {
+  const fetchShippingMethods = useCallback(async () => {
+    try {
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_SHIPPING_METHODS, method: RequestMethod.POST };
+      const shippingResult = await callApi(config)
+      setShippingData(shippingResult?.data)
+    } catch (error) { setShippingData([]) }
+  }, [])
+
+  const fetchUpdatedQuoteDetails = async (quoteId: any, currentStep?: number) => {
     setIsLoading(true);
     try {
       const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteId } };
       const { data } = await callApi(config);
       setQuoteData(data);
-      setCurrentStep(data?.value?.street ? 4 : 2);
+      setCurrentStep(data?.value?.street ? 4 : currentStep ? currentStep - 1 : 2);
     } catch (error) {
       logError(error);
     } finally {
@@ -199,10 +207,11 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
   };
 
   useEffect(() => {
+    if (router.query?.currentStep === '4') fetchShippingMethods()
     if (router.query?.quoteId) {
-      fetchUpdatedQuoteDetails(router.query?.quoteId);
+      fetchUpdatedQuoteDetails(router.query?.quoteId, parseInt(String(router.query?.currentStep)));
     }
-  }, [router.query?.quoteId]);
+  }, [router.query?.quoteId, router.query?.currentStep]);
 
   const cleanPath = removeQueryString(router.asPath)
   if (!featureToggle?.features?.enableTradeIn) {

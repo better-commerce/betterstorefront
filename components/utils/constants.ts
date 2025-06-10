@@ -741,8 +741,8 @@ export enum OrderStatus {
 export enum QuoteStatus {
   AwaitingQuotation = "Awaiting Quotation",
   Quoted = "Quoted",
-  QuoteAccepted = "Quote Accepted",
-  QuoteRejected = "Quote Rejected",
+  QuoteAccepted = "QuoteAccepted",
+  QuoteRejected = "QuoteRejected",
   QuoteExpired = "Quote Expired",
   CollectionArranged = "Collection Arranged",
   ParcelArrived = "Parcel Arrived",
@@ -786,7 +786,7 @@ export enum AssessmentStatus {
   RejectedByBusiness = "Rejected By Business",
 }
 
-export const UNCHANGEABLE_STATUSES = ["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness", "Quoted"];
+export const UNCHANGEABLE_STATUSES = ["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness", ];
 
 export const PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES =
   process.env.PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES

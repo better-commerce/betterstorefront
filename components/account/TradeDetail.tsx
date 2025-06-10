@@ -197,9 +197,9 @@ export default function TradeInDetail() {
       .replace(/_/g, " ") // Replace underscores with spaces (if any)
       .trim();
   };
-  const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus);
+  const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus) && itemStatus === "Quoted";
   const canCancelTradeIn = (itemStatus: QuoteStatus) => [QuoteStatus.AwaitingQuotation, QuoteStatus.Quoted, QuoteStatus.QuoteAccepted, QuoteStatus.QuoteExpired].includes(itemStatus);
-  const canUpdateShippingAddress = (itemStatus: QuoteStatus) => [QuoteStatus.AwaitingQuotation, QuoteStatus.Quoted, QuoteStatus.QuoteAccepted].includes(itemStatus) && !tradeDetail?.value?.street
+  const canUpdateShippingAddress = (itemStatus: QuoteStatus) => [QuoteStatus.QuoteAccepted].includes(itemStatus) && !tradeDetail?.value?.street
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
     <div className="flex items-center justify-start gap-2">
       <img src={product?.parentProductImageUrl} className="inline-block w-auto h-16 border border-gray-300 rounded-md shadow" alt={product?.parentProductName} />
@@ -366,7 +366,7 @@ export default function TradeInDetail() {
                     </td>
                     {showActionColumn && (
                       <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                        {(status === "Quoted" || status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject" || status === "FurtherAssessment") && (item?.status === "Assessed" || item.status === "Quoted") ? (
+                        {(status === "Assessed" || status === "AssessedPartialReject" || status === "TradeInCompletePartialReject" || status === "FurtherAssessment") && (item?.status === "Assessed" || item.status === "Quoted") ? (
                           canChangeStatus(item?.status) && (
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.REJECTED_BY_CUSTOMER)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
@@ -430,7 +430,7 @@ export default function TradeInDetail() {
             </span>
           </div>
           {canUpdateShippingAddress(tradeDetail?.value?.status) && <button
-            onClick={() => router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}`)}
+            onClick={() => router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}&currentStep=4`)}
             className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full mt-3">
             Continue  <ChevronRightIcon className="w-5 h-5" />
           </button>}
