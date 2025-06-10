@@ -132,7 +132,7 @@ export default function TradeInTable() {
                 </tbody>
               </table>
             </div>
-            {tradeList?.items?.length > 20 && <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected + 1 || 1)} pageCount={paginationState.pageCount} />}
+            {tradeList?.totalRecords > 20 && <Pagination currentPage={paginationState.pageNumber} onPageChange={({ selected }: any) => fetchAllTrades(selected + 1 || 1)} pageCount={paginationState.pageCount} />}
             <p className="mt-6 text-xs text-left text-gray-600">
               {translate('label.myAccount.tradeInSectionFeedbackMessage')} <a href="mailto:websitefeedback@parkcameras.com" className="text-sky-600">websitefeedback@parkcameras.com</a>.
               {translate('label.myAccount.queryEmailInstruction')} <a href="mailto:sales@parkcameras.com" className="text-sky-600">sales@parkcameras.com</a>.

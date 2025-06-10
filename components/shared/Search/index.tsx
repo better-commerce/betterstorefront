@@ -105,17 +105,17 @@ export default function Search(props: any) {
             <>
               {products?.map((product: any, idx: number) => {
                 return (
-                  <Link  href={`/${product.slug}`} className={`grid grid-cols-12 border border-gray-200 pc-grid`} key={`search-${idx}`}>
+                  <Link  href={`/${product.slug}`} className={`grid grid-cols-12 border border-gray-200 pc-grid`} key={`search-${idx}`} onClick={() => {
+                    closeWrapper();
+                    if (inputValue) {
+                      const location = window.location
+                      pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
+                    }
+                  }}>
                     <div className='items-center justify-center col-span-4'>
-                      <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden group">
+                      <div className="relative flex-shrink-0 overflow-hidden group">
                         <div className="block">
-                          <div className="flex w-full"
-                            onClick={() => {
-                              if (inputValue) {
-                                const location = window.location
-                                pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
-                              }
-                            }}>
+                          <div className="flex w-full">
                             <img src={generateUri(product?.image, 'h=170&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-top w-auto h-[180px] mx-auto" alt={product?.name} />
                           </div>
                         </div>
