@@ -142,7 +142,7 @@ export default function CustomerForm({
         ? {
           ...initialValues,
           ...b2bRegisterInitialValues,
-          ...{ isRequestTradingAccount: b2bEnabled, email: email },
+          ...{ isRequestTradingAccount: false, email: email },
         }
         : initialValues
       : initialValues
