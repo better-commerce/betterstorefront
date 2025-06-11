@@ -2524,13 +2524,13 @@ button.icon-grp .header-dark{
   background-color: #ffcc02 !important;
 }
 .main-footer-section{
-  background: #212B3B !important;
+  background: #fff !important;
 }
 .main-footer-section a{
-  color: #FFFFFF !important;
+  color: #5A5A5A !important;
 }
 .main-footer-section h2{
-  color: #FFFFFF !important;
+  color: #5A5A5A !important;
 }
 .footer-top-bg-clr.bg-white{
   background: var(--btn-bg-secondary)!important;
@@ -3022,4 +3022,7 @@ color: #fff !important;
 }
 .menu-banner-image img{
   height: 170px !important;
+}
+.border-footer-btn{
+  text-transform: capitalize !important;
 }

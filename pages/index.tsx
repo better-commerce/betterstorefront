@@ -394,7 +394,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
               )} */}
-              <RecentlyViewedProduct isHome={true} deviceInfo={deviceInfo} config={config} productPerRow={4} featureToggle={featureToggle} />
+              <RecentlyViewedProduct isHome={false} deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
               {/* Featured deals section */}
               {pageContents?.featureddeal?.length > 0 && (
                 <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
