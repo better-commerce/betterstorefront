@@ -2367,6 +2367,7 @@ body .pdp-right-section .price{
   color: #000 !important;
   box-shadow: none !important;
   font-size: 16px !important;
+  height: 48px !important;
 }
 .blue-add-btn .add-green-btn .nc-Button svg{
   display: none !important;
@@ -3050,7 +3051,7 @@ color: #fff !important;
   border: 1px solid #d9d9d9 !important;
 }
 .bg-gradient-white-blue {
-  background: linear-gradient(to right, white 60%, #294384 60%);
+  background: linear-gradient(to right, white 60%, #F5f5f5 60%);
 }
 .nomral-text-transform a span{
   text-transform:none !important;
