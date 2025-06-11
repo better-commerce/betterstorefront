@@ -92,7 +92,7 @@ const Prices: FC<PricesProps> = ({
             <div className="flex items-center gap-x-1">
               {/* Discount Percentage */}
               {nonMemberDiscountPercentage > 0 && (
-                  <span className="mr-2 font-32 font-normal text-red-600">
+                  <span className="mr-2 font-normal text-red-600 font-32">
                   -{nonMemberDiscountPercentage < 1 ? nonMemberDiscountPercentage.toFixed(2) : Math.round(nonMemberDiscountPercentage)}%
                 </span>
               )}
@@ -107,7 +107,7 @@ const Prices: FC<PricesProps> = ({
                   return (
                     <span className="relative inline-flex items-start mr-2">
                       <span className="text-sm mr-0.5">{symbol}</span>
-                      <span className="font-32 font-semibold">{main}</span>
+                      <span className="font-semibold font-32">{main}</span>
                       {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
                     </span>
                   );
@@ -123,14 +123,14 @@ const Prices: FC<PricesProps> = ({
                   listPrice?.raw?.withTax > 0 &&
                   listPrice?.raw?.withTax > price?.raw?.withTax && (
                     <span className="px-1 pl-1 text-xs font-normal text-gray-400">
-                      Was: <span className=" line-through">{featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withTax}</span>
+                      Was: <span className="line-through ">{listPrice?.formatted?.withTax}</span>
                     </span>
                   )
                 ) : (
                   listPrice?.raw?.withoutTax > 0 &&
                   listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
                     <span className="px-1 pl-1 text-xs font-normal text-gray-400">
-                      Was: <span className=" line-through">{featureToggle?.features?.enableForPCSite && 'RRP:'}{listPrice?.formatted?.withoutTax}</span>
+                      Was: <span className="line-through ">{listPrice?.formatted?.withoutTax}</span>
                     </span>
                   )
                 )}

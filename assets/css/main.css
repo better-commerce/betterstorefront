@@ -17541,7 +17541,7 @@ body:has(.engage-announcement-bar){
 @media (min-width: 1536px) {
 
   .container-pdp {
-    max-width: 1536px;
+    max-width: 1420px;
     padding-right: 128px;
     padding-left: 128px;
   }
