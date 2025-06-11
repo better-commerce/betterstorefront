@@ -3055,3 +3055,14 @@ color: #fff !important;
 .nomral-text-transform a span{
   text-transform:none !important;
 }
+@media (min-width: 1024px) {
+    .lg\:grid-cols-5 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (min-width: 1820px) {
+    .lg\:grid-cols-5 {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    }
+}
