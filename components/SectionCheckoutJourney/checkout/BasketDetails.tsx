@@ -175,7 +175,7 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
                       <span className='font-semibold text-black'>{userCartItems?.length}{' '}{userCartItems?.length > 1 ? 'items' : 'item'}</span>
                       <i className={`${open ? 'rotate-180 transform' : ''} sprite-icons sprite-dropdown`} />
                     </Disclosure.Button>}
-                    <Disclosure.Panel className="px-0 pt-3 pb-2">
+                    <Disclosure.Panel className="px-0">
                       <div className="w-full max-basket-panel">
                         <SplitDeliveryBasketItems cartItem={userCartItems} cart={basket} config={config} />
                       </div>

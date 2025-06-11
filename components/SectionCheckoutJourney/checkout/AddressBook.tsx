@@ -142,7 +142,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
     <>
       {!shouldHideView ? (
         <>
-          <div className="flex flex-col gap-0 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
+          <div className="flex flex-col gap-0 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50 form-container-bg">
             <div className="flex items-center justify-between w-full">
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">
                 {translate('label.addressBook.addressBookTitleText')}
@@ -393,7 +393,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
           {useSameForBilling && (
             <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
               <button
-                className="mb-4 border border-black btn-full-width btn-primary lg:py-2 py-3 sm:px-4 px-1 btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn"
+                className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn"
                 onClick={handleContinue}
               >
                 {translate('label.checkout.continueToDeliveryText')}
@@ -404,7 +404,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
       ) : (
         <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
           <button
-            className="mb-4 border border-black btn-full-width btn-primary lg:py-2 py-3 sm:px-4 px-1 btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn"
+            className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn"
             onClick={onContinueToSelectDeliveryType}
           >
             {translate('label.checkout.continueToDeliveryText')}

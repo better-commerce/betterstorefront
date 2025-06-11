@@ -1146,7 +1146,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           <Link href="/" title="BetterStore" className="desktop-w-88 logo-link-chk pc-img-filter">
             <Logo />
           </Link>
-          <h1 className="flex items-center justify-center text-lg font-semibold text-bg-white sm:text-2xl mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
+          <h1 className="flex items-center justify-center text-lg font-semibold text-header-white sm:text-2xl mob-font-14 sm:justify-center dark:text-black mob-line-height-1">
             {translate('label.checkout.secureCheckoutText')}{' '}
             <span>
               <i className="ml-4 sprite-icons sprite-secure filter-inver-text"></i>
@@ -1190,7 +1190,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         {isMobile || isIPadorTablet ? (
           <></>
         ) : (
-          <div className="justify-start min-h-screen p-6 bg-gray-100 border-gray-300 park-primary-bg-clr basket-container top-14">
+          <div className="justify-start min-h-screen p-6 bg-gray-100 border-gray-300 basket-container top-14">
             <BasketDetails  {...basketDetailsProps} />
           </div>
         )}

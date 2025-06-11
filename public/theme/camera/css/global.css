@@ -2553,16 +2553,24 @@ button.icon-grp .header-dark{
 .park-seconday-bg-clr{
   background: #2D4D9C !important;
 }
-.inner-card-cart{
-  background: #EAEDF5;
-  padding:10px;
-  border-radius: 5px;
+inner-card-cart{
+  background: transparent;
+  padding:0px;
+  border-radius: 0px;
+}
+.max-basket-panel{
+  max-height: 90dvh !important;
 }
 .text-bg-white{
-  color: #fff !important;
+  color: #294384 !important;
 }
+.text-header-white{
+  color: #FFFFFF !important;
+}
+
 .font-text-normal{
-  font-weight: 400 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
 }
 .no-padding-container{
   padding:0 !important;

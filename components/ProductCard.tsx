@@ -4,7 +4,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { StarIcon } from "@heroicons/react/24/solid";
-import { ArrowsPointingOutIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { ArrowsPointingOutIcon, CheckCircleIcon, ClockIcon } from "@heroicons/react/24/outline";
 import { useUI } from "@components/ui";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { SITE_ORIGIN_URL } from "@components/utils/constants";
@@ -40,6 +40,23 @@ export interface ProductCardProps {
   readonly featureToggle: any;
   readonly defaultDisplayMembership: any;
 }
+const promotionMessages = [
+  'Free software access worth £60',
+  'Peak Design Price Drop',
+  'Free Peak Design Kit worth £28',
+  '3LT Price Drop',
+  'Wandrd Price Drop',
+  'Lens when bought with offer',
+  '50% off Profoto connect with A2',
+  'Exclusive Online Deal',
+  'Vanguard Price Drop',
+  'Save 5% on Sony lens',
+];
+
+function getRandomPromotion() {
+  const index = Math.floor(Math.random() * promotionMessages.length);
+  return promotionMessages[index];
+}
 
 const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, deviceInfo, maxBasketItemsCount, key, featureToggle, defaultDisplayMembership }) => {
   const { recordAnalytics } = useAnalytics()
@@ -52,6 +69,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const [compareAttributes, setCompareAttributes] = useState<any>([])
   const translate = useTranslation()
   const [quantity, setQuantity] = useState(1)
+  const [promotion] = useState(() => getRandomPromotion());
   const handleQuickViewData = (data: any) => {
     //debugger
     const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
@@ -318,6 +336,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         {data?.condition != "pre-launch" && <div className="flex items-center justify-between mt-2 product-card-panel">
           <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>}
+        <p className="border border-[#2D4D9C] px-2 py-1 flex items-center gap-1 text-xs font-semibold text-[#2D4D9C] text-left rounded">
+          <CheckCircleIcon className='inline-block w-4 h-4' />
+          {promotion}</p>
         {featureToggle.features?.enableForPCSite &&
           <>
             <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
@@ -329,7 +350,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         }
         {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && data?.condition != "pre-launch" && (
           <div className='flex justify-between my-3 ml-0 text-left add-btn-plp'>
-            <Button size="small" className={`block cart-btn-plp ${featureToggle?.features?.enableForPCSite ? '!max-w-[80%]' : ''}`} title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+            <Button size="small" className={`block cart-btn-plp ${featureToggle?.features?.enableForPCSite ? '!max-w-[85%]' : ''}`} title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
             {featureToggle?.features?.enableForPCSite && <LikeButton liked={isInWishList} className="justify-end text-right" handleWishList={handleWishList} />}
           </div>
         )}

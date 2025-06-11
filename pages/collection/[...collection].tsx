@@ -697,7 +697,7 @@ function CollectionPage(props: any) {
                 {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
                   <>
                     <div className="col-span-12 bg-transparent fixing-main-section dark:bg-white d--none-amm">
-                      <div className='container !px-0'>
+                      <div className='container !px-4'>
                         <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
                           <li className='flex items-center text-10-mob sm:text-sm'>
                             <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
