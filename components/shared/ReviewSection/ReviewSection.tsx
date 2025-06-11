@@ -24,10 +24,10 @@ const TrustpilotRating = ({
 
       {/* Trust Score */}
       <div className="space-y-1">
-        <div className="text-base font-semibold text-foreground">
+        <div className="text-base font-medium text-foreground">
           TrustScore <span className="font-bold">{score}</span>
         </div>
-        <div className="text-base font-semibold text-foreground">
+        <div className="text-base font-medium text-foreground">
           <span className="font-bold">{reviewCount.toLocaleString()}</span> reviews
         </div>
       </div>

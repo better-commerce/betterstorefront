@@ -9,7 +9,7 @@ export default function SectionHomeProductCardNew({ products, productPerColumn, 
   return (
     <>
       <Swiper
-        slidesPerView={2.2}
+        slidesPerView={1.4}
         spaceBetween={10}
         navigation={true}
         loop={true}

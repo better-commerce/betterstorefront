@@ -8,7 +8,7 @@ export default function LongDescription({ data, heading }: any) {
   const fullHTML = data;
 
   // Decide how many characters to show by default
-  const MAX_CHAR_COUNT = 220;
+  const MAX_CHAR_COUNT = 300;
 
   // Check if the description is longer than our cutoff
   const isOverflow = fullHTML?.length > MAX_CHAR_COUNT;

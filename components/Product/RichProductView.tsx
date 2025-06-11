@@ -2,7 +2,7 @@ import Link from "next/link";
 import ReviewBadge from "./ReviewBadge";
 import PricesWithDiscount from '@components/PricesWithDiscount'
 import ParkPoint from '@components/ParkPoint'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 import StockCheckModal from "@components/StoreLocator/StockCheckModal/StockCheckModal";
 import LongDescription from "./LongDescription";
@@ -17,9 +17,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import { HeartIcon } from "@heroicons/react/24/outline";
 import KitPrice from "@components/KitPrice";
+import { CURRENT_THEME } from "@components/utils/constants";
+import { useState } from "react";
 const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCard'))
-export default function RichProductView({ product, selectedOption, isGuestUser, handleWishList, isInWishList, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
+const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
+export default function RichProductView({ product, selectedOption, isGuestUser, handleWishList, isInWishList,promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
   const translate = useTranslation()
+    const [showFallback, setShowFallback] = useState(false);
   return (
     <div className='flex gap-6 flex-mob-col'>
       <div className='w-full lg:w-[60%]'>
@@ -66,6 +70,39 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                 </div>
               </div>
             )}
+                         <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
+                    <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
+                      <div className="bg-gray-100 rounded-full">
+                        {!showFallback ? (
+                            <img
+                              src={`/theme/${CURRENT_THEME}/image/cashback-icon.svg`}
+                              alt="card icon"
+                              className="h-[18px]"
+                              onError={() => setShowFallback(true)}
+                            />
+                          ) : (
+                            <CreditCardIcon className="w-4 h-4 text-black" />
+                          )}
+                      </div>
+                      <h2 className="text-sm font-semibold text-gray-800">{product?.brand} Cashback</h2>
+                    </div>
+
+                    <div className="px-3 py-2 pb-4 mt-2 space-y-1 ">
+                      <div className="flex items-baseline">
+                        <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
+                        <span className="ml-2 text-sm font-bold text-red-700">£1,749.00</span>
+                      </div>
+
+                      <p className="text-sm font-medium text-gray-800">after £400 cashback</p>
+
+                      <div className="pt-2 mt-8">
+                        <p className="text-sm text-gray-800">
+                          Cashback applies if product ordered within the offer period, even if out of stock.{" "}
+                          <a href="#" className="text-blue-600 hover:underline link-clr">How to redeem?</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div> 
             {selectedOption === "new" && product?.condition != 'pre-launch' && (  
              <>
              <div className="flex my-3 gap-x-2 items-center w-full">
@@ -105,30 +142,11 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
             )}
             </>
             )}
-            {/* <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
-                    <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
-                      <div className="bg-gray-100 rounded-full">
-                        <CreditCardIcon className="w-4 h-4 text-black" />
-                      </div>
-                      <h2 className="text-sm font-semibold text-gray-800">{product?.brand} Cashback</h2>
-                    </div>
-
-                    <div className="px-3 py-2 pb-4 mt-2 space-y-1 ">
-                      <div className="flex items-baseline">
-                        <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
-                        <span className="ml-2 text-sm font-bold text-red-700">£1,749.00</span>
-                      </div>
-
-                      <p className="text-sm font-medium text-gray-800">after £400 cashback</p>
-
-                      <div className="pt-2 mt-8">
-                        <p className="text-sm text-gray-800">
-                          Cashback applies if product ordered within the offer period, even if out of stock.{" "}
-                          <a href="#" className="text-blue-600 hover:underline link-clr">How to redeem?</a>
-                        </p>
-                      </div>
-                    </div>
-                  </div> */}
+              {/* {promotions?.promotions?.availablePromotions?.length > 0 && (
+                <div className="flex">
+                <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
+                </div>
+              )} */}
           </div>
           {attrGroup['product.relatedproducts']?.length > 0 &&
             <div className='flex w-full'>
@@ -162,7 +180,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
           }
           {weloveAttribute && (
             <div className="w-full make-section ul-li-html bg-[#EAEDF5] p-2 rounded-md">
-              <h4 className="txt-black font-semibold text-sm mb-2">What Makes it Great</h4>
+              <h4 className="txt-black font-semibold text-sm mb-2">We Love</h4>
                 <LongDescription data={weloveAttribute?.value} heading="" />
             </div>
           )}
@@ -270,7 +288,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         </div>
                       </div> */}
                     {product?.condition != 'pre-launch' && <div className='w-full'>
-                      <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                      <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
                         {isInWishList(selectedAttrData?.productId) ? (
                           <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
                         ) : (

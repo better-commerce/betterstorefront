@@ -38,7 +38,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
   const [referralObj, setReferralObj] = useState({ id: '', userId: '', name: '', slug: '', invitesSent: 0, clickOnInvites: 0, successfulInvites: 0, })
   const [referralOffers, setReferralOffers] = useState<any>(null)
   const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
-
+  const { isMobile } = deviceInfo || { isMobile: false };
   const recentlyViewedProds = () => {
     let prodStockCodes: any = []
     try {
@@ -132,7 +132,8 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
         </div>
         <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
           {isLoading ? (<LoadingDots />) : (
-            <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 16 }, 1024: { slidesPerView: productPerRow, spaceBetween: 16 }, }} className="mySwiper" >
+            <Swiper 
+            slidesPerView={1.4} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 10 }, 1024: { slidesPerView: productPerRow, spaceBetween: 20 }, }}  className={`mySwiper ${isMobile ? 'mob-navigation-hide' : ''}`}>
               {recentlyViewedProducts?.map((product: any, pid: number) => {
                 return (
                   <SwiperSlide key={pid} className="height-equal">
