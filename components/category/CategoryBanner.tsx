@@ -8,18 +8,18 @@ export default function CategoryBanner({ data, props, deviceInfo }: any) {
   const translate = useTranslation()
   return (
     <>
-      <section className="relative w-full grid col-span-12">
+      <section className="relative grid w-full col-span-12 mt-4">
         {props?.image &&(
           <>
             <div className="relative">
-              <img src={props?.image} alt="banner" className="object-cover object-center w-full h-auto sm:h-[400px] sm:max-h-[400px] cursor-pointer" />
+              <img src={props?.image} alt="banner" className="object-cover object-center w-full h-auto sm:h-[480px] sm:max-h-[480px] cursor-pointer" />
                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
             </div>
           </>
          )}
       </section>
-     <section className="pt-4 grid col-span-12 bg-white">
-      <div className="container !px-2 mx-auto space-y-4">
+     <section className="grid col-span-12 pt-4 mt-4 bg-white">
+      <div className="container !px-0 mx-auto space-y-4">
       <h1 className={`block title-page mb-2 font-bold dark:text-black primary-text-blue`}>
         {props?.name}
        </h1>

@@ -56,7 +56,7 @@ function Grid({ products, currentPage, handlePageChange = () => { }, handleInfin
       products.results.length < 4
         ? 'lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4'
         : featureToggle?.features?.enableHorizontalFilter
-          ? 'lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4'
+          ? 'lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5'
           : featureToggle?.features?.enableForPCSite
             ? 'lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-5'
             : 'lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3'

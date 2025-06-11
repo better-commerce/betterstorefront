@@ -52,71 +52,71 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
             <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
               {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                 <>
-                {!featureToggle.features?.enableForPCSite &&  <>
-                  {isMobile ? (
-                    <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                  ) : (
-                    !featureToggle?.features?.enableHorizontalFilter ? (
-                      <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                  {!featureToggle.features?.enableForPCSite && <>
+                    {isMobile ? (
+                      <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                     ) : (
-                      <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                    )
-                  )}
-                </>}
+                      !featureToggle?.features?.enableHorizontalFilter ? (
+                        <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                      ) : (
+                        <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                      )
+                    )}
+                  </>}
                   <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                     {featureToggle.features?.enableForPCSite &&
                       <>
                         {shopAll ? (
-                              <div className="mt-2 bg-transparent dark:bg-white">
-                                <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
-                                  <li className='flex items-center text-10-mob sm:text-sm'>
-                                    <Link href="/category" passHref>
-                                      <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Category</span>
-                                    </Link>
-                                  </li>
-                                  <li className='flex items-center text-10-mob sm:text-sm'>
-                                    <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-                                      <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-                                    </span>
-                                  </li>
-                                  <li className='flex items-center text-10-mob sm:text-sm'>
-                                    <Link href={`/${category?.link}`} passHref>
-                                      <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {category?.name}</span>
-                                    </Link>
-                                  </li>
-                                  <li className='flex items-center text-10-mob sm:text-sm'>
-                                    <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-                                      <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-                                    </span>
-                                  </li>
-                                  <li className='flex items-center text-10-mob sm:text-sm'>
-                                    <Link href="#" passHref>
-                                      <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {category?.name}</span>
-                                    </Link>
-                                  </li>
-                                </ol>
-                              </div>
-                            ) : (category?.breadCrumbs && (<BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />))}
-                          <CategoryBanner props={category} deviceInfo={deviceInfo}/>
-                          <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
+                          <div className="mt-2 bg-transparent dark:bg-white">
+                            <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <Link href="/category" passHref>
+                                  <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Category</span>
+                                </Link>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                                  <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                </span>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <Link href={`/${category?.link}`} passHref>
+                                  <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {category?.name}</span>
+                                </Link>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                                  <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                </span>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <Link href="#" passHref>
+                                  <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {category?.name}</span>
+                                </Link>
+                              </li>
+                            </ol>
+                          </div>
+                        ) : (category?.breadCrumbs && (<BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />))}
+                        <CategoryBanner props={category} deviceInfo={deviceInfo} />
+                        <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
                           {isMobile ? (
-                                <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                              ) : (
-                                !featureToggle?.features?.enableHorizontalFilter ? (
-                                  <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                                ) : (
-                                  <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                                )
-                            )}
-                          </div>
-                          <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
-                            <div className='flex items-center justify-between w-full gap-0'>
-                              <div className='flex justify-start gap-3'>
-                                <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${category?.name}`}</span>
-                              </div>
-                              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                          ) : (
+                            !featureToggle?.features?.enableHorizontalFilter ? (
+                              <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                            ) : (
+                              <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                            )
+                          )}
+                        </div>
+                        <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                          <div className='flex items-center justify-between w-full gap-0'>
+                            <div className='flex justify-start gap-3'>
+                              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${category?.name}`}</span>
                             </div>
+                            <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                           </div>
+                        </div>
                       </>
                     }
                     {isMobile ? null : (

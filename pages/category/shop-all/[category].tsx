@@ -552,7 +552,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
       <section className="main-section fixing-main-section dark:bg-white">
         {!featureToggle.features?.enableForPCSite &&
           <>
-            <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
+            <div className="container mx-auto my-2 bg-transparent dark:bg-white">
               <div className="mt-2 bg-transparent dark:bg-white">
                 <ol role="list" className="flex items-center space-x-0 truncate sm:mb-4 sm:space-x-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
                   <li className='flex items-center text-10-mob sm:text-sm'>

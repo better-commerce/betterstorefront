@@ -122,7 +122,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
 
   return (
     recentlyViewedProducts?.length > 0 && (
-      <div className={`flex flex-col w-full container-ffx pt-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-5'}`}>
+      <div className={`flex flex-col w-full container-ffx pt-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-0'}`}>
         <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
           {featureToggle?.features?.enableForPCSite ? (
             <h2 className="mb-6 font-semibold text-black title-page">Customers who viewed items in your browsing history also viewed</h2>
@@ -132,7 +132,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
         </div>
         <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
           {isLoading ? (<LoadingDots />) : (
-            <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 10 }, 1024: { slidesPerView: productPerRow, spaceBetween: 10 }, }} className="mySwiper" >
+            <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 16 }, 1024: { slidesPerView: productPerRow, spaceBetween: 16 }, }} className="mySwiper" >
               {recentlyViewedProducts?.map((product: any, pid: number) => {
                 return (
                   <SwiperSlide key={pid} className="height-equal">

@@ -15,15 +15,15 @@ export default function ReviewBadge({ reviewCountdata, ratingdata }: ReviewBadge
       <div className="flex items-center space-x-4">
         {/* Rating + stars */}
         <div className="flex items-center">
-          <span className="text-x-small font-semibold text-gray-900 plp-hidden pr-1">
+          <span className="pr-1 font-semibold text-gray-900 text-x-small plp-hidden">
             {ratingdata?.toFixed(1)}
           </span>
           <div className="flex text-color-primary-blue">
             {[...Array(starCount)].map((_, i) => (
               i < Math.floor(ratingdata) ? (
-                <SolidStarIcon key={i} className="h-4 w-4 text-color-primary-blue" />
+                <SolidStarIcon key={i} className="w-4 h-4 text-color-primary-blue" />
               ) : (
-                <OutlineStarIcon key={i} className="h-4 w-4 text-color-primary-blue" />
+                <OutlineStarIcon key={i} className="w-4 h-4 text-color-primary-blue" />
               )
             ))}
           </div>
@@ -31,18 +31,18 @@ export default function ReviewBadge({ reviewCountdata, ratingdata }: ReviewBadge
 
         {/* Reviews */}
         {reviewCountdata > 0 ? (
-            <span className="text-x-small text-gray-600 underline no-plp-underline">
+            <span className="text-gray-600 text-x-small no-plp-underline">
               <a href="#bottomtabs">
                 {reviewCountdata} <span className="plp-hidden">reviews</span>
               </a>
             </span>
           ) : (
-            <span className="text-x-small text-gray-600 underline no-plp-underlinee">
+            <span className="text-gray-600 text-x-small no-plp-underline">
               {reviewCountdata} <span className="plp-hidden">reviews</span>
             </span>
           )}
         {/* Answers */}
-        <span className="text-x-small text-gray-600 underline plp-hidden">{answers} answers</span>
+        <span className="text-gray-600 text-x-small plp-hidden">{answers} answers</span>
       </div>
       {/* Deal badge */}
     </>

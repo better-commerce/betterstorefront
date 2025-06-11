@@ -6,9 +6,9 @@ export default function CategoryBanner({ data }: any) {
   return (
     <>
       <section className="relative">
-        <div className="relative h-64 md:h-96">
+        <div className="relative h-[320px] md:h-[480px]">
           {/* Background Image */}
-          <img src={data?.additionalInfo3} alt="Banner Image" className="absolute inset-0 object-cover w-full h-full" />
+          <img src={data?.additionalInfo3} alt="Banner Image" className="absolute inset-0 object-cover sm:h-[480px] sm:max-h-[480px] w-full h-full" />
           {/* Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
           {/* Top Content */}
@@ -24,8 +24,8 @@ export default function CategoryBanner({ data }: any) {
           </div>
         </div>
       </section>
-      <section className="pt-6 bg-white">
-        <div className="container px-4 mx-auto">
+      <section className="pt-2 bg-white">
+        <div className="container !px-4 mx-auto">
           {/* <div className="relative z-10 p-6 mx-auto -mt-20 bg-white shadow-md md:w-3/4 lg:w-2/3">
             <h2 className="mb-4 text-2xl font-bold text-gray-800">Choosing a Landscape Camera & Lens on a Budget</h2>
             <p className="mb-4 text-sm text-gray-600">

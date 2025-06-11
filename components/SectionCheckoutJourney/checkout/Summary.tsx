@@ -10,9 +10,7 @@ const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBaske
   return (
     <>
       <div className="w-full px-4 sm:px-0">
-        <div className="mt-4">
-          <PromotionInput deviceInfo={deviceInfo} basketPromos={basketPromos} items={basket} getBasketPromoses={getBasketPromos} setBasket={setBasket} membership={membership} />
-        </div>
+        <PromotionInput deviceInfo={deviceInfo} basketPromos={basketPromos} items={basket} getBasketPromoses={getBasketPromos} setBasket={setBasket} membership={membership} />
         <dl className="space-y-2 sm:space-y-2">
           <div
             className={

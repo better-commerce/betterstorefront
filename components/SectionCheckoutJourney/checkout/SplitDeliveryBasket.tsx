@@ -319,15 +319,15 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
             }
             return (
               <>
-                <div key={product?.id} className={`w-full px-2 py-2 mb-2 border rounded items-list ${product?.price?.raw?.withTax > 0 ? 'bg-white' : 'bg-emerald-50 border-emerald-400'}`}>
+                <div key={product?.id} className={`w-full px-2 py-2 mb-1 border rounded items-list ${product?.price?.raw?.withTax > 0 ? 'bg-white' : 'bg-emerald-50 border-emerald-400'}`}>
                   <div className='grid grid-cols-12 gap-2'>
                     <div className='col-span-3 img-container'>
                       <img width={120} height={150} src={`${product?.image}` || IMG_PLACEHOLDER} alt={product?.name} className="object-cover object-center w-32 image" />
                     </div>
                     <div className='col-span-9'>
-                      <h6 className={`font-light text-black ${CURRENT_THEME === 'camera' ? 'font-semibold' : ''}`}>{productNameWithVoltageAttr}</h6>
+                      <h6 className={`font-light text-black ${CURRENT_THEME === 'camera' ? 'font-semibold text-xs' : ''}`}>{productNameWithVoltageAttr}</h6>
                       {CURRENT_THEME === 'camera' && (
-                        <div className='justify-end'><span className='flex flex-col font-normal text-xs mt-1 text-black'>Quantity: {product?.qty}</span></div>
+                        <div className='justify-end'><span className='flex flex-col mt-1 text-xs font-normal text-black'>Quantity: {product?.qty}</span></div>
                         )}
                       <div className="flex items-center justify-between w-full my-2 gap-y-3">
                         <div className='justify-start text-left'>
@@ -355,7 +355,7 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
                          )}
                       </div>
                       {featureToggle?.features?.enableCutBelt &&
-                        <div className='text-left py-3'>
+                        <div className='py-3 text-left'>
                           <CutBelt size={Number(product?.size) || 5} productId={product?.productId} />
                         </div>
                       }  
@@ -405,7 +405,7 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
                     }
                     return (
                       <>
-                        <div key={product?.id} className={`w-full px-2 py-2 mb-2 border rounded items-list ${product?.price?.raw?.withTax > 0 ? 'bg-white' : 'bg-emerald-50 border-emerald-400'}`}>
+                        <div key={product?.id} className={`w-full px-2 py-2 mb-1 border rounded items-list ${product?.price?.raw?.withTax > 0 ? 'bg-white' : 'bg-emerald-50 border-emerald-400'}`}>
                           <div className='grid grid-cols-12 gap-2'>
                             <div className='col-span-2 img-container'>
                               <img width={120} height={150} src={`${product?.image}` || IMG_PLACEHOLDER} alt={product?.name} className="object-cover object-center w-32 image" />
@@ -413,7 +413,7 @@ const SplitDeliveryBasketItems = ({ cartItem, cart, config }: any) => {
                             <div className='col-span-10'>
                               <h6 className={`font-light text-black ${CURRENT_THEME === 'camera' ? 'font-semibold' : ''}`}>{productNameWithVoltageAttr}</h6>
                               {CURRENT_THEME === 'camera' && (
-                                <div className='justify-end'><span className='flex flex-col font-normal text-xs mt-1 text-black'>Qunatity: {product?.qty}</span></div>
+                                <div className='justify-end'><span className='flex flex-col mt-1 text-xs font-normal text-black'>Qunatity: {product?.qty}</span></div>
                               )}
                               <div className="flex items-center justify-between w-full my-2 gap-y-3">
                                 <div className='justify-start text-left'>

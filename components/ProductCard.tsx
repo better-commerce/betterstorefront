@@ -263,7 +263,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
   const CLASSES = "absolute top-3 start-3";
   return (
     <>
-      <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-gray-200 p-2 rounded relative z-9' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-6 ${product?.compared ? featureToggle?.features?.enableForPCSite ? '!border-2 !border-[#2D4D9C]' : '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
+      <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-[#D9D9D9] p-2 rounded relative z-9' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative flex flex-col sm:group bg-transparent mb-2 ${product?.compared ? featureToggle?.features?.enableForPCSite ? '!border-2 !border-[#2D4D9C]' : '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
         <div className={`${featureToggle?.features?.enableForPCSite ? '' : 'bg-slate-50 dark:bg-slate-300 rounded-3xl'} relative flex-shrink-0 overflow-hidden z-1 group rounded-green product-card__image-container`}>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="relative flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
@@ -286,7 +286,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         </div>
 
         <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
-          <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-5 pb-2.5 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
+          <div className={`${featureToggle?.features?.enableForPCSite ? 'px-0 pt-3 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
             <div className='mt-4'>
               <h2 className="text-base text-left product-card-title font-semibold transition-colors dark:text-black min-h-[60px] nc-ProductCard__title product-card__brand">{data?.name}</h2>
               {data?.condition === "pre-launch" && <div dangerouslySetInnerHTML={{ __html: data?.description }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description clamp-4-lines" />}
@@ -318,19 +318,19 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         {data?.condition != "pre-launch" && <div className="flex items-center justify-between mt-2 product-card-panel">
           <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>}
-        {/* {featureToggle.features?.enableForPCSite &&
+        {featureToggle.features?.enableForPCSite &&
           <>
-            <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
-              <span className='px-1 py-0.5 rounded text-xs text-white bg-[#009951]'>Save {data?.price?.currencySymbol}2.35</span> with voucher
-            </div>
-            <div className='flex items-center justify-start gap-1 mt-2 text-xs font-normal text-gray-600'>
-              <span className='px-1 py-0.5 rounded text-xs text-gray-700'>FREE Next day delivery</span>
+            <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
+              {data?.currentStock > 0 ? <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>In stock</span> :
+                <span className='px-1 py-0.5 rounded text-xs text-[#E5A000]'>Awaiting stock</span>
+              }
             </div>
           </>
-        } */}
+        }
         {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && data?.condition != "pre-launch" && (
-          <div className='justify-start my-3 ml-0 text-left add-btn-plp'>
-            <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+          <div className='flex justify-between my-3 ml-0 text-left add-btn-plp'>
+            <Button size="small" className={`block cart-btn-plp ${featureToggle?.features?.enableForPCSite ? '!max-w-[80%]' : ''}`} title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+            {featureToggle?.features?.enableForPCSite && <LikeButton liked={isInWishList} className="justify-end text-right" handleWishList={handleWishList} />}
           </div>
         )}
         {data?.condition === "pre-launch" &&

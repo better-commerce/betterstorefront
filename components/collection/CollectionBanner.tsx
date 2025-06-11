@@ -12,25 +12,14 @@ export default function CollectionBanner({ data, props, deviceInfo }: any) {
   const translate = useTranslation()
   return (
     <>
-      <section className="relative w-full grid col-span-12">
-        <> 
-        {props?.images?.length > 1 ? (
-         <Swiper
-              navigation={true}
-              loop={true}
-              className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0"
-            >
+      <section className="relative grid w-full col-span-12 mt-1 mb-4">
+        <>
+          {props?.images?.length > 1 ? (
+            <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0" >
               {props?.images?.map((img: any, idx: number) => (
                 <SwiperSlide key={`horizontal-slider-${idx}`} className='relative'>
                   <Link href={sanitizeRelativeUrl(img?.link || '')}>
-                    <img
-                      width={1920}
-                      height={500}
-                      src={generateUri(img?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
-                      alt={props?.name || 'Collection Banner'}
-                      className="object-cover object-center w-full h-[400px] max-h-[400px] cursor-pointer"
-                      loading={idx < 2 ? "eager" : "lazy"}
-                    />
+                    <img width={1920} height={500} src={generateUri(img?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} alt={props?.name || 'Collection Banner'} className="object-cover object-center w-full h-[480px] max-h-[480px] cursor-pointer" loading={idx < 2 ? "eager" : "lazy"} />
                   </Link>
                   <div className="absolute inset-0 bg-black bg-opacity-40"></div>
                 </SwiperSlide>
@@ -38,39 +27,34 @@ export default function CollectionBanner({ data, props, deviceInfo }: any) {
             </Swiper>
           ) : null}
         </>
-        {props?.images?.length === 1 &&(
+        {props?.images?.length === 1 && (
           <>
-          {props?.images?.map((img: { mobileUrl?: string; url: string; link?: string }, idx: number) => {
-            const imgUrl = (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url;
+            {props?.images?.map((img: { mobileUrl?: string; url: string; link?: string }, idx: number) => {
+              const imgUrl = (isOnlyMobile ? img?.mobileUrl : img?.url) || img?.url;
               return (
-                  <div className="relative" key={`banner-image-${idx}`}>
-                      <Link legacyBehavior href={sanitizeRelativeUrl(img.link || '')}>
-                          <a>
-                              <img
-                                  src={imgUrl}
-                                  alt="banner"
-                                  loading={idx < 2 ? "eager" : "lazy"}
-                             className="object-cover object-center w-full h-auto sm:h-[400px] sm:max-h-[400px] cursor-pointer"
-                              />
-                          </a>
-                      </Link>
-                      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-                  </div>
+                <div className="relative" key={`banner-image-${idx}`}>
+                  <Link legacyBehavior href={sanitizeRelativeUrl(img.link || '')}>
+                    <a>
+                      <img src={imgUrl} alt="banner" loading={idx < 2 ? "eager" : "lazy"} className="object-cover object-center w-full h-auto sm:h-[480px] sm:max-h-[480px] cursor-pointer" />
+                    </a>
+                  </Link>
+                  <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+                </div>
               );
-          })}
+            })}
           </>
-         )}
+        )}
       </section>
-     <section className="pt-4 grid col-span-12 bg-white">
-      <div className="container mx-auto space-y-4">
-      <h1 className={`block title-page font-bold dark:text-black primary-text-blue`}>
-        {props?.name}
-       </h1>
-        {props?.customInfo1 &&
-           <div className='flex w-full'>
+      <section className="grid col-span-12 pt-4 bg-white">
+        <div className="container mx-auto space-y-4">
+          <h1 className={`block title-page font-bold dark:text-black primary-text-blue !mb-4`}>
+            {props?.name}
+          </h1>
+          {props?.customInfo1 &&
+            <div className='flex w-full'>
               <div className="block text-sm font-normal text-gray-800 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
             </div>
-           }                 
+          }
         </div>
       </section>
     </>

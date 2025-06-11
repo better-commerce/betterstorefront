@@ -26,7 +26,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
     const discountedPrice = (price?.raw?.withoutTax * ((100.0 - discountPerc) * 1.0 / 100.0))
     return `${price?.currencySymbol}${roundToDecimalPlaces(discountedPrice)}`
   }, [price?.raw?.withoutTax])
-
+  const saving = isIncludeVAT ? listPrice?.raw?.withTax - price?.raw?.withTax : listPrice?.raw?.withoutTax - price?.raw?.withoutTax
   return (
     <>
       <div className={`${className}`}>
@@ -46,7 +46,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
         {featureToggle?.features?.enableForPCSite ? (
           <>
             {price?.raw?.withTax != 0 ? (
-              <div className="flex items-end text-sm font-semibold text-gray-400 price">
+              <div className="flex flex-col items-start justify-start text-sm font-semibold text-gray-400 price">
                 <span className="flex items-end">
                   {(() => {
                     const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;
@@ -55,6 +55,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
                     const symbol = match?.[1] || '';
                     const main = match?.[2] || ''; // keep commas here
                     const decimal = match?.[3]?.replace('.', '') || '';
+
 
                     return (
                       <span className="relative inline-flex items-start mr-2">
@@ -67,15 +68,16 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
                   {isIncludeVAT ? (
                     listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax &&
                     (
-                      <span className="pl-3 pr-1 font-normal text-gray-400 line-through text-x-small">RRP:{listPrice?.formatted?.withTax} </span>
+                      <span className="pl-3 pr-1 font-normal text-gray-400 text-x-small">Was:{listPrice?.formatted?.withTax} </span>
                     )
                   ) : (
                     listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax &&
                     (
-                      <span className="pl-3 pr-1 font-normal text-gray-400 line-through text-x-small">RRP:{listPrice?.formatted?.withoutTax} </span>
+                      <span className="pl-3 pr-1 font-normal text-gray-400 text-x-small">Was:{listPrice?.formatted?.withoutTax} </span>
                     )
                   )}
                 </span>
+                {saving > 0 && <span className="px-2 py-0.5 text-xs font-semibold text-white bg-[#009951]">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
                 <span className="text-xs font-normal text-gray-400"> {featureToggle?.features?.enableMembership && `${translate('label.membership.nonMemberPriceText')}`} </span>
                 {!featureToggle?.features?.enableForPCSite && <span className="pl-2 font-light text-right text-gray-400 ex-vat-text font-10"> {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')} </span>}
               </div>

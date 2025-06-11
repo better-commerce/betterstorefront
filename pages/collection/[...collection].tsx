@@ -485,7 +485,7 @@ function CollectionPage(props: any) {
   const cleanPath = removeQueryString(router.asPath)
   // Memoize featured products
   const topFeaturedProduct = useMemo(() => {
-    return productDataToPass?.results?.filter((p: any) => [1, 2, 3].includes(p.displayOrder))
+    return productDataToPass?.results?.filter((p: any) => [1, 2, 3, 4, 5, 6].includes(p.displayOrder))
   }, [productDataToPass?.results])
   // Memoize the featured product renderer for better performance
   const renderFeaturedProduct = useCallback(() => {
@@ -494,35 +494,37 @@ function CollectionPage(props: any) {
         {topFeaturedProduct?.length > 0 &&
           <div className='flex flex-col w-full gap-4 p-2 mt-4 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
             <div className='flex flex-col justify-end w-full text-right'>
-              <h4 className='text-xs font-normal primary-text-blue'>Featured Products</h4>
+              <h4 className='text-xs font-normal primary-text-blue'>Featured {props?.name}</h4>
             </div>
-            <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 p-2'>
+            <Swiper slidesPerView={3.1} spaceBetween={4} navigation={true} loop={true} className="flex items-start justify-start w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
               {topFeaturedProduct?.map((product: any, pIdx: number) => (
-                <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
-                  <div className='col-span-4'>
-                    <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
-                      <img
-                        src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
-                        className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`}
-                        alt={product?.name}
-                        width={400}
-                        height={400}
-                        loading="lazy"
-                      />
-                    </Link>
-                  </div>
-                  <div className='flex flex-col col-span-8 gap-3'>
-                    <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
-                      <h4 className='text-sm font-normal text-black hover:underline hover:primary-text-blue'>{product?.name}</h4>
-                    </Link>
-                    <div className='flex items-center justify-start gap-1 text-xs'>
-                      <span className='text-lg font-semibold text-black'>{product?.price?.formatted?.withTax}</span>
-                      <span className='text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
+                <SwiperSlide key={`horizontal-slider-${pIdx}`}>
+                  <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
+                    <div className='col-span-4'>
+                      <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
+                        <img
+                          src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
+                          className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`}
+                          alt={product?.name}
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                        />
+                      </Link>
+                    </div>
+                    <div className='flex flex-col col-span-8 gap-3'>
+                      <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
+                        <h4 className='text-sm font-normal text-left text-black hover:underline hover:primary-text-blue'>{product?.name}</h4>
+                      </Link>
+                      <div className='flex items-center justify-start gap-1 text-xs'>
+                        <span className='text-lg font-semibold text-black'>{product?.price?.formatted?.withTax}</span>
+                        <span className='text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </SwiperSlide>
               ))}
-            </div>
+            </Swiper>
           </div>
         }
       </>
@@ -582,7 +584,7 @@ function CollectionPage(props: any) {
                                   alt="Collection Banner"
                                   className="object-contain"
                                   width={1600}
-                                  height={500}                                  
+                                  height={500}
                                   loading={idx < 2 ? "eager" : "lazy"}
                                   onLoad={({ target }) => {
                                     const { naturalWidth, naturalHeight } = target as HTMLImageElement;
@@ -639,26 +641,26 @@ function CollectionPage(props: any) {
             </div>
           </>
         )}
-       {(props?.customInfo3?.toLowerCase() === 'horizontal' && props?.images?.length > 0) && (
-        <div className={`${CURRENT_THEME === 'ammega' ? 'container' : 'w-full'}`}>
-          <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
-            {props?.images?.map((img: any, idx: number) => (
-              <SwiperSlide key={`horizontal-slider-${idx}`}>
-                <Link href={img.link || '#'}>
-                  <img
-                    style={css}
-                    width={1920}
-                    height={500}
-                    src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
-                    alt={props?.name || 'Collection Banner'}
-                    className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer"
-                    loading={idx < 2 ? "eager" : "lazy"}
-                  />
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        {(props?.customInfo3?.toLowerCase() === 'horizontal' && props?.images?.length > 0) && (
+          <div className={`${CURRENT_THEME === 'ammega' ? 'container' : 'w-full'}`}>
+            <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
+              {props?.images?.map((img: any, idx: number) => (
+                <SwiperSlide key={`horizontal-slider-${idx}`}>
+                  <Link href={img.link || '#'}>
+                    <img
+                      style={css}
+                      width={1920}
+                      height={500}
+                      src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
+                      alt={props?.name || 'Collection Banner'}
+                      className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer"
+                      loading={idx < 2 ? "eager" : "lazy"}
+                    />
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         )}
       </div>
       <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 collection-full-container' : ' pt-5 header-space'} container mx-auto bg-transparent sm:pb-24 dark:bg-white`}>
@@ -666,7 +668,7 @@ function CollectionPage(props: any) {
           <>
             {props?.breadCrumbs && (
               <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
-            )} 
+            )}
             <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
               <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
                 {props?.name?.toLowerCase()}
@@ -694,73 +696,73 @@ function CollectionPage(props: any) {
               <>
                 {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
                   <>
-                  <div className="bg-transparent col-span-12 fixing-main-section dark:bg-white d--none-amm">
-                    <div className='container !px-0'>
-                      <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
-                            <li className='flex items-center text-10-mob sm:text-sm'>
-                              <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
-                                  <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
-                              </Link>
-                            </li>
-                            <li className='flex items-center text-10-mob sm:text-sm'>
-                                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
-                                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-                                </span>
-                            </li>
-                            <li className='flex items-center text-10-mob sm:text-sm'>
-                              <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
-                            </li>
+                    <div className="col-span-12 bg-transparent fixing-main-section dark:bg-white d--none-amm">
+                      <div className='container !px-0'>
+                        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                          <li className='flex items-center text-10-mob sm:text-sm'>
+                            <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+                            </Link>
+                          </li>
+                          <li className='flex items-center text-10-mob sm:text-sm'>
+                            <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                              <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                            </span>
+                          </li>
+                          <li className='flex items-center text-10-mob sm:text-sm'>
+                            <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+                          </li>
                         </ol>
+                      </div>
                     </div>
-                  </div>
-                  {featureToggle.features?.enableForPCSite &&
-                    <>
-                    <CollectionBanner props={props} deviceInfo={deviceInfo} />
-                    </>
-                  }
+                    {featureToggle.features?.enableForPCSite &&
+                      <>
+                        <CollectionBanner props={props} deviceInfo={deviceInfo} />
+                      </>
+                    }
                     <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'} ${featureToggle?.features?.enableForPCSite ? 'container' : ''}`}>
-                     {featureToggle.features?.enableForPCSite ? (
-                         <>
+                      {featureToggle.features?.enableForPCSite ? (
+                        <>
                           {renderFeaturedProduct()}
-                            <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                          <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
                             {isMobile ? (
-                                <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                              ) : (
-                                <>
-                                  {!featureToggle?.features?.enableHorizontalFilter ? (
-                                    <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                                  ) : (
-                                    <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                                  )}
-                                </>
-                              )}
+                              <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            ) : (
+                              <>
+                                {!featureToggle?.features?.enableHorizontalFilter ? (
+                                  <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                ) : (
+                                  <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                )}
+                              </>
+                            )}
                           </div>
-                            <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
-                              <div className='flex items-center justify-between w-full gap-0'>
-                                <div className='flex justify-start gap-3'>
-                                  <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
-                                </div>
-                                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                          <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className='flex items-center justify-between w-full gap-0'>
+                              <div className='flex justify-start gap-3'>
+                                <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
                               </div>
+                              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             </div>
-                         </>
-                        ) : (
-                          <>
-                            <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
-                            {isMobile ? (
-                                <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                              ) : (
-                                <>
-                                  {!featureToggle?.features?.enableHorizontalFilter ? (
-                                    <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                                  ) : (
-                                    <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                                  )}
-                                </>
-                              )}
                           </div>
-                          </>
-                        )}
+                        </>
+                      ) : (
+                        <>
+                          <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                            {isMobile ? (
+                              <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            ) : (
+                              <>
+                                {!featureToggle?.features?.enableHorizontalFilter ? (
+                                  <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                ) : (
+                                  <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                )}
+                              </>
+                            )}
+                          </div>
+                        </>
+                      )}
                       {isMobile ? null : (
                         !featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                       )}
@@ -776,25 +778,25 @@ function CollectionPage(props: any) {
                   <div className="col-span-12">
                     {featureToggle.features?.enableForPCSite &&
                       <>
-                         <div className="bg-transparent col-span-12 fixing-main-section dark:bg-white">
-                            <div className='container'>
-                              <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
-                                    <li className='flex items-center text-10-mob sm:text-sm'>
-                                      <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
-                                          <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
-                                      </Link>
-                                    </li>
-                                    <li className='flex items-center text-10-mob sm:text-sm'>
-                                        <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
-                                        <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-                                        </span>
-                                    </li>
-                                    <li className='flex items-center text-10-mob sm:text-sm'>
-                                      <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
-                                    </li>
-                                </ol>
-                            </div>
+                        <div className="col-span-12 bg-transparent fixing-main-section dark:bg-white">
+                          <div className='container'>
+                            <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                                  <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+                                </Link>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                                  <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                </span>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+                              </li>
+                            </ol>
                           </div>
+                        </div>
                         <CollectionBanner props={props} deviceInfo={deviceInfo} />
                         <div className={`grid lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 ${featureToggle.features?.enableForPCSite ? 'container' : ''}`}>
                           {renderFeaturedProduct()}
@@ -810,8 +812,8 @@ function CollectionPage(props: any) {
                       </>
                     }
                     <div className={`${featureToggle?.features?.enableForPCSite ? 'container' : 'w-full'}`}>
-                    {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
-                    {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                      {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
+                      {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
                     </div>
                     {featureToggle.features?.enableForPCSite && <div className={`${featureToggle.features?.enableForPCSite ? ' container' : ''} col-span-12`}>
                       <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />

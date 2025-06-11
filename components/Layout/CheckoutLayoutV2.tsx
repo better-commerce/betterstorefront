@@ -116,7 +116,7 @@ const CheckoutLayoutV2: FC<any> = (props: any) => {
         <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </Head>
       <ContentSnippetInjector snippets={snippets} />
-      <main className="sm:fit gradient">
+      <main className="sm:fit gradient bg-gradient-white-blue">
         {displayAlert && <AlertRibbon />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         {children}

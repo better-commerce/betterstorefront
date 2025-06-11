@@ -19,7 +19,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { PagePropType, getPagePropType } from '@framework/page-props'
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
-const GridList = dynamic(() => import('@components/Product/Grid/GridList'))
+const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'), { ssr: true })
 const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
 const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
@@ -376,7 +376,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                 <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                   {featureToggle.features?.enableForPCSite &&
                     <>
-                      <div className='grid px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-2 sm:my-2'>
+                      <div className='grid mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-2 sm:my-2'>
                         <div className='flex flex-col w-full gap-2 sm:col-span-12'>
                           <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
                             Results
@@ -410,7 +410,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                   {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
                   {isValidating && !IS_INFINITE_SCROLL ? <Loader /> :
                     featureToggle.features?.enableForPCSite ? (
-                      <GridList products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     ) : (
                       <ProductGridWithFacet isPagination={true} products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     )

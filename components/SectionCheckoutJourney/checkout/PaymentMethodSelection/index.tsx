@@ -329,7 +329,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
       <>
         {paymentMethods?.length > 0 ? (
           <div className="">
-            <div className="flex flex-col gap-2 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
+            <div className="flex flex-col gap-2 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50 form-container-bg">
               <h5 className="px-0 font-semibold uppercase sm:px-0 font-18 dark:text-black">{translate('label.checkout.paymentMethodsText')}</h5>
               <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none">
 
@@ -340,7 +340,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
             </div>
             <div>
               {selectedPaymentMethod?.id && basketOrderInfo && (
-                <div className="flex flex-col w-full py-5 px-5 space-y-4">
+                <div className="flex flex-col w-full py-5 space-y-4">
 
                   {/* EXCEPT for Wallet, Full & Partial Payment section is shown here(STARTS) */}
                   {!matchStrings(selectedPaymentMethod?.systemName, PaymentMethodType.WALLET, true) && (
@@ -348,7 +348,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
                   )}
                   {/* EXCEPT for Wallet, Full & Partial Payment section is shown here(ENDS) */}
 
-                  <div className="flex flex-col justify-center chk-payment-btn w-full gap-2 pb-5 mt-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
+                  <div className="flex flex-col justify-center w-full gap-2 pb-5 mt-4 bg-white rounded-md chk-payment-btn sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
 
                     {/* GENERIC Payment Button */}
                     <PaymentButton translate={translate} btnTitle={translate('common.label.continueBtnText')} paymentMethod={selectedPaymentMethod} basketOrderInfo={basketOrderInfo} uiContext={uiContext} dispatchState={dispatch} contactDetails={contactDetails} isApplePayScriptLoaded={isApplePayScriptLoaded} onScrollToSection={() => { }} recordAnalytics={recordAnalytics} paymentType={selectedPaymentMethod?.systemName?.toLowerCase() === PaymentMethodType.COD ? PaymentSelectionType.FULL : paymentType} partialAmount={partialAmount ? partialAmount : 0} prepaidValueType={selectedPaymentSplitPaymentPrepaidValueType} minPrepaidValue={selectedPaymentSplitPaymentMinimumPrepaidValue} setPaymentType={setPaymentType} setPartialAmount={setPartialAmount} paymentTypeSelectionCmp={paymentTypeSelectionCmp} setSelectedPaymentMethod={setSelectedPaymentMethod} />
@@ -369,7 +369,7 @@ const PaymentMethodSelection: React.FC<PaymentMethodSelectionProps> = memo( ({ b
               {/* Section to display REST of the payment methods when PARTIAL PAYMENT is already completed (STARTS) */}
               {(selectedPaymentSplitPaymentEnabled && basket?.isPartialPayment && paymentType === PaymentSelectionType.PARTIAL && (basket?.partialPaidMethods || [])?.includes(selectedPaymentMethod?.systemName)) && (
                 <div className="p-2 sm:p-0 bg-[#fbfbfb] sm:bg-transparent border border-gray-200 sm:border-0 rounded-md sm:rounded-none mb-6">
-                  <div className="w-full text-black font-semibold capitalize p-2">Pay Remaining amount using:</div>
+                  <div className="w-full p-2 font-semibold text-black capitalize">Pay Remaining amount using:</div>
                   <PaymentMethodOptions paymentMethods={splitPaymentMethodOptions} basket={basket} getMethods={getMethods} selectedPaymentMethod={selectedPaymentMethod} handleMethodSelection={handleMethodSelection} translate={translate} forPartialPayment={true} />
                 </div>
               )}

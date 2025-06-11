@@ -18,7 +18,7 @@
     "enableCategory": true,
     "enableDemoToggle": false,
     "enableLoqateSearch": false,
-    "enableAddressIOSearch":false,
+    "enableAddressIOSearch":true,
     "enableGoogleAnalytics": true,
     "googleAnalyticsEvents": {
       "_comment": "strategy types are <include-all>, <exclude-all>, <include-specific>, <exclude-specific>",

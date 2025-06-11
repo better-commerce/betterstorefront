@@ -8,10 +8,11 @@ import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import Link from "next/link";
 import CategoryBanner from "./RichCategory/CategoryBanner";
 import LinkGroup from "./RichCategory/LinkGroup";
+const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { generateUri } from "@commerce/utils/uri-util";
 
-export default function RichLandingCategory({ category, deviceInfo, filterBrandData, productDataToPass, onToggleBrandListPage, maxBasketItemsCount, config, featureToggle, defaultDisplayMembership, campaignData, blogList }: any) {
+export default function RichLandingCategory({ category, deviceInfo, filterBrandData, productDataToPass, data, state, handlePageChange, onToggleBrandListPage, maxBasketItemsCount, config, featureToggle, defaultDisplayMembership, campaignData, blogList, handleInfiniteScroll, isCompared }: any) {
   return (
     <>
       <div className='w-full !px-0 pb-8'>
@@ -21,18 +22,23 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
         }
         <LinkGroup data={category?.linkGroups} deviceInfo={deviceInfo} />
         {productDataToPass?.results?.length > 0 &&
-          <div className="container px-4 pt-8 mx-auto">
+          <div className="container !px-4 pt-8 mx-auto">
             <div className="flex pt-4 mb-6 border-t border-gray-400 gap-x-6">
               <h2 className="block font-semibold text-black heading dark:text-black">Featured {category?.name}</h2>
-              <button onClick={onToggleBrandListPage} className='text-lg font-normal text-black underline'>See more</button>
+              {!featureToggle.features?.enableForPCSite && <button onClick={onToggleBrandListPage} className='text-lg font-normal text-black underline'>See more</button>}
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
-              {productDataToPass?.results?.map((product: any, pIdx: number) => (
-                <div key={pIdx}>
-                  <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                </div>
-              ))}
-            </div>
+            {featureToggle?.features?.enableForPCSite ?
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+                <ProductGridWithFacet isPagination={true} products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              </div> :
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
+                {productDataToPass?.results?.map((product: any, pIdx: number) => (
+                  <div key={pIdx}>
+                    <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  </div>
+                ))}
+              </div>
+            }
           </div>
         }
         {category?.additionalInfo1 && (

@@ -1141,7 +1141,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         <link rel="icon" type="image/png" sizes="16x16" href={`/theme/${CURRENT_THEME}/favicon/favicon-16x16.png`} />
         <link rel="icon" href={`/theme/${CURRENT_THEME}/favicon/favicon.ico`} />
       </NextHead>
-      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 border-b border-gray-300 park-seconday-bg-clr sm:py-4 checkout-header">
+      <div className="sticky top-0 left-0 z-50 w-full py-2 bg-gray-100 park-seconday-bg-clr sm:py-4 checkout-header">
         <div className="flex justify-between container-storefront gap-x-5 small-screen">
           <Link href="/" title="BetterStore" className="desktop-w-88 logo-link-chk pc-img-filter">
             <Logo />
@@ -1190,7 +1190,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         {isMobile || isIPadorTablet ? (
           <></>
         ) : (
-          <div className="justify-start min-h-screen p-6 bg-gray-100 border-gray-300 park-primary-bg-clr border-x basket-container top-14">
+          <div className="justify-start min-h-screen p-6 bg-gray-100 border-gray-300 park-primary-bg-clr basket-container top-14">
             <BasketDetails  {...basketDetailsProps} />
           </div>
         )}

@@ -72,7 +72,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
 
   return (
     <>
-      <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
+      <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50 form-container-bg">
         <h5 className="px-0 font-semibold uppercase font-18 dark:text-black">
           {translate('label.checkout.reviewAndPaymentText')}
         </h5>

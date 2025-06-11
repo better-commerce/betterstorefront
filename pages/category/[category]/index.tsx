@@ -333,7 +333,7 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
     // Setting initial filters from query string
     filters: filters ? filters : [],
     // if featuredProductCSV and LinkGroup
-    stockCodes: (category?.featuredProductCSV && category?.linkGroups?.length) ? category?.featuredProductCSV?.split(',') : [],
+    stockCodes: (category?.featuredProductCSV && category?.linkGroups?.length && !featureToggle.features?.enableForPCSite) ? category?.featuredProductCSV?.split(',') : [],
     categoryId: category?.id,
   }
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -598,56 +598,27 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         }
         {category?.isFeatured && category?.linkGroups?.length > 0 ?
           (
-            <>
-              {featureToggle?.features?.enableForPCSite ? (
-                router.asPath == "/category/digital-cameras" ?
-                  <RichLandingCategoryV2
-                    shopAll={false}
-                    featureToggle={featureToggle}
-                    category={category}
-                    handleFilters={handleFilters}
-                    productDataToPass={productDataToPass}
-                    state={state}
-                    data={data}
-                    excludeOOSProduct={excludeOOSProduct}
-                    handleInfiniteScroll={handleInfiniteScroll}
-                    deviceInfo={deviceInfo}
-                    maxBasketItemsCount={maxBasketItemsCount}
-                    config={config}
-                    isCompared={isCompared}
-                    defaultDisplayMembership={defaultDisplayMembership}
-                    closeCompareProducts={closeCompareProducts}
-                    onEnableOutOfStockItems={onEnableOutOfStockItems}
-                    isValidating={isValidating}
-                    isMobile={isMobile}
-                    products={products}
-                    handleSortBy={handleSortBy}
-                    clearAll={clearAll}
-                    removeFilter={removeFilter}
-                    isProductCompare={isProductCompare}
-                    showCompareProducts={showCompareProducts}
-                    handlePageChange={handlePageChange}
-                    campaignData={campaignData}
-                    blogList={blogList} 
-                    filterBrandData={filterBrandData}
-                    onToggleBrandListPage={onToggleBrandListPage} />
-
-                  : <RichLandingCategory
-                    blogList={blogList}
-                    category={category}
-                    deviceInfo={deviceInfo}
-                    filterBrandData={filterBrandData}
-                    productDataToPass={productDataToPass}
-                    onToggleBrandListPage={onToggleBrandListPage}
-                    maxBasketItemsCount={maxBasketItemsCount}
-                    config={config}
-                    featureToggle={featureToggle}
-                    defaultDisplayMembership={defaultDisplayMembership}
-                    campaignData={campaignData} />
-              ) : (
-                <LandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
-              )}
-            </>
+            featureToggle?.features?.enableForPCSite ? (
+              <RichLandingCategory
+                blogList={blogList}
+                category={category}
+                deviceInfo={deviceInfo}
+                filterBrandData={filterBrandData}
+                productDataToPass={productDataToPass}
+                data={data}
+                state={state}
+                onToggleBrandListPage={onToggleBrandListPage}
+                maxBasketItemsCount={maxBasketItemsCount}
+                config={config}
+                featureToggle={featureToggle}
+                handlePageChange={handlePageChange}
+                handleInfiniteScroll={handleInfiniteScroll}
+                isCompared={isCompared}
+                defaultDisplayMembership={defaultDisplayMembership}
+                campaignData={campaignData} />
+            ) : (
+              <LandingCategory category={category} deviceInfo={deviceInfo} filterBrandData={filterBrandData} productDataToPass={productDataToPass} onToggleBrandListPage={onToggleBrandListPage} maxBasketItemsCount={maxBasketItemsCount} config={config} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} campaignData={campaignData} />
+            )
           ) : (
             <CategoryList
               shopAll={false}
