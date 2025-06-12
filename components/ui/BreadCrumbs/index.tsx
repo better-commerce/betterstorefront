@@ -51,8 +51,8 @@ export default function BreadCrumbs({ items = [], currentProduct }: Props) {
       {flattenedItems?.map((breadcrumb: any, breadcrumbIdx: number) => (
         <li key={breadcrumbIdx} className="flex items-center text-10-mob sm:text-sm" >
           <Link href={sanitizeRelativeUrl(`/${breadcrumb?.slug}`)} passHref>
-              <span className={`font-light hover:text-gray-900 capitalize dark:text-black  ${breadcrumb?.isCurrent ? ' font-medium text-black' : 'text-slate-500'}`} >
-                {breadcrumb?.title?.toLowerCase()}
+              <span className={`font-light hover:text-gray-900 dark:text-black  ${breadcrumb?.isCurrent ? ' font-medium text-black' : 'text-slate-500'}`} >
+                {breadcrumb?.title}
               </span>
             </Link>
             {breadcrumbIdx !== flattenedItems?.length - 1 && (
