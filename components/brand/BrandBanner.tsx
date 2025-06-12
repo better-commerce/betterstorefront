@@ -1,18 +1,14 @@
 
-import { useTranslation } from '@commerce/utils/use-translation'
 export default function BrandBanner({ data, props, deviceInfo, description }: any) {
-  const { isOnlyMobile, isMobile } = deviceInfo
-  const translate = useTranslation()
   return (
     <>
-      <section className="relative grid w-full col-span-12 mt-4">
-        {props?.premiumBrandLogo != "" && (
-          <div className="relative">
-            <img src={props?.premiumBrandLogo} alt="banner" className="object-cover object-center w-full h-auto sm:h-[480px] sm:max-h-[480px] cursor-pointer" />
-            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-          </div>
-        )}
+      {props?.premiumBrandLogo != "" && (<section className="relative grid w-full col-span-12">
+        <div className="relative">
+          <img src={props?.premiumBrandLogo} alt="banner" className="object-cover object-center w-full h-auto sm:h-[480px] sm:max-h-[480px] cursor-pointer" />
+          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        </div>
       </section>
+      )}
       <section className="grid col-span-12 pt-2 bg-white">
         <div className="container !px-0 mx-auto space-y-4">
           <h1 className={`block title-page font-bold dark:text-black primary-text-blue !mb-4`}>{props?.name}</h1>
