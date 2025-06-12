@@ -2921,3 +2921,20 @@ button.nc-Button {
 .product-card-title{
 word-break: break-word;
 }
+@media (min-width: 1024px) {
+  .lg\:grid-cols-5 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .\32xl\:grid-cols-5 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1820px) {
+  .lg\:grid-cols-5 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .\32xl\:grid-cols-5 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}

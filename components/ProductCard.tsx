@@ -330,9 +330,11 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         {data?.condition != "pre-launch" && <div className="flex items-center justify-between mt-2 product-card-panel">
           <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>}
-        <p className="border border-[#2D4D9C] px-2 py-1 flex items-center gap-1 text-xs font-semibold text-[#2D4D9C] text-left rounded">
-          <CheckCircleIcon className='inline-block w-4 h-4' />
-          {promotion}</p>
+        {featureToggle?.features?.enableForPCSite &&
+          <p className="border border-[#2D4D9C] px-2 py-1 flex items-center gap-1 text-xs font-semibold text-[#2D4D9C] text-left rounded">
+            <CheckCircleIcon className='inline-block w-4 h-4' /> {promotion}
+          </p>
+        }
         {featureToggle.features?.enableForPCSite &&
           <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
             {data?.currentStock > 0 ? <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>In stock</span> :
