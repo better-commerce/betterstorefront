@@ -350,7 +350,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         </Link>
-        <div className="absolute bottom-0 left-0 right-0 flex flex-col">
+        <div className="absolute bottom-0 left-0 right-0 flex flex-col add-btn-plp">
           {isOutOfStock(product) ? (
             <ButtonNotifyMe product={product} className="text-sm font-medium rounded-md" />
           ) : (
