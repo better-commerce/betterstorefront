@@ -251,29 +251,25 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
     return (
       <>
         {isMobile ? (
-          <>
-            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} plp-btn-section-div absolute grid justify-center px-2 transition-all sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1`}>
-              {featureToggle?.features?.enableAddToBagPlp &&
-                <Button size="small" className="block cart-btn-plp" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-              }
-              {data?.condition != "pre-launch" && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
-                <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
-                <span className="ms-1">{translate('common.label.quickViewText')}</span>
-              </ButtonSecondary>}
-            </div>
-          </>
+          <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} plp-btn-section-div absolute grid justify-center px-2 transition-all sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1`}>
+            {featureToggle?.features?.enableAddToBagPlp &&
+              <Button size="small" className="block cart-btn-plp" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+            }
+            {data?.condition != "pre-launch" && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white hover:!bg-gray-100 dark:hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+              <span className="ms-1">{translate('common.label.quickViewText')}</span>
+            </ButtonSecondary>}
+          </div>
         ) : (
-          <>
-            <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} plp-btn-section-div absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
-              {featureToggle?.features?.enableAddToBagPlp &&
-                <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
-              }
-              {data?.condition != "pre-launch" && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
-                <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
-                <span className="ms-1">{translate('common.label.quickViewText')}</span>
-              </ButtonSecondary>}
-            </div>
-          </>
+          <div className={`${featureToggle?.features?.enableAddToBagPlp ? ' grid-cols-2' : ' grid-cols-1'} plp-btn-section-div absolute grid justify-center invisible px-2 transition-all opacity-0 sm:bottom-0 bottom-4 sm:px-2 group-hover:bottom-4 inset-x-1 group-hover:opacity-100 group-hover:visible`}>
+            {featureToggle?.features?.enableAddToBagPlp &&
+              <Button size="small" className="block cart-btn-plp" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+            }
+            {data?.condition != "pre-launch" && <ButtonSecondary className="quickview-plp ms-1.5 bg-white dark:bg-white dark:hover:!bg-gray-100 hover:!bg-gray-100 hover:text-slate-900 dark:hover:text-slate-900 transition-colors shadow-lg" fontSize="text-xs" sizeClass="py-2 px-4" onClick={() => handleQuickViewData(data)} >
+              <ArrowsPointingOutIcon className="w-3.5 h-3.5" />
+              <span className="ms-1">{translate('common.label.quickViewText')}</span>
+            </ButtonSecondary>}
+          </div>
         )}
       </>
     );
@@ -323,11 +319,9 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </div >
         </ButtonLink>
         {data?.condition != "pre-launch" && featureToggle?.features?.enableAddButtonBottom ? (
-          <>
-            <div className="flex flex-col gap-2 plp-hidden-section">
-              <ReviewBadge reviewCountdata={data?.reviewCount} ratingdata={data?.rating} />
-            </div>
-          </>
+          <div className="flex flex-col gap-2 plp-hidden-section">
+            <ReviewBadge reviewCountdata={data?.reviewCount} ratingdata={data?.rating} />
+          </div>
         ) : (
           <>
             {/* Content to render if false */}
@@ -340,13 +334,11 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           <CheckCircleIcon className='inline-block w-4 h-4' />
           {promotion}</p>
         {featureToggle.features?.enableForPCSite &&
-          <>
-            <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
-              {data?.currentStock > 0 ? <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>In stock</span> :
-                <span className='px-1 py-0.5 rounded text-xs text-[#E5A000]'>Awaiting stock</span>
-              }
-            </div>
-          </>
+          <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
+            {data?.currentStock > 0 ? <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>In stock</span> :
+              <span className='px-1 py-0.5 rounded text-xs text-[#E5A000]'>Awaiting stock</span>
+            }
+          </div>
         }
         {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && data?.condition != "pre-launch" && (
           <div className='flex justify-between my-3 ml-0 text-left add-btn-plp'>
