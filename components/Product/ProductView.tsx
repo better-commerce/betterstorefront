@@ -1028,7 +1028,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       label: 'Specs',
       content: (
         <>
-          <div className="p-4 overflow-x-auto w-full">
+          <div className="p-4 !px-0 overflow-x-auto w-full">
             {product && product?.customAttributes?.length > 0 ? <table className="w-full border border-gray-300">
               <thead>
                 <tr className="text-left bg-gray-200">

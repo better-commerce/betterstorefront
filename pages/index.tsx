@@ -206,7 +206,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'Cameras',
       label: 'Cameras',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.cameraslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -215,7 +215,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'UsedCameras',
       label: 'Used Cameras',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.usedcameraslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -224,7 +224,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'Lenses',
       label: 'Lenses',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.lenseslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -233,7 +233,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'UsedLenses',
       label: 'Used Lenses',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.usedlenseslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -242,7 +242,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'Bags',
       label: 'Bags',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.bagslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -251,7 +251,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'Tripods',
       label: 'Tripods',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.tripodslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -260,7 +260,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'Video',
       label: 'Video',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.videolist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -269,7 +269,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
       id: 'Accessories',
       label: 'Accessories',
       content: (
-        <div className="space-y-4">
+        <div className="space-y-4 slider-equal-height">
           <SectionHomeProductCardNew onlyImage={false} products={pageContents?.accessorieslist} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
         </div>
       )
@@ -397,7 +397,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <RecentlyViewedProduct isHome={false} deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
               {/* Featured deals section */}
               {pageContents?.featureddeal?.length > 0 && (
-                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
+                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css slider-equal-height">
                   {pageContents?.featureditemheading?.length > 0 && pageContents?.featureditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
                   ))}

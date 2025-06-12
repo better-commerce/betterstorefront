@@ -2690,6 +2690,7 @@ display: none !important;
   background-color: #2D4D9C !important;
   box-shadow: none !important;
   font-size:16px !important;
+  min-height: 48px !important;
 }
 .blue-add-btn .buy-btn svg{
 display: none !important;
@@ -3072,4 +3073,23 @@ color: #fff !important;
     .\32xl\:grid-cols-5 {
         grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     }
+}
+
+/* Equal height cards in slider */
+.height-equal {
+  height: 100%;
+  display: flex;
+}
+
+.height-equal > div {
+  height: 100%;
+  width: 100%;
+}
+
+.slider-equal-height .swiper {
+  padding: 1px;
+}
+
+.slider-equal-height .swiper-slide {
+  height: auto;
 }
