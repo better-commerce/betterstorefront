@@ -3073,3 +3073,7 @@ color: #fff !important;
         grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
     }
 }
+
+.not-allowed-cursor{
+  cursor: not-allowed !important;
+}
