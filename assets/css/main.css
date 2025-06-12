@@ -17513,25 +17513,21 @@ body:has(.engage-announcement-bar){
 }
 }
 @media (min-width: 640px) {
-
   .container-pdp {
     max-width: 640px;
   }
 }
 @media (min-width: 768px) {
-
   .container-pdp {
     max-width: 768px;
   }
 }
 @media (min-width: 1024px) {
-
   .container-pdp {
     max-width: 1024px;
   }
 }
 @media (min-width: 1280px) {
-
   .container-pdp {
     max-width: 1280px;
     padding-right: 40px;
@@ -17539,9 +17535,15 @@ body:has(.engage-announcement-bar){
   }
 }
 @media (min-width: 1536px) {
-
   .container-pdp {
     max-width: 1420px;
+    padding-right: 128px;
+    padding-left: 128px;
+  }
+}
+@media (min-width: 1820px) {
+  .container-pdp {
+    max-width: 1536px;
     padding-right: 128px;
     padding-left: 128px;
   }
