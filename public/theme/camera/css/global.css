@@ -3137,7 +3137,3 @@ select {
 .slider-equal-height .swiper-slide {
   height: auto;
 }
-
-.not-allowed-cursor{
-  cursor: not-allowed !important;
-}
