@@ -356,7 +356,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         {isComparedEnabled && product?.compared && (
           <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
             {product?.compared && (
-              <button className={`${featureToggle?.features?.enableAddButtonBottom ? 'rounded-b border-t border-[#2D4D9C]' : 'rounded-b-2xl border-t border-red-600'} w-full py-2 font-semibold text-red-600 uppercase  bg-red-50 hover:bg-red-100 font-14`}>
+              <button onClick={handleSetCompareProduct} className={`${featureToggle?.features?.enableAddButtonBottom ? 'rounded-b border-t border-[#2D4D9C]' : 'rounded-b-2xl border-t border-red-600'} w-full py-2 font-semibold text-red-600 uppercase  bg-red-50 hover:bg-red-100 font-14`}>
                 Remove
               </button>
             )}

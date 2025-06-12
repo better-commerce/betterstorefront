@@ -91,11 +91,11 @@ const Prices: FC<PricesProps> = ({
           <div className={`flex ${nonMemberDiscountPercentage > 0 ? "flex-col" : "flex-row"} items-start text-sm font-semibold text-gray-400 price`}>
             <div className="flex items-center gap-x-1">
               {/* Discount Percentage */}
-              {nonMemberDiscountPercentage > 0 && (
+              {/* {nonMemberDiscountPercentage > 0 && (
                   <span className="mr-2 font-normal text-red-600 font-32">
                   -{nonMemberDiscountPercentage < 1 ? nonMemberDiscountPercentage.toFixed(2) : Math.round(nonMemberDiscountPercentage)}%
                 </span>
-              )}
+              )} */}
               {featureToggle?.features?.enableForPCSite ? (
                 (() => {
                   const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;

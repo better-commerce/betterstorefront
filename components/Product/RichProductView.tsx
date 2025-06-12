@@ -24,6 +24,7 @@ const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffer
 export default function RichProductView({ product, selectedOption, isGuestUser, handleWishList, isInWishList,promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
   const translate = useTranslation()
     const [showFallback, setShowFallback] = useState(false);
+  const cashback = (product?.price.raw.withTax * 0.2)
   return (
     <div className='flex gap-6 flex-mob-col'>
       <div className='w-full lg:w-[60%]'>
@@ -90,10 +91,10 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     <div className="px-3 py-2 pb-4 mt-2 space-y-1 ">
                       <div className="flex items-baseline">
                         <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
-                        <span className="ml-2 text-sm font-bold text-red-700">£1,749.00</span>
+                        <span className="ml-2 text-sm font-bold text-red-700">{product?.price?.currencySymbol}{(product?.price.raw.withTax - cashback).toFixed(2)}</span>
                       </div>
 
-                      <p className="text-sm font-medium text-gray-800">after £400 cashback</p>
+                      <p className="text-sm font-medium text-gray-800">after {product?.price?.currencySymbol}{product?.price?.raw?.withTax ? (product?.price.raw.withTax * 0.2).toFixed(2) : 'N/A'} cashback</p>
 
                       <div className="pt-2 mt-8">
                         <p className="text-sm text-gray-800">
@@ -288,12 +289,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         </div>
                       </div> */}
                     {product?.condition != 'pre-launch' && <div className='w-full'>
-                      <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+                      <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center group w-full h-auto px-4 py-2 text-[#767676] bg-white hover:text-pink sm:px-2 hover:border-pink" >
                         {isInWishList(selectedAttrData?.productId) ? (
                           <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
                         ) : (
-                          <HeartIcon className="flex-shrink-0 w-3 h-3 mr-2 font-semibold text-black" />)}
-                        <span className='text-xs font-semibold text-black'> Add to Wishlist </span>
+                          <HeartIcon className="flex-shrink-0 w-3 h-3 mr-2 group-hover:text-red-700 font-semibold text-black" />)}
+                        <span className='text-xs font-semibold text-black group-hover:text-red-700'> Add to Wishlist </span>
                       </button>
                     </div>}
                   </div>

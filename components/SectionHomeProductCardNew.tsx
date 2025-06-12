@@ -22,7 +22,7 @@ export default function SectionHomeProductCardNew({ products, productPerColumn, 
         }}
       >
         {products?.map((product: any, pId: number) => (
-          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+          <SwiperSlide key={pId} className="relative inline-flex flex-col w-64 h-auto text-left cursor-pointer height-auto-slide group lg:w-auto height-equal">
             <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </SwiperSlide>
         ))}
