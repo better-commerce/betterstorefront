@@ -25,7 +25,7 @@ const DEFAULT_COLOR_SCHEME = {
 
 const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
   className = '',
-  title = 'Add to bag',
+  title = 'Add to basket',
   buttonType = 'cart',
   action = () => { },
   colorScheme = DEFAULT_COLOR_SCHEME,

@@ -56,7 +56,7 @@
       }
     },
     "basket": {
-      "addToBagText": "Add to bag",
+      "addToBagText": "Add to basket",
       "addBundleText": "Add bundle",  
       "outOfStockText": "Out Of Stock",
       "promoCodeText": "Promo Code",
