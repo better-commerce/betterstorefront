@@ -510,6 +510,7 @@
             "amountText": "Importo",
             "referenceText": "Riferimento",
             "noTransactionHistoryMessage": "Nessuna cronologia transazioni disponibile.",
+            "noBankTransferHistoryText": "Nessun bonifico bancario disponibile",
             "bankTransferHistoryText": "Cronologia Bonifici Bancari",
             "bankNameText": "Nome della Banca",
             "AccountNoText": "Conto N.",

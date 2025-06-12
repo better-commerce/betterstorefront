@@ -537,6 +537,7 @@
             "amountText": "Belopp",
             "referenceText": "Referens",
             "noTransactionHistoryMessage": "Ingen transaktionshistorik tillgänglig.",
+            "noBankTransferHistoryText": "Ingen banköverföring tillgänglig",
             "bankTransferHistoryText": "Banköverföringshistorik",
             "bankNameText": "Banknamn",
             "AccountNoText": "Kontonr.",

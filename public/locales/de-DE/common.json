@@ -537,6 +537,7 @@
       "amountText": "Betrag",
       "referenceText": "Referenz",
       "noTransactionHistoryMessage": "Kein Transaktionsverlauf verfügbar.",
+      "noBankTransferHistoryText": "Keine Banküberweisung möglich",
       "bankTransferHistoryText": "Banküberweisungsverlauf",
       "bankNameText": "Bankname",
       "AccountNoText": "Kontonr.",

@@ -537,6 +537,7 @@
             "amountText": "Сумма",
             "referenceText": "Ссылка",
             "noTransactionHistoryMessage": "История операций недоступна.",
+            "noBankTransferHistoryText": "Банковский перевод недоступен",
             "bankTransferHistoryText": "История Банковских Переводов",
             "bankNameText": "Название Банка",
             "AccountNoText": "Номер Счета",

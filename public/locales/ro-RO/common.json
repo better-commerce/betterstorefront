@@ -537,6 +537,7 @@
             "amountText": "Sumă",
             "referenceText": "Referință",
             "noTransactionHistoryMessage": "Nu există istoric de tranzacții disponibil.",
+            "noBankTransferHistoryText": "Nu este disponibil transfer bancar",
             "bankTransferHistoryText": "Istoricul Transferurilor Bancare",
             "bankNameText": "Numele Băncii",
             "AccountNoText": "Nr. Cont",

@@ -537,6 +537,7 @@
             "amountText": "Suma",
             "referenceText": "Referencia",
             "noTransactionHistoryMessage": "História transakcií nie je k dispozícii.",
+            "noBankTransferHistoryText": "Bankový prevod nie je k dispozícii",
             "bankTransferHistoryText": "História Bankových Prevodov",
             "bankNameText": "Názov Banky",
             "AccountNoText": "Č. Účtu",

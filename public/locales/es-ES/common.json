@@ -536,6 +536,7 @@
       "amountText": "Cantidad",
       "referenceText": "Referencia",
       "noTransactionHistoryMessage": "No hay historial de transacciones disponible.",
+      "noBankTransferHistoryText": "No bank transfer available",
       "bankTransferHistoryText": "Historial de Transferencias Bancarias",
       "bankNameText": "Nombre del Banco",
       "AccountNoText": "Nº de Cuenta",

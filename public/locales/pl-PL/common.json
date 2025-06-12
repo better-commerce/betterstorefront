@@ -538,6 +538,7 @@
             "amountText": "Kwota",
             "referenceText": "Odnośnik",
             "noTransactionHistoryMessage": "Brak dostępnej historii transakcji.",
+            "noBankTransferHistoryText": "Przelew bankowy nie jest dostępny",
             "bankTransferHistoryText": "Historia Przelewów Bankowych",
             "bankNameText": "Nazwa Banku",
             "AccountNoText": "Nr konta",

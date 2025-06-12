@@ -537,6 +537,7 @@
             "amountText": "Määrä",
             "referenceText": "Viite",
             "noTransactionHistoryMessage": "Tapahtumahistoriaa ei ole saatavilla.",
+            "noBankTransferHistoryText": "Aucun virement bancaire disponible",
             "bankTransferHistoryText": "Pankkisiirtohistoria",
             "bankNameText": "Pankin Nimi",
             "AccountNoText": "Tilinro.",

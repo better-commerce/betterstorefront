@@ -538,6 +538,7 @@
             "amountText": "Částka",
             "referenceText": "Odkaz",
             "noTransactionHistoryMessage": "Historie transakcí není k dispozici.",
+            "noBankTransferHistoryText": "Bankovní převod není k dispozici",
             "bankTransferHistoryText": "Historie Bankovních Převodů",
             "bankNameText": "Název Banky",
             "AccountNoText": "Č. Účtu",

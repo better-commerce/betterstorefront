@@ -537,6 +537,7 @@
             "amountText": "Beløb",
             "referenceText": "Reference",
             "noTransactionHistoryMessage": "Ingen transaktionshistorik tilgængelig.",
+            "noBankTransferHistoryText": "Ingen bankoverførsel tilgængelig",
             "bankTransferHistoryText": "Bankoverførsel Historik",
             "bankNameText": "Banknavn",
             "AccountNoText": "Kontonr.",

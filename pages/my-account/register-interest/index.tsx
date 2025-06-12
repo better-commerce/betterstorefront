@@ -101,13 +101,11 @@ function InterestProducts() {
           </>
         ) : (
           <>
-            <div className="flex flex-col w-full px-4 py-12 max-acc-container sm:px-0">
-              <h1 className="my-2 text-2xl font-semibold text-black dark:text-white">No Product Found</h1>
-              <div className="flex mt-5 w-60 sm:flex-col">
-                <Link legacyBehavior passHref href="/">
-                  <a className="w-full flex items-center justify-center px-4 py-3 -mr-0.5 rounded-sm sm:px-6 link-button btn-primary">Start Shopping</a>
-                </Link>
-              </div>
+            <div className="flex flex-col items-center justify-center w-full col-span-12 px-4 py-12">
+              <h1 className="my-2 text-2xl font-semibold text-black dark:text-white">No Interested Product Found</h1>
+              <Link legacyBehavior passHref href="/search">
+                <a className="px-6 py-2 font-semibold bg-white border rounded-full cursor-pointer hover:bg-sky-100 border-sky-500 text-sky-500">Start Shopping</a>
+              </Link>
             </div>
           </>
         )}

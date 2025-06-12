@@ -226,7 +226,7 @@ export default function WalletDetail() {
                   </>
                 )}
 
-                <h3 className="mb-3 text-lg font-medium">{translate('label.myAccount.bankTransferHistoryText')}</h3>
+                <h3 className="mt-5 mb-3 text-lg font-medium">{translate('label.myAccount.bankTransferHistoryText')}</h3>
                 {isLoadingBankTransactions && <Loader />}
                 {bankTransferTransactions?.items?.length > 0 ? (
                   <>
@@ -268,7 +268,7 @@ export default function WalletDetail() {
                   <>
                     <div className="flex flex-col justify-center w-full py-10">
                       <WalletIcon className="w-10 h-10 mx-auto text-gray-300" />
-                      <h4 className="text-xl font-semibold text-center text-gray-300">{translate('label.myAccount.noTransactionHistoryMessage')}</h4>
+                      <h4 className="text-xl font-semibold text-center text-gray-300">{translate('label.myAccount.noBankTransferHistoryText')}</h4>
                     </div>
                   </>
                 )}

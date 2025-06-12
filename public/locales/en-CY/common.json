@@ -537,6 +537,7 @@
         "amountText": "Ποσό",
         "referenceText": "Αναφορά",
         "noTransactionHistoryMessage": "Δεν υπάρχει ιστορικό συναλλαγών.",
+        "noBankTransferHistoryText": "Δεν υπάρχει διαθέσιμη τραπεζική μεταφορά",
         "bankTransferHistoryText": "Ιστορικό Τραπεζικών Μεταφορών",
         "bankNameText": "Όνομα Τράπεζας",
         "AccountNoText": "Αριθμός Λογαριασμού",

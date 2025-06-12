@@ -537,6 +537,7 @@
       "amountText": "Amount",
       "referenceText": "Reference",
       "noTransactionHistoryMessage": "No Transaction history available.",
+      "noBankTransferHistoryText": "No bank transfer available",
       "bankTransferHistoryText": "Bank Transfer History",
       "bankNameText": "Bank Name",
       "AccountNoText": "Account No.",

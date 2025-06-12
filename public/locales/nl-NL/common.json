@@ -536,6 +536,7 @@
             "amountText": "Bedrag",
             "referenceText": "Referentie",
             "noTransactionHistoryMessage": "Geen transactiegeschiedenis beschikbaar.",
+            "noBankTransferHistoryText": "Geen bankoverschrijving mogelijk",
             "bankTransferHistoryText": "Bankoverschrijvingsgeschiedenis",
             "bankNameText": "Banknaam",
             "AccountNoText": "Rekeningnr.",
