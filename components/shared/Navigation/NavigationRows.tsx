@@ -301,6 +301,53 @@ function NavigationRows({ navItems = [], featureToggle, subMenuPosition }: any) 
                               </div>
                             )}
                           </div>
+
+                          {/* Popular Brands Section - Fixed Right */}
+                          {getWidgets(item?.navBlocks?.filter((block: any) => block?.navBlockType === 8))?.length > 0 && 
+                            getWidgets(item?.navBlocks?.filter((block: any) => block?.navBlockType === 8))?.some((grp: any) => 
+                              grp?.widgets?.some((navItem: any) => navItem?.navItems?.length > 0)
+                            ) && (
+                            <div className="w-64 pl-6 border-l">
+                              {getWidgets(
+                                item?.navBlocks?.filter((block: any) => block?.navBlockType === 8)
+                              )?.[0]?.widgets?.[0]?.boxTitle && (
+                                <h3 className="mb-3 mt-2 font-bold capitalize text-left text-sm text-black">
+                                  {getWidgets(
+                                    item?.navBlocks?.filter((block: any) => block?.navBlockType === 8)
+                                  )?.[0]?.widgets?.[0]?.boxTitle?.toLowerCase()}
+                                </h3>
+                              )}
+                              {getWidgets(
+                                item?.navBlocks?.filter((block: any) => block?.navBlockType === 8)
+                              )?.map((grp: any, grpIdx: number) => (
+                                <div key={`popular-brands-${grpIdx}`}>
+                                  {grp?.widgets?.map((navItem: any, kdx: number) => (
+                                    navItem?.navItems?.length > 0 && (
+                                      <div key={`brand-section-${kdx}`}>
+                                        <ul className="space-y-2">
+                                          {navItem?.navItems
+                                            ?.filter((item: any) => item?.caption && item?.itemLink)
+                                            ?.sort((a: any, b: any) => (a?.caption || '').localeCompare(b?.caption || ''))
+                                            ?.map((item: any, idx: number) => (
+                                              <li key={`brand-${idx}`}>
+                                                <Link
+                                                  href={sanitizeRelativeUrl(`/${item?.itemLink || ''}`)}
+                                                  className="text-sm font-medium capitalize text-black hover:text-black hover:underline"
+                                                  onClick={handleLinkClick}
+                                                  prefetch={false}
+                                                >
+                                                  {(item?.caption || '').toLowerCase()}
+                                                </Link>
+                                              </li>
+                                            ))}
+                                        </ul>
+                                      </div>
+                                    )
+                                  ))}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
