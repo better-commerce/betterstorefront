@@ -47,7 +47,8 @@
     "enableShortThankYouPage":false,
     "enableCutBelt":false,
     "enableCart":false,
-    "defaultCheckoutRoute":"/checkout"
+    "defaultCheckoutRoute":"/checkout",
+    "hidePriceForGuest": false
   },
   "social":[
     { "name": "Facebook", "icon": "images/socials/facebook.svg", "href": "", "enable":true },

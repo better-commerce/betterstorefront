@@ -1,3 +1,4 @@
+import { CURRENT_THEME } from "@components/utils/constants";
 export const ITEM_TYPE_ADDON = 'ADDON'
 export const BTN_SEARCH = 'Search'
 export const ITEM_TYPE_ADDONS = 'ADDONS'
@@ -11,7 +12,7 @@ export const GENERAL_NOTIFY_ME_MESSAGE = 'Be the ﬁrst to know when your produc
 export const BTN_PRE_ORDER = 'Pre-order'
 export const BTN_RECOMMENDED_PROD = 'Recommended products'
 export const ITEM_TYPE_ALTERNATIVE = 'ALTERNATIVE'
-export const IMG_PLACEHOLDER ='https://www.imagedelivery.space/betterstore/images/noimagefound.png'
+export const IMG_PLACEHOLDER = CURRENT_THEME === 'officestag' ? 'https://www.imagedelivery.space/officestag/siteassets/noimagefound.png' : 'https://www.imagedelivery.space/betterstore/images/noimagefound.png'
 export const SLUG_TYPE_MANUFACTURER = 'Manufacturer'
 export const BTN_SUBMIT = 'Submit'
 export const LOGIN_SUCCESSFUL = 'login successful'
