@@ -12,7 +12,7 @@ export default function CollectionBanner({ data, props, deviceInfo }: any) {
   const translate = useTranslation()
   return (
     <>
-      <section className="relative grid w-full col-span-12 mt-1 mb-4">
+      <section className={`relative grid w-full col-span-12 ${props?.images?.length > 0 ? 'mt-1 mb-4' : ''}`}>
         <>
           {props?.images?.length > 1 ? (
             <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0" >

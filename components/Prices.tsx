@@ -48,7 +48,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
         price?.raw?.withTax != 0 ? (
           <div className="flex flex-col items-start justify-end gap-2 text-sm font-semibold text-gray-400 price">
             <span className="bg-[#2D4D9C] text-xs w-full text-white px-2 py-1 rounded text-left font-semibold">{price?.currencySymbol}{price?.raw?.withTax ? (cashback).toFixed(2) : 'N/A'} Cashback</span>
-            <span className="flex flex-col items-start justify-end w-full min-h-[58px]">
+            <span className="flex flex-col items-start w-full min-h-[58px]">
               <span className="flex items-end justify-end w-full pr-6">
                 {isIncludeVAT ? (
                   listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (
