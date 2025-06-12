@@ -327,7 +327,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             {/* Content to render if false */}
           </>
         )}
-        {data?.condition != "pre-launch" && <div className="flex items-center justify-between mt-2 product-card-panel">
+        {(!featureToggle?.features?.hidePriceForGuest || user?.userId) && data?.condition != "pre-launch" && <div className="flex items-center justify-between mt-2 product-card-panel">
           <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>}
         {featureToggle?.features?.enableForPCSite &&
