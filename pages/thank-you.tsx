@@ -121,7 +121,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
 
   useEffect(() => {
     localStorage.setItem('cutBeltData', JSON.stringify([]))
-  },[])
+  }, [])
 
   const handleCopyClick = async () => {
     try {
@@ -149,7 +149,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
     const fetchNextOrderPromo = async () => {
       try {
         let nextOrderConfig = { ...config }
-        const getPromotionConfig = (key: any) => nextOrderConfig?.configSettings ?.find((x: any) => x.configType === 'PromotionSettings') ?.configKeys?.find((x: any) => x.key === key)?.value
+        const getPromotionConfig = (key: any) => nextOrderConfig?.configSettings?.find((x: any) => x.configType === 'PromotionSettings')?.configKeys?.find((x: any) => x.key === key)?.value
 
         const isNextPromoEnabled = stringToBoolean(getPromotionConfig('PromotionSettings.EnableNextPurchasePromotion'))
         const nextOrderPromoName = getPromotionConfig('PromotionSettings.PromotionName')
@@ -190,7 +190,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
       const { data }: any = await axios.post(NEXT_GET_ORDER, { id: orderId, })
       const orderData: any = data.order
       setOrderData(data.order)
-      
+
       // PURCHASE EVENT
       const extras = { originalLocation: SITE_ORIGIN_URL + router.asPath }
       const cartItems = { ...orderData, id: orderData?.basketId, lineItems: orderData?.items, }
@@ -293,7 +293,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
   const css = { maxWidth: '100%', height: 'auto' }
 
   const getPaymentMethodName = (payments: any) => {
-    return (payments?.find( (x: any) => x?.isValid /* && x?.status === PaymentStatus.PAID */ )?.paymentGateway || EmptyString)
+    return (payments?.find((x: any) => x?.isValid /* && x?.status === PaymentStatus.PAID */)?.paymentGateway || EmptyString)
   }
 
   let absPath = ''
@@ -317,161 +317,161 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + router.asPath} key="ogurl" />
       </NextHead>
       {featureToggle?.features?.enableShortThankYouPage ? (
-        <main className="px-4 pt-6 pb-10 sm:pb-24 bg-white sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
-        <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
-          {/* Box Icon */}
-          {order?.orderNo ? (
-          <div className="flex flex-col items-center">
-            <img src="theme/camera/image/order-box-icon.png" alt="order-icon" />
-            <h1 className="text-2xl font-bold mt-4">Thank you for your order!</h1>
-            <p className="mt-2 text-center">
-              We've sent confirmation to <span className="font-medium">{order?.createdBy}</span>.
-            </p>
-          </div>
-          ) : null}
-      
-          {/* Navigation Cards */}
-          
- {/* Navigation Cards */}
- {order?.orderNo ? (
- <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
-          <img src="theme/camera/image/truck-icon.png" alt="order-icon"/>
-            <span className="mt-2 text-sm font-medium">Track Order</span>
-          </div>
-          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
-          <img src="theme/camera/image/pencil-icon.png" alt="order-icon"/>
-            <span className="mt-2 text-sm font-medium">Manage Order</span>
-          </div>
-          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
-          <img src="theme/camera/image/return-icon.png" alt="order-icon"/>
-            <span className="mt-2 text-sm font-medium">Returns Policy</span>
-          </div>
-          <div className="bg-gray-100 rounded p-6 flex flex-col items-center justify-center">
-          <img src="theme/camera/image/user-icon.png" alt="order-icon"/>
-            <span className="mt-2 text-sm font-medium">My Account</span>
-          </div>
-        </div>
-     ) : null}
-          {/* Order Status Card */}
-          {order?.orderNo ? (
-          <div className="bg-[#EAEDF5] rounded p-6 mt-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-left border-b border-gray-50 pb-3">
-                <p className="text-gray-700">Order status:</p>
-              </div>
-              <div className="text-left border-b border-gray-50 pb-3">
-                <p className="font-medium">{order?.orderStatus}</p>
-              </div>
-      
-              <div className="text-left border-b border-gray-50 pb-3">
-                <p className="text-gray-700">Order reference:</p>
-              </div>
-              <div className="text-left border-b border-gray-50 pb-3">
-                <p className="font-medium">{order?.orderNo}</p>
-              </div>
-      
-              <div className="text-left">
-                <p className="text-gray-700">Estimated delivery:</p>
-              </div>
-              <div className="text-left">
-                <p className="font-medium text-black dark:text-black">
-                  {order?.deliveryPlans?.length >= 1 ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget) : eddDateFormat(order?.dueDate)}
+        <main className="px-4 pt-6 pb-10 bg-white sm:pb-24 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+          <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
+            {/* Box Icon */}
+            {order?.orderNo ? (
+              <div className="flex flex-col items-center">
+                <img src="theme/camera/image/order-box-icon.png" alt="order-icon" />
+                <h1 className="mt-4 text-2xl font-bold">Thank you for your order!</h1>
+                <p className="mt-2 text-center">
+                  We've sent confirmation to <span className="font-medium">{order?.createdBy}</span>.
                 </p>
               </div>
-            </div>
-          </div>
-           ) : null}
-          {/* Order Summary */}
-          {order?.orderNo ? (
-          <div className="border rounded mt-4 p-6 bg-gray-100">
-            <div className="flex justify-between items-center">
-              <h2 className="font-bold text-lg">Order Summary</h2>
-              <div className="text-right">
-                <p className="font-bold"> Total: {isIncludeVAT ? order?.grandTotal?.formatted?.withTax : order?.grandTotal?.formatted?.withTax} </p>
+            ) : null}
+
+            {/* Navigation Cards */}
+
+            {/* Navigation Cards */}
+            {order?.orderNo ? (
+              <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-4">
+                <Link passHref href={`/my-account/orders`} className="flex flex-col items-center justify-center p-6 bg-gray-100 rounded">
+                  <img src="theme/camera/image/truck-icon.png" alt="order-icon" />
+                  <span className="mt-2 text-sm font-medium">Track Order</span>
+                </Link>
+                <Link passHref href={`/my-account/orders`} className="flex flex-col items-center justify-center p-6 bg-gray-100 rounded">
+                  <img src="theme/camera/image/pencil-icon.png" alt="order-icon" />
+                  <span className="mt-2 text-sm font-medium">Manage Order</span>
+                </Link>
+                <Link passHref href={`/privacy-policy`} className="flex flex-col items-center justify-center p-6 bg-gray-100 rounded">
+                  <img src="theme/camera/image/return-icon.png" alt="order-icon" />
+                  <span className="mt-2 text-sm font-medium">Returns Policy</span>
+                </Link>
+                <Link passHref href={`/my-account`} className="flex flex-col items-center justify-center p-6 bg-gray-100 rounded">
+                  <img src="theme/camera/image/user-icon.png" alt="order-icon" />
+                  <span className="mt-2 text-sm font-medium">My Account</span>
+                </Link>
               </div>
-            </div>
-      
-            <div className="mt-4 space-y-2">
-              <div className="flex justify-between">
-                <p className="text-gray-700">
-                  {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
-                  :
-                </p>
-                <div className="flex gap-8">
-                 <p className="text-gray-700">{order?.items.length} {order?.items.length === 1 ? 'item' : 'items'}</p>
-                  <p> {isIncludeVAT ? order?.subTotal?.formatted?.withTax : order?.subTotal?.formatted?.withoutTax} </p>
-                </div>
-              </div>
-      
-              {order?.discount.raw?.withTax > 0 && (
-                <div className="flex justify-between">
-                  <p className="text-gray-700">{translate('label.orderSummary.discountText')}:</p>
-                  <div className="flex gap-8">
-                    <p> {isIncludeVAT ? order?.discount.formatted?.withTax : order?.discount.formatted?.withoutTax} </p>
+            ) : null}
+            {/* Order Status Card */}
+            {order?.orderNo ? (
+              <div className="bg-[#EAEDF5] rounded p-6 mt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="pb-3 text-left border-b border-gray-50">
+                    <p className="text-gray-700">Order status:</p>
+                  </div>
+                  <div className="pb-3 text-left border-b border-gray-50">
+                    <p className="font-medium">{order?.orderStatus}</p>
+                  </div>
+
+                  <div className="pb-3 text-left border-b border-gray-50">
+                    <p className="text-gray-700">Order reference:</p>
+                  </div>
+                  <div className="pb-3 text-left border-b border-gray-50">
+                    <p className="font-medium">{order?.orderNo}</p>
+                  </div>
+
+                  <div className="text-left">
+                    <p className="text-gray-700">Estimated delivery:</p>
+                  </div>
+                  <div className="text-left">
+                    <p className="font-medium text-black dark:text-black">
+                      {order?.deliveryPlans?.length >= 1 ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget) : eddDateFormat(order?.dueDate)}
+                    </p>
                   </div>
                 </div>
-              )}
-      
-              <div className="flex justify-between">
-                <p className="text-gray-700">{translate('label.orderSummary.shippingText')}</p>
-                <div className="text-right">
-                  <p className="font-bold"> {isIncludeVAT ? order?.shippingCharge.formatted?.withTax : order?.shippingCharge.formatted?.withoutTax} </p>
-                </div>
               </div>
-      
-              <div className="flex justify-between">
-                <p className="text-gray-700">Delivery:</p>
-                <div className="flex gap-8">
-                  <p className="text-black dark:text-black">
-                    {order?.deliveryPlans?.length >= 1 ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget) : eddDateFormat(order?.dueDate)}
-                  </p>
+            ) : null}
+            {/* Order Summary */}
+            {order?.orderNo ? (
+              <div className="p-6 mt-4 bg-gray-100 border rounded">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-bold">Order Summary</h2>
+                  <div className="text-right">
+                    <p className="font-bold"> Total: {isIncludeVAT ? order?.grandTotal?.formatted?.withTax : order?.grandTotal?.formatted?.withTax} </p>
+                  </div>
                 </div>
-              </div>
-            </div>
-      
-            {/* Product Items */}
-            {order?.orderNo && (
-              <div className="mt-4">
-                {order?.deliveryPlans?.length < 1 ? (
-                  order?.items?.map((product: any) => (
-                    <div key={product.id} className="border-t border-gray-200 pt-4 mb-2 bg-white p-3" >
-                      <div className="flex">
-                        <div className="w-20">
-                          <img style={css} src={ generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER } width={200} height={200} alt={product.name || 'thank you'} className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40" />
-                        </div>
-                        <div className="ml-4">
-                          <p className="font-medium">
-                            <Link className="text-black" href={`/${product.slug}`}> {product.name} </Link>
-                          </p>
-                          <p className="text-gray-600 text-sm">Quantity: {product.qty}</p>
-                          <p className="font-medium mt-1">
-                            {product?.price?.raw?.withTax > 0 ? (
-                              product.price.formatted.withTax
-                            ) : (
-                              <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600"> {translate('label.orderSummary.freeText')} </span>
-                            )}
-                          </p>
-                        </div>
+
+                <div className="mt-4 space-y-2">
+                  <div className="flex justify-between">
+                    <p className="text-gray-700">
+                      {isIncludeVAT ? translate('label.orderSummary.subTotalVATIncText') : translate('label.orderSummary.subTotalVATExText')}
+                      :
+                    </p>
+                    <div className="flex gap-8">
+                      <p className="text-gray-700">{order?.items.length} {order?.items.length === 1 ? 'item' : 'items'}</p>
+                      <p> {isIncludeVAT ? order?.subTotal?.formatted?.withTax : order?.subTotal?.formatted?.withoutTax} </p>
+                    </div>
+                  </div>
+
+                  {order?.discount.raw?.withTax > 0 && (
+                    <div className="flex justify-between">
+                      <p className="text-gray-700">{translate('label.orderSummary.discountText')}:</p>
+                      <div className="flex gap-8">
+                        <p> {isIncludeVAT ? order?.discount.formatted?.withTax : order?.discount.formatted?.withoutTax} </p>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <SplitDeliveryOrderItems order={order} />
+                  )}
+
+                  <div className="flex justify-between">
+                    <p className="text-gray-700">{translate('label.orderSummary.shippingText')}</p>
+                    <div className="text-right">
+                      <p className="font-bold"> {isIncludeVAT ? order?.shippingCharge.formatted?.withTax : order?.shippingCharge.formatted?.withoutTax} </p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <p className="text-gray-700">Delivery:</p>
+                    <div className="flex gap-8">
+                      <p className="text-black dark:text-black">
+                        {order?.deliveryPlans?.length >= 1 ? eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget) : eddDateFormat(order?.dueDate)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Product Items */}
+                {order?.orderNo && (
+                  <div className="mt-4">
+                    {order?.deliveryPlans?.length < 1 ? (
+                      order?.items?.map((product: any) => (
+                        <div key={product.id} className="p-3 pt-4 mb-2 bg-white border-t border-gray-200" >
+                          <div className="flex">
+                            <div className="w-20">
+                              <img style={css} src={generateUri(product.image, 'h=200&fm=webp') || IMG_PLACEHOLDER} width={200} height={200} alt={product.name || 'thank you'} className="flex-none object-cover object-center w-20 h-20 bg-gray-100 rounded-lg sm:w-40 sm:h-40" />
+                            </div>
+                            <div className="ml-4">
+                              <p className="font-medium">
+                                <Link className="text-black" href={`/${product.slug}`}> {product.name} </Link>
+                              </p>
+                              <p className="text-sm text-gray-600">Quantity: {product.qty}</p>
+                              <p className="mt-1 font-medium">
+                                {product?.price?.raw?.withTax > 0 ? (
+                                  product.price.formatted.withTax
+                                ) : (
+                                  <span className="font-medium uppercase text-14 xs-text-14 text-emerald-600"> {translate('label.orderSummary.freeText')} </span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <SplitDeliveryOrderItems order={order} />
+                    )}
+                  </div>
                 )}
               </div>
-            )}
+            ) : null}
           </div>
-          ) : null}
-        </div>
-        <div className="max-w-xl mt-5 text-center">
-              <Link href={`/`} passHref>
-                <span className="btn-primary btn"> {translate('common.label.backToHomeText')} </span>
-              </Link>
-            </div>
+          <div className="max-w-xl mt-5 text-center">
+            <Link href={`/`} passHref>
+              <span className="btn-primary btn"> {translate('common.label.backToHomeText')} </span>
+            </Link>
+          </div>
         </main>
-        ) : (
-          <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
+      ) : (
+        <main className="px-4 pt-6 pb-10 sm:pb-24 bg-gray-50 sm:px-6 sm:pt-6 lg:px-8 lg:py-2">
           <div className="max-w-3xl p-4 mx-auto bg-white rounded-md shadow-lg">
             <div className="max-w-xl">
               <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">
@@ -530,7 +530,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
                 )}
                 <div className="border-t border-gray-200 lg:pl-5 sm:pl-2 ">
                   <h3 className="sr-only">{translate('common.label.yourInfoText')}</h3>
-  
+
                   <h4 className="sr-only">{translate('label.checkout.addressesText')}</h4>
                   <dl className="grid grid-cols-2 py-10 text-sm gap-x-6">
                     <div>
@@ -558,7 +558,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
                       </dd>
                     </div>
                   </dl>
-  
+
                   <h4 className="sr-only">{translate('label.checkout.paymentHeadingText')}</h4>
                   <dl className="grid grid-cols-2 py-10 text-sm border-t border-gray-200 gap-x-6">
                     {order?.payments && (
@@ -576,9 +576,9 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
                         <p>
                           {translate('label.thankyou.deliverdText')}:{' '}
                           {order?.deliveryPlans?.length >= 1 ? (
-                            <p className="font-semibold uppercase font-14 dark:text-black"> {eddDateFormat( order?.deliveryPlans[0].deliveryDateTarget )} </p>
+                            <p className="font-semibold uppercase font-14 dark:text-black"> {eddDateFormat(order?.deliveryPlans[0].deliveryDateTarget)} </p>
                           ) : (
-                            <p className="font-semibold uppercase font-14 dark:text-black"> {eddDateFormat( order?.shipping?.expectedDeliveryDate )} </p>
+                            <p className="font-semibold uppercase font-14 dark:text-black"> {eddDateFormat(order?.shipping?.expectedDeliveryDate)} </p>
                           )}
                         </p>
                       </dd>
@@ -638,14 +638,14 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
                 </div>
               </section>
             ) : null}
-            <div className="max-w-xl mt-5 text-center">
+            <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
               <Link href={`/`} passHref>
-                <span className="btn-primary btn"> {translate('common.label.backToHomeText')} </span>
+                <span className="px-1 py-3 border border-black btn-full-width park-bg-secondary btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn lg:py-2 sm:px-4"> {translate('common.label.backToHomeText')} </span>
               </Link>
             </div>
           </div>
         </main>
-        )}
+      )}
 
       {/* Placeholder for order confirmation after progress bar snippet */}
       <div
@@ -685,7 +685,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
                               {shareOptionsConfig?.map(
                                 (shareOpt: any, Idx: any) => {
                                   return (
-                                    <span key={Idx} onClick={shareOpt.onClick} className={classNames( shareOpt.name === shareMethod ? 'border-b-[3px]  border-black' : 'border-none', 'border-b-1[px] py-2 mx-4 w-8 my-2 flex items-center justify-center cursor-pointer text-black' )} >
+                                    <span key={Idx} onClick={shareOpt.onClick} className={classNames(shareOpt.name === shareMethod ? 'border-b-[3px]  border-black' : 'border-none', 'border-b-1[px] py-2 mx-4 w-8 my-2 flex items-center justify-center cursor-pointer text-black')} >
                                       {shareOpt?.icon}
                                     </span>
                                   )
@@ -720,7 +720,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
                             )}
                           </div>
                         ) : (
-                          <div className={classNames( 'my-20 flex w-full flex-col justify-center items-center dark:text-black' )} >
+                          <div className={classNames('my-20 flex w-full flex-col justify-center items-center dark:text-black')} >
                             <h2 className="px-5 text-center"> {referralOffers?.refereePromo} </h2>
                             <p className="px-5 text-center"> {translate('label.thankyou.referralServiceEmailsText')} </p>
                             <Button className="my-3" onClick={() => { setShareReferralView(true) }} >
