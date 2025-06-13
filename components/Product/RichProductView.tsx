@@ -24,7 +24,7 @@ const AvailableOffers = dynamic(() => import('@components/Product/EffectiveAvail
 export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
   const translate = useTranslation()
   const [showFallback, setShowFallback] = useState(false);
-  const bestPrice = parseInt(promotions?.promotions?.bestAvailablePromotion?.additionalInfo10)
+  const bestPrice = promotions?.promotions?.bestAvailablePromotion?.additionalInfo10
   return (
     <div className='flex gap-6 flex-mob-col'>
       <div className='w-full lg:w-[60%]'>
@@ -73,15 +73,16 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
             )}
             {cashbackAmount && <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
               <div className="flex items-center gap-3 px-3 py-2 justify-between bg-[#EAEDF5]">
+
                 <h2 className="text-sm font-semibold text-[#1E1E1E]">Effective price
-                <span className="block text-xs italic font-normal text-gray-500">after <strong>{product?.price?.currencySymbol}{cashbackAmount}</strong> cashback and voucher</span>
+                  <span className="block text-xs italic font-normal text-gray-500">after <strong>{product?.price?.currencySymbol}{cashbackAmount}</strong> cashback and voucher</span>
                 </h2>
-                <span className="ml-2 text-xl font-bold text-red-700">{product?.price?.currencySymbol}{(bestPrice - cashbackAmount).toFixed(2)}</span>
+                <span className="ml-2 text-xl font-bold text-red-700">{product?.price?.currencySymbol}{(bestPrice ? bestPrice - cashbackAmount : product?.price?.raw?.withTax - cashbackAmount)?.toFixed(2)}</span>
               </div>
 
               <div className="flex w-full gap-2 px-3 py-2 pb-4 mt-2">
                 <div className="mt-[1px]">
-                  <InformationCircleIcon className="w-5 h-5 text-[#1E1E1E]"/>
+                  <InformationCircleIcon className="w-5 h-5 text-[#1E1E1E]" />
                 </div>
                 <div className="text-sm font-medium text-[#757575]" dangerouslySetInnerHTML={{ __html: cashbackDescription }}></div>
               </div>
