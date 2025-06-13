@@ -72,7 +72,7 @@ export default function TradeInDetail() {
   const [assessmentModal, setAssessmentModal] = useState<{ open: boolean; data: any }>({ open: false, data: null });
   const tradeinId = router.query?.tradeinId[0]
 
-  const rejectionOptions = rejectionValues.map((x, i) => ({id: i+ 1, value: x}));
+  const rejectionOptions = rejectionValues.map((x, i) => ({ id: i + 1, value: x }));
 
   useEffect(() => {
     fetchTradeDetail(tradeinId);
@@ -197,7 +197,7 @@ export default function TradeInDetail() {
       .replace(/_/g, " ") // Replace underscores with spaces (if any)
       .trim();
   };
-  const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus) && itemStatus === "Quoted";
+  const canChangeStatus = (itemStatus: string) => !UNCHANGEABLE_STATUSES.includes(itemStatus);
   const canCancelTradeIn = (itemStatus: QuoteStatus) => [QuoteStatus.AwaitingQuotation, QuoteStatus.Quoted, QuoteStatus.QuoteAccepted, QuoteStatus.QuoteExpired].includes(itemStatus);
   const canUpdateShippingAddress = (itemStatus: QuoteStatus) => [QuoteStatus.QuoteAccepted].includes(itemStatus) && !tradeDetail?.value?.street
   const renderProductInfo = (product: any, accessories: any, condition: any) => (
@@ -307,7 +307,7 @@ export default function TradeInDetail() {
                             <div className="flex flex-col w-full mb-3">
                               {renderProductInfo(item, item?.accessories, item?.condition)}
                             </div>
-                            {item?.parentStockCode != item?.assessment?.parentStockCode && item?.assessment?.parentStockCode != null  &&
+                            {item?.parentStockCode != item?.assessment?.parentStockCode && item?.assessment?.parentStockCode != null &&
                               <>
                                 <span className="text-xs font-semibold text-[#2d4d9c] uppercase">Updated product during assessment: </span>
                                 <div className="flex items-center justify-start gap-2 p-2 bg-white border border-gray-200 rounded-md">
@@ -459,7 +459,7 @@ export default function TradeInDetail() {
           </div>
         </div>
       }
-      {assessmentModal?.open && <AmendProductModal {...assessmentModal} onCloseAmendProduct={onToggleAssessmentModal} /> }
+      {assessmentModal?.open && <AmendProductModal {...assessmentModal} onCloseAmendProduct={onToggleAssessmentModal} />}
     </>
   );
 }
