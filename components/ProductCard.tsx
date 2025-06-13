@@ -343,19 +343,24 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             }
           </div>
         }
-        {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && data?.condition != "pre-launch" && (
-          <div className='flex justify-between my-3 ml-0 text-left add-btn-plp'>
-            <Button size="small" className={`block cart-btn-plp ${featureToggle?.features?.enableForPCSite ? '!max-w-[85%]' : ''}`} title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
-            {featureToggle?.features?.enableForPCSite && <LikeButton liked={isInWishList} className="justify-end text-right" handleWishList={handleWishList} />}
-          </div>
-        )}
-        {data?.condition === "pre-launch" &&
-          <div className='justify-start my-3 ml-0 text-left add-btn-plp'>
-            <button className="flex items-center text-xs justify-center flex-1 font-semibold max-w-xs px-8 py-1 text-black bg-[#ABC1F8] hover:bg-[#ABC1F8] hover:text-black border border-transparent rounded-2xl" onClick={() => createProductInterest()} >
-              I'm Interested
-            </button>
-          </div>
-        }
+        
+        {/* Button section aligned to bottom */}
+        <div className={`mt-auto ${featureToggle?.features?.enableForPCSite ? 'pt-4 pb-4' : 'pt-2 pb-3'}`}>
+          {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && data?.condition != "pre-launch" && (
+            <div className={`flex justify-between ${featureToggle?.features?.enableForPCSite ? 'px-0' : 'px-2.5'} ml-0 text-left add-btn-plp`}>
+              <Button size="small" className={`block cart-btn-plp ${featureToggle?.features?.enableForPCSite ? '!max-w-[85%]' : ''}`} title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+              {featureToggle?.features?.enableForPCSite && <LikeButton liked={isInWishList} className="justify-end text-right" handleWishList={handleWishList} />}
+            </div>
+          )}
+          {data?.condition === "pre-launch" &&
+            <div className={`justify-start ${featureToggle?.features?.enableForPCSite ? 'px-0' : 'px-2.5'} ml-0 text-left add-btn-plp`}>
+              <button className="flex items-center text-xs justify-center flex-1 font-semibold max-w-xs px-8 py-1 text-black bg-[#ABC1F8] hover:bg-[#ABC1F8] hover:text-black border border-transparent rounded-2xl" onClick={() => createProductInterest()} >
+                I'm Interested
+              </button>
+            </div>
+          }
+        </div>
+        
         {isComparedEnabled && product?.compared && (
           <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
             {product?.compared && (
