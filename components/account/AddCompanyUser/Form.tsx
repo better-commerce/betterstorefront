@@ -63,14 +63,14 @@ export default function AddCompanyUserForm({ type = 'addCompanyUser', hierarchy 
         const fetchCompanyHierarchyByParentId = async () => {
           setLoadingBranches(true)
           try {
-            const selectedZone = hierarchy?.find((item: any) => (item.id === values?.zone))
+            const selectedZone = hierarchy.find((item: any) => (item.id === values.zone))
             const { data : branchList } = await axios.post(NEXT_B2B_GET_COMPANY_HIERARCHY_BY_PARENT_ID, {
-              companyId: selectedZone?.companyId,
-              parentId: selectedZone?.id
+              companyId: selectedZone.companyId,
+              parentId: selectedZone.parentId
             })
 
             if (branchList?.length > 0) {
-              const options = branchList?.map((item: any) => ({ label: item?.name, value: item?.id }))
+              const options = branchList.map((item: any) => ({ label: item.name, value: item.id }))
               setBranchOptions(options)
             } else {
               setBranchOptions([])
