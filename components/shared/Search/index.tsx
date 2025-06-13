@@ -89,7 +89,7 @@ export default function Search(props: any) {
             </div>
           </div>
         </div>
-        <div className={`${featureToggle?.features?.enableForPCSite ? 'grid grid-cols-1 sm:mx-0 md:grid-cols-1 px-3 sm:px-4 lg:grid-cols-1 mt-2' : 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-10'} w-full sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 max-panel-search overflow-y-scroll pc-overflow-auto max-h-[70vh] pb-10 customScrollbar`}>
+        <div className={`${featureToggle?.features?.enableForPCSite ? 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-2' : 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-10'} w-full sm:w-3/5 p-[1px] border-gray-100 gap-x-4 gap-y-4 max-panel-search overflow-y-scroll pc-overflow-auto max-h-[70vh] pb-10 customScrollbar`}>
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
@@ -104,15 +104,16 @@ export default function Search(props: any) {
           {featureToggle?.features?.enableForPCSite ? (
             <>
               {products?.map((product: any, idx: number) => {
+                const cashbackAmount = product?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
                 return (
-                  <Link  href={`/${product.slug}`} className={`grid grid-cols-12 border border-gray-200 pc-grid`} key={`search-${idx}`} onClick={() => {
+                  <Link href={`/${product.slug}`} className={`grid grid-cols-12 border border-gray-200 pc-grid`} key={`search-${idx}`} onClick={() => {
                     closeWrapper();
                     if (inputValue) {
                       const location = window.location
                       pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
                     }
                   }}>
-                    <div className='items-center justify-center col-span-4'>
+                    <div className='col-span-12'>
                       <div className="relative flex-shrink-0 overflow-hidden group">
                         <div className="block">
                           <div className="flex w-full">
@@ -124,7 +125,7 @@ export default function Search(props: any) {
                         </div>
                       </div>
                     </div>
-                    <div className='col-span-8 border-l border-gray-200'>
+                    <div className='col-span-12 border-l border-gray-200'>
                       <div className="space-y-4 px-2.5 pt-5 pb-2.5">
                         <div>
                           <h2 className="text-sm text-base font-semibold text-left">{product?.brand}</h2>
@@ -132,7 +133,7 @@ export default function Search(props: any) {
                           <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
                         </div>
                         <div className="flex items-end justify-between product-card-panel">
-                          <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          <Prices cashbackAmount={cashbackAmount} price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           {product?.reviewCount > 0 &&
                             <div className="flex items-center mb-0.5">
                               <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
@@ -141,10 +142,7 @@ export default function Search(props: any) {
                               </span>
                             </div>
                           }
-                        </div>
-                        <div className='flex items-center justify-start gap-1 mt-2 text-xs font-light text-gray-600'>
-                          <span className='px-1 py-0.5 rounded text-xs text-white bg-[#009951]'>Save {product?.price?.currencySymbol}2.35</span> with voucher
-                        </div>
+                        </div>                        
                       </div>
                     </div>
                   </Link>
@@ -154,6 +152,7 @@ export default function Search(props: any) {
           ) : (
             <>
               {products?.map((product: any, idx: number) => {
+                const cashbackAmount = product?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
                 return (
                   <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
                     <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
@@ -179,7 +178,7 @@ export default function Search(props: any) {
                         <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
                       </div>
                       <div className="flex items-end justify-between product-card-panel">
-                        <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        <Prices cashbackAmount={cashbackAmount} price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                         {product?.reviewCount > 0 &&
                           <div className="flex items-center mb-0.5">
                             <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />

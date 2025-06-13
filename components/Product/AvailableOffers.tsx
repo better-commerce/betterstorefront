@@ -10,7 +10,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import BankOfferIcon from '@components/BankOfferIcon'
 declare const window: any
 SwiperCore.use([Navigation])
-export default function AvailableOffers({ currency, offers, key, product }: any) {
+export default function AvailableOffers({ currency, offers, key, product, featureToggle }: any) {
   const translate = useTranslation()
   const [isOffers, setOffers] = useState(false)
   const [isCopied, showCopied] = useState(false)
@@ -37,7 +37,7 @@ export default function AvailableOffers({ currency, offers, key, product }: any)
   const bestprice = parseInt(offers?.bestAvailablePromotion?.additionalInfo10)
   return (
     <section key={key} aria-labelledby="details-heading" className="mt-4 border-t border-gray-200 sm:mt-2 ipad-border-none-pdp" >
-      <div className="flex flex-col pt-4 pb-4 border-b border-gray-200 gap-y-4 mob-gap-y-4 mob-border-none-pdp">
+      {!featureToggle?.features?.enableForPCSite && <div className="flex flex-col pt-4 pb-4 border-b border-gray-200 gap-y-4 mob-gap-y-4 mob-border-none-pdp">
         <div className="grid w-full grid-cols-12 px-0 sm:grid-cols-6 sm:px-0 mob-promo-grid">
           <div className="col-span-7 sm:col-span-3 mob-left-7">
             <h3 className="font-semibold font-16 text-16 dark:text-black">
@@ -69,7 +69,7 @@ export default function AvailableOffers({ currency, offers, key, product }: any)
             <ProductSaleCountdown startDate={offers?.bestAvailablePromotion?.fromDate} endDate={offers?.bestAvailablePromotion?.toDate} />
           </div>
         </div>
-      </div>
+      </div>}
       <div className="flex flex-col px-0 py-2 pr-0 mt-2 sm:pr-4 gap-x-4 sm:px-0 offeres m-hide-navigation">
         <h2 className="mb-2 font-semibold text-black uppercase opacity_056 text-primary font-18 dark:text-black offer-heading-text">
           {translate('label.basket.moreOffersText')} <span className='sr-only'>{' '}of {product?.name}</span>

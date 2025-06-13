@@ -16,6 +16,7 @@ const BuyNowButton = dynamic(() => import('@components/ui/BuyNowButton'))
 const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
 export default function DefaultProductView({ product, detailsConfig, config, isEngravingAvailable, renderProductSpecification, isInWishList, handleWishList, buttonConfig, showMobileCaseButton, featureToggle, isMobile, onStoreStockCheck, setOpenStockCheckModal, showEngravingModal, selectedAttrData, renderSellableType, openStoreLocatorModal, promotions, deviceInfo, reviews, renderVariants, attrGroup, renderRelatedProducts, defaultDisplayMembership }: any) {
   const translate = useTranslation()
+  const cashbackAmount = product?.customAttributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
   return (
     <div className="space-y-8">
       <div>
@@ -23,7 +24,7 @@ export default function DefaultProductView({ product, detailsConfig, config, isE
           {product?.name}
         </h1>
         <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-          <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          <Prices cashbackAmount={cashbackAmount} contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           {reviews?.review?.totalRecord > 0 &&
             <>
               <div className="flex w-64">

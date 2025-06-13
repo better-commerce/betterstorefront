@@ -247,6 +247,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       }
     )
   }
+  const cashbackAmount = data?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
   const renderGroupButtons = () => {
     return (
       <>
@@ -328,7 +329,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </>
         )}
         {(!featureToggle?.features?.hidePriceForGuest || user?.userId) && data?.condition != "pre-launch" && <div className="flex items-center justify-between mt-2 product-card-panel">
-          <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+          <Prices cashbackAmount={cashbackAmount} price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>}
         {featureToggle?.features?.enableForPCSite &&
           <p className="border border-[#2D4D9C] px-2 py-1 flex items-center gap-1 text-xs font-semibold text-[#2D4D9C] text-left rounded">

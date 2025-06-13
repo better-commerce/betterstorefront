@@ -39,11 +39,13 @@ const Prices: FC<PricesProps> = ({
   // Calculate discount percentage for the non-member price
   const originalPrice = isIncludeVAT ? listPrice?.raw?.withTax : listPrice?.raw?.withoutTax;
   const currentPrice = isIncludeVAT ? price?.raw?.withTax : price?.raw?.withoutTax;
-  const nonMemberDiscountPercentage = originalPrice > currentPrice? ((originalPrice - currentPrice) / originalPrice) * 100: 0;
-  
+  const nonMemberDiscountPercentage = originalPrice > currentPrice ? ((originalPrice - currentPrice) / originalPrice) * 100 : 0;
+
   const formattedOriginalPrice = isIncludeVAT ? listPrice?.formatted?.withTax : listPrice?.formatted?.withoutTax;
   const match = formattedOriginalPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
   const symbol = match?.[1] || '';
+  const saving = isIncludeVAT ? listPrice?.raw?.withTax - price?.raw?.withTax : listPrice?.raw?.withoutTax - price?.raw?.withoutTax
+
   return (
     <>
       <div className={`${className}`}>
@@ -105,10 +107,13 @@ const Prices: FC<PricesProps> = ({
                   const decimal = match?.[3]?.replace('.', '') || '';
 
                   return (
-                    <span className="relative inline-flex items-start mr-2">
-                      <span className="text-sm mr-0.5">{symbol}</span>
-                      <span className="font-semibold font-32">{main}</span>
-                      {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
+                    <span className="inline-flex items-center gap-6 mr-2">
+                      <span className="relative">
+                        <span className="text-sm mr-0.5">{symbol}</span>
+                        <span className="font-semibold font-32">{main}</span>
+                        {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
+                      </span>
+                      {saving > 0 && <span className="px-2 py-0.5 font-28 font-normal italic">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
                     </span>
                   );
                 })()

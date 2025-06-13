@@ -10,9 +10,10 @@ export interface PricesProps {
   readonly contentClass?: string;
   readonly featureToggle: any;
   readonly defaultDisplayMembership: any;
+  readonly cashbackAmount: any;
 }
 
-const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPrice, contentClass = "py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium", featureToggle, defaultDisplayMembership, }) => {
+const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPrice, contentClass = "py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium", featureToggle, defaultDisplayMembership, cashbackAmount = "" }) => {
   const discountPerc = defaultDisplayMembership?.membershipPromoDiscountPerc || 0
   const isIncludeVAT = vatIncluded()
   const translate = useTranslation()
@@ -28,7 +29,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
   }, [price?.raw?.withoutTax])
 
   const saving = isIncludeVAT ? listPrice?.raw?.withTax - price?.raw?.withTax : listPrice?.raw?.withoutTax - price?.raw?.withoutTax
-  const cashback = (price.raw.withTax * 0.2)
+  const cashback = cashbackAmount
   return (
     <div className={`${className}`}>
       {featureToggle?.features?.enableMembership && (
@@ -47,7 +48,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
       {featureToggle?.features?.enableForPCSite ? (
         price?.raw?.withTax != 0 ? (
           <div className="flex flex-col items-start justify-end gap-2 text-sm font-semibold text-gray-400 price">
-            <span className="bg-[#2D4D9C] text-xs w-full text-white px-2 py-1 rounded text-left font-semibold">{price?.currencySymbol}{price?.raw?.withTax ? (cashback).toFixed(2) : 'N/A'} Cashback</span>
+            {cashback && <span className="bg-[#2D4D9C] text-xs w-full text-white px-2 py-1 rounded text-left font-semibold">{price?.currencySymbol}{price?.raw?.withTax ? cashback : 'N/A'} Cashback</span>}
             <span className="flex flex-col items-start w-full min-h-[58px]">
               <span className="flex items-end justify-end w-full pr-6">
                 {isIncludeVAT ? (
@@ -76,13 +77,13 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
               </span>
               {saving > 0 && <span className="px-2 py-0.5 text-xs font-semibold flex-1 text-white bg-[#009951] rounded">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
             </span>
-            <span className="text-sm w-full font-medium text-black py-0.5 text-left">
+            {cashback && <span className="text-sm w-full font-medium text-black py-0.5 text-left">
               Effective price{' '}
               <span className="font-semibold text-red-500">{price?.currencySymbol}{(price.raw.withTax - cashback).toFixed(2)}</span>
               {' '}after{' '}
-              <span> {price?.currencySymbol}{price?.raw?.withTax ? (price.raw.withTax * 0.2).toFixed(2) : 'N/A'}</span>
+              <span> {price?.currencySymbol}{cashback}</span>
               {' '}cashback and voucher.
-            </span>
+            </span>}
             <span className="text-xs font-normal text-gray-400"> {featureToggle?.features?.enableMembership && `${translate('label.membership.nonMemberPriceText')}`} </span>
             {!featureToggle?.features?.enableForPCSite && <span className="pl-2 font-light text-right text-gray-400 ex-vat-text font-10"> {isIncludeVAT ? translate('label.orderSummary.incVATText') : translate('label.orderSummary.excVATText')} </span>}
           </div>

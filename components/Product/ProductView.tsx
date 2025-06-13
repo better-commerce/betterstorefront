@@ -829,6 +829,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const weloveAttribute = product?.customAttributes?.find(
     (attr: { key: string }) => attr?.key === "web.welove"
   );
+
+  const cashbackAmount = product?.customAttributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
+  const cashbackDescription = product?.customAttributes?.find(((item: any) => item?.key == "cashback.description"))?.value
   const renderCustomControls = () =>
     fullscreen ? (
       <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999' onClick={exitFullscreen}>
@@ -1002,11 +1005,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
   };
 
- 
+
   const renderSectionContent = () => {
     return (
       featureToggle?.features?.enableRichPDP ? (
-        <RichProductView product={product} selectedOption={selectedOption} kitsProducts={kitsProducts?.['Bundle']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} promotions={promotions} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
+        <RichProductView product={product} cashbackAmount={cashbackAmount} cashbackDescription={cashbackDescription} selectedOption={selectedOption} kitsProducts={kitsProducts?.['Bundle']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} promotions={promotions} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
       ) : (
         <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
       )
@@ -1018,7 +1021,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       id: 'overview',
       label: 'Overview',
       content: (
-        <div className="space-y-4 w-full">
+        <div className="w-full space-y-4">
           <div className="text-sm text-gray-800 description-html description-p-long" dangerouslySetInnerHTML={{ __html: product?.description }} />
         </div>
       )
@@ -1052,17 +1055,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </>
       )
     },
-     {
+    {
       id: 'Reviews',
       label: 'Reviews',
       content: (
         <div className="space-y-4 review-none-section container-tabs">
-          {reviews?.review?.productReviews?.length > 0
-            ? renderReviews()
-            : 
-            <div className='flex justify-start flex-col text-xl font-semibold text-left text-gray-400'>
+          {reviews?.review?.productReviews?.length > 0 ? renderReviews() :
+            <div className='flex flex-col justify-start text-xl font-semibold text-left text-gray-400'>
               This product hasn't been reviewed yet. Be the first to share your thoughts!
-              <div className='w-full mt-4'><ReviewInput data={product} productId={ product?.productId ?? product?.recordId} setSubmitReview={setSubmitReview}deviceInfo={deviceInfo}/></div>
+              <div className='w-full mt-4'><ReviewInput data={product} productId={product?.productId ?? product?.recordId} setSubmitReview={setSubmitReview} deviceInfo={deviceInfo} /></div>
             </div>}
         </div>
       )
@@ -1241,21 +1242,21 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
                 />
                 {selectedOption === "new" ? (
                   <>
-                  {overlayImages?.length > 0 &&
-                    <div className='absolute z-10 top-1 right-1 border border-[#ddd] shadow-md'>
-                      <img
-                        src={generateUri(overlayImage?.image, 'h=100&fm=webp') || IMG_PLACEHOLDER}
-                        className='overlayImage'
-                        width="100"
-                        height="100"
-                        title="Free Gift"
-                        alt={product?.name} />
-                    </div>
-                 }
+                    {overlayImages?.length > 0 &&
+                      <div className='absolute z-10 top-1 right-1 border border-[#ddd] shadow-md'>
+                        <img
+                          src={generateUri(overlayImage?.image, 'h=100&fm=webp') || IMG_PLACEHOLDER}
+                          className='overlayImage'
+                          width="100"
+                          height="100"
+                          title="Free Gift"
+                          alt={product?.name} />
+                      </div>
+                    }
                   </>
-                    ) : (
+                ) : (
                   <></>
-                 )}
+                )}
                 {featureToggle?.features?.enableRichPDP && (<p className='pt-4 text-sm text-gray-500'>Product Code: {product?.productCode}</p>)}
               </div>
             ) : (

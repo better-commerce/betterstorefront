@@ -208,7 +208,7 @@ const ProductQuickView2: FC<ProductQuickView2Props> = ({ className = "", feature
 
           <div className="flex items-center mt-5 space-x-4 sm:space-x-5">
             {/* <div className="flex text-xl font-semibold">$112.00</div> */}
-            <Prices
+            <Prices cashbackAmount=""
               contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold"
               price={112}
               listPrice={122}

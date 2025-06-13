@@ -206,6 +206,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       }
     }
   })
+  const cashbackAmount = data?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
   const renderCompareAttributes = () => {
     return (
       <>
@@ -289,7 +290,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
               </div>
             </div>
             <div className="flex items-center justify-between ">
-              <Prices price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <Prices cashbackAmount={cashbackAmount} price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             </div>
             {renderCompareAttributes()}
             {isComparedEnabled && product?.compared && (

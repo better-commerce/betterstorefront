@@ -56,7 +56,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
   deviceInfo,
   maxBasketItemsCount,
   attributesCount = 0,
-  featureToggle, 
+  featureToggle,
   defaultDisplayMembership,
 }) => {
   const [currentProductData, setCurrentProductData] = useState({
@@ -327,6 +327,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     }
     return product?.currentStock < 1
   }
+  const cashbackAmount = product?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
 
   return (
     <>
@@ -347,7 +348,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name}
           </div>
           <div className="px-0 text-xs font-bold text-left text-black sm:text-xs product-card-panel">
-            <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <Prices cashbackAmount={cashbackAmount} price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         </Link>
         <div className="absolute bottom-0 left-0 right-0 flex flex-col add-btn-plp">

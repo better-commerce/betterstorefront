@@ -174,7 +174,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemC
                                 </div>
                               </div>
                               : <div></div>}
-                            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                            <Prices cashbackAmount="" contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </div>
                         </div>
                         {!product?.isMembership && product?.price?.raw?.withTax !== 0 &&
@@ -187,7 +187,7 @@ const CartItems = ({ reValidateData, handleItem, openModal, featureToggle, itemC
                           </div>
                         }
                         <div className="justify-end flex-1 hidden sm:flex basket-item-price">
-                          <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} className="mt-0.5" />
+                          <Prices cashbackAmount="" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} className="mt-0.5" />
                         </div>
                       </div>
                     </div>

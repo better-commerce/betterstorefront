@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 import LikeButton from "@components/LikeButton";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import Prices from "@components/Prices";
+import Prices from "@components/PricesWithDiscount";
 import detail1JPG from "images/products/detail1.jpg";
 import detail2JPG from "images/products/detail2.jpg";
 import detail3JPG from "images/products/detail3.jpg";
@@ -450,7 +450,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       </div>
     )
   };
-
+const cashbackAmount = selectedAttrData?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
   const renderSectionContent = () => {
     return (
       <div className="space-y-8">

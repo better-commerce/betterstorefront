@@ -520,6 +520,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       }
     }
   }
+  const cashbackAmount = product?.customAttributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
+  const cashbackDescription = product?.customAttributes?.find(((item: any) => item?.key == "cashback.description"))?.value
 
   const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
   SwiperCore.use([Navigation])
@@ -661,7 +663,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <Prices cashbackAmount={cashbackAmount} contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
             <div className="flex items-center">
               <Link href={`#productReview`} className="flex items-center text-sm font-medium" >

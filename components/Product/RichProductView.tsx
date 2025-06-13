@@ -2,7 +2,7 @@ import Link from "next/link";
 import ReviewBadge from "./ReviewBadge";
 import PricesWithDiscount from '@components/PricesWithDiscount'
 import ParkPoint from '@components/ParkPoint'
-import { ChevronRightIcon, CreditCardIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import { sanitizeRelativeUrl } from "@framework/utils/app-util";
 import StockCheckModal from "@components/StoreLocator/StockCheckModal/StockCheckModal";
 import LongDescription from "./LongDescription";
@@ -20,11 +20,11 @@ import KitPrice from "@components/KitPrice";
 import { CURRENT_THEME } from "@components/utils/constants";
 import { useState } from "react";
 const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCard'))
-const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
-export default function RichProductView({ product, selectedOption, isGuestUser, handleWishList, isInWishList,promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
+const AvailableOffers = dynamic(() => import('@components/Product/EffectiveAvailableOffers'))
+export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
   const translate = useTranslation()
-    const [showFallback, setShowFallback] = useState(false);
-  const cashback = (product?.price.raw.withTax * 0.2)
+  const [showFallback, setShowFallback] = useState(false);
+  const bestPrice = parseInt(promotions?.promotions?.bestAvailablePromotion?.additionalInfo10)
   return (
     <div className='flex gap-6 flex-mob-col'>
       <div className='w-full lg:w-[60%]'>
@@ -71,83 +71,65 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                 </div>
               </div>
             )}
-                         <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
-                    <div className="flex items-center gap-3 px-3 py-2 bg-gray-100">
-                      <div className="bg-gray-100 rounded-full">
-                        {!showFallback ? (
-                            <img
-                              src={`/theme/${CURRENT_THEME}/image/cashback-icon.svg`}
-                              alt="card icon"
-                              className="h-[18px]"
-                              onError={() => setShowFallback(true)}
-                            />
-                          ) : (
-                            <CreditCardIcon className="w-4 h-4 text-black" />
-                          )}
-                      </div>
-                      <h2 className="text-sm font-semibold text-gray-800">{product?.brand} Cashback</h2>
-                    </div>
+            {cashbackAmount && <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
+              <div className="flex items-center gap-3 px-3 py-2 justify-between bg-[#EAEDF5]">
+                <h2 className="text-sm font-semibold text-[#1E1E1E]">Effective price
+                <span className="block text-xs italic font-normal text-gray-500">after <strong>{product?.price?.currencySymbol}{cashbackAmount}</strong> cashback and voucher</span>
+                </h2>
+                <span className="ml-2 text-xl font-bold text-red-700">{product?.price?.currencySymbol}{(bestPrice - cashbackAmount).toFixed(2)}</span>
+              </div>
 
-                    <div className="px-3 py-2 pb-4 mt-2 space-y-1 ">
-                      <div className="flex items-baseline">
-                        <h3 className="text-sm font-medium text-gray-800">Effective price: </h3>
-                        <span className="ml-2 text-sm font-bold text-red-700">{product?.price?.currencySymbol}{(product?.price.raw.withTax - cashback).toFixed(2)}</span>
-                      </div>
-
-                      <p className="text-sm font-medium text-gray-800">after {product?.price?.currencySymbol}{product?.price?.raw?.withTax ? (product?.price.raw.withTax * 0.2).toFixed(2) : 'N/A'} cashback</p>
-
-                      <div className="pt-2 mt-8">
-                        <p className="text-sm text-gray-800">
-                          Cashback applies if product ordered within the offer period, even if out of stock.{" "}
-                          <a href="#" className="text-blue-600 hover:underline link-clr">How to redeem?</a>
+              <div className="flex w-full gap-2 px-3 py-2 pb-4 mt-2">
+                <div className="mt-[1px]">
+                  <InformationCircleIcon className="w-5 h-5 text-[#1E1E1E]"/>
+                </div>
+                <div className="text-sm font-medium text-[#757575]" dangerouslySetInnerHTML={{ __html: cashbackDescription }}></div>
+              </div>
+            </div>}
+            {selectedOption === "new" && product?.condition != 'pre-launch' && (
+              <>
+                <div className="flex items-center w-full my-3 gap-x-2">
+                  <img src="/theme/camera/image/pc-point-icon.svg" alt="icon" />
+                  <p className="text-xs text-black">Earn <ParkPoint price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} /> Park Points. <a href="#" className="font-semibold link-clr primary-text-blue">Details</a></p>
+                </div>
+                {kitsProducts?.length > 0 && (
+                  <div className="w-full">
+                    <h1 className="mb-2 text-sm text-gray-700">
+                      Configuration: <span className="font-semibold text-black">{product?.name}</span>
+                    </h1>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                      <div className="pt-2 relative rounded-md border-2 text-center bg-[#F5F5F5] justify-center transition-all hover:border-blue-500/50 flex flex-col active-clr">
+                        <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
+                          {product?.name}
+                        </h2>
+                        <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t w-full">
+                          <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                         </p>
                       </div>
+                      {kitsProducts?.map((item: any, index: number) => (
+                        <Link
+                          key={index}
+                          href={sanitizeRelativeUrl(`/${item?.slug}`)}
+                          className="pt-2 border-2 relative text-center rounded-md bg-[#F5F5F5] border-[#757575] justify-center transition-all hover:border-blue-500/50 flex flex-col hover-link-clr"
+                        >
+                          <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
+                            {item?.name}
+                          </h2>
+                          <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t border-[#D9D9D9] w-full">
+                            <KitPrice price={item?.price} listPrice={item?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          </p>
+                        </Link>
+                      ))}
                     </div>
-                  </div> 
-            {selectedOption === "new" && product?.condition != 'pre-launch' && (  
-             <>
-             <div className="flex my-3 gap-x-2 items-center w-full">
-              <img src="/theme/camera/image/pc-point-icon.svg" alt="icon"/>
-              <p className="text-xs text-black">Earn <ParkPoint price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} /> Park Points. <a href="#" className="font-semibold link-clr primary-text-blue">Details</a></p>
-            </div>
-            {kitsProducts?.length > 0 && (
-            <div className="w-full">
-              <h1 className="text-sm mb-2 text-gray-700">
-                Configuration: <span className="font-semibold text-black">{product?.name}</span>
-              </h1> 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div  className="pt-2 relative rounded-md border-2 text-center bg-[#F5F5F5] justify-center transition-all hover:border-blue-500/50 flex flex-col active-clr">
-                  <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
-                    {product?.name}
-                    </h2>
-                    <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t w-full">
-                    <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </p>
-                </div>
-                {kitsProducts?.map((item: any, index: number) => (
-                  <Link 
-                    key={index} 
-                    href={sanitizeRelativeUrl(`/${item?.slug}`)} 
-                    className="pt-2 border-2 relative text-center rounded-md bg-[#F5F5F5] border-[#757575] justify-center transition-all hover:border-blue-500/50 flex flex-col hover-link-clr"
-                  >
-                    <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
-                      {item?.name}
-                    </h2>
-                    <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t border-[#D9D9D9] w-full">
-                     <KitPrice price={item?.price} listPrice={item?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </p>
-                  </Link>
-                ))}
+                  </div>
+                )}
+              </>
+            )}
+            {promotions?.promotions?.availablePromotions?.length > 0 && (
+              <div className="flex w-full">
+                <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
               </div>
-            </div>
             )}
-            </>
-            )}
-              {/* {promotions?.promotions?.availablePromotions?.length > 0 && (
-                <div className="flex">
-                <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
-                </div>
-              )} */}
           </div>
           {attrGroup['product.relatedproducts']?.length > 0 &&
             <div className='flex w-full'>
@@ -181,8 +163,8 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
           }
           {weloveAttribute && (
             <div className="w-full make-section ul-li-html bg-[#EAEDF5] p-2 rounded-md">
-              <h4 className="txt-black font-semibold text-sm mb-2">We Love</h4>
-                <LongDescription data={weloveAttribute?.value} heading="" />
+              <h4 className="mb-2 text-sm font-semibold txt-black">We Love</h4>
+              <LongDescription data={weloveAttribute?.value} heading="" />
             </div>
           )}
         </div>
@@ -201,11 +183,9 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     {selectedOption === "new" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
                   </span>
                 </label>
-                <div className='mt-3 space-y-3'>
-                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                  {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                    <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
-                </div>
+                {/* <div className='mt-3 space-y-3'>
+                  <Prices cashbackAmount={cashbackAmount} contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                </div> */}
                 {selectedOption === "new" && (
                   <div className="mt-2 space-y-2">
                     {featureToggle?.features?.enableStoreStockCheck &&
@@ -215,12 +195,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                       </div>
                     }
                     {product?.currentStock > 1 ? (
-                        <p className="font-semibold text-green-600">In stock</p>
-                      ) : (
-                       <></>
-                      )}
-                      {product?.currentStock > 0 && product?.currentStock === 1 && (
-                        <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
+                      <p className="font-semibold text-green-600">In stock</p>
+                    ) : (
+                      <></>
+                    )}
+                    {product?.currentStock > 0 && product?.currentStock === 1 && (
+                      <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
                     )}
                     {/* <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
                       <span className='pr-1'>Quantity:</span>
@@ -293,7 +273,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         {isInWishList(selectedAttrData?.productId) ? (
                           <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
                         ) : (
-                          <HeartIcon className="flex-shrink-0 w-3 h-3 mr-2 group-hover:text-red-700 font-semibold text-black" />)}
+                          <HeartIcon className="flex-shrink-0 w-3 h-3 mr-2 font-semibold text-black group-hover:text-red-700" />)}
                         <span className='text-xs font-semibold text-black group-hover:text-red-700'> Add to Wishlist </span>
                       </button>
                     </div>}
@@ -311,7 +291,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     </span>
                   </label>
                   <div className='mt-3 space-y-2'>
-                    <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={usedProduct?.[0]?.price} listPrice={usedProduct?.[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <Prices cashbackAmount={cashbackAmount} contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={usedProduct?.[0]?.price} listPrice={usedProduct?.[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
                       <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
                   </div>
@@ -323,14 +303,14 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
                         </div>
                       }
-                    {product?.currentStock > 1 ? (
+                      {product?.currentStock > 1 ? (
                         <p className="font-semibold text-green-600">In stock</p>
                       ) : (
                         <></>
                       )}
                       {product?.currentStock > 0 && product?.currentStock === 1 && (
                         <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
-                    )}
+                      )}
                       <UsedProductCard products={usedProduct[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                     </>
                   )}

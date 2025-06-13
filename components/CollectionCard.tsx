@@ -79,7 +79,7 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
             </span>
           </div>
         </div>
-        <Prices className="mt-0.5 sm:mt-1 ml-4" listPrice={price} price={price} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+        <Prices cashbackAmount="" className="mt-0.5 sm:mt-1 ml-4" listPrice={price} price={price} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
       </div>
       <Link href={"/product-detail-2"} className="absolute inset-0 "></Link>
     </div>
