@@ -3137,3 +3137,9 @@ select {
 .slider-equal-height .swiper-slide {
   height: auto;
 }
+.link-para a{
+  color: #0070f3 !important;
+}
+.link-para a:hover{
+  text-decoration: underline !important;
+}

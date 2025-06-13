@@ -84,7 +84,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                 <div className="mt-[1px]">
                   <InformationCircleIcon className="w-5 h-5 text-[#1E1E1E]" />
                 </div>
-                <div className="text-sm font-medium text-[#757575]" dangerouslySetInnerHTML={{ __html: cashbackDescription }}></div>
+                <div className="text-sm font-medium text-[#757575] link-para" dangerouslySetInnerHTML={{ __html: cashbackDescription }}></div>
               </div>
             </div>}
             {selectedOption === "new" && product?.condition != 'pre-launch' && (
