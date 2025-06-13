@@ -1,25 +1,5 @@
 import { useTranslation } from '@commerce/utils/use-translation'
-
-export interface IHierarchy {
-  companyId: string;
-  id: string;
-  name: string;
-  parentId: string;
-  type: number;
-  typeLabel: string;
-}
-
-enum HierarchyType {
-  Country = 1,
-  Zone = 2,
-  Branch = 3
-}
-
-export interface ICountry {
-  itemText: string
-  itemValue: string
-}
-export const useAddCompanyUserConfig = (hierarchy: Array<IHierarchy> = []) => {
+export const useAddCompanyUserConfig = () => {
   const translate = useTranslation()
   return [
     {
@@ -36,6 +16,7 @@ export const useAddCompanyUserConfig = (hierarchy: Array<IHierarchy> = []) => {
     },
     {
       key: 'email',
+      id: 'email',
       name: 'email',
       label: translate('label.addressBook.emailText'),
       type: 'email',
@@ -54,41 +35,31 @@ export const useAddCompanyUserConfig = (hierarchy: Array<IHierarchy> = []) => {
       placeholder: translate('label.myAccount.confirmPasswordText'),
     },
     {
-      key: 'country',
-      label: translate('label.checkout.countryText'),
-      type: 'select',
-      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Country)?.map((item: IHierarchy) => ({ value: item?.name, label: item?.name })),
-      placeholder: translate('label.myAccount.rfq.selectCountryText'),
-    },
-    {
-      key: 'zone',
-      label: translate('label.myAccount.rfq.zoneText'),
-      // label: translate('common.label.mobileNumText'),
-      type: 'select',
-      options: hierarchy?.filter((item: IHierarchy) => item?.type === HierarchyType.Zone)?.map((item: IHierarchy) => ({ value: item.id, label: item?.name })),
-      placeholder: 'Select a zone',
-    },
-    {
-      key: 'branch',
-      label: translate('label.myAccount.rfq.branchText'),
-      // label: translate('common.label.mobileNumText'),
-      type: 'select',
-      options: [],
-      placeholder: translate('label.myAccount.rfq.selectBranchText'),
-    },
-    {
       key: 'role',
-      label: translate('label.myAccount.rfq.role'),
+      label: 'Role',
       type: 'select',
       options: [
-        { value: '1', label: translate('label.myAccount.rfq.roleAdminText') },
-        { value: '2', label: translate('label.myAccount.rfq.roleSalesUserText') },
-        { value: '3', label: translate('label.myAccount.rfq.roleUserText') },
-        { value: '4', label: translate('label.myAccount.rfq.roleBranchHeadText') },
-        { value: '5', label: translate('label.myAccount.rfq.roleZonalHeadText') },
-        { value: '6', label: translate('label.myAccount.rfq.roleOrderCreatorText') },
+        { value: '1', label: 'Admin' },
+        { value: '2', label: 'Sales user' },
+        { value: '3', label: 'User' },
       ],
-      placeholder: translate('label.myAccount.rfq.selectRoleText'),
+      placeholder: 'Select a role',
+    },
+    {
+      key: 'mobileNumber',
+      id: 'mobileNumber',
+      name: 'mobileNumber',
+      label: translate('common.label.mobileNumText'),
+      type: 'phone',
+      placeholder: translate('common.label.mobileNumText'),
+    },
+    {
+      key: 'phoneNumber',
+      id: 'phoneNumber',
+      name: 'phoneNumber',
+      label: translate('label.b2b.phoneNumberText'),
+      type: 'phone',
+      placeholder: translate('label.b2b.phoneNumberText'),
     },
   ]
 }

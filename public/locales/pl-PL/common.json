@@ -463,20 +463,7 @@
                 "validUntilRequired": "ETA jest wymagane",
                 "ETA": "ETA",
                 "assignToRequired": "Przypisanie do jest wymagane",
-                "productRequired": "Wymagany jest co najmniej jeden produkt",
-                "branchText": "Oddział",
-                "zoneText": "Strefa",
-                "roleAdminText": "Administrator",
-                "roleSalesUserText": "Użytkownik sprzedaży",
-                "roleUserText": "Użytkownik",
-                "roleBranchHeadText": "Kierownik oddziału",
-                "roleZonalHeadText": "Kierownik strefy",
-                "roleOrderCreatorText": "Twórca zamówień",
-                "selectCountryText": "Wybierz kraj",
-                "selectZoneText": "Wybierz strefę",
-                "selectBranchText": "Wybierz oddział",
-                "selectRoleText": "Wybierz rolę"
-
+                "productRequired": "Wymagany jest co najmniej jeden produkt"
             },
             "myDetailsHeadingText": "Mój profil",
             "tradeInText":"Wymiana",
