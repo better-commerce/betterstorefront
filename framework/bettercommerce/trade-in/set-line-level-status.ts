@@ -12,7 +12,7 @@ export default function saveQuoteByItemId(
 ) {
   async function saveQuoteByItemIdAsync() {
     const url = new URL(
-      `${TRADE_IN_GET_QUOTE_BY_ID}/${id}/item/${itemId}/review`,
+      `${TRADE_IN_GET_QUOTE_BY_ID}/${id}/item/review`,
       BC_API_BASE_URL
     );
 
@@ -20,9 +20,13 @@ export default function saveQuoteByItemId(
       const response: any = await fetcher({
         baseUrl: BC_API_BASE_URL,
         url: url.href,
-        data: { status, rejectionReason }, // Fixed data structure
+        data: {
+          request: [
+            { itemId, status, rejectionReason }
+          ]
+        },
         method: 'PUT',
-        cookies,       
+        cookies,
         headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID },
       });
 
