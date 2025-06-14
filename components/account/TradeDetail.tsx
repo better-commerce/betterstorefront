@@ -223,10 +223,15 @@ export default function TradeInDetail() {
           <span className="text-xs font-medium text-black">{product?.parentStockCode != "DP000001" && <span>({product?.parentStockCode})</span>}</span>
         </span>
         {condition != "" && (
-          <span className="text-xs text-gray-600"> <strong>Condition: </strong>
+          <span className="text-xs text-gray-600"> <strong>Quote Condition: </strong>
             {condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
               condition == TradeInItemCondition.GOOD ? 'Good' : condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' : condition == TradeInItemCondition.EXCELLENT ? 'Excellent' : condition == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
             }
+          </span>
+        )}
+        {(product?.assessment?.assessmentCondition && product?.assessment?.assessmentCondition !== 'None') && (
+          <span className="text-xs text-gray-600"> <strong>Assessment Condition: </strong>
+            {product?.assessment?.assessmentCondition}
           </span>
         )}
         {accessories?.length > 0 && (
