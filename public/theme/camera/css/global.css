@@ -3143,3 +3143,32 @@ select {
 .link-para a:hover{
   text-decoration: underline !important;
 }
+.account-main-bg-gradient{
+  background: #f5f5f5;
+}
+
+.account-main-bg-gradient .aac-grid {
+  background: white;
+  background-image: 
+    linear-gradient(to right, #f5f5f5 0%, #f5f5f5 calc(3/12 * 100% - 1px), transparent calc(3/12 * 100%), transparent 100%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.account-main-bg-gradient  .aac-grid  {
+  background: white;
+  background-image: 
+    linear-gradient(to right, #f5f5f5 0%, #f5f5f5 calc(3/12 * 100% - 1px), transparent calc(3/12 * 100%), transparent 100%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.account-main-bg-gradient .pc-acc-3 {
+  background: #f5f5f5;
+}
+
+.account-main-bg-gradient .pc-acc-9 {
+  background: white;
+}

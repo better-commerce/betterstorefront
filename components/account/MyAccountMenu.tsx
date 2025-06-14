@@ -332,7 +332,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           </div>
         </>
       ) : (
-        <div className={`flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50 ${featureToggle?.features?.enableForPCSite ? 'sidebar_inner_section' : ''}`}>
+        <div className={`flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50 ${featureToggle?.features?.enableForPCSite ? 'sidebar_inner_section !mt-0' : ''}`}>
           {newConfig.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
             <>
               {item.text == myAccountActiveTab ? (
