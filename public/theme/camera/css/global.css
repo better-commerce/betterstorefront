@@ -3143,6 +3143,7 @@ select {
 .link-para a:hover{
   text-decoration: underline !important;
 }
+@media (min-width: 1825px) {
 .account-main-bg-gradient{
   background: #f5f5f5;
 }
@@ -3171,4 +3172,5 @@ select {
 
 .account-main-bg-gradient .pc-acc-9 {
   background: white;
+}
 }
