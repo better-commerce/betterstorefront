@@ -71,7 +71,7 @@ function ProductQtyTextbox({ product, maxBasketItemsCount, onUpdateBasket, onLoa
         onChange={onQtyChange}
         onKeyDown={onKeyDown} // Restrict non-number input
         min="1" // Prevents negative values being entered manually
-        className='flex items-center justify-center w-10 !px-0 text-xs text-center text-black bg-transparent border-0'
+        className='flex items-center justify-center w-10 !px-0 text-xs text-center text-black bg-transparent !border-0'
       />
     </form>
   )

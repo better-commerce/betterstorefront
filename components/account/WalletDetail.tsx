@@ -139,19 +139,19 @@ export default function WalletDetail() {
             </div>
           }
           <div className="w-full">
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full btn-primary-clr btn-section-wallet">
               <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>{translate('label.myAccount.myWalletText')}</h2>
               {walletEnabled &&
                 <div className="flex w-5/12 gap-2 mb-6">
                   <button
-                    className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-primary ${bankAccountList?.length > 0 ? '' : '!cursor-not-allowed opacity-50'}`}
+                    className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-primary  ${bankAccountList?.length > 0 ? '' : '!cursor-not-allowed opacity-50'}`}
                     onClick={() => setOpenTransferToBankModal(true)}
                     disabled={!(bankAccountList?.length > 0)}
                   >
                     {translate('label.myAccount.transferToBankText')}
                   </button>
                   <button
-                    className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-primary`}
+                    className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-c btn-primary`}
                     onClick={() => setOpenAddBankDetailsModal(true)}
                   >
                     {translate('label.myAccount.addBankDetailsText')}
