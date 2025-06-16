@@ -3148,9 +3148,7 @@ select {
   text-decoration: underline !important;
 }
 
-.theme-account-container{
+.pc-padding-bottom {
+  margin-bottom: 30px !important;  
   padding: 0px !important;
-}
-.pc-padding-bottom{
-  margin-bottom: 30px !important;
 }
