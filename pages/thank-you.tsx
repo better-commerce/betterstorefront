@@ -464,9 +464,9 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
               </div>
             ) : null}
           </div>
-          <div className="max-w-xl mt-5 text-center">
+          <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
             <Link href={`/`} passHref>
-              <span className="btn-primary btn"> {translate('common.label.backToHomeText')} </span>
+              <span className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-55 btn-c btn"> {translate('common.label.backToHomeText')} </span>
             </Link>
           </div>
         </main>

@@ -93,7 +93,7 @@ export default function TradeInTable() {
       .trim();
   };
   return (
-    <div className="w-full px-6">
+    <div className="w-full">
       {isLoading && <Loader />}
       <h2 className="text-xl font-normal sm:text-2xl dark:text-black">{translate('label.myAccount.myTradeInText')}</h2>
       <div className="mt-4 overflow-x-auto">

@@ -124,7 +124,7 @@ export default function WalletDetail() {
 
   return (
     isLoading ? (
-      <div className='flex flex-col w-full px-6'>
+      <div className='flex flex-col w-full'>
         <div className='flex flex-col items-center justify-center gap-5 py-10'>
           <LoadingDots />
           <span className='text-2xl font-semibold text-gray-600'>{translate('label.myAccount.walletActivationMessage')}</span>
@@ -138,7 +138,7 @@ export default function WalletDetail() {
               <span className='px-4 py-2 text-sm font-semibold text-white rounded-full bg-emerald-500'>{successMessage}</span>
             </div>
           }
-          <div className="w-full px-6">
+          <div className="w-full">
             <div className="flex items-center justify-between w-full">
               <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>{translate('label.myAccount.myWalletText')}</h2>
               {walletEnabled &&

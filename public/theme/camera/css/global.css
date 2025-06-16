@@ -2889,12 +2889,12 @@ select.focus-none:focus {
   padding-top: 8.5rem !important;
 }
 .sidebar_bg {
-  background: #294384 !important;
+  background: #F5F5F5 !important;
 }
 .sidebar_bg .sidebar_inner_section {
   background: #eaedf5;
   box-shadow: none !important;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
   padding: 15px;
   margin-top: 25px !important;
@@ -3098,6 +3098,10 @@ select {
 .bg-gradient-white-blue {
   background: linear-gradient(to right, white 60%, #f5f5f5 60%);
 }
+
+.bg-gradient-white-blue-left {
+  background: linear-gradient(to left, white 65%, #f5f5f5 65%);
+}
 .nomral-text-transform a span {
   text-transform: none !important;
 }
@@ -3142,4 +3146,11 @@ select {
 }
 .link-para a:hover{
   text-decoration: underline !important;
+}
+
+.theme-account-container{
+  padding: 0px !important;
+}
+.pc-padding-bottom{
+  margin-bottom: 30px !important;
 }

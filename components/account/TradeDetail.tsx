@@ -256,7 +256,7 @@ export default function TradeInDetail() {
   return (
     <>
       {isLoading ? <Loader /> :
-        <div className="flex flex-col w-full px-6 gp-5">
+        <div className="flex flex-col w-full">
           {message != "" && <div className='fixed z-10 top-24 right-4'>
             <span className='px-4 py-2 text-sm font-semibold text-white rounded-full bg-emerald-600'>{message}</span>
           </div>}
@@ -337,7 +337,7 @@ export default function TradeInDetail() {
                                       <span className="text-xs font-medium text-black">{item?.assessment?.parentStockCode != "DP000001" && <span>({item?.assessment?.parentStockCode})</span>}</span>
                                     </span>
                                     {item?.assessment?.assessmentCondition && (
-                                      <span className="text-xs text-gray-600"> <strong>Condition: </strong>
+                                      <span className="text-xs text-gray-600"> <strong>Assessment Condition: </strong>
                                         {item?.assessment?.assessmentCondition == TradeInItemCondition.WELL_USED ? 'Well Used' :
                                           item?.assessment?.assessmentCondition == TradeInItemCondition.GOOD ? 'Good' : item?.assessment?.assessmentCondition == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.assessment?.assessmentCondition == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.assessment?.assessmentCondition == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
                                         }
