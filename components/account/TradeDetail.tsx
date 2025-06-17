@@ -443,7 +443,7 @@ export default function TradeInDetail() {
             </table>
           </div>
           <div className='flex items-center justify-start gap-1 mt-4 ml-1'>
-            <input type='checkbox' name="pre-sign-agreement" className='w-4 h-4 border border-gray-300 rounded' checked={isChecked} onChange={handleCheckboxChange} />
+            <input type='checkbox' name="pre-sign-agreement" className='w-4 h-4 border border-gray-300 rounded' disabled={getStatusLabel(tradeDetail?.value?.status ?? "Unknown") != 'Assessed'} checked={isChecked} onChange={handleCheckboxChange} />
             <span className='text-sm italic font-normal text-gray-600'>
               By checking this box, you approve the auto-acceptance of the quote if the price is greater than or equal to the quoted price.
             </span>
