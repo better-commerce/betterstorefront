@@ -2370,6 +2370,11 @@ h6 {
 .description-html h6 {
   font-weight: 600;
 }
+.pdp-right-section{
+  max-height: 60dvh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
 body .pdp-right-section .price {
   font-size: 22px !important;
 }
