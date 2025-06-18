@@ -815,7 +815,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                               <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
                             </span>
                             <span className='flex items-center gap-2 pr-5'>
-                              <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
+                              <span>{translate('label.basket.checkoutBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
                             </span>
                           </Link>
                         </>
