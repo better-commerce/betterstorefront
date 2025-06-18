@@ -50,30 +50,38 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   const handleMethodSelection = (method: any) => {
     setSelectedShippingMethodId(method?.id)
     setSelectedShippingMethod(method)
+
+    const isCollect =
+      selectedDeliveryMethod?.type?.includes(DeliveryType.COLLECT) &&
+      selectedDeliveryMethod?.children?.some((x: any) => x?.id === method?.id)
+
+    setShowFindStore(isCollect)
   }
+
 
   const handleContinue = async () => {
     if (shouldContinueBtnEnabled) return
-    let isValid = false;
-    let errorMessage = '';
+    let isValid = false
+    let errorMessage = ''
 
     if (showFindStore) {
-      isValid = selectedStore !== null;
-      errorMessage = translate('common.message.selectStoreErrorMsg');
+      isValid = selectedStore !== null
+      errorMessage = translate('common.message.selectStoreErrorMsg')
     } else {
       isValid =
-        (selectedShippingMethod?.type === DeliveryType.STANDARD_DELIVERY && selectedDeliveryMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY)) || (selectedShippingMethod?.type === DeliveryType.EXPRESS_DELIVERY && selectedDeliveryMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY));
-      errorMessage = translate('common.message.selectDeliveryToContinueErrorMsg');
+        (selectedShippingMethod?.type === DeliveryType.STANDARD_DELIVERY && selectedDeliveryMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY)) ||
+        (selectedShippingMethod?.type === DeliveryType.EXPRESS_DELIVERY && selectedDeliveryMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY))
+      errorMessage = translate('common.message.selectDeliveryToContinueErrorMsg')
     }
 
     if (isValid) {
-      await onDeliveryMethodSelect(selectedShippingMethod, showFindStore ? selectedStore : null);
-      onContinue();
+      await onDeliveryMethodSelect(selectedShippingMethod, showFindStore ? selectedStore : null)
+      onContinue()
     } else {
       setAlert({
         type: AlertType.ERROR,
-        msg: errorMessage,
-      });
+        msg: errorMessage
+      })
     }
   }
 
@@ -86,45 +94,60 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
   }, [deliveryMethod])
 
   useEffect(() => {
-    if(basket?.shippingMethodId === Guid.empty){
-      const defaultShippingMethod = basket.shippingMethods.find((method: any) => method?.isDefault)
-      if (defaultShippingMethod) {
-        setSelectedShippingMethodId(defaultShippingMethod.id)
-        setSelectedShippingMethod(defaultShippingMethod)
-      }
-    } else if (basket?.shippingMethodId && basket?.shippingMethodId !== Guid.empty) {
-      const selectedShippingMethod = basket?.shippingMethods?.find(
-        (x: any) => x?.id === basket?.shippingMethodId
-      )
-      if (selectedShippingMethod) {
-        setSelectedShippingMethodId(basket?.shippingMethodId)
-        setSelectedShippingMethod(selectedShippingMethod)
+    if (!selectedDeliveryMethod?.children) return
+
+    // Auto-select if only one option and it's Click & Collect
+    const collectMethods = selectedDeliveryMethod.children.filter(
+      (method: any) => method?.type === DeliveryType.COLLECT
+    )
+
+    if (collectMethods.length === 1) {
+      const method = collectMethods[0]
+      setSelectedShippingMethodId(method.id)
+      setSelectedShippingMethod(method)
+      setShowFindStore(true)
+    } else {
+      if (basket?.shippingMethodId === Guid.empty) {
+        const defaultShippingMethod = basket.shippingMethods.find((method: any) => method?.isDefault)
+        if (defaultShippingMethod) {
+          setSelectedShippingMethodId(defaultShippingMethod.id)
+          setSelectedShippingMethod(defaultShippingMethod)
+        }
+      } else if (basket?.shippingMethodId && basket?.shippingMethodId !== Guid.empty) {
+        const selectedShippingMethod = basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId)
+        if (selectedShippingMethod) {
+          setSelectedShippingMethodId(basket?.shippingMethodId)
+          setSelectedShippingMethod(selectedShippingMethod)
+        }
       }
     }
-  }, [basket])
+  }, [selectedDeliveryMethod, basket])
 
   useEffect(() => {
     const isDeliveryTypeCollect =
       selectedDeliveryMethod?.type?.includes(DeliveryType.COLLECT) &&
-      selectedDeliveryMethod?.children?.some((x: any) => x?.id === selectedShippingMethodId);
+      selectedDeliveryMethod?.children?.some((x: any) => x?.id === selectedShippingMethodId)
 
-    setShowFindStore(isDeliveryTypeCollect);
+    setShowFindStore(isDeliveryTypeCollect)
   }, [selectedShippingMethodId, selectedDeliveryMethod])
 
   const handleStoreSelection = (store: any) => {
-    // handle selected store 
     setSelectedStore(store)
   }
 
   const shouldContinueBtnEnabled = useMemo(() => {
     let isEnabled = false
-    if (deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY)) isEnabled = !selectedShippingMethodId
-    if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) isEnabled = !selectedStore?.Id
+    if (deliveryTypeMethod?.type?.includes(DeliveryType.STANDARD_DELIVERY) || deliveryTypeMethod?.type?.includes(DeliveryType.EXPRESS_DELIVERY)) {
+      isEnabled = !selectedShippingMethodId
+    }
+    if (deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT)) {
+      isEnabled = !selectedStore?.Id
+    }
     return isEnabled
   }, [deliveryTypeMethod, selectedStore, selectedShippingMethodId])
 
   const isDeliverTypeSelected = useMemo(() => {
-    return (method: any)  => method?.type === DeliveryType.STANDARD_DELIVERY
+    return (method: any) => method?.type === DeliveryType.STANDARD_DELIVERY
   }, [])
 
   if (!selectedDeliveryMethod || !selectedDeliveryMethod?.children) {
@@ -139,41 +162,60 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
             <h5 className="font-semibold uppercase font-18 dark:text-black">{translate('label.checkout.deliveryText')}</h5>
             <div className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
               {selectedDeliveryMethod?.children?.map((method: any) => (
-                <div key={method?.id} className={`${selectedShippingMethodId === method?.id ? 'bg-gray-200' : 'bg-white border-gray-200'} border flex sm:flex-row flex-col items-center sm:justify-between justify-start sm:p-4 p-2 cursor-pointer rounded`} onClick={() => handleMethodSelection(method)}>
+                <div
+                  key={method?.id}
+                  className={`${selectedShippingMethodId === method?.id ? 'bg-gray-200' : 'bg-white border-gray-200'
+                    } border flex sm:flex-row flex-col items-center sm:justify-between justify-start sm:p-4 p-2 cursor-pointer rounded`}
+                  onClick={() => handleMethodSelection(method)}
+                >
                   <div className="flex justify-start w-full gap-0 sm:gap-3">
                     <div className="check-panel">
-                      <span className={`rounded-check rounded-full check-address ${selectedShippingMethodId === method.id ? 'bg-black p-check-inpt border border-black' : 'bg-white border border-gray-600'}`}></span>
+                      <span
+                        className={`rounded-check rounded-full check-address ${selectedShippingMethodId === method.id
+                            ? 'bg-black p-check-inpt border border-black'
+                            : 'bg-white border border-gray-600'
+                          }`}
+                      ></span>
                     </div>
                     <div className="flex justify-between info-panel">
                       <span className="font-medium text-black">
                         <h4 className="my-0 text-sm dark:text-black text-wrap-p sm:text-xl">
-                          {method?.id === basket?.shippingMethodId ? basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId)?.displayName : method?.displayName}{' '}
+                          {method?.id === basket?.shippingMethodId
+                            ? basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId)?.displayName
+                            : method?.displayName}{' '}
                         </h4>
-                        <div dangerouslySetInnerHTML={{ __html: method?.description, }} className="my-0 font-12 dark:text-black delivery-method-desc" />
-                        {(basket?.estimatedDeliveryDate && basket?.estimatedDeliveryDate !== "0001-01-01T00:00:00") && (
+                        <div
+                          dangerouslySetInnerHTML={{ __html: method?.description }}
+                          className="my-0 font-12 dark:text-black delivery-method-desc"
+                        />
+                        {basket?.estimatedDeliveryDate && basket?.estimatedDeliveryDate !== '0001-01-01T00:00:00' ? (
                           <span className="block text-xs font-normal sm:text-sm text-wrap-p">
                             {translate('common.label.expectedDeliveryDateText')}:{' '}
                             <span className="font-bold">
-                              {isDeliverTypeSelected(method) ? eddDateFormat(basket?.estimatedDeliveryDate) : eddDateFormat(method?.expectedDeliveryDate)}{' '}
+                              {isDeliverTypeSelected(method)
+                                ? eddDateFormat(basket?.estimatedDeliveryDate)
+                                : eddDateFormat(method?.expectedDeliveryDate)}{' '}
                             </span>
                           </span>
-                        )}
-
-                        {(!basket?.estimatedDeliveryDate || (basket?.estimatedDeliveryDate && basket?.estimatedDeliveryDate === "0001-01-01T00:00:00")) && (
+                        ) : (
                           <span className="block text-xs font-normal text-wrap-p">
                             {translate('common.label.expectedDeliveryDateText')}:{' '}
-                            <span className="font-bold">
-                              {eddDateFormat(method?.expectedDeliveryDate)}{' '}
-                            </span>
+                            <span className="font-bold">{eddDateFormat(method?.expectedDeliveryDate)} </span>
                           </span>
                         )}
                       </span>
                       <span className="flex justify-start font-bold text-black sm:justify-end">
-                        {method?.id === basket?.shippingMethodId ? (
-                          basket?.shippingCharge?.raw?.withTax == 0 ? translate('label.orderSummary.freeText') : isIncludeVAT ? basket?.shippingCharge?.formatted?.withTax : basket?.shippingCharge?.formatted?.withoutTax
-                        ) : (
-                          method?.price?.raw?.withTax == 0 ? translate('label.orderSummary.freeText') : isIncludeVAT ? method?.price?.formatted?.withTax : method?.price?.formatted?.withoutTax
-                        )}
+                        {method?.id === basket?.shippingMethodId
+                          ? basket?.shippingCharge?.raw?.withTax == 0
+                            ? translate('label.orderSummary.freeText')
+                            : isIncludeVAT
+                              ? basket?.shippingCharge?.formatted?.withTax
+                              : basket?.shippingCharge?.formatted?.withoutTax
+                          : method?.price?.raw?.withTax == 0
+                            ? translate('label.orderSummary.freeText')
+                            : isIncludeVAT
+                              ? method?.price?.formatted?.withTax
+                              : method?.price?.formatted?.withoutTax}
                       </span>
                     </div>
                   </div>
@@ -181,12 +223,10 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
               ))}
             </div>
           </div>
-          {showFindStore && (
-            <FindStore basket={basket} onStoreSelected={handleStoreSelection} />
-          )}
+          {showFindStore && <FindStore basket={basket} onStoreSelected={handleStoreSelection} />}
           <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
             <button
-              className="px-1 py-3 mb-4 border btn-full-width border-black btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-55 btn-primary btn-c btn-primary btn"
+              className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-55 btn-c btn"
               onClick={handleContinue}
               disabled={shouldContinueBtnEnabled}
             >
@@ -195,11 +235,11 @@ const DeliveryMethodSelection: React.FC<DeliveryMethodSelectionProps> = ({
           </div>
         </>
       ) : (
-        <>
-          <div className='flex flex-col w-full'>
-            <span className='font-medium text-gray-400'>{translate('label.checkout.noDeliveryMethodAvailableText')}</span>
-          </div>
-        </>
+        <div className="flex flex-col w-full">
+          <span className="font-medium text-gray-400">
+            {translate('label.checkout.noDeliveryMethodAvailableText')}
+          </span>
+        </div>
       )}
     </>
   )
