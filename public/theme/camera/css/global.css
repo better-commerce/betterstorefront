@@ -2370,7 +2370,7 @@ h6 {
 .description-html h6 {
   font-weight: 600;
 }
-.pdp-right-section{
+.pdp-right-section.plp-section-right{
   max-height: 60dvh;
   overflow-y: auto;
   scrollbar-width: none;
