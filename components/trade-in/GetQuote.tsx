@@ -102,11 +102,11 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
         <span className='px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-full'>{message}</span>
       </div>}
       <div className="flex flex-col w-full gap-6 mt-4 sm:mt-5">
-        <div className="flex flex-col justify-center w-full gap-4 mt-6 text-center sm:mt-8">
-          <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
+        <div className="flex flex-col justify-center w-full gap-2 mt-6 text-center sm:gap-4 sm:mt-8">
+          <h3 className="px-4 py-3 sm:text-xl text-md w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
             Hi {user?.userId ? `${user?.firstName}` : updatedQuoteDetail?.value?.firstName}
           </h3>
-          <h3 className="px-4 py-3 text-xl w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
+          <h3 className="px-4 sm:py-3 py-2 sm:text-xl text-md w-full text-white bg-[#2d4d9c] rounded disabled:bg-gray-300">
             Your Quote Reference Number: {updatedQuoteDetail?.value?.quoteNo}
           </h3>
         </div>
@@ -120,14 +120,14 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                   <table className="flex flex-col divide-y divide-gray-300">
                     <thead className="bg-gray-50">
                       <tr className='flex w-full'>
-                        <th className="py-3.5 pl-2 w-[60%] pr-3 text-left text-sm font-semibold text-gray-900">Product</th>
-                        <th className="px-3 py-3.5 w-[40%] text-right text-sm font-semibold text-gray-900">Price</th>
+                        <th className="py-3.5 pl-2 w-[80%] pr-3 text-left text-sm font-semibold text-gray-900">Product</th>
+                        <th className="px-3 py-3.5 w-[20%] text-right text-sm font-semibold text-gray-900">Price</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {updatedQuoteDetail?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
                         <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
-                          <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                          <td className="flex gap-1 py-3 pl-2 w-[80%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
                             <span className='w-10'>
                               <img src={item?.parentProductImageUrl} className="inline-block w-10 h-auto" alt={item?.parentProductName} />
                             </span>
@@ -196,14 +196,14 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                             </div>
 
                           </td>
-                          <td className="px-3 w-[40%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
+                          <td className="px-3 w-[20%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
                         </tr>
                       ))}
                     </tbody>
                     <tfoot className={`${allItemsRejected ? 'bg-red-100' : 'bg-gray-100'}`}>
                       <tr className='flex w-full'>
-                        <td className="py-3 pl-3 w-[60%] text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-                        <td className="px-3 py-3 w-[40%] text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
+                        <td className="py-3 pl-3 w-[70%] text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
+                        <td className="px-3 py-3 w-[30%] text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
                       </tr>
                     </tfoot>
                   </table>

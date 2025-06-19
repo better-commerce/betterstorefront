@@ -11,7 +11,9 @@ import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AlertType, StoreType } from "@framework/utils/enums";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
 interface ShippingDetailProps {
   nextSteps: any;
   quoteData: any;
@@ -277,14 +279,14 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
               <table className='flex flex-col divide-y divide-gray-300'>
                 <thead className="bg-gray-50">
                   <tr className='flex w-full'>
-                    <th className="py-3.5 pl-2 w-[60%] pr-3 text-left text-sm font-semibold text-gray-900">Trade in Product</th>
-                    <th className="px-3 py-3.5 w-[40%] text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                    <th className="py-3.5 pl-2 w-[80%] pr-3 text-left text-sm font-semibold text-gray-900">Trade in Product</th>
+                    <th className="px-3 py-3.5 w-[20%] text-right text-sm font-semibold text-gray-900">Quote Value</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
                     <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
-                      <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                      <td className="flex gap-1 py-3 pl-2 w-[80%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
                         <span className="w-10"><img src={item?.parentProductImageUrl} className='inline-block w-10 h-auto' alt={item?.parentProductName} /></span>
                         <div className='flex flex-col justify-center w-full gap-1 text-left'>
                           <span className="font-semibold text-left text-black whitespace-normal">
@@ -315,7 +317,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                           <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
                         </div>
                       </td>
-                      <td className="px-3 w-[40%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                      <td className="px-3 w-[20%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
                         {"£"}{item?.price}
                       </td>
                     </tr>
@@ -323,8 +325,8 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                 </tbody>
                 <tfoot>
                   <tr className='flex w-full'>
-                    <td className="py-4 pl-3 w-[60%] text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
-                    <td className="px-3 py-4 w-[40%] text-xl font-semibold text-right text-black whitespace-nowrap">
+                    <td className="py-4 pl-3 w-[70%] text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                    <td className="px-3 py-4 w-[30%] text-xl font-semibold text-right text-black whitespace-nowrap">
                       £{quoteData?.value?.grandTotal}
                     </td>
                   </tr>
@@ -399,19 +401,39 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
       <div className='flex flex-col w-full'>
         <h3 className='text-lg font-normal text-left text-black'>Select from the following options to get your equipment to Park Cameras:</h3>
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {shippingData?.value?.map((ship: any, shipIdx: number) => (
-          <div key={`condition-${shipIdx}`} className={`flex flex-col group w-full text-center border rounded cursor-pointer transition ${ship?.iId === isStoreOpen ? "bg-sky-100 border-[#2d4d9c] text-black shadow-lg" : "bg-white border-gray-300 hover:shadow-md"}`} onClick={() => selectShipping(ship)}>
-            <h3 className={`rounded-t w-full font-medium py-3 text-md ${ship?.iId === isStoreOpen ? "bg-[#2d4d9c] text-white" : "bg-gray-200 text-black"}`} >
-              {ship?.name}
-            </h3>
-            <img src={ship?.imageurl} className='object-cover w-full h-52' alt={ship?.name} />
-            <p className={`font-normal text-sm text-left leading-3 px-4 pb-3 mt-4 ${ship?.iId === isStoreOpen ? "text-black" : "text-gray-600 group-hover:text-[#2d4d9c]"}`} >
-              {ship?.description}
-            </p>
-          </div>
-        ))}
-      </div>
+      {isMobile ? (
+        <Swiper slidesPerView={1.1} spaceBetween={4} navigation={true} loop={false} className={deviceInfo?.isMobile ? '' : ''} breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+          {shippingData?.value?.map((ship: any, shipIdx: number) => (
+            <SwiperSlide key={shipIdx} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+              <div key={`condition-${shipIdx}`} className={`flex flex-col group w-full text-center border rounded cursor-pointer transition ${ship?.iId === isStoreOpen ? "bg-sky-100 border-[#2d4d9c] text-black shadow-lg" : "bg-white border-gray-300 hover:shadow-md"}`} onClick={() => selectShipping(ship)}>
+                <h3 className={`rounded-t w-full font-medium py-3 text-md ${ship?.iId === isStoreOpen ? "bg-[#2d4d9c] text-white" : "bg-gray-200 text-black"}`} >
+                  {ship?.name}
+                </h3>
+                <img src={ship?.imageurl} className='object-cover w-full h-52' alt={ship?.name} />
+                <p className={`font-normal text-sm text-left leading-3 px-4 pb-3 mt-4 ${ship?.iId === isStoreOpen ? "text-black" : "text-gray-600 group-hover:text-[#2d4d9c]"}`} >
+                  {ship?.description}
+                </p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {shippingData?.value?.map((ship: any, shipIdx: number) => (
+            <div key={`condition-${shipIdx}`} className={`flex flex-col group w-full text-center border rounded cursor-pointer transition ${ship?.iId === isStoreOpen ? "bg-sky-100 border-[#2d4d9c] text-black shadow-lg" : "bg-white border-gray-300 hover:shadow-md"}`} onClick={() => selectShipping(ship)}>
+              <h3 className={`rounded-t w-full font-medium py-3 text-md ${ship?.iId === isStoreOpen ? "bg-[#2d4d9c] text-white" : "bg-gray-200 text-black"}`} >
+                {ship?.name}
+              </h3>
+              <img src={ship?.imageurl} className='object-cover w-full h-52' alt={ship?.name} />
+              <p className={`font-normal text-sm text-left leading-3 px-4 pb-3 mt-4 ${ship?.iId === isStoreOpen ? "text-black" : "text-gray-600 group-hover:text-[#2d4d9c]"}`} >
+                {ship?.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+
       {!shippingData &&
         <div className={`flex flex-col w-full gap-4`}>
           {
@@ -495,36 +517,75 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
           <div className='flex flex-col w-full gap-1 mt-4'>
             <h4 className='text-xl font-medium text-left text-black'>Where would you like to drop off your items?</h4>
           </div>
-          <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-2">
-            {storeData?.value?.map((store: any, index: number) => {
-              const isSelected = selectedCameraStore === index;
-              return (
-                <div key={index} className={`p-4 text-left border rounded shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`} onClick={() => setSelectedCameraStore(index)}>
-                  <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
-                    <input type="radio" name="store" checked={isSelected} onChange={() => setSelectedCameraStore(index)} className="relative w-5 h-5 text-blue-500 focus:ring-blue-400" />
-                    <h2 className="w-full text-xl font-semibold text-gray-700 uppercase">
-                      {store?.name}
-                    </h2>
-                  </div>
-                  {/* <img src={store?.image} alt={store?.name} className="w-full h-auto" /> */}
-                  <div className="grid grid-cols-12 gap-1">
-                    <div className='col-span-12 sm:col-span-6'>
-                      <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
-                      <p>{store?.name}</p>
-                      <p>{store?.street}</p>
-                      {store?.street2 && <p>{store?.street2}</p>}
-                      <p>{store?.city}, {store?.country}, {store?.postCode}</p>
-                      <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
-                      <div className="flex flex-col text-sm font-normal divide-x divide-gray-200" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
+          {isMobile ?
+            (
+              <Swiper slidesPerView={1.1} spaceBetween={4} navigation={true} loop={true} className={deviceInfo?.isMobile ? '' : ''} breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                {storeData?.value?.map((store: any, index: number) => {
+                  const isSelected = selectedCameraStore === index;
+                  return (
+                    <SwiperSlide key={index} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+                      <div key={index} className={`p-4 text-left border rounded shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`} onClick={() => setSelectedCameraStore(index)}>
+                        <div className="flex items-center w-full gap-2 pb-1 border-b border-gray-300 sm:mb-4">
+                          <input type="radio" name="store" checked={isSelected} onChange={() => setSelectedCameraStore(index)} className="relative w-5 h-5 text-blue-500 focus:ring-blue-400" />
+                          <h2 className="w-full text-sm font-semibold text-gray-700 uppercase sm:text-xl">
+                            {store?.name}
+                          </h2>
+                        </div>
+                        {/* <img src={store?.image} alt={store?.name} className="w-full h-auto" /> */}
+                        <div className="grid grid-cols-12 gap-1">
+                          <div className='col-span-12 text-sm sm:col-span-6 sm:text-lg'>
+                            <h2 className="mt-2 mb-1 text-sm font-semibold text-gray-700 uppercase sm:mb-4">Address:</h2>
+                            <p>{store?.name}</p>
+                            <p>{store?.street}</p>
+                            {store?.street2 && <p>{store?.street2}</p>}
+                            <p>{store?.city}, {store?.country}, {store?.postCode}</p>
+                            <p className="mt-4 mb-1 text-sm font-semibold text-gray-700 uppercase sm:mb-4">Opening Hours:</p>
+                            <div className="flex flex-col text-xs font-normal divide-x divide-gray-200 sm:text-sm" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
+                          </div>
+                          <div className='col-span-12 sm:col-span-6'>
+                            <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-2">
+                {storeData?.value?.map((store: any, index: number) => {
+                  const isSelected = selectedCameraStore === index;
+                  return (
+                    <div key={index} className={`p-4 text-left border rounded shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`} onClick={() => setSelectedCameraStore(index)}>
+                      <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
+                        <input type="radio" name="store" checked={isSelected} onChange={() => setSelectedCameraStore(index)} className="relative w-5 h-5 text-blue-500 focus:ring-blue-400" />
+                        <h2 className="w-full font-semibold text-gray-700 uppercase sm:text-xl !text-md">
+                          {store?.name}
+                        </h2>
+                      </div>
+                      {/* <img src={store?.image} alt={store?.name} className="w-full h-auto" /> */}
+                      <div className="grid grid-cols-12 gap-1">
+                        <div className='col-span-12 sm:col-span-6'>
+                          <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
+                          <p>{store?.name}</p>
+                          <p>{store?.street}</p>
+                          {store?.street2 && <p>{store?.street2}</p>}
+                          <p>{store?.city}, {store?.country}, {store?.postCode}</p>
+                          <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
+                          <div className="flex flex-col text-sm font-normal divide-x divide-gray-200" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
+                        </div>
+                        <div className='col-span-12 sm:col-span-6'>
+                          <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
+                        </div>
+                      </div>
                     </div>
-                    <div className='col-span-12 sm:col-span-6'>
-                      <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
+            )
+          }
+
+
           <button onClick={() => {
             submitStoreDropOff(); // Pass true for store drop-off
             document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });

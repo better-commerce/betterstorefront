@@ -61,14 +61,14 @@ export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryD
             <table className='flex flex-col divide-y divide-gray-300'>
               <thead className="bg-gray-50">
                 <tr className='flex w-full'>
-                  <th className="py-3.5 pl-2 w-[60%] pr-3 text-left text-sm font-semibold text-gray-900">Trade in Product</th>
-                  <th className="px-3 py-3.5 w-[40%] text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                  <th className="py-3.5 pl-2 w-[80%] pr-3 text-left text-sm font-semibold text-gray-900">Trade in Product</th>
+                  <th className="px-3 py-3.5 w-[20%] text-right text-sm font-semibold text-gray-900">Quote Value</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
                   <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
-                    <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                    <td className="flex gap-1 py-3 pl-2 w-[80%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
                       <span className="w-10"><img src={item?.parentProductImageUrl} className='inline-block w-10 h-auto' alt={item?.parentProductName} /></span>
                       <div className='flex flex-col justify-center w-full gap-1 text-left'>
                         <span className="font-semibold text-left text-black whitespace-normal">
@@ -99,7 +99,7 @@ export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryD
                         <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
                       </div>
                     </td>
-                    <td className="px-3 w-[40%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                    <td className="px-3 w-[20%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
                       {"£"}{item?.price}
                     </td>
                   </tr>
@@ -107,8 +107,8 @@ export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryD
               </tbody>
               <tfoot>
                 <tr className='flex w-full'>
-                  <td className="py-4 pl-3 w-[60%] text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
-                  <td className="px-3 py-4 w-[40%] text-xl font-semibold text-right text-black whitespace-nowrap">
+                  <td className="py-4 pl-3 w-[70%] text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                  <td className="px-3 py-4 w-[30%] text-xl font-semibold text-right text-black whitespace-nowrap">
                     £{quoteData?.value?.grandTotal}
                   </td>
                 </tr>

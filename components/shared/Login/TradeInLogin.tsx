@@ -159,15 +159,15 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
     <>
       {isLoading && <Loader />}
       <section aria-labelledby="trending-heading" className="bg-gray-50">
-        <div className="px-10 pt-10 pb-10 text-left lg:max-w-7xl lg:mx-auto sm:pt-6 sm:pb-6">
-          <div className="flex flex-col px-4 mb-4 sm:px-6 lg:px-0 sm:mb-6">
+        <div className="px-4 pt-4 pb-4 text-left sm:px-10 lg:max-w-7xl lg:mx-auto sm:pt-6 sm:pb-6">
+          <div className="flex flex-col px-0 mb-4 sm:px-6 lg:px-0 sm:mb-6">
             <h3 className="text-xl font-medium text-left text-black">
               {translate('label.login.loginBtnText')}
             </h3>
             <p className='text-sm font-normal text-left text-gray-600'>Already got a Park Cameras account? Log in below.</p>
           </div>
-          <div className='grid grid-cols-12 gap-10'>
-            <div className='col-span-6'>
+          <div className='flex flex-col w-full gap-10 sm:grid sm:grid-cols-12'>
+            <div className='order-1 col-span-12 sm:col-span-6 sm:order-1'>
               <div className="w-full">
                 <div className="grid gap-3">
                   {SOCIAL_LOGINS_ENABLED && (
@@ -223,8 +223,8 @@ export default function TradeInLogin({ isLoginSidebarOpen, redirectToOriginUrl =
                 </span>
               </div>
             </div>
-            <div className='col-span-6'>
-              <h3 className="text-xl font-medium text-left text-black">Login to get the following benefits:</h3>
+            <div className='flex flex-col order-2 w-full col-span-12 whitespace-normal sm:col-span-6 sm:order-2'>
+              <h3 className="font-medium text-left text-black sm:text-xl text-md">Login to get the following benefits:</h3>
               <ul className='pl-0 text-sm list-disc list-inside'>
                 <li>Quick and easy trade-in from start to finish</li>
                 <li>Track your quote through its journey</li>
