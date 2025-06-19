@@ -257,7 +257,7 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
             <SellingGuide data={pageContents?.sellguide} />
           }
           {pageContents?.sellingdescription != "" && <div className='w-full mx-auto mb-4 text-xl font-normal text-black sm:w-10/12 sm:mb-8 cms-para-xl' dangerouslySetInnerHTML={{ __html: pageContents?.sellingdescription }}></div>}
-          <div id='step-component' className="flex flex-col w-full gap-6 p-6 mx-auto bg-white border border-gray-200">
+          <div id='step-component' className="flex flex-col w-full gap-6 p-3 mx-auto bg-white border border-gray-200 sm:p-6">
             <Steps data={data?.steps} setCurrentStep={setCurrentStep} currentStep={currentStep} />
 
             <div className="flex flex-col justify-start gap-4">
@@ -277,16 +277,16 @@ function SellOrPartExchange({ pageContentsWeb, pageContentsMobileWeb, hostName, 
                   currentStep={currentStep} isLoadingDots={isLoadingDots} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.CONFIRM_DETAIL &&
-                <ConfirmDetails selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} nextSteps={handleNextStep} prevStep={prevStep} />
+                <ConfirmDetails deviceInfo={deviceInfo} selectedItems={selectedItems} setSuccessMessage={setSuccessMessage} nextSteps={handleNextStep} prevStep={prevStep} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.GET_QUOTE &&
-                <GetQuote user={user} startNewTrade={startNewTrade} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />
+                <GetQuote deviceInfo={deviceInfo} user={user} startNewTrade={startNewTrade} nextSteps={handleNextStep} quoteData={quoteData} setShippingData={setShippingData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.SHIPPING_DETAILS &&
-                <ShippingDetail shippingData={shippingData} setDeliveryData={setDeliveryData} nextSteps={handleNextStep} quoteData={quoteData} />
+                <ShippingDetail deviceInfo={deviceInfo} shippingData={shippingData} setDeliveryData={setDeliveryData} nextSteps={handleNextStep} quoteData={quoteData} />
               }
               {data?.steps[currentStep]?.step === TradeInSteps.FINAL_DETAILS &&
-                <QuoteDetails data={data?.stores} quoteData={quoteData} startNewTrade={startNewTrade} deliveryData={deliveryData} />
+                <QuoteDetails deviceInfo={deviceInfo} data={data?.stores} quoteData={quoteData} startNewTrade={startNewTrade} deliveryData={deliveryData} />
               }
             </div>
           </div>

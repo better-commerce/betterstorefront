@@ -7,10 +7,11 @@ import { AxiosRequestConfig } from "axios";
 import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { useEffect, useState } from "react";
 
-export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryData }: any) {
+export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryData, deviceInfo }: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [downloadData, setDownloadData] = useState<any>(null);
 
+  const { isMobile } = deviceInfo
   const getDownloadFile = async () => {
     setIsLoading(true);
     try {
@@ -55,65 +56,128 @@ export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryD
         </div>
       </div>
       <div className='flex flex-col w-full overflow-hidden shadow ring-1 ring-gray-300 sm:rounded'>
-        <table className='min-w-full divide-y divide-gray-300'>
-          <thead className="bg-emerald-100">
-            <tr>
-              <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Product</th>
-              <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Price</th>
-              <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
-              <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
-                <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                  <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
-                  <div className='flex flex-col justify-center w-full gap-1 text-left'>
-                    <span className="font-semibold text-left text-black">{item?.parentProductName} <span className="text-xs font-medium text-black">({item?.parentStockCode})</span></span>
-                    {item?.condition != "" &&
-                      <span className="text-xs text-left text-gray-600">
-                        <strong>Condition: </strong>
-                        {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
-                          item?.condition == TradeInItemCondition.GOOD ? 'Good' :
-                            item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
-                              item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
-                                item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
-                                  item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
-                                  'N/A'
-                        }
-                      </span>
-                    }
-                    {item?.accessories?.length > 0 && (
-                      <span className="text-xs text-left text-gray-600">
-                        <strong>Accessories: </strong>
-                        {item.accessories
-                          .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
-                          .map((acc: any) => acc?.name) // Extract names
-                          .join(", ") // Join with commas
-                        }
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                  {"£"}{item?.price}
-                </td>
-                <td className={`whitespace-nowrap justify-end pr-2`} align="right">
-                  <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot className="bg-gray-100">
-            <tr>
-              <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-              <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">
-                £{quoteData?.value?.grandTotal}
-              </td>
-              <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
-            </tr>
-          </tfoot>
-        </table>
+        {isMobile ? (
+          <>
+            <table className='flex flex-col divide-y divide-gray-300'>
+              <thead className="bg-gray-50">
+                <tr className='flex w-full'>
+                  <th className="py-3.5 pl-2 w-[60%] pr-3 text-left text-sm font-semibold text-gray-900">Trade in Product</th>
+                  <th className="px-3 py-3.5 w-[40%] text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                  <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
+                    <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                      <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
+                      <div className='flex flex-col justify-center w-full gap-1 text-left'>
+                        <span className="font-semibold text-left text-black">
+                          {item?.parentProductName}{" "}
+                          <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                        </span>
+                        <span className="text-xs text-left text-gray-600">
+                          <strong>Condition: </strong>
+                          {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                            item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                              item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                  item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                    item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                      'N/A'
+                          }
+                        </span>
+                        {item?.accessories?.length > 0 && (
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Accessories: </strong>
+                            {item.accessories
+                              .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                              .map((acc: any) => acc?.name) // Extract names
+                              .join(", ") // Join with commas
+                            }
+                          </span>
+                        )}
+                        <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                      </div>
+                    </td>
+                    <td className="px-3 w-[40%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                      {"£"}{item?.price}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className='flex w-full'>
+                  <td className="py-4 pl-3 w-[60%] text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                  <td className="px-3 py-4 w-[40%] text-xl font-semibold text-right text-black whitespace-nowrap">
+                    £{quoteData?.value?.grandTotal}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </>
+        ) : (
+          <>
+            <table className='min-w-full divide-y divide-gray-300'>
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Trade in Product</th>
+                  <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                  <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                  <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
+                    <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                      <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
+                      <div className='flex flex-col justify-center w-full gap-1 text-left'>
+                        <span className="font-semibold text-left text-black">
+                          {item?.parentProductName}{" "}
+                          <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                        </span>
+                        <span className="text-xs text-left text-gray-600">
+                          <strong>Condition: </strong>
+                          {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                            item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                              item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                  item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                    item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                      'N/A'
+                          }
+                        </span>
+                        {item?.accessories?.length > 0 && (
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Accessories: </strong>
+                            {item.accessories
+                              .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                              .map((acc: any) => acc?.name) // Extract names
+                              .join(", ") // Join with commas
+                            }
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                      {"£"}{item?.price}
+                    </td>
+                    <td className={`whitespace-nowrap justify-end pr-2`} align="right">
+                      <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td className="py-4 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                  <td className="px-3 py-4 text-xl font-semibold text-right text-black whitespace-nowrap">
+                    £{quoteData?.value?.grandTotal}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </>
+        )}
       </div>
       <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-1 lg:grid-cols-1">
         {data.slice(0, 1).map((store: any, index: number) => {
@@ -125,7 +189,7 @@ export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryD
                 </h2>
               </div>
               <div className="grid grid-cols-12 gap-4">
-                <div className='sm:col-span-5'>
+                <div className='col-span-12 sm:col-span-5'>
                   <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
                   {quoteData?.value?.street != "-" && <p>{quoteData?.value?.street}</p>}
                   {quoteData?.value?.street2 != "-" && <p>{quoteData?.value?.street2}</p>}

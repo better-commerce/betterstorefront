@@ -17,6 +17,7 @@ interface ShippingDetailProps {
   quoteData: any;
   shippingData: any;
   setDeliveryData: any;
+  deviceInfo: any;
 }
 
 interface DPDAddress {
@@ -30,9 +31,10 @@ interface DPDAddress {
   countryCode: string;
 }
 
-export default function ShippingDetail({ nextSteps, quoteData, shippingData, setDeliveryData }: ShippingDetailProps) {
+export default function ShippingDetail({ nextSteps, quoteData, shippingData, setDeliveryData, deviceInfo }: ShippingDetailProps) {
   const [selectedCameraStore, setSelectedCameraStore] = useState<any>(0);
   const { setAlert, user } = useUI()
+  const { isMobile } = deviceInfo
   const translate = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [isSummary, setShowSummary] = useState(false);
@@ -100,7 +102,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
     setIsLoading(true);
 
     const getAddressPayload = () => {
-      if(isStoreOpen === StoreType.PICKUP_SHOP) {
+      if (isStoreOpen === StoreType.PICKUP_SHOP) {
         return pickupShopAddressData
       }
 
@@ -270,71 +272,134 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
 
       {isSummary &&
         <div className='flex flex-col w-full overflow-hidden shadow ring-2 ring-sky-600 sm:rounded'>
-          <table className='min-w-full divide-y divide-gray-300'>
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Trade in Product</th>
-                <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Quote Value</th>
-                <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
-                <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
-                  <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                    <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
-                    <div className='flex flex-col justify-center w-full gap-1 text-left'>
-                      <span className="font-semibold text-left text-black">
-                        {item?.parentProductName}{" "}
-                        <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
-                      </span>
-                      <span className="text-xs text-left text-gray-600">
-                        <strong>Condition: </strong>
-                        {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
-                          item?.condition == TradeInItemCondition.GOOD ? 'Good' :
-                            item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
-                              item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
-                                item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
-                                  item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
-                                  'N/A'
-                        }
-                      </span>
-                      {item?.accessories?.length > 0 && (
-                        <span className="text-xs text-left text-gray-600">
-                          <strong>Accessories: </strong>
-                          {item.accessories
-                            .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
-                            .map((acc: any) => acc?.name) // Extract names
-                            .join(", ") // Join with commas
-                          }
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
-                    {"£"}{item?.price}
-                  </td>
-                  <td className={`whitespace-nowrap justify-end pr-2`} align="right">
-                    <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td className="py-4 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
-                <td className="px-3 py-4 text-xl font-semibold text-right text-black whitespace-nowrap">
-                  £{quoteData?.value?.grandTotal}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          {isMobile ? (
+            <>
+              <table className='flex flex-col divide-y divide-gray-300'>
+                <thead className="bg-gray-50">
+                  <tr className='flex w-full'>
+                    <th className="py-3.5 pl-2 w-[60%] pr-3 text-left text-sm font-semibold text-gray-900">Trade in Product</th>
+                    <th className="px-3 py-3.5 w-[40%] text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                    <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
+                      <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                        <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
+                        <div className='flex flex-col justify-center w-full gap-1 text-left'>
+                          <span className="font-semibold text-left text-black">
+                            {item?.parentProductName}{" "}
+                            <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                          </span>
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Condition: </strong>
+                            {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                              item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                                item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                  item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                    item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                      item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                        'N/A'
+                            }
+                          </span>
+                          {item?.accessories?.length > 0 && (
+                            <span className="text-xs text-left text-gray-600">
+                              <strong>Accessories: </strong>
+                              {item.accessories
+                                .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                                .map((acc: any) => acc?.name) // Extract names
+                                .join(", ") // Join with commas
+                              }
+                            </span>
+                          )}
+                          <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                        </div>
+                      </td>
+                      <td className="px-3 w-[40%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                        {"£"}{item?.price}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className='flex w-full'>
+                    <td className="py-4 pl-3 w-[60%] text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                    <td className="px-3 py-4 w-[40%] text-xl font-semibold text-right text-black whitespace-nowrap">
+                      £{quoteData?.value?.grandTotal}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </>
+          ) : (
+            <>
+              <table className='min-w-full divide-y divide-gray-300'>
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Trade in Product</th>
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                    <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
+                      <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                        <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
+                        <div className='flex flex-col justify-center w-full gap-1 text-left'>
+                          <span className="font-semibold text-left text-black">
+                            {item?.parentProductName}{" "}
+                            <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                          </span>
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Condition: </strong>
+                            {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                              item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                                item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                  item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                    item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                      item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                        'N/A'
+                            }
+                          </span>
+                          {item?.accessories?.length > 0 && (
+                            <span className="text-xs text-left text-gray-600">
+                              <strong>Accessories: </strong>
+                              {item.accessories
+                                .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                                .map((acc: any) => acc?.name) // Extract names
+                                .join(", ") // Join with commas
+                              }
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                        {"£"}{item?.price}
+                      </td>
+                      <td className={`whitespace-nowrap justify-end pr-2`} align="right">
+                        <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td className="py-4 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                    <td className="px-3 py-4 text-xl font-semibold text-right text-black whitespace-nowrap">
+                      £{quoteData?.value?.grandTotal}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </>
+          )}
         </div>
       }
       <div className='flex flex-col w-full'>
         <h3 className='text-lg font-normal text-left text-black'>Select from the following options to get your equipment to Park Cameras:</h3>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {shippingData?.value?.map((ship: any, shipIdx: number) => (
           <div key={`condition-${shipIdx}`} className={`flex flex-col group w-full text-center border rounded cursor-pointer transition ${ship?.iId === isStoreOpen ? "bg-sky-100 border-[#2d4d9c] text-black shadow-lg" : "bg-white border-gray-300 hover:shadow-md"}`} onClick={() => selectShipping(ship)}>
             <h3 className={`rounded-t w-full font-medium py-3 text-md ${ship?.iId === isStoreOpen ? "bg-[#2d4d9c] text-white" : "bg-gray-200 text-black"}`} >

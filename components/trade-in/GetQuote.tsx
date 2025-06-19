@@ -9,8 +9,9 @@ import { RequestMethod } from 'bc-payments-sdk/dist/constants';
 import { callApi } from '@framework/utils/api-util';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
-export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade }: any) {
+export default function GetQuote({ quoteData, nextSteps, setShippingData, user, startNewTrade, deviceInfo }: any) {
   const [isLoading, setIsLoading] = useState(false);
+  const { isMobile } = deviceInfo
   const [getUpdatedQuoteDetails, setUpdatedQuoteDetails] = useState<any>(quoteData);
   const [rejectReasons, setRejectReasons] = useState<{ [key: string]: number }>({});
   const [showDropdown, setShowDropdown] = useState<{ [key: string]: boolean }>({});
@@ -115,101 +116,194 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
           {updatedQuoteDetail?.value?.items?.length > 0 ?
             <>
               <div className={`${allItemsRejected ? 'ring-red-400' : 'ring-gray-300'} flex flex-col w-full overflow-hidden shadow ring-1  sm:rounded`}>
-                <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th scope="col" className="py-3.5 pl-4 w-6/12 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Product</th>
-                      <th scope="col" className="px-3 py-3.5 w-2/12 text-right text-sm font-semibold text-gray-900">Price</th>
-                      <th scope="col" className="px-3 py-3.5w-4/12 text-right text-sm font-semibold text-gray-900">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {updatedQuoteDetail?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
-                      <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
-                        <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                          <img src={item?.parentProductImageUrl} className="inline-block w-auto h-16" alt={item?.parentProductName} />
-                          <div className="flex flex-col items-start justify-center w-full gap-1 text-left">
-                            <span className="font-semibold text-left text-black">
-                              {item?.parentProductName}{" "}
-                              <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                {isMobile ? (
+                  <table className="flex flex-col divide-y divide-gray-300">
+                    <thead className="bg-gray-50">
+                      <tr className='flex w-full'>
+                        <th className="py-3.5 pl-2 w-[60%] pr-3 text-left text-sm font-semibold text-gray-900">Product</th>
+                        <th className="px-3 py-3.5 w-[40%] text-right text-sm font-semibold text-gray-900">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {updatedQuoteDetail?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                        <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
+                          <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                            <span className='w-10'>
+                              <img src={item?.parentProductImageUrl} className="inline-block w-10 h-auto" alt={item?.parentProductName} />
                             </span>
-                            {item?.condition != "" &&
-                              <span className="text-xs text-left text-gray-600">
-                                <strong>Condition: </strong>
-                                {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
-                                  item?.condition == TradeInItemCondition.GOOD ? 'Good' :
-                                    item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
-                                      item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
-                                        item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
-                                          item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
-                                            'N/A'
-                                }
+                            <div className="flex flex-col items-start justify-center w-full gap-1 text-left">
+                              <span className="text-xs font-semibold text-left text-black break-words contents">
+                                {item?.parentProductName}{" "}
+                                <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
                               </span>
-                            }
+                              {item?.condition != "" &&
+                                <span className="text-xs text-left text-gray-600">
+                                  <strong>Condition: </strong>
+                                  {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                                    item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                                      item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                        item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                          item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                            item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                              'N/A'
+                                  }
+                                </span>
+                              }
 
-                            {item?.accessories?.length > 0 && (
-                              <span className="text-xs text-left text-gray-600">
-                                <strong>Accessories: </strong>
-                                {item.accessories
-                                  .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
-                                  .map((acc: any) => acc?.name) // Extract names
-                                  .join(", ") // Join with commas
-                                }
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
-                        {updatedQuoteDetail?.value?.status != "Quoted" && updatedQuoteDetail?.value?.status != "QuoteAccepted" && updatedQuoteDetail?.value?.status != "QuoteRejected" && updatedQuoteDetail?.value?.status != "QuoteExpired" ? (
-                          <td>
-                            <div className="flex justify-end pr-3">
-                              <span className={`bg-yellow-100 border-yellow-400 text-yellow-600 px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{updatedQuoteDetail?.value?.status}</span>
-                            </div>
-                          </td>
-                        ) : (
-                          <td>
-                            {item?.status === "Accepted" || item?.status === "Rejected" ? (
-                              <div className="flex justify-end pr-3">
-                                <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
-                              </div>
-                            ) : (
-                              showDropdown[item?.itemId] ? (
-                                <div className="flex justify-end gap-2">
-                                  <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
-                                    <option value="">Select a reason</option>
-                                    {rejectionOptions?.map((reason, idx) => (
-                                      <option key={idx} value={reason?.id}>{reason?.value}</option>
-                                    ))}
-                                  </select>
-                                  <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
-                                  <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                              {item?.accessories?.length > 0 && (
+                                <span className="text-xs text-left text-gray-600">
+                                  <strong>Accessories: </strong>
+                                  {item.accessories
+                                    .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                                    .map((acc: any) => acc?.name) // Extract names
+                                    .join(", ") // Join with commas
+                                  }
+                                </span>
+                              )}
+                              {updatedQuoteDetail?.value?.status != "Quoted" && updatedQuoteDetail?.value?.status != "QuoteAccepted" && updatedQuoteDetail?.value?.status != "QuoteRejected" && updatedQuoteDetail?.value?.status != "QuoteExpired" ? (
+                                <div>
+                                  <div className="flex justify-end pr-3">
+                                    <span className={`bg-yellow-100 border-yellow-400 text-yellow-600 px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{updatedQuoteDetail?.value?.status}</span>
+                                  </div>
                                 </div>
                               ) : (
-                                <div className="flex justify-end gap-2 pr-3">
-                                  <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                                  <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                                <div>
+                                  {item?.status === "Accepted" || item?.status === "Rejected" ? (
+                                    <div className="flex justify-end pr-3">
+                                      <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                                    </div>
+                                  ) : (
+                                    showDropdown[item?.itemId] ? (
+                                      <div className="flex justify-end gap-2">
+                                        <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
+                                          <option value="">Select a reason</option>
+                                          {rejectionOptions?.map((reason, idx) => (
+                                            <option key={idx} value={reason?.id}>{reason?.value}</option>
+                                          ))}
+                                        </select>
+                                        <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
+                                        <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                                      </div>
+                                    ) : (
+                                      <div className="flex justify-end gap-2 pr-3">
+                                        <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
+                                        <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                                      </div>
+                                    )
+                                  )}
                                 </div>
-                              )
-                            )}
-                          </td>
-                        )}
+                              )}
+                            </div>
 
+                          </td>
+                          <td className="px-3 w-[40%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot className={`${allItemsRejected ? 'bg-red-100' : 'bg-gray-100'}`}>
+                      <tr className='flex w-full'>
+                        <td className="py-3 pl-3 w-[60%] text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
+                        <td className="px-3 py-3 w-[40%] text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
                       </tr>
-                    ))}
-                  </tbody>
-                  <tfoot className={`${allItemsRejected ? 'bg-red-100' : 'bg-gray-100'}`}>
-                    <tr>
-                      <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-                      <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
-                      <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
-                    </tr>
-                  </tfoot>
-                </table>
+                    </tfoot>
+                  </table>
+                ) : (
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th scope="col" className="py-3.5 pl-4 w-6/12 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Product</th>
+                        <th scope="col" className="px-3 py-3.5 w-2/12 text-right text-sm font-semibold text-gray-900">Price</th>
+                        <th scope="col" className="px-3 py-3.5w-4/12 text-right text-sm font-semibold text-gray-900">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {updatedQuoteDetail?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                        <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
+                          <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                            <img src={item?.parentProductImageUrl} className="inline-block w-auto h-16" alt={item?.parentProductName} />
+                            <div className="flex flex-col items-start justify-center w-full gap-1 text-left">
+                              <span className="font-semibold text-left text-black">
+                                {item?.parentProductName}{" "}
+                                <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                              </span>
+                              {item?.condition != "" &&
+                                <span className="text-xs text-left text-gray-600">
+                                  <strong>Condition: </strong>
+                                  {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                                    item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                                      item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                        item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                          item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                            item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                              'N/A'
+                                  }
+                                </span>
+                              }
+
+                              {item?.accessories?.length > 0 && (
+                                <span className="text-xs text-left text-gray-600">
+                                  <strong>Accessories: </strong>
+                                  {item.accessories
+                                    .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                                    .map((acc: any) => acc?.name) // Extract names
+                                    .join(", ") // Join with commas
+                                  }
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
+                          {updatedQuoteDetail?.value?.status != "Quoted" && updatedQuoteDetail?.value?.status != "QuoteAccepted" && updatedQuoteDetail?.value?.status != "QuoteRejected" && updatedQuoteDetail?.value?.status != "QuoteExpired" ? (
+                            <td>
+                              <div className="flex justify-end pr-3">
+                                <span className={`bg-yellow-100 border-yellow-400 text-yellow-600 px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{updatedQuoteDetail?.value?.status}</span>
+                              </div>
+                            </td>
+                          ) : (
+                            <td>
+                              {item?.status === "Accepted" || item?.status === "Rejected" ? (
+                                <div className="flex justify-end pr-3">
+                                  <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                                </div>
+                              ) : (
+                                showDropdown[item?.itemId] ? (
+                                  <div className="flex justify-end gap-2">
+                                    <select className="p-1 text-xs border rounded" value={rejectReasons[item?.itemId] || ""} onChange={(e) => setRejectReasons({ ...rejectReasons, [item?.itemId]: Number(e.target.value) })} >
+                                      <option value="">Select a reason</option>
+                                      {rejectionOptions?.map((reason, idx) => (
+                                        <option key={idx} value={reason?.id}>{reason?.value}</option>
+                                      ))}
+                                    </select>
+                                    <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.REJECTED)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Confirm Reject</button>
+                                    <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600" >Accept</button>
+                                  </div>
+                                ) : (
+                                  <div className="flex justify-end gap-2 pr-3">
+                                    <button onClick={() => setShowDropdown({ ...showDropdown, [item?.itemId]: true })} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
+                                    <button onClick={() => handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)} className="px-2 py-1 text-xs text-white rounded bg-emerald-600">Accept</button>
+                                  </div>
+                                )
+                              )}
+                            </td>
+                          )}
+
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot className={`${allItemsRejected ? 'bg-red-100' : 'bg-gray-100'}`}>
+                      <tr>
+                        <td className="py-3 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
+                        <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
+                        <td className="px-3 py-3 text-xl font-semibold text-right text-black whitespace-nowrap"></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                )}
               </div>
               {/* Show Proceed Button only when all items are processed */}
               {allItemsProcessed && hasApprovedItem && (
                 <div className="flex flex-col justify-center gap-4">
-                  <div className='flex items-center justify-start gap-1'>
+                  <div className='flex items-center justify-start gap-1 text-left'>
                     <input
                       type='checkbox'
                       name="pre-sign-agreement"
@@ -217,7 +311,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                       checked={isChecked}
                       onChange={handleCheckboxChange}
                     />
-                    <span className='text-sm italic font-normal text-gray-600'>
+                    <span className='text-sm italic font-normal text-left text-gray-600'>
                       By checking this box, you approve the auto-acceptance of the quote if the price is greater than or equal to the quoted price.
                     </span>
                   </div>

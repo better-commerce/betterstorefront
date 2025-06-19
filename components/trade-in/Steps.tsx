@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function Steps({ data, setCurrentStep, currentStep }: any) {
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(new Array(data.length).fill(false));
   return (
-    <div className="flex flex-col w-8/12 mx-auto mt-10 mb-10">
+    <div className="flex flex-col w-full mx-auto mt-2 mb-5 sm:mt-10 sm:mb-10 sm:w-8/12">
       <div className='step-indicator'>
         {data?.map((step: any, index: number) => (
           <span className={`flex items-center ${index == 4 ? '' : 'w-[25%]'}`} key={`trade-in-${index}`}>
