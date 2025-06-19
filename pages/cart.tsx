@@ -726,6 +726,43 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     return (membershipItemsCount === basket?.lineItems?.length)
   }, [basket])
 
+  const handleInputQuantity = (product: any, updateQty: any) => {
+    const prevValue: number = parseInt(product.qty);
+    const newValue: number = parseInt(updateQty)
+
+    let qtyChange = newValue - prevValue;
+    if (newValue <= 0) {
+      qtyChange = 0;
+    }
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
+        asyncHandleItem(product, qtyChange)
+        setBasketReValidate([])
+      })
+    } else if (product?.productId) {
+      asyncHandleItem(product, qtyChange)
+    }
+  }
+
+  const asyncHandleItem = async (product: any, productQuantity: any) => {
+    const data: any = {
+      basketId,
+      productId: product?.productId,
+      stockCode: product?.stockCode,
+      manualUnitPrice: product?.price,
+      displayOrder: product?.displayOrder || "0",
+      qty: productQuantity,
+      targetPrice: product?.targetPrice || product?.price, // Preserve the target price
+    };
+
+    try {
+      const item = await addToCart(data, 'ADD', { product })
+      setCartItems(item)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <NextHead>
@@ -817,6 +854,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                         soldOutMessage={soldOutMessage}
                         getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                         featureToggle={featureToggle}
+                        handleInputQuantity={handleInputQuantity}
                       />
                       {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                         (child: any, idx: number) => (
@@ -836,6 +874,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                             getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                             key={idx}
                             featureToggle={featureToggle}
+                            handleInputQuantity={handleInputQuantity}
                           />
                         )
                       )}
@@ -976,6 +1015,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                 soldOutMessage={soldOutMessage}
                                 getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                 featureToggle={featureToggle}
+                                handleInputQuantity={handleInputQuantity}
                               />
                               {product?.itemType !== ProductType.BUNDLE && product.children?.map((child: any, idx: number) => (
                                 <CartSideBarProductCard
@@ -994,6 +1034,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                   getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                   key={idx}
                                   featureToggle={featureToggle}
+                                  handleInputQuantity={handleInputQuantity}
                                 />
                               ))}
                             </>
