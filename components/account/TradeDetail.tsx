@@ -114,7 +114,7 @@ export default function TradeInDetail() {
     setTimeout(() => { setMessage(""); }, 4000);
   }
 
-  const handlePreSignAgreement = async () => {
+  const handlePreSignAgreement = async (isChecked: boolean) => {
     try{
       if (isChecked) {
         const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, method: RequestMethod.POST, data: { id: tradeDetail?.value?.id } };
@@ -140,7 +140,7 @@ export default function TradeInDetail() {
         };
 
         if (isChecked) {
-        await handlePreSignAgreement()
+        await handlePreSignAgreement(isChecked)
         }
 
         const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: requestBody };
@@ -474,7 +474,7 @@ export default function TradeInDetail() {
               </tfoot>
             </table>
           </div>
-          {tradeDetail?.value?.statusId > 1 && (
+          {tradeDetail?.value?.statusId > QuoteStatusType.QUOTED && (
           <div className='flex items-center justify-start gap-1 mt-4 ml-1'>
             <input type='checkbox' name="pre-sign-agreement" className='w-4 h-4 border border-gray-300 rounded' disabled={tradeDetail?.value?.agreementPreSigned} checked={isChecked} onChange={handleCheckboxChange} />
             <span className='text-sm italic font-normal text-gray-600'>
@@ -482,7 +482,7 @@ export default function TradeInDetail() {
             </span>
           </div>
           )}
-          {tradeDetail?.value?.statusId >= 9 && (
+          {tradeDetail?.value?.statusId >= QuoteStatusType.ASSESSED && (
           <div className='mt-6 space-y-6 border p-4 rounded-md shadow'>
           {/* Finality of Trade-in */}
           <div>
@@ -534,7 +534,7 @@ export default function TradeInDetail() {
           </div>
           )}
           {canUpdateShippingAddress(tradeDetail?.value?.status) && <button
-            onClick={() => {router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}&currentStep=4`); handlePreSignAgreement()}}
+            onClick={() => {router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}&currentStep=4`); handlePreSignAgreement(isChecked)}}
             className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full mt-3">
             Continue  <ChevronRightIcon className="w-5 h-5" />
           </button>}
