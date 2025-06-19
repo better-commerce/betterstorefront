@@ -115,12 +115,12 @@ export default function TradeInDetail() {
   }
 
   const handlePreSignAgreement = async () => {
-    if (isChecked) {
     try{
+      if (isChecked) {
         const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, method: RequestMethod.POST, data: { id: tradeDetail?.value?.id } };
         await callApi(config)
-      }catch(error) {}
-    }
+      }
+    }catch(error) {}
   }
 
   const handleItemAction = async (itemId: any, status: number) => {
