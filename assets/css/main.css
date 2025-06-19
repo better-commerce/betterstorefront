@@ -18170,3 +18170,14 @@ input[type=number] {
   background-color: #f5f5f5 !important;
   border: 1px solid #d9d9d9 !important;
 }
+
+
+@media (max-width: 767px) {
+.bg-gradient-white-blue {
+  background: linear-gradient(to right, #fff 60%, #fff 60%);
+}
+
+.bg-gradient-white-blue-left {
+  background: linear-gradient(to left, #fff 65%, #fff 65%);
+}
+}

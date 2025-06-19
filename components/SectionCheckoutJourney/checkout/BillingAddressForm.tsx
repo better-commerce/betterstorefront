@@ -221,7 +221,7 @@ const BillingAddressForm: React.FC<any> = ({
             onSubmit={handleGuestWithAddressSubmit}
             className="flex flex-col w-full gap-1 mt-1 sm:gap-4 sm:mt-4"
           >
-            <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-12">
+            <div className="grid grid-cols-1 gap-5 sm:gap-4 sm:grid-cols-12">
               <div className="relative mt-1 sm:col-span-12 custom-select">
 
                 <select
