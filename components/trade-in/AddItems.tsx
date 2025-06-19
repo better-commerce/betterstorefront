@@ -146,13 +146,13 @@ export default function AddItems({ products, images, onChangeSearch, nextStep, s
             </div>
             {item?.selectedProductData?.conditions?.length > 0 && (
               <div className='flex flex-col justify-start w-full gap-2 mt-5 text-left sm:mt-3'>
-                <label className='text-lg font-semibold text-[#2d4d9c]'>
+                <label className='text-lg font-semibold sm:flex-row flex-col flex text-[#2d4d9c]'>
                   <span>Condition</span>
                   <span className='pl-1 text-sm font-normal underline cursor-pointer' onClick={() => setRightCondition(item?.selectedProductData?.conditions)} >
                     (Click here for help choosing the right condition)
                   </span>
                 </label>
-                <div className='grid grid-cols-5 gap-3'>
+                <div className='grid grid-cols-2 gap-3 sm:grid-cols-5'>
                   {[...item?.selectedProductData?.conditions]?.sort((a, b) => conditionOrder.indexOf(a?.conditionName) - conditionOrder.indexOf(b?.conditionName))?.map((cn: any, cnIdx: number) => {
                     // If no condition is selected, set the first one as default
                     return (
@@ -176,7 +176,7 @@ export default function AddItems({ products, images, onChangeSearch, nextStep, s
             {item?.selectedProductData?.accessories?.length > 0 &&
               <div className='flex flex-col justify-start w-full gap-2 mt-5 text-left sm:mt-3'>
                 <label className='text-lg font-semibold text-[#2d4d9c]'>Accessories</label>
-                <div className={`grid grid-cols-3 gap-3`}>
+                <div className={`grid sm:grid-cols-3 grid-cols-2 gap-3`}>
                   {[...item?.selectedProductData?.accessories]
                     ?.sort((a, b) => a?.accessoryName?.localeCompare(b?.accessoryName))
                     .map((ac: any, acIdx: number) => (
