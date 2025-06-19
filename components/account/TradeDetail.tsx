@@ -12,6 +12,7 @@ import { RequestMethod } from "bc-payments-sdk/dist/constants";
 import { callApi } from "@framework/utils/api-util";
 import AmendProductModal from "./AmendProduct";
 import QuoteAssessmentNotes from './QuoteAssessmentNotes';
+import { useUI } from "@components/ui";
 
 export const statusClasses: Record<string, string> = {
   // QuoteStatus
@@ -72,6 +73,7 @@ export default function TradeInDetail() {
   const [assessmentModal, setAssessmentModal] = useState<{ open: boolean; data: any }>({ open: false, data: null });
   const [isChecked, setIsChecked] = useState(tradeDetail?.value?.agreementPreSigned)
   const [formData, setFormData] = useState({ finality: tradeDetail?.value?.agreementPreSigned, goodsCert: tradeDetail?.value?.agreementPreSigned, customerAck: tradeDetail?.value?.agreementPreSigned });
+  const { setAlert } = useUI()
   const agreementSigned = useMemo(() => {
   return isChecked && formData.finality && formData.goodsCert && formData.customerAck;
   }, [isChecked, formData.finality, formData.goodsCert, formData.customerAck]);
@@ -112,6 +114,15 @@ export default function TradeInDetail() {
     setTimeout(() => { setMessage(""); }, 4000);
   }
 
+  const handlePreSignAgreement = async () => {
+    if (isChecked) {
+    try{
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, method: RequestMethod.POST, data: { id: tradeDetail?.value?.id } };
+        await callApi(config)
+      }catch(error) {}
+    }
+  }
+
   const handleItemAction = async (itemId: any, status: number) => {
     if (status === QuoteItemStatusType.REJECTED && !rejectReasons[itemId]) {
       setMessage("Please select reject reasons!!");
@@ -129,9 +140,8 @@ export default function TradeInDetail() {
         };
 
         if (isChecked) {
-        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_PRE_SIGN_AGREEMENT, method: RequestMethod.POST, data: { id: tradeDetail?.value?.id } };
-        await callApi(config)
-      }
+        await handlePreSignAgreement()
+        }
 
         const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS, method: RequestMethod.POST, data: requestBody };
         const quoteResult = await callApi(config)
@@ -148,7 +158,10 @@ export default function TradeInDetail() {
   };
 
   const updateAssessmentStatus = async (item: any, status: number) => {
-    if(!agreementSigned) return
+    if(!agreementSigned) {
+      setAlert({ type: 'error', msg: 'Plase select all the required fields' })
+      return
+    }
     setIsLoading(true);
     await handleItemAction(item?.itemId, QuoteItemStatusType.ACCEPTED)
     try {
@@ -408,7 +421,7 @@ export default function TradeInDetail() {
                           canChangeStatus(item?.status) && (
                             <div className="flex justify-end gap-2 pr-3">
                               <button onClick={() => updateAssessmentStatus(item?.assessment?.assessmentId, AssessmentStatusType.REJECTED_BY_CUSTOMER)} className="px-2 py-1 text-xs text-white bg-red-600 rounded">Reject</button>
-                              <button disabled={!agreementSigned} onClick={() => updateAssessmentStatus(item, AssessmentStatusType.APPROVED)} className={`px-2 py-1 text-xs text-white rounded ${agreementSigned ? 'bg-emerald-600' : 'bg-emerald-400 !cursor-not-allowed'} `}>Accept</button>
+                              <button onClick={() => updateAssessmentStatus(item, AssessmentStatusType.APPROVED)} className={`px-2 py-1 text-xs text-white rounded ${agreementSigned ? 'bg-emerald-600' : 'bg-emerald-400 cursor-default'} `}>Accept</button>
                               {/* {showAmendButton(item) && <button onClick={() => handleAmendItem(item)} className="px-2 py-1 text-xs text-white rounded bg-blue" > Amend </button>} */}
                             </div>
                           )
@@ -461,12 +474,15 @@ export default function TradeInDetail() {
               </tfoot>
             </table>
           </div>
+          {tradeDetail?.value?.statusId > 1 && (
           <div className='flex items-center justify-start gap-1 mt-4 ml-1'>
-            <input type='checkbox' name="pre-sign-agreement" className='w-4 h-4 border border-gray-300 rounded' disabled={getStatusLabel(tradeDetail?.value?.status ?? "Unknown") != 'Assessed'} checked={isChecked} onChange={handleCheckboxChange} />
+            <input type='checkbox' name="pre-sign-agreement" className='w-4 h-4 border border-gray-300 rounded' disabled={tradeDetail?.value?.agreementPreSigned} checked={isChecked} onChange={handleCheckboxChange} />
             <span className='text-sm italic font-normal text-gray-600'>
               By checking this box, you approve the auto-acceptance of the quote if the price is greater than or equal to the quoted price.
             </span>
           </div>
+          )}
+          {tradeDetail?.value?.statusId >= 9 && (
           <div className='mt-6 space-y-6 border p-4 rounded-md shadow'>
           {/* Finality of Trade-in */}
           <div>
@@ -478,7 +494,7 @@ export default function TradeInDetail() {
             </p>
             <div className='mt-2'>
               <label className='inline-flex items-center'>
-                <input type='checkbox' name='finality' className='w-4 h-4 border border-gray-300 rounded mr-2' disabled={getStatusLabel(tradeDetail?.value?.status ?? "Unknown") != 'Assessed'} checked={formData.finality} onChange={handleFormChange} />
+                <input type='checkbox' name='finality' className='w-4 h-4 border border-gray-300 rounded mr-2' disabled={tradeDetail?.value?.agreementPreSigned} checked={formData.finality} onChange={handleFormChange} />
                 I acknowledge
               </label>
             </div>
@@ -494,7 +510,7 @@ export default function TradeInDetail() {
             </p>
             <div className='mt-2'>
               <label className='inline-flex items-center'>
-                <input type='checkbox' name='goodsCert' className='w-4 h-4 border border-gray-300 rounded mr-2' disabled={getStatusLabel(tradeDetail?.value?.status ?? "Unknown") != 'Assessed'} checked={formData.goodsCert} onChange={handleFormChange} />
+                <input type='checkbox' name='goodsCert' className='w-4 h-4 border border-gray-300 rounded mr-2' disabled={tradeDetail?.value?.agreementPreSigned} checked={formData.goodsCert} onChange={handleFormChange} />
                 I certify
               </label>
             </div>
@@ -510,14 +526,15 @@ export default function TradeInDetail() {
             </p>
             <div className='mt-2'>
               <label className='inline-flex items-center'>
-                <input type='checkbox' name='customerAck' className='w-4 h-4 border border-gray-300 rounded mr-2' disabled={getStatusLabel(tradeDetail?.value?.status ?? "Unknown") != 'Assessed'} checked={formData.customerAck} onChange={handleFormChange} />
+                <input type='checkbox' name='customerAck' className='w-4 h-4 border border-gray-300 rounded mr-2' disabled={tradeDetail?.value?.agreementPreSigned} checked={formData.customerAck} onChange={handleFormChange} />
                 I acknowledge
               </label>
             </div>
           </div>
-        </div>
+          </div>
+          )}
           {canUpdateShippingAddress(tradeDetail?.value?.status) && <button
-            onClick={() => router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}&currentStep=4`)}
+            onClick={() => {router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}&currentStep=4`); handlePreSignAgreement()}}
             className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full mt-3">
             Continue  <ChevronRightIcon className="w-5 h-5" />
           </button>}
