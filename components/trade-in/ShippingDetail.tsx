@@ -285,9 +285,9 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                   {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
                     <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
                       <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                        <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
+                        <span className="w-10"><img src={item?.parentProductImageUrl} className='inline-block w-10 h-auto' alt={item?.parentProductName} /></span>
                         <div className='flex flex-col justify-center w-full gap-1 text-left'>
-                          <span className="font-semibold text-left text-black">
+                          <span className="font-semibold text-left text-black whitespace-normal">
                             {item?.parentProductName}{" "}
                             <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
                           </span>
@@ -508,7 +508,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                   </div>
                   {/* <img src={store?.image} alt={store?.name} className="w-full h-auto" /> */}
                   <div className="grid grid-cols-12 gap-1">
-                    <div className='sm:col-span-6'>
+                    <div className='col-span-12 sm:col-span-6'>
                       <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
                       <p>{store?.name}</p>
                       <p>{store?.street}</p>
@@ -517,7 +517,7 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                       <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
                       <div className="flex flex-col text-sm font-normal divide-x divide-gray-200" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
                     </div>
-                    <div className='sm:col-span-6'>
+                    <div className='col-span-12 sm:col-span-6'>
                       <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
                     </div>
                   </div>

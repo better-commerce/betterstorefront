@@ -69,9 +69,9 @@ export default function QuoteDetails({ data, quoteData, startNewTrade, deliveryD
                 {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
                   <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
                     <td className="flex gap-1 py-3 pl-2 w-[60%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
-                      <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
+                      <span className="w-10"><img src={item?.parentProductImageUrl} className='inline-block w-10 h-auto' alt={item?.parentProductName} /></span>
                       <div className='flex flex-col justify-center w-full gap-1 text-left'>
-                        <span className="font-semibold text-left text-black">
+                        <span className="font-semibold text-left text-black whitespace-normal">
                           {item?.parentProductName}{" "}
                           <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
                         </span>

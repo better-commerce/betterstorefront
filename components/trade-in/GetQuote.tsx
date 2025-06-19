@@ -132,7 +132,7 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                               <img src={item?.parentProductImageUrl} className="inline-block w-10 h-auto" alt={item?.parentProductName} />
                             </span>
                             <div className="flex flex-col items-start justify-center w-full gap-1 text-left">
-                              <span className="text-xs font-semibold text-left text-black break-words contents">
+                              <span className="text-xs font-semibold text-left text-black whitespace-normal">
                                 {item?.parentProductName}{" "}
                                 <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
                               </span>

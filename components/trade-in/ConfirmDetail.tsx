@@ -98,8 +98,8 @@ export default function ConfirmDetails({ selectedItems, nextSteps, setSuccessMes
                       <div className="w-10">
                         <img src={item?.selectedProductImage} className="inline-block w-10 h-auto" alt={item?.selectedProduct} />
                       </div>
-                      <div className="flex flex-col w-full gap-0">
-                        <span className="text-sm">{item?.selectedProduct}</span>
+                      <div className="flex flex-col w-full gap-0 whitespace-normal">
+                        <span className="text-xs max-w-[200px] break-words">{item?.selectedProduct}</span>
                         <span className="text-xs font-medium"><strong>Condition:</strong> {item?.selectedCondition?.conditionName == TradeInItemCondition.WELL_USED ? 'Well Used' :
                           item?.selectedCondition?.conditionName == TradeInItemCondition.FAULTY ? 'Faulty' : item?.selectedCondition?.conditionName == TradeInItemCondition.GOOD ? 'Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.VERY_GOOD ? 'Very Good' : item?.selectedCondition?.conditionName == TradeInItemCondition.EXCELLENT ? 'Excellent' : item?.selectedCondition?.conditionName == TradeInItemCondition.LIKE_NEW ? 'Like New' : 'N/A'
                         }</span>
