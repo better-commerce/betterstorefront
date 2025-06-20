@@ -310,14 +310,14 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       sizes="100vw"
                       loading={uIdx === 0 ? "eager" : "lazy"}
                     />
-                    <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 '>
+                    <div className='relative flex flex-col items-center justify-center w-full gap-2 bg-transparent z-2 mob-padding-38'>
                       <h2 className='font-bold uppercase primary-text-blue title-page'>{usd?.usedproduct_title}</h2>
                       <div className='mx-auto text-[14px] font-semibold primary-text-blue text-center sm:w-8/12' dangerouslySetInnerHTML={{ __html: usd?.usedproduct_description }}></div>
                       <div className='h-48 col-span-12 sm:h-56'>
                         <img
                           src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                           alt={usd?.usedproduct_title}
-                          className='object-cover w-full h-40 sm:h-56'
+                          className='sm:object-cover sm:w-full w-auto h-40 sm:h-56'
                           width={500}
                           height={224}
                           loading="lazy"

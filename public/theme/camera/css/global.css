@@ -3444,3 +3444,14 @@ select {
 .pc-dynamic-html a {
 	background-color: #FFFFFF !important;
 }
+@media (max-width: 767px) {
+.mob-padding-38{
+	padding-bottom:38px !important
+}
+}
+.nc-Button.help-button-link{
+	background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-decoration: underline;
+}

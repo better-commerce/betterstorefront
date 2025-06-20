@@ -44,7 +44,7 @@ function OrdersTableView({ alertRibbon, displayAlert, isIPadorTablet, isMobile, 
           <h1 id="recent-heading" className="sr-only">
             {translate('label.orderDetails.recentOrdersText')}
           </h1>
-          <div className="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+          <div className="mt-4 overflow-x-auto sm:overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-50">
                 <tr>

@@ -139,10 +139,10 @@ export default function WalletDetail() {
             </div>
           }
           <div className="w-full">
-            <div className="flex items-center justify-between w-full btn-primary-clr btn-section-wallet">
-              <h2 className={`text-xl font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>{translate('label.myAccount.myWalletText')}</h2>
+            <div className="flex sm:items-center flex-col sm:flex-row sm:justify-between w-full btn-primary-clr btn-section-wallet">
+              <h2 className={`text-xl text-left font-normal sm:text-2xl dark:text-black ${walletEnabled ? 'mb-6' : ''}`}>{translate('label.myAccount.myWalletText')}</h2>
               {walletEnabled &&
-                <div className="flex w-5/12 gap-2 mb-6">
+                <div className="flex w-full sm:w-5/12 gap-2 mb-6">
                   <button
                     className={`w-full flex items-center justify-center !text-sm px-4 py-3 -mr-0.5 !rounded-sm sm:px-2 link-button btn-primary  ${bankAccountList?.length > 0 ? '' : '!cursor-not-allowed opacity-50'}`}
                     onClick={() => setOpenTransferToBankModal(true)}
@@ -187,7 +187,7 @@ export default function WalletDetail() {
                 {isLoadingTransactions && <Loader />}
                 {walletTransactions?.items?.length > 0 ? (
                   <>
-                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                    <div className="overflow-x-auto sm:overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                           <tr className="bg-gray-200">
@@ -230,7 +230,7 @@ export default function WalletDetail() {
                 {isLoadingBankTransactions && <Loader />}
                 {bankTransferTransactions?.items?.length > 0 ? (
                   <>
-                    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                    <div className="overflow-x-auto sm:overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                           <tr className="bg-gray-200">

@@ -41,7 +41,7 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
             <div className="flex justify-between">
                <div>
                   {order?.orderDetails?.order?.id && (
-                     <p className='text-sm font-medium text-black'>
+                     <p className='text-sm font-medium text-black pr-2 sm:pr-0'>
                         {order?.orderDetails?.order?.deliveryPlans.length > 0 ? (
                            <span>{translate('label.orderDetails.packageText')} {idx + 1}/{order?.orderDetails?.order?.deliveryPlans.length} • </span>
 
