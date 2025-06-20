@@ -99,7 +99,7 @@ export default function TradeInTable() {
       <div className="mt-4 overflow-x-auto">
         {tradeList?.items?.length > 0 ? (
           <>
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <div className="overflow-x-auto sm:overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
                 <thead className="bg-gray-50">
                   <tr>
@@ -117,7 +117,7 @@ export default function TradeInTable() {
                         <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm text-sky-600">{item.quoteNo || '-'}</Link>
                       </td>
                       <td className="px-4 py-2 text-sm text-right border">
-                        <span className={`px-2 py-1 text-[11px] font-medium rounded-full border ${statusClasses[item?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
+                        <span className={`px-2 py-1 text-[11px] font-medium rounded-full border whitespace-nowrap ${statusClasses[item?.status] || 'bg-gray-200 border-gray-500 text-gray-500'}`}>
                           {getStatusLabel(item?.status ?? "Unknown")}
                         </span>
                       </td>

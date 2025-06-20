@@ -204,7 +204,7 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
                 <div className={`sticky z-10 top-7 sm:top-12 sm:col-span-3 ${featureToggle?.features?.enableForPCSite ? 'sidebar_bg' : ''}`}>
                   <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} config={config} />
                 </div>
-                <div className='pt-0 pl-4 bg-white sm:pl-10 sm:col-span-9 sm:pt-5 z-1 sm:pb-32'>
+                <div className='pt-0 pl-0 bg-white sm:pl-10 sm:col-span-9 sm:pt-5 z-1 sm:pb-32'>
                   {featureToggle?.features?.enableForPCSite && <MembershipBanner user={user} />}
                   {children}
                 </div>
