@@ -1,36 +1,36 @@
-import { CURRENT_THEME } from "@components/utils/constants";
+// components/TrustpilotWidget.tsx
+'use client';
+import { useEffect } from 'react';
 
-interface TrustpilotRatingProps {
-  score?: number;
-  reviewCount?: number;
-  className?: string;
-}
+const TrustpilotRating = () => {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
-const TrustpilotRating = ({
-  score = 4.9,
-  reviewCount = 16371,
-  className = "",
-}: TrustpilotRatingProps) => {
   return (
-    <div className={`inline-flex flex-col items-start space-y-4 ${className}`}>
-      {/* Trustpilot Logo */}
-      <div className="flex items-center space-x-2">
-        <img
-          src={`/theme/${CURRENT_THEME}/image/trustpilot-img.png`}
-          alt="Trustpilot Logo"
-          className="h-[80px]"
-        />
-      </div>
-
-      {/* Trust Score */}
-      <div className="space-y-1">
-        <div className="text-base font-medium text-foreground">
-          TrustScore <span className="font-bold">{score}</span>
-        </div>
-        <div className="text-base font-medium text-foreground">
-          <span className="font-bold">{reviewCount.toLocaleString()}</span> reviews
-        </div>
-      </div>
+    <div
+      className="trustpilot-widget"
+      data-locale="en-GB"
+      data-template-id="54197383fd9dceac42a68694"
+      data-businessunit-id="477447a300006400050209bb"
+      data-style-width="100%"
+      data-style-size="XS"
+      data-headline="star"
+      data-external-elements-color="dark"
+    >
+      <a
+        href="https://uk.trustpilot.com/review/www.parkcameras.com"
+        target="_blank"
+        rel="noopener"
+      >
+        Trustpilot
+      </a>
     </div>
   );
 };
