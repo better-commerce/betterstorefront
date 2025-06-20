@@ -98,14 +98,14 @@ export default function CategoryList({ featureToggle, category, handleFilters, p
                           </div>
                         ) : (category?.breadCrumbs && (<BreadCrumbs items={category?.breadCrumbs} currentProduct={category} />))}
                         <CategoryBanner props={category} deviceInfo={deviceInfo} />
-                        <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
+                        <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0' : ' w-full'} col-span-12`}>
                           {isMobile ? (
                             <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                           ) : (
                             !featureToggle?.features?.enableHorizontalFilter ? (
                               <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                             ) : (
-                              <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                              <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="" />
                             )
                           )}
                         </div>

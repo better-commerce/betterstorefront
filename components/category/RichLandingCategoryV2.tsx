@@ -164,7 +164,7 @@ export default function RichLandingCategoryV2({ featureToggle, category, handleF
                                   <div className="block text-sm font-normal text-gray-800 text-x-small dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: category?.description }}></div>
                                 </div>
                               }
-                              <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                              <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0 py-4' : ' w-full'} col-span-12`}>
                                 {isMobile ? (
                                   <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                                 ) : (

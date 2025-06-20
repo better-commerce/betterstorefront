@@ -716,7 +716,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                 </div>
                                 <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription}/>
                               </div>
-                              <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0' : ' w-full'} col-span-12`}>
+                              <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0' : ' w-full'} col-span-12`}>
                               {isMobile ? (
                                     <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                                   ) : (

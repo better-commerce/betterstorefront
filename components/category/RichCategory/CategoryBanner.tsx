@@ -37,7 +37,7 @@ export default function CategoryBanner({ data }: any) {
               <span>February 2nd, 2023</span>
             </div>
           </div> */}
-          <div dangerouslySetInnerHTML={{ __html: data?.description, }} className="px-0 mt-8 text-sm font-medium text-black text-x-small" />
+          <div dangerouslySetInnerHTML={{ __html: data?.description, }} className="px-0 mt-8 text-sm font-medium text-black text-x-small pc-dynamic-html" />
         </div>
       </section>
     </>

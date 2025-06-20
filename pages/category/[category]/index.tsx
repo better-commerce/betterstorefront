@@ -610,10 +610,16 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
                 onToggleBrandListPage={onToggleBrandListPage}
                 maxBasketItemsCount={maxBasketItemsCount}
                 config={config}
+                handleFilters={handleFilters}
+                products={products}
+                handleSortBy={handleSortBy}
+                clearAll={clearAll}
+                removeFilter={removeFilter}
                 featureToggle={featureToggle}
                 handlePageChange={handlePageChange}
                 handleInfiniteScroll={handleInfiniteScroll}
                 isCompared={isCompared}
+                isMobile={isMobile}
                 defaultDisplayMembership={defaultDisplayMembership}
                 campaignData={campaignData} />
             ) : (
