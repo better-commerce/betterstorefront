@@ -32,7 +32,7 @@ export default function getShippingMethods() {
   }: Props) {
     const url =
       SHIPPING_ENDPOINT +
-      `?basketId=${basketId}&shipToCountryIso=${countryCode}`
+      `?basketId=${basketId}&shipToCountryIso=${countryCode}&postCode=${postCode}`
     try {
       const response: any = await fetcher({
         url,

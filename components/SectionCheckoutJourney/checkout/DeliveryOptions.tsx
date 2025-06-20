@@ -198,7 +198,7 @@ function DeliveryOptions({
       ) : (
         <RadioGroup
           value={selectedDeliveryMethod}
-          onChange={() => {}} //{handleDeliveryMethodChange}
+          onChange={() => { }} //{handleDeliveryMethodChange}
         >
           {/* <RadioGroup.Label className="text-lg font-semibold text-gray-900">
               {`Delivery ${count+1}`}
@@ -269,9 +269,8 @@ function DeliveryOptions({
                 <div key={idx} className="flex flex-col">
                   <li
                     onClick={() => handleShippingMethod(item)}
-                    className={`${
-                      shippingMethod.id === item.id ? 'border-black' : ''
-                    }  pointer border-2 py-5 px-5 flex justify-between flex-row`}
+                    className={`${shippingMethod.id === item.id ? 'border-black' : ''
+                      }  pointer border-2 py-5 px-5 flex justify-between flex-row`}
                   >
                     <div>
                       <h4 className="font-bold text-gray-900 uppercase">

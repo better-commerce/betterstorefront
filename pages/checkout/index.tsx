@@ -927,6 +927,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       const { data: deliveryMethods = [] }: any = await axios.post(NEXT_SHIPPING_ENDPOINT, {
         basketId,
         countryCode: shippingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_DEFAULT_COUNTRY,
+        postCode: shippingAddress?.postCode,
       })
       if (deliveryMethods?.length) {
         const output: any = DELIVERY_METHODS_TYPE?.map((method: any) => {
