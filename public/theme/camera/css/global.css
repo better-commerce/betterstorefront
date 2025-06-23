@@ -3455,3 +3455,6 @@ select {
     box-shadow: none !important;
     text-decoration: underline;
 }
+.trustpilot-widget{
+	max-height: 30px !important;
+}

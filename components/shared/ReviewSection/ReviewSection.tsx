@@ -2,7 +2,7 @@
 'use client';
 import { useEffect } from 'react';
 
-const TrustpilotRating = () => {
+const TrustpilotRating = ({templateId, templateSize}:any) => {
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js';
@@ -17,10 +17,10 @@ const TrustpilotRating = () => {
     <div
       className="trustpilot-widget"
       data-locale="en-GB"
-      data-template-id="54197383fd9dceac42a68694"
+      data-template-id={templateId}
       data-businessunit-id="477447a300006400050209bb"
       data-style-width="100%"
-      data-style-size="S"
+      data-style-size={templateSize}
       data-headline="star"
       data-external-elements-color="dark"
     >

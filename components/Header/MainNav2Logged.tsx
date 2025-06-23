@@ -27,6 +27,7 @@ const MenuBar = dynamic(() => import('@components/shared/MenuBar/MenuBar'))
 const Navigation = dynamic(() => import('@components/shared/Navigation/Navigation'))
 const ToggleSwitch = dynamic(() => import('@components/shared/ToggleSwitch/ToggleSwitch'))
 const BulkAddTopNav = dynamic(() => import('@components/SectionCheckoutJourney/bulk-add/TopNav'))
+import ReviewSection from "@components/shared/ReviewSection/ReviewSection";
 interface Props {
   config: []
   currencies: []
@@ -113,7 +114,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
             <div className="container mx-auto">
               <div className="flex justify-between w-full">
                 <div className="flex items-center justify-start">
-                  <span className="flex items-center font-light text-black text-regular">Free Delivery Over £50 <ChevronDownIcon className="w-3 h-3" /> </span>
+                  <ReviewSection templateId="5419b6a8b0d04a076446a9ad" templateSize="XS" />
                   <span className="pl-4 text-black text-regular">Call us <span className="font-semibold">01444 237070</span></span>
                 </div>
                 <div className="flex items-center justify-end gap-4">

@@ -184,7 +184,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
                 <Logo />
               </div>
               <div className="flex justify-start gap-2 mt-10 sm:mb-4">
-                <ReviewSection/>
+                <ReviewSection templateId="54197383fd9dceac42a68694" templateSize="S" />
               </div>
               <div className="flex justify-start gap-2 mt-10">
                 <SocialsList1 className="flex items-center justify-start gap-4" featureToggle={featureToggle} />
