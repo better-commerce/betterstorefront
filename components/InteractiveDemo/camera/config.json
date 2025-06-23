@@ -38,6 +38,14 @@
           "active": 1
         },
         {
+          "group": "PLP",
+          "urlCode": "plp-register-interest",
+          "name": "Register Interest",
+          "url": "https://parkcameras.bettercommerce.tech/collection/prelaunch",
+          "displayOrder": 10,
+          "active": 1
+        },
+        {
           "group": "PDP",
           "urlCode": "pdp-type-cashback-promotion-used-product",
           "name": "Promotion, Cashback, Used Related Type",

@@ -375,16 +375,16 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return groupBy(
       (products || []).filter((item: { groupNameList: { relatedTypeCode: string }[] }) =>
         item?.groupNameList?.some((group: { relatedTypeCode: string }) =>
-          group?.relatedTypeCode === filterKey
+          group?.relatedTypeCode.toLowerCase() === filterKey
         )
       ),
       () => groupKey
     );
   };
-  const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Used", "Used");
-  const kitsProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Bundle", "Bundle");
-  const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Accessories", "Accessories");
-  const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "Compare", "Compare");
+  const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "used", "Used");
+  const kitsProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "bundle", "Bundle");
+  const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "accessories", "Accessories");
+  const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "compare", "Compare");
   const overlayImages = product?.images?.filter((x: any) => matchStrings(x?.tag, "overlay", true));
   const overlayImage = product?.images?.find((x: any) => matchStrings(x?.tag, "overlay", true));
   interface MediaItem {
@@ -1009,7 +1009,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const renderSectionContent = () => {
     return (
       featureToggle?.features?.enableRichPDP ? (
-        <RichProductView product={product} cashbackAmount={cashbackAmount} cashbackDescription={cashbackDescription} selectedOption={selectedOption} kitsProducts={kitsProducts?.['Bundle']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} promotions={promotions} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} />
+        <>
+          <RichProductView product={product} cashbackAmount={cashbackAmount} cashbackDescription={cashbackDescription} selectedOption={selectedOption} kitsProducts={kitsProducts?.['Bundle']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} promotions={promotions} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} /></>
       ) : (
         <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
       )

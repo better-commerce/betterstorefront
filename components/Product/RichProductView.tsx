@@ -290,12 +290,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     <span className={`w-5 h-5 border rounded-full flex items-center justify-center mr-2 ${selectedOption === "used" ? "border-blue-600 active-radio" : "border-gray-400"}`}>
                       {selectedOption === "used" && <span className="w-3 h-3 bg-blue-600 rounded-full"></span>}
                     </span>
-                  </label>
-                  <div className='mt-3 space-y-2'>
-                    <Prices cashbackAmount={cashbackAmount} contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={usedProduct?.[0]?.price} listPrice={usedProduct?.[0]?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    {/* <p className="text-sm text-gray-600">Or <strong>£138.33</strong> per month for <strong>36 months</strong> plus deposit £449.90. <a href="#" className="text-color-primary-blue">Details.</a></p>
-                      <p className="text-sm font-normal text-black">FREE next day delivery.</p> */}
-                  </div>
+                  </label>                  
                   {selectedOption === "used" && (
                     <>
                       {featureToggle?.features?.enableStoreStockCheck &&
