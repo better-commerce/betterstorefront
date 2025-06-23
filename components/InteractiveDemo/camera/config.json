@@ -54,6 +54,14 @@
           "active": 1
         },
         {
+          "group": "PDP",
+          "urlCode": "pdp-pre-launch-interested-in",
+          "name": "Pre Launch Interested In",
+          "url": "https://parkcameras.bettercommerce.tech/products/my-brand-insta360-pos-display-9707008a",
+          "displayOrder": 12,
+          "active": 1
+        },
+        {
           "group": "Brand",
           "urlCode": "brand-brand-directory",
           "name": "Brand Directory",
