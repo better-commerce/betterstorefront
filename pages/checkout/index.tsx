@@ -993,10 +993,6 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
   }, [basket])
 
   useEffect(() => {
-    if (basket?.lineItems?.length == 0) {
-      router.push('/cart')
-      return
-    }
 
     if (appConfig) {
       const appConfigData = tryParseJson(decrypt(appConfig))
@@ -1008,12 +1004,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     const asyncCartItemsChangeHandler = async (oldBasket: any) => {
       if (basketId && basketId != Guid.empty) {
         const basketResult = await getBasket(basketId)
-        if (
-          oldBasket &&
-          basketResult &&
-          (oldBasket?.lineItems?.length != basketResult?.lineItems?.length ||
-            oldBasket?.id !== basketResult?.id)
-        ) {
+        if (oldBasket && basketResult && (oldBasket?.lineItems?.length != basketResult?.lineItems?.length || oldBasket?.id !== basketResult?.id)) {
           router.push('/cart')
         }
       }
@@ -1030,11 +1021,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
           asyncCartItemsChangeHandler(oldCartItems)
         } else {
           const newCartItems: any = tryParseJson(ev?.newValue)
-          if (
-            oldCartItems &&
-            newCartItems &&
-            oldCartItems?.lineItems?.length != newCartItems?.lineItems?.length
-          ) {
+          if (oldCartItems && newCartItems && oldCartItems?.lineItems?.length != newCartItems?.lineItems?.length) {
             router.push('/cart')
           }
         }
@@ -1047,11 +1034,6 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
   }, [])
 
-  useEffect(() => {
-    if (basket?.lineItems && basket?.lineItems?.length == 0) {
-      router.push('/cart')
-    }
-  }, [basket])
 
   useEffect(() => {
     const isLoggedIn =
@@ -1064,10 +1046,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       if (basketId && basketId != Guid.empty) {
         const basketResult = await getBasket(basketId)
         if (basketResult) {
-          if (
-            !basketResult ||
-            (basketResult?.id && basketResult?.lineItems?.length === 0)
-          ) {
+          if (!basketResult || (basketResult?.id && basketResult?.lineItems?.length === 0)) {
             router.push('/cart')
           } else {
             setBasket(basketResult)
