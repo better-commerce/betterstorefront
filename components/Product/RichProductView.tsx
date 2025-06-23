@@ -73,7 +73,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
             )}
             {cashbackAmount && <div className="w-full max-w-3xl my-4 border shadow-sm rounded-xl bg-background">
               <div className="flex items-center gap-3 px-3 py-2 justify-between bg-[#EAEDF5]">
-                <h2 className="text-sm font-semibold text-[#1E1E1E]">Effective price
+                <h2 className="text-sm font-semibold text-[#1E1E1E]">Effective price <span className="hidden opacity-0">{bestPrice}----{JSON.stringify(promotions?.promotions?.bestAvailablePromotion)}</span>
                   <span className="block text-xs italic font-normal text-gray-500">after <strong>{product?.price?.currencySymbol}{cashbackAmount}</strong> cashback and voucher</span>
                 </h2>
                 {selectedOption === "used" ? <span className="ml-2 text-xl font-bold text-red-700">{product?.price?.currencySymbol}{(bestPrice ? usedProduct?.at(0)?.price?.raw?.withTax - cashbackAmount : usedProduct?.at(0)?.price?.raw?.withTax - cashbackAmount)?.toFixed(2)}</span> :
