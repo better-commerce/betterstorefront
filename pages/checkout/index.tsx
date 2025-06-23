@@ -614,7 +614,7 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         prevAddrList = new Array(2).fill(undefined)
       }
       const { isBilling, ...addressData } = newAddress
-      if (size(addressData) > 0) {
+      if (size(addressData) > 0 && addressData?.id > 0) {
         if (isBilling) {
           prevAddrList[1] = { ...addressData, isBilling: true }
         } else {
