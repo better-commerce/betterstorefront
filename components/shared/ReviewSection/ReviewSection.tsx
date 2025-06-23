@@ -20,7 +20,7 @@ const TrustpilotRating = () => {
       data-template-id="54197383fd9dceac42a68694"
       data-businessunit-id="477447a300006400050209bb"
       data-style-width="100%"
-      data-style-size="XS"
+      data-style-size="S"
       data-headline="star"
       data-external-elements-color="dark"
     >
