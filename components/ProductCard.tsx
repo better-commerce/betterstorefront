@@ -336,7 +336,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             <CheckCircleIcon className='inline-block w-4 h-4' /> {promotion}
           </p>
         }
-        {featureToggle.features?.enableForPCSite &&
+        {featureToggle?.features?.enableForPCSite &&
           <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
             {data?.currentStock > 0 ? <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>In stock</span> :
               <span className='px-1 py-0.5 rounded text-xs text-[#E5A000]'>Awaiting stock</span>

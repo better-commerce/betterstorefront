@@ -89,7 +89,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
     )
     // if billing address exist
     if(basket?.billingAddress?.id !== basket?.shippingAddress?.id){
-      onAddressSelect( shippingAddress, basket?.billingAddress )
+      onAddressSelect( shippingAddress, useSameForBilling ? shippingAddress : basket?.billingAddress )
     } else {
       onAddressSelect(
         shippingAddress,
