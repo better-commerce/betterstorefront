@@ -724,7 +724,7 @@ function CollectionPage(props: any) {
                       {featureToggle.features?.enableForPCSite ? (
                         <>
                           {renderFeaturedProduct()}
-                          <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                          <div className={`${featureToggle.features?.enableForPCSite ? 'sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
                             {isMobile ? (
                               <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             ) : (

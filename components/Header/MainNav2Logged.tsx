@@ -243,7 +243,7 @@ const MainNav2Logged: FC<Props & IExtraProps> = ({ config, configSettings, curre
                           <span className="text-xs font-light">Discover Trade-In</span>
                         </Link>
                       </div>
-                      <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none sm:pr-10">
+                      <div className="relative flex flex-col items-center justify-center px-1 text-left mob-line-height-none sm:pr-0">
                         <Link href="/" className="flex flex-col items-center justify-center w-auto h-10 gap-1 text-white rounded-full pc-text-header-clr wish-hover-icon lg:flex sm:w-full sm:h-12 dark:text-slate-700 focus:outline-none">
                           <img src="/theme/camera/image/expert.svg" className="w-6 !fill-white trade-icon h-auto mx-auto" alt="Ask an Expert" />
                           <span className="text-xs font-light">Ask an Expert</span>
