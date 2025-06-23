@@ -81,7 +81,7 @@ function NavigationRows({ navItems = [], featureToggle, subMenuPosition }: any) 
 
   return (
     <>
-      <ul className="flex items-center gap-10 nc-Navigation navigation-ul nav-ul-li-height">
+      <ul className="flex items-center gap-10 small-sm-gap nc-Navigation navigation-ul nav-ul-li-height">
         {navItems?.map((item: any, itemIdx: number) => (
           <li className="flex-shrink-0 mt-0 menu-item menu-megamenu menu-megamenu--large group" onMouseEnter={() => handleMouseEnterItem(itemIdx)} onMouseLeave={handleMouseLeaveItem} key={`to-nav-${itemIdx}`}>
             <div className="flex items-center flex-shrink-0 h-16 height-div-nav">
