@@ -106,9 +106,11 @@ const LoginOrGuest: React.FC<any> = ({
           billingCountries={billingCountries}
           searchAddressByPostcode={searchAddressByPostcode}
           onSubmit={onSubmit}
+          featureToggle={featureToggle}
           useSameForBilling={false}
           shouldDisplayEmail={false}
           appConfig={appConfig}
+
         />
       )
     } else {
@@ -212,7 +214,7 @@ const LoginOrGuest: React.FC<any> = ({
               <div className='w-full'>
               <button
               type="submit"
-              className="px-1 py-3 btn-c w-full btn-width-auto btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 lg:py-2 sm:px-4"
+              className="w-full px-1 py-3 btn-c btn-width-auto btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 lg:py-2 sm:px-4"
               disabled={loginCheckoutFormik.isSubmitting}
             >
               {loginCheckoutFormik.isSubmitting ? <LoadingDots /> : translate('label.login.loginBtnText')}
@@ -265,9 +267,9 @@ const LoginOrGuest: React.FC<any> = ({
             )}
             </div>
             {featureToggle?.features?.enableCollectDeliveryOption && (
-              <div className="w-full flex justify-end btn-start-sec">
+              <div className="flex justify-end w-full btn-start-sec">
               <button
-                className="border border-black park-bg-secondary btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1 self-end"
+                className="self-end px-1 py-3 border border-black park-bg-secondary btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn lg:py-2 sm:px-4"
                 type="submit"
                 disabled={guestCheckoutFormik.isSubmitting}
               >

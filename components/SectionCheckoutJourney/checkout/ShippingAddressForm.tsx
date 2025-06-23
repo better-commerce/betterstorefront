@@ -192,7 +192,7 @@ const ShippingAddressForm: React.FC<any> = ({
                 onSubmit={addressFinderFormik.handleSubmit}
                 className="flex items-start w-full gap-2 mt-1 sm:gap-4 sm:mt-4"
               >
-                <div className="relative">
+                <div className="relative w-[70%]">
                   <input
                     name="postCode"
                     type="text"
@@ -568,6 +568,7 @@ const ShippingAddressForm: React.FC<any> = ({
             useSameForBilling={useSameForBilling}
             shouldDisplayEmail={false}
             appConfig={appConfig}
+            featureToggle={featureToggle}
           />
         </div>
       )}

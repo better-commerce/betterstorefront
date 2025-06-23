@@ -3459,3 +3459,17 @@ select {
 	max-height: 30px !important;
 	overflow: hidden !important;
 }
+.container, .container-pdp{
+	max-width: 1536px !important;
+	width: 100% !important;
+    padding-right: 20px !important ;
+   padding-left: 20px !important;
+}
+@media (min-width: 767px) and (max-width: 1300px) {
+.small-sm-gap{
+    gap: 1rem !important;
+}
+.font-28 {
+    font-size: 22px !important;
+}
+}

@@ -150,7 +150,7 @@ const BillingAddressForm: React.FC<any> = ({
         className={`${!useSameForBilling
           ? ''
           : ''
-          } flex flex-col gap-2 sm:rounded-md sm:border border-transparent bg-white py-4 px-0`}
+          } flex flex-col gap-2 sm:rounded-md sm:border border-transparent py-4 px-0`}
       >
         <h5 className="font-semibold font-18 dark:text-black">
           {editAddressValues ? translate('common.label.editText') : ''} {translate('label.addressBook.BillingAddressHeadingText')}
@@ -158,11 +158,8 @@ const BillingAddressForm: React.FC<any> = ({
         {/* address finder form */}
         <div className="border border-gray-200 sm:border-none sm:border-transparent rounded-md sm:rounded-none sm:p-0 p-3 mt-0 bg-[#fbfbfb] sm:bg-transparent">
           {(featureToggle?.features?.enableLoqateSearch || featureToggle?.features?.enableAddressIOSearch) && (
-            <form
-              onSubmit={addressFinderFormik.handleSubmit}
-              className="flex items-start w-full gap-4 sm:mt-4"
-            >
-              <div className="relative">
+            <form onSubmit={addressFinderFormik.handleSubmit} className="flex items-start w-full gap-4 sm:mt-4" >
+              <div className="relative w-[70%]">
                 <input
                   name="postCode"
                   type="text"
@@ -248,8 +245,7 @@ const BillingAddressForm: React.FC<any> = ({
                   </span>
                 )}
               </div>
-              <div className="sm:col-span-6">
-
+              <div className="relative sm:col-span-6">
                 <input
                   name="firstName"
                   type="text"
@@ -257,18 +253,16 @@ const BillingAddressForm: React.FC<any> = ({
                   onChange={formik.handleChange}
                   className="font-medium text-black rounded checkout-input-field dark:bg-white placeholder:!text-sm dark:text-black placeholder:text-gray-400 placeholder:font-normal input-check-default"
                 />
-                {featureToggle?.features?.enableInputLabel && (
-                  <label htmlFor="firstName" className="absolute left-2 bg-white px-1 -top-2 text-xs text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 transition-all duration-200 ease-in-out">
-                    {translate('common.label.firstNameText')}
-                  </label>
-                )}
+                {featureToggle?.features?.enableInputLabel && (<label htmlFor="firstName" className="absolute left-2 bg-white px-1 -top-2 text-xs text-gray-500 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 transition-all duration-200 ease-in-out">
+                  {translate('common.label.firstNameText')}
+                </label>)}
                 {formik?.errors?.firstName && (
                   <span className="form-input-error">
                     {formik?.errors?.firstName}
                   </span>
                 )}
               </div>
-              <div className="sm:col-span-6">
+              <div className="relative sm:col-span-6">
 
                 <input
                   name="lastName"
@@ -288,7 +282,7 @@ const BillingAddressForm: React.FC<any> = ({
                   </span>
                 )}
               </div>
-              <div className="sm:col-span-12">
+              <div className="relative sm:col-span-12">
 
                 <input
                   name="phoneNo"
@@ -362,7 +356,7 @@ const BillingAddressForm: React.FC<any> = ({
                   </span>
                 )}
               </div> */}
-              <div className="sm:col-span-12">
+              <div className="relative sm:col-span-12">
 
                 <input
                   name="address1"
@@ -382,7 +376,7 @@ const BillingAddressForm: React.FC<any> = ({
                   </span>
                 )}
               </div>
-              <div className="sm:col-span-12">
+              <div className="relative sm:col-span-12">
 
                 <input
                   name="address2"
@@ -402,7 +396,7 @@ const BillingAddressForm: React.FC<any> = ({
                   </span>
                 )}
               </div>
-              <div className="sm:col-span-12">
+              <div className="relative sm:col-span-12">
 
                 <input
                   name="address3"
@@ -422,7 +416,7 @@ const BillingAddressForm: React.FC<any> = ({
                   </span>
                 )}
               </div>
-              <div className="sm:col-span-4">
+              <div className="relative sm:col-span-4">
 
                 <input
                   name="city"
@@ -440,7 +434,7 @@ const BillingAddressForm: React.FC<any> = ({
                   <span className="form-input-error">{formik?.errors?.city}</span>
                 )}
               </div>
-              <div className="sm:col-span-4">
+              <div className="relative sm:col-span-4">
 
                 <input
                   name="postCode"
@@ -461,7 +455,7 @@ const BillingAddressForm: React.FC<any> = ({
                 )}
               </div>
 
-              <div className="sm:col-span-4">
+              <div className="relative sm:col-span-4">
 
                 <input
                   name="state"

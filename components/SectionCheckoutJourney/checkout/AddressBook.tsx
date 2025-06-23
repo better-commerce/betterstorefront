@@ -330,8 +330,8 @@ const AddressBook: React.FC<AddressBookProps> = ({
               </>
             )}
             {isDeliverTypeSelected && !useSameForBilling && (
-              <div className="mt-4 border-t border-gray-300">
-                <BillingAddressForm editAddressValues={editAddressValues} shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={useSameForBilling} shouldDisplayEmail={false} appConfig={appConfig} />
+              <div className="px-5 mt-4 bg-white rounded shadow">
+                <BillingAddressForm editAddressValues={editAddressValues} shippingCountries={shippingCountries} billingCountries={billingCountries} searchAddressByPostcode={searchAddressByPostcode} onSubmit={onSubmit} useSameForBilling={useSameForBilling} shouldDisplayEmail={false} appConfig={appConfig} featureToggle={featureToggle} />
               </div>
             )}
 
