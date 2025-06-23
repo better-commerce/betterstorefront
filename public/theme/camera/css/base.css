@@ -266,6 +266,59 @@
   box-sizing: inherit;
 }
 
+@media screen and (max-width: 1620px) {
+  :root {
+    --font-10: 10px;
+    --font-12: 12px;
+    --font-14: 14px;
+    --font-16: 16px;
+    --font-18: 18px;
+    --font-20: 18px;
+    --font-22: 22px;
+    --font-24: 18px;
+    --font-26: 22px;
+    --font-28: 24px;
+    --font-30: 24px;
+    --font-32: 24px;
+    --font-34: 30px;
+    --font-36: 28px;
+    --font-40: 30px;
+    --font-44: 30px;
+    --font-48: 30px;
+    --font-64: 30px;
+    --font-68: 30px;
+    --font-72: 32px;
+    --font-74: 36px;
+    --font-76: 40px;
+  }
+}
+@media screen and (max-width: 1320px) {
+  :root {
+    --font-10: 10px;
+    --font-12: 12px;
+    --font-14: 14px;
+    --font-16: 16px;
+    --font-18: 18px;
+    --font-20: 18px;
+    --font-22: 22px;
+    --font-24: 18px;
+    --font-26: 22px;
+    --font-28: 18px;
+    --font-30: 24px;
+    --font-32: 24px;
+    --font-34: 30px;
+    --font-36: 28px;
+    --font-40: 30px;
+    --font-44: 30px;
+    --font-48: 30px;
+    --font-64: 30px;
+    --font-68: 30px;
+    --font-72: 32px;
+    --font-74: 36px;
+    --font-76: 40px;
+  }
+}
+
 @media screen and (max-width: 767px) {
   :root {
     --font-10: 10px;
