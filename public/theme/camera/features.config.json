@@ -16,7 +16,7 @@
     "enableProductSpecification": true,
     "enableTrendingCategory": false,
     "enableCategory": true,
-    "enableDemoToggle": false,
+    "enableDemoToggle": true,
     "enableLoqateSearch": false,
     "enableAddressIOSearch":true,
     "enableGoogleAnalytics": true,
