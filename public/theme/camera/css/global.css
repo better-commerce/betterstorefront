@@ -3457,4 +3457,5 @@ select {
 }
 .trustpilot-widget{
 	max-height: 30px !important;
+	overflow: hidden !important;
 }
