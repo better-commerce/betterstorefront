@@ -3,7 +3,17 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 
-const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBasketPromos, setBasket = () => { }, membership, }: any) => {
+interface SummaryProps {
+  basket: any;
+  groupedPromotions: any;
+  deviceInfo: any;
+  basketPromos: any;
+  getBasketPromos: any;
+  setBasket: any;
+  membership: any;
+}
+
+const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBasketPromos, setBasket = () => { }, membership, }: SummaryProps) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
 

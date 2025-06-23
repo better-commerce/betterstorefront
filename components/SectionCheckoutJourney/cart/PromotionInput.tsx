@@ -14,12 +14,10 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { NEXT_APPLY_PROMOTION, SHOW_APPLY_COUPON_SECTION } from '@components/utils/constants'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import useDevice from '@commerce/utils/use-device'
 import Coupon from './Coupon'
 import BasketPromo from './BasketPromo'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { logError } from '@framework/utils/app-util'
-import { Guid } from '@commerce/types'
 
 declare const window: any
 SwiperCore.use([Navigation])
@@ -35,9 +33,7 @@ interface IPromotionInputProps {
 }
 
 const PromotionInput = (props: IPromotionInputProps) => {
-  const { user } = useUI()
   const translate = useTranslation()
-  const { isMobile, isIPadorTablet } = useDevice()
   const [appliedBenefit, setAppliedBenefit] = useState(false)
   const {
     basketPromos,
@@ -166,6 +162,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
       if (data?.result) {
         //setError(data?.result?.isVaild);
         setCartItems(data?.result?.basket)
+        setBasket(data?.result?.basket)
         setValue('')
       } else {
         setError(!data?.result?.isVaild)

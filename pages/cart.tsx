@@ -23,7 +23,7 @@ import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { getCartValidateMessages, getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
+import { getCartValidateMessages, getCurrentPage, vatIncluded, maxBasketItemsCount as calMaxBasketItemsCount } from '@framework/utils/app-util'
 import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST, BASKET_PROMO_TYPES } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
@@ -45,7 +45,7 @@ import CartSideBarProductCard from '@components/CartSideBarProductCard'
 import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 import { ProductType } from '@framework/utils/enums'
 
-function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
+function Cart({ cart, deviceInfo, config, allMembershipPlans, defaultDisplayMembership, featureToggle }: any) {
   const router = useRouter()
   const allowSplitShipping = stringToBoolean(
     config?.configSettings
@@ -726,6 +726,41 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
     return (membershipItemsCount === basket?.lineItems?.length)
   }, [basket])
 
+  const handleInputQuantity = (product: any, updateQty: any) => {
+    const prevValue: number = parseInt(product.qty);
+    const newValue: number = parseInt(updateQty)
+
+    let qtyChange = newValue - prevValue;
+    if (newValue <= 0) {
+      qtyChange = 0;
+    }
+    if (product && product?.length) {
+      product?.forEach((product: any) => {
+        asyncHandleItem(product, qtyChange)
+        setBasketReValidate([])
+      })
+    } else if (product?.productId) {
+      asyncHandleItem(product, qtyChange)
+    }
+  }
+
+  const asyncHandleItem = async (product: any, productQuantity: any) => {
+    const data: any = {
+      basketId,
+      productId: product?.productId,
+      stockCode: product?.stockCode,
+      manualUnitPrice: product?.price,
+      displayOrder: product?.displayOrder || "0",
+      qty: productQuantity,
+      targetPrice: product?.targetPrice || product?.price, // Preserve the target price
+    };
+
+    try {
+      const item = await addToCart(data, 'ADD', { product })
+      setCartItems(item)
+    } catch (error) {}
+  }
+
   return (
     <>
       <NextHead>
@@ -807,7 +842,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                         handleRedirectToPDP={handleRedirectToPDP}
                         handleClose={handleClose}
                         handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
-                        maxBasketItemsCount={maxBasketItemsCount}
+                        maxBasketItemsCount={calMaxBasketItemsCount(config)}
                         isIncludeVAT={isIncludeVAT}
                         discount={discount}
                         handleItem={handleItem}
@@ -817,6 +852,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                         soldOutMessage={soldOutMessage}
                         getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                         featureToggle={featureToggle}
+                        handleInputQuantity={handleInputQuantity}
                       />
                       {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                         (child: any, idx: number) => (
@@ -836,6 +872,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                             getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                             key={idx}
                             featureToggle={featureToggle}
+                            handleInputQuantity={handleInputQuantity}
+                            maxBasketItemsCount={calMaxBasketItemsCount(config)}
                           />
                         )
                       )}
@@ -915,7 +953,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
             <div>
               {altRelatedProducts?.relatedProducts && (
                 <div className="flex flex-col px-4 pb-10 mt-0 sm:px-8 sm:pb-16 cart-related-prod ">
-                  <RelatedProductWithGroup products={altRelatedProducts?.relatedProducts?.products?.results || []} productPerColumn={1.7} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+                  <RelatedProductWithGroup products={altRelatedProducts?.relatedProducts?.products?.results || []} productPerColumn={1.7} deviceInfo={deviceInfo} maxBasketItemsCount={calMaxBasketItemsCount(config)} />
                 </div>
               )}
             </div>
@@ -966,7 +1004,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                 handleRedirectToPDP={handleRedirectToPDP}
                                 handleClose={handleClose}
                                 handleToggleOpenSizeChangeModal={handleToggleOpenSizeChangeModal}
-                                maxBasketItemsCount={maxBasketItemsCount}
+                                maxBasketItemsCount={calMaxBasketItemsCount(config)}
                                 isIncludeVAT={isIncludeVAT}
                                 discount={discount}
                                 handleItem={handleItem}
@@ -976,6 +1014,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                 soldOutMessage={soldOutMessage}
                                 getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                 featureToggle={featureToggle}
+                                handleInputQuantity={handleInputQuantity}
                               />
                               {product?.itemType !== ProductType.BUNDLE && product.children?.map((child: any, idx: number) => (
                                 <CartSideBarProductCard
@@ -994,6 +1033,8 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                   getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                   key={idx}
                                   featureToggle={featureToggle}
+                                  handleInputQuantity={handleInputQuantity}
+                                  maxBasketItemsCount={calMaxBasketItemsCount(config)}
                                 />
                               ))}
                             </>
@@ -1071,7 +1112,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
             <div>
               {altRelatedProducts?.relatedProducts && (
                 <div className="flex flex-col px-4 pb-10 mt-0 sm:px-8 sm:pb-16 cart-related-prod ">
-                  <RelatedProductWithGroup products={altRelatedProducts?.relatedProducts?.products?.results || []} productPerColumn={1.7} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+                  <RelatedProductWithGroup products={altRelatedProducts?.relatedProducts?.products?.results || []} productPerColumn={1.7} deviceInfo={deviceInfo} maxBasketItemsCount={calMaxBasketItemsCount(config)} />
                 </div>
               )}
             </div>

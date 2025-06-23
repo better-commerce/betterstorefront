@@ -669,6 +669,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                     getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                     insertToLocalWishlist={insertToLocalWishlist}
                                     featureToggle={featureToggle}
+                                    handleInputQuantity={handleInputQuantity}
                                   />
                                   {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                                     (child: any, idx: number) => (
@@ -695,6 +696,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                         key={idx}
                                         insertToLocalWishlist={insertToLocalWishlist}
                                         featureToggle={featureToggle}
+                                        handleInputQuantity={handleInputQuantity}
                                       />
                                     )
                                   )}
