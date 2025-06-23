@@ -13,7 +13,7 @@ import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { Messages, NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_GET_ALT_RELATED_PRODUCTS, collectionSlug, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, SITE_ORIGIN_URL, } from '@components/utils/constants'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
-import { getCurrentPage, vatIncluded, getCartValidateMessages, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, getCartValidateMessages, maxBasketItemsCount as calMaxBasketItemsCount } from '@framework/utils/app-util'
 import Engraving from '@components/Product/Engraving'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
@@ -30,7 +30,7 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import { PAGE_TYPES } from '@components/withDataLayer'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
 
-const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
+const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
   const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
   const { isInWishList } = wishlistHandler()
@@ -373,7 +373,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         qty: -1,
       }
       if (type === 'increase') {
-        if (product.qty < maxBasketItemsCount) {
+        if (product.qty < calMaxBasketItemsCount(config)) {
           data.qty = 1
           if (currentPage) {
             if (typeof window !== 'undefined') {
@@ -384,8 +384,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
         } else {
           setAlert({
             type: 'error',
-            msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount }), {
-              maxBasketItemsCount,
+            msg: stringFormat(stringFormat(translate('common.message.basket.maxBasketItemsCountErrorMsg'), { maxBasketItemsCount: calMaxBasketItemsCount(config) }), {
+              maxBasketItemsCount : calMaxBasketItemsCount(config),
             }),
           })
           return
@@ -689,7 +689,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                               </Link>
                               {altRelatedProducts?.relatedProducts && (
                                 <div className="flex flex-col px-4 pb-10 mt-0 sm:px-8 sm:pb-16 cart-related-prod ">
-                                  <RelatedProductWithGroup products={altRelatedProducts?.relatedProducts?.products?.results || []} productPerColumn={1.7} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
+                                  <RelatedProductWithGroup products={altRelatedProducts?.relatedProducts?.products?.results || []} productPerColumn={1.7} deviceInfo={deviceInfo} maxBasketItemsCount={calMaxBasketItemsCount(config)} />
                                 </div>
                               )}
                             </div>

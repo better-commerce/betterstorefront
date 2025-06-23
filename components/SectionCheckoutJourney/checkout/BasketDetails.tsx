@@ -1,4 +1,4 @@
-import { NEXT_GET_BASKET_PROMOS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO } from '@components/utils/constants';
+import { NEXT_GET_BASKET_PROMOS, NEXT_MEMBERSHIP_BENEFITS, NEXT_REFERRAL_ADD_USER_REFEREE, NEXT_REFERRAL_BY_SLUG, NEXT_REFERRAL_INFO } from '@components/utils/constants';
 import { BEEN_REFERRED_BY_A_FRIEND, CLOSE_PANEL, FIND_THEM, USER_NOT_FOUND } from '@components/utils/textVariables';
 import { formatFromToDates } from '@framework/utils/parse-util';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
@@ -14,6 +14,7 @@ import { BASKET_PROMO_TYPES } from '@framework/utils/constants';
 import Summary from './Summary';
 import BasketItems from './BasketItems';
 import SplitDeliveryBasketItems from './SplitDeliveryBasket';
+import { Guid } from '@commerce/types';
 interface BasketItem {
   id: string;
   name: string;
@@ -21,7 +22,7 @@ interface BasketItem {
   price: number;
 }
 
-const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUpdatePromoCode = () => { }, featureToggle }: any) => {
+const BasketDetails = ({ basket, deviceInfo, config, featureToggle, setBasket }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, isGuestUser, setAlert } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -38,6 +39,22 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
     autoAppliedPromos: null,
   })
   const [basketPromos, setBasketPromos] = useState<any | undefined>(undefined)
+  const [membership, setMembership] = useState([])
+
+  useEffect(()=>{
+    async function fetchMembership(){
+      const membershipItem = basket?.lineItems?.find( (x: any) => x?.isMembership )
+      const userId = membershipItem ? null : user?.userId !== Guid.empty ? user?.userId : null
+      const data = { userId, basketId: basket?.id, membershipPlanId: null }
+
+      const { data: membershipBenefitsResult } = await axios.post( NEXT_MEMBERSHIP_BENEFITS, data )
+      if (membershipBenefitsResult?.result) {
+        const membership = membershipBenefitsResult?.result
+        setMembership(membership)}
+    }
+    fetchMembership()
+  },[basket, basket?.id, basket?.lineItems])
+
   useEffect(() => {
     const fetchReferralPromotion = async () => {
       let { data: referralPromotions } = await axios.post(NEXT_REFERRAL_INFO)
@@ -154,7 +171,7 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
                       {referralAvailable && isGuestUser && basket?.contactDetails?.emailAddress && (//user?.userEmail && (
                         <h3 className="text-sm font-semibold underline cursor-pointer text-green" onClick={() => { setReferralModalShow(true) }}>{BEEN_REFERRED_BY_A_FRIEND}</h3>
                       )}
-                      <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} promotionsUpdate={promotionsUpdate} onUpdatePromoCode={onUpdatePromoCode} />
+                      <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} setBasket={setBasket} membership={membership} />
                     </div>
                   </Disclosure.Panel>
                 </>
@@ -189,7 +206,7 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
                 {BEEN_REFERRED_BY_A_FRIEND}
               </h3>
             )}
-            <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} promotionsUpdate={promotionsUpdate} onUpdatePromoCode={onUpdatePromoCode} />
+            <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} setBasket={setBasket} membership={membership} />
             </div>
           </div>
         )
