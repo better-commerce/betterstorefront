@@ -57,7 +57,7 @@
           "group": "PDP",
           "urlCode": "pdp-pre-launch-interested-in",
           "name": "Pre Launch Interested In",
-          "url": "https://parkcameras.bettercommerce.tech/products/my-brand-insta360-pos-display-9707008a",
+          "url": "https://parkcameras.bettercommerce.tech/products/modifli-modifli-mavic-air-skin-white-combo-9702660m",
           "displayOrder": 12,
           "active": 1
         },
@@ -110,11 +110,19 @@
           "active": 1
         },
         {
+          "group": "My Account",
+          "urlCode": "register-interest",
+          "name": "I'm Interested In",
+          "url": "https://parkcameras.bettercommerce.tech/my-account/register-interest",
+          "displayOrder": 34,
+          "active": 1
+        },
+        {
           "group": "Blogs",
           "urlCode": "blogs",
           "name": "Blogs",
           "url": "https://parkcameras.bettercommerce.tech/blog?ireftp=nav&iref=nav-blog",
-          "displayOrder": 34,
+          "displayOrder": 35,
           "active": 1
         },
         {
@@ -122,7 +130,7 @@
           "urlCode": "store-locator",
           "name": "Store Locator",
           "url": "https://parkcameras.bettercommerce.tech/store-locator",
-          "displayOrder": 35,
+          "displayOrder": 36,
           "active": 1
         }
       ]
