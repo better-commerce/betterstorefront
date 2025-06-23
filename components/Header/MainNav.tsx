@@ -106,7 +106,7 @@ const MainNav: FC<Props & IExtraProps> = ({ config, configSettings, currencies, 
               <div className="flex justify-between w-full">
                 <div className="flex items-center justify-start">
                   <span className="relative pl-0 text-black -top-0.5 text-regular">Call us <span className="font-semibold">01444 237070</span></span>
-                  <ReviewSection templateId="5419b6a8b0d04a076446a9ad" templateSize="XS" />
+                  <ReviewSection templateId="5419b732fbfb950b10de65e5" templateSize="XS" widgetClass="trustpilot-widget small" />
                 </div>
                 <div className="flex items-center justify-end gap-4">
                   {b2bEnabled && featureToggle?.features?.enableB2BHeader && (<BulkAddTopNav b2bSettings={b2bSettings} onClick={openBulkAdd} />)}
