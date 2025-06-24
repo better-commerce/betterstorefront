@@ -351,7 +351,6 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   <SectionHomeProductCardNew onlyImage={true} products={pageContents?.relateditems} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                 </div>
               )} */}
-              <RecentlyViewedProduct isHome={false} deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
               {/* Featured deals section */}
               {pageContents?.featureddeal?.length > 0 && (
                 <div className="container flex flex-col !px-0 mx-auto sm:pt-10 pt-6 slider-btn-css slider-btn-css slider-equal-height">
@@ -365,6 +364,9 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
             {/* brand Image collection list start */}
             {pageContents?.brandlist?.length > 0 && (<><ImageCollection data={pageContents?.brandlist} deviceInfo={deviceInfo}/></>)}
             {/* brand Image collection list End */}
+            <div className='container px-0  mx-auto'>
+            <RecentlyViewedProduct isHome={false} deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
+            </div>
             {Array.isArray(productTabs) && productTabs.length > 0 && (
               <div className='container py-6 pb-0 tab-padding-none slider-btn-css'>
                 {pageContents?.featureproductsheading?.length > 0 && pageContents?.featureproductsheading?.map((heading: any, hIdx: number) => (
@@ -373,6 +375,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                <ProductTabs tabs={productTabs} defaultActiveTab="Cameras" />
               </div>
             )}
+            
             {/* Brands section */}
             {pageContents?.brands?.length > 0 && (
                 <div className='flex flex-col w-full pt-4 mt-2 sm:mt-4'>
