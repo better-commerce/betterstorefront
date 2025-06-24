@@ -733,7 +733,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           )}
                           {!isEmpty && relatedProductData && (
                             <>
-                              <div className="flex flex-col px-4 mt-0 cart-related-prod sm:px-6">
+                              <div className="flex flex-col px-4 mt-0 cart-related-prod cart-slider-sec sm:px-6">
                                 <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title={translate('common.label.frequentlyBoughtTogetherText')} handleQuickAddToBag={handleQuickAddToBag} featureToggle={featureToggle} deviceInfo={deviceInfo} />
                               </div>
                             </>

@@ -3514,3 +3514,24 @@ select {
 		padding-right: 15px !important;
 	}
 }
+.cart-related-prod.cart-slider-sec .product-card-title {
+    font-size: 12px !important;
+    line-height: 16px !important;
+}
+.cart-related-prod.cart-slider-sec .font-32 {
+    font-size: 20px !important;
+    line-height: 26px !important;
+}
+.cart-related-prod.cart-slider-sec .save-price-sec{
+	height: auto !important;
+    line-height: 1;
+    display: flex;
+    min-height: 0;
+    max-height: 1;
+    align-items: center;
+    font-size: 10px;
+    margin-top: 5px;
+}
+.promo-info-sec{
+  font-size: 10px  !important;
+}
