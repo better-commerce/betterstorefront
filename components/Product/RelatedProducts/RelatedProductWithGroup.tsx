@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import { useUI } from '@components/ui'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { getCurrentPage } from '@framework/utils/app-util'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import cartHandler from '@components/services/cart'
@@ -12,7 +12,8 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 const QuickViewModal = dynamic(() => import('@components/Product/QuickView/ProductQuickView'))
-
+import Prev from '@components/shared/NextPrevIcon/Prev'
+import Next from '@components/shared/NextPrevIcon/Next'
 export default function RelatedProductWithGroup({ products, productPerColumn, deviceInfo, maxBasketItemsCount, defaultDisplayMembership, featureToggle }: any) {
   const { recordAnalytics } = useAnalytics()
   const [isQuickview, setQuickview] = useState(undefined)
@@ -85,12 +86,18 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
       }
     }
   }
+    const swiperGroup = useRef<any>(null);
   return (
     <>
+    <div className='relative'>
+       <div className="flex justify-between mb-2 slider-out-btn">
+        <Prev onClickPrev={() => swiperGroup.current?.swiper?.slidePrev()} />
+        <Next onClickNext={() => swiperGroup.current?.swiper?.slideNext()} />
+        </div>
       <Swiper
         slidesPerView={1}
         spaceBetween={20}
-        navigation={true}
+        navigation={false}
         loop={true}
         breakpoints={{
           640: { slidesPerView: 1.5 },
@@ -104,6 +111,7 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
           </SwiperSlide>
         ))}
       </Swiper>
+    </div>
       <QuickViewModal
         isQuikview={isQuickview}
         setQuickview={setQuickview}
