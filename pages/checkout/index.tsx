@@ -575,6 +575,9 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         }
       }
     }
+    if (currentStep === CheckoutStep.EDIT_ADDRESS) {
+      await loadDeliveryMethods(newAddressData, basketId)
+    }
     cb()
     hideOverlayLoaderState()
     if (address?.isBilling || address?.useSameForBilling) {
