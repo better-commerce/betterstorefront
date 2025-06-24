@@ -47,19 +47,10 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
       )}
       {featureToggle?.features?.enableForPCSite ? (
         price?.raw?.withTax != 0 ? (
-          <div className="flex flex-col items-start justify-end gap-2 text-sm font-semibold text-gray-400 price">
+          <div className="flex flex-col items-start justify-start gap-2 text-sm font-semibold text-gray-400 price">
             {cashback && <span className="bg-[#2D4D9C] text-xs w-full text-white px-2 py-1 rounded text-left font-semibold">{price?.currencySymbol}{price?.raw?.withTax ? cashback : 'N/A'} Cashback</span>}
-            <span className="flex flex-col items-start w-full min-h-[58px]">
-              <span className="flex items-end justify-end w-full pr-6">
-                {isIncludeVAT ? (
-                  listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (
-                    <span className="pr-1 font-normal text-gray-600 text-x-small">Was: {listPrice?.formatted?.withTax} </span>
-                  )
-                ) : (
-                  listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
-                    <span className="pr-1 font-normal text-gray-600 text-x-small">Was: {listPrice?.formatted?.withoutTax} </span>
-                  )
-                )}
+            <span className="flex flex-col items-start w-full gap-1 min-h-[58px]">
+              <span className="flex items-end gap-6 justify-start w-full pr-6">
                 {(() => {
                   const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;
                   const match = rawPrice?.match(/^(\D*)([\d,]+)(\.\d+)?$/);
@@ -74,6 +65,15 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
                     </span>
                   );
                 })()}
+                {isIncludeVAT ? (
+                  listPrice?.raw?.withTax > 0 && listPrice?.raw?.withTax > price?.raw?.withTax && (
+                    <span className="pl-1 font-normal text-gray-600 text-x-small">Was: {listPrice?.formatted?.withTax} </span>
+                  )
+                ) : (
+                  listPrice?.raw?.withoutTax > 0 && listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
+                    <span className="pl-1 font-normal text-gray-600 text-x-small">Was: {listPrice?.formatted?.withoutTax} </span>
+                  )
+                )}
               </span>
               {saving > 0 && <span className="px-2 py-0.5 text-xs font-semibold flex-1 text-white bg-[#009951] rounded save-price-sec">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
             </span>
