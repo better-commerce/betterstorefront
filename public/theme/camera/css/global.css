@@ -3502,6 +3502,9 @@ select {
 	position: relative;
     right: -23px;
 }
+.search-fixed{
+	cursor: auto !important;
+}
 @media (max-width: 767px) {
 	.slider-out-btn {
 	display: none  !important;
