@@ -13,6 +13,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 // Icons
 import { GiftIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from '@heroicons/react/24/solid'
+import { DiscussionEmbed } from 'disqus-react';
 
 // Styles
 import 'swiper/swiper-bundle.min.css'
@@ -45,6 +46,7 @@ import wishlistHandler from '@components/services/wishlist'
 import { AnalyticsEventType } from '@components/services/analytics'
 import ReviewInput from './Reviews/ReviewInput'
 import { getItem } from '@components/utils/localStorage'
+import { content } from 'tailwind.config'
 
 // Dynamically imported components
 const ProductDescription = dynamic(() => import('./ProductDescription'))
@@ -1116,6 +1118,23 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         <div className="space-y-4">
           <TabProductCard products={accessoriesProducts?.Accessories} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
         </div>
+      )
+    },
+    {
+      id: 'QnA',
+      label: 'Q&A',
+      content: (
+        <DiscussionEmbed
+          shortname='parkcameras'
+          config={
+            {
+              url: product?.link,
+              identifier: product?.stockCode,
+              title: product?.name,
+              language: 'en-GB'
+            }
+          }
+        />
       )
     }
   ].filter(Boolean);
