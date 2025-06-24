@@ -3506,6 +3506,10 @@ select {
 	cursor: auto !important;
 }
 @media (max-width: 767px) {
+	.mob-width-full.mobile-cart-width{
+		width: 100% !important;
+		max-width: 100% !important;
+	}
 	.slider-out-btn {
 	display: none  !important;
 	}

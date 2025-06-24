@@ -148,7 +148,7 @@ export default function RelatedProducts({
                   </div>
                   <div className="mb-8 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-8">
                     <Swiper
-                      slidesPerView={2}
+                      slidesPerView={1.4}
                       spaceBetween={8}
                       navigation={true}
                       loop={false}

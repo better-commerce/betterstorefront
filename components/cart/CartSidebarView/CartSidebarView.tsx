@@ -492,7 +492,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
             </Transition.Child>
             <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child as={Fragment} enter="transform transition ease-in-out duration-500 sm:duration-700" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leaveFrom="translate-x-0" leaveTo="translate-x-full" >
-                <div className="w-screen max-w-md mob-width-full">
+                <div className="w-screen max-w-md mob-width-full mobile-cart-width">
                   <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
                     <div className="flex-1">
                       <div className="sticky top-0 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow z-99 sm:px-6">
