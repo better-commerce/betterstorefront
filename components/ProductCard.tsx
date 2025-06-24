@@ -332,7 +332,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           <Prices cashbackAmount={cashbackAmount} price={data?.price} listPrice={data?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
         </div>}
         {featureToggle?.features?.enableForPCSite &&
-          <p className="border border-[#2D4D9C] px-2 py-1 flex items-center gap-1 text-xs font-semibold text-[#2D4D9C] text-left rounded">
+          <p className="border border-[#2D4D9C] px-2 py-1 flex items-center gap-1 text-xs font-semibold text-[#2D4D9C] text-left rounded promo-info-sec">
             <CheckCircleIcon className='inline-block w-4 h-4' /> {promotion}
           </p>
         }

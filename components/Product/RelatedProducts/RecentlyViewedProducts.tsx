@@ -124,7 +124,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
   const swiperRecently = useRef<any>(null);
   return (
     recentlyViewedProducts?.length > 0 && (
-      <div className={`flex flex-col w-full container-ffx py-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-0'}`}>
+      <div className={`flex flex-col w-full container-ffx py-6 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-0'}`}>
         <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
           {featureToggle?.features?.enableForPCSite ? (
             <h2 className="mb-6 font-semibold text-black title-page">Customers who viewed items in your browsing history also viewed</h2>

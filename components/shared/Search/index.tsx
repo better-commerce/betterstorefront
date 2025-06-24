@@ -71,9 +71,9 @@ export default function Search(props: any) {
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
       <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-primary-50 '></div>
-      <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden black-icon-svg" onClick={closeWrapper} >
-        <XMarkIcon />
-      </div>
+      <button  type="button" className="absolute text-gray-900 cursor-pointer h-12 w-12 flex items-center justify-center z-50 right-10 top-10 mobile-hidden black-icon-svg" onClick={closeWrapper} >
+        <XMarkIcon className='h-9 w-9' />
+      </button>
       <div className="absolute z-10 flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10 top-5">
         <div className="w-full mx-auto mb-4 sm:w-3/5">
           <div className="flex flex-row items-center justify-center px-1 rounded-sm mob-center-align">

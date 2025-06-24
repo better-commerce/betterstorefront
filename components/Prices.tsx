@@ -75,7 +75,7 @@ const Prices: FC<PricesProps> = ({ className = "w-full price-div", price, listPr
                   );
                 })()}
               </span>
-              {saving > 0 && <span className="px-2 py-0.5 text-xs font-semibold flex-1 text-white bg-[#009951] rounded">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
+              {saving > 0 && <span className="px-2 py-0.5 text-xs font-semibold flex-1 text-white bg-[#009951] rounded save-price-sec">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
             </span>
             {cashback && <span className="text-sm w-full font-medium text-black py-0.5 text-left">
               Effective price{' '}

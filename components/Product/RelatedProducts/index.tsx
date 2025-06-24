@@ -153,15 +153,15 @@ export default function RelatedProducts({
                       navigation={true}
                       loop={false}
                       breakpoints={{
-                        640: { slidesPerView: 2.3, spaceBetween: 4 },
-                        768: { slidesPerView: 2.3, spaceBetween: 15 },
-                        1024: { slidesPerView: 2.3, spaceBetween: 15 },
+                        640: { slidesPerView: 2, spaceBetween: 4 },
+                        768: { slidesPerView: 2, spaceBetween: 15 },
+                        1024: { slidesPerView: 2, spaceBetween: 15 },
                       }}
                       className="mySwiper"
                     >
                       {values?.map((product: any, pid: number) => {
                         return (
-                          <SwiperSlide key={pid}>
+                          <SwiperSlide key={pid} className="height-equal">
                             <ProductCard
                               data={product}
                               deviceInfo={deviceInfo}
