@@ -341,53 +341,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                 </Link>
               </div>
             </div>
-            <div className='container relative flex flex-col pt-6 mt-0 sm:pt-20 mb-7 sm:mb-8 lg:mb-12'>
-              {pageContents?.about?.length > 0 && pageContents?.about?.map((ab: any, aIdx: number) => (
-                <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12' key={`about-${aIdx}`}>
-                  <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
-                    <div className='col-span-12'>
-                      <img
-                        src={generateUri(ab?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
-                        alt={ab?.about_title}
-                        className='object-cover w-full h-full'
-                        width={500}
-                        height={500}
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                  <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
-                    <div className='flex flex-col justify-start w-full gap-4'>
-                      <h2 className='font-semibold text-black heading'>{ab?.about_title}</h2>
-                      <div className='font-normal text-black sm:w-full text-body-small' dangerouslySetInnerHTML={{ __html: ab?.about_description }}></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              {pageContents?.shopwithus?.length > 0 && pageContents?.shopwithus?.map((swu: any, sIdx: number) => (
-                <div className='grid items-end grid-cols-12 gap-1 pt-6 border-b border-gray-200 sm:items-center sm:pt-0 sm:gap-12 sm:grid-cols-12' key={`swu-${sIdx}`}>
-                  <span className='w-[100px] sm:h-0 sm:mb-0 mb-4 h-[2px] col-span-12 bg-black mx-auto'></span>
-                  <div className='order-1 col-span-7 sm:col-span-8 sm:order-1'>
-                    <div className='flex flex-col justify-center w-full gap-1 sm:gap-4'>
-                      <span className='w-[100px] sm:h-1 h-0 bg-black mx-auto'></span>
-                      <h2 className='font-semibold text-left text-black sm:text-center sub-heading'>{swu?.shopwithus_title}</h2>
-                      <div className='mx-auto font-normal sm:text-center text-left !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
-                    </div>
-                  </div>
-                  <div className='order-2 col-span-5 sm:col-span-4 sm:order-2'>
-                    <div className='col-span-12'>
-                      <img
-                        src={generateUri(swu?.shopwithus_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
-                        alt={swu?.shopwithus_title}
-                        className='object-cover w-full h-full'
-                        width={500}
-                        height={500}
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className='container relative flex flex-col pt-6 mt-0 sm:pt-8 mb-7 sm:mb-8 lg:mb-12'>
               {/* Related items section */}
               {/* {pageContents?.relateditems?.length > 0 && (
                 <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css">
@@ -400,7 +354,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <RecentlyViewedProduct isHome={false} deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
               {/* Featured deals section */}
               {pageContents?.featureddeal?.length > 0 && (
-                <div className="container flex flex-col !px-0 mx-auto bg-white border-t border-gray-200 sm:pt-10 pt-6 slider-btn-css slider-btn-css slider-equal-height">
+                <div className="container flex flex-col !px-0 mx-auto sm:pt-10 pt-6 slider-btn-css slider-btn-css slider-equal-height">
                   {pageContents?.featureditemheading?.length > 0 && pageContents?.featureditemheading?.map((heading: any, hIdx: number) => (
                     <h3 className="pb-6 font-semibold text-black title-page sm:pb-10 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureditemheading_title}</h3>
                   ))}
@@ -536,6 +490,52 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   </div>
                 </div>
               }
+              {pageContents?.about?.length > 0 && pageContents?.about?.map((ab: any, aIdx: number) => (
+                <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12 pt-6 mt-0 sm:pt-10' key={`about-${aIdx}`}>
+                  <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
+                    <div className='col-span-12'>
+                      <img
+                        src={generateUri(ab?.about_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                        alt={ab?.about_title}
+                        className='object-cover w-full h-full'
+                        width={500}
+                        height={500}
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                  <div className='order-1 col-span-12 sm:col-span-8 sm:order-2'>
+                    <div className='flex flex-col justify-start w-full gap-4'>
+                      <h2 className='font-semibold text-black heading'>{ab?.about_title}</h2>
+                      <div className='font-normal text-black sm:w-full text-body-small' dangerouslySetInnerHTML={{ __html: ab?.about_description }}></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {pageContents?.shopwithus?.length > 0 && pageContents?.shopwithus?.map((swu: any, sIdx: number) => (
+                <div className='grid items-end grid-cols-12 gap-1 pt-6 border-b border-gray-200 sm:items-center sm:pt-0 sm:gap-12 sm:grid-cols-12' key={`swu-${sIdx}`}>
+                  <span className='w-[100px] sm:h-0 sm:mb-0 mb-4 h-[2px] col-span-12 bg-black mx-auto'></span>
+                  <div className='order-1 col-span-7 sm:col-span-8 sm:order-1'>
+                    <div className='flex flex-col justify-center w-full gap-1 sm:gap-4'>
+                      <span className='w-[100px] sm:h-1 h-0 bg-black mx-auto'></span>
+                      <h2 className='font-semibold text-left text-black sm:text-center sub-heading'>{swu?.shopwithus_title}</h2>
+                      <div className='mx-auto font-normal sm:text-center text-left !leading-relaxed text-gray-600 sm:w-10/12' dangerouslySetInnerHTML={{ __html: swu?.shopwithus_description }}></div>
+                    </div>
+                  </div>
+                  <div className='order-2 col-span-5 sm:col-span-4 sm:order-2'>
+                    <div className='col-span-12'>
+                      <img
+                        src={generateUri(swu?.shopwithus_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                        alt={swu?.shopwithus_title}
+                        className='object-cover w-full h-full'
+                        width={500}
+                        height={500}
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
             <div className='flex flex-col justify-center gap-4 pt-6 pb-20 text-center'>
               <h3 className='font-semibold text-black heading'>See personalised recommendation</h3>
