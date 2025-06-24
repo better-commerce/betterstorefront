@@ -97,6 +97,7 @@ export default function RelatedProductWithGroup({ products, productPerColumn, de
       <Swiper
         slidesPerView={1}
         spaceBetween={20}
+        ref={swiperGroup}
         navigation={false}
         loop={true}
         breakpoints={{
