@@ -3,13 +3,13 @@
     {
       "name": "ParkCameras",
       "code": "parkcameras",
-      "url": "http://localhost:4500",
+      "url": "https://parkcameras.bettercommerce.tech",
       "features": [
         {
           "group": "Global",
           "urlCode": "home",
           "name": "Home Page",
-          "url": "http://localhost:4500",
+          "url": "https://parkcameras.bettercommerce.tech",
           "displayOrder": 6,
           "active": 1
         },
@@ -17,7 +17,7 @@
           "group": "PLP",
           "urlCode": "plp-product-listing",
           "name": "Product Listing",
-          "url": "http://localhost:4500/collection/featured-deal",
+          "url": "https://parkcameras.bettercommerce.tech/collection/featured-deal",
           "displayOrder": 7,
           "active": 1
         },
@@ -25,7 +25,7 @@
           "group": "PLP",
           "urlCode": "plp-compare-products",
           "name": "Compare Products",
-          "url": "http://localhost:4500/collection/featured-deal",
+          "url": "https://parkcameras.bettercommerce.tech/collection/featured-deal",
           "displayOrder": 8,
           "active": 1
         },
@@ -33,7 +33,7 @@
           "group": "PLP",
           "urlCode": "plp-used",
           "name": "Used Products",
-          "url": "http://localhost:4500/collection/used-cameras",
+          "url": "https://parkcameras.bettercommerce.tech/collection/used-cameras",
           "displayOrder": 9,
           "active": 1
         },
@@ -41,7 +41,7 @@
           "group": "PLP",
           "urlCode": "plp-register-interest",
           "name": "Register Interest",
-          "url": "http://localhost:4500/collection/prelaunch",
+          "url": "https://parkcameras.bettercommerce.tech/collection/prelaunch",
           "displayOrder": 10,
           "active": 1
         },
@@ -49,7 +49,7 @@
           "group": "PDP",
           "urlCode": "pdp-type-cashback-promotion-used-product",
           "name": "Promotion, Cashback, Used Related Type",
-          "url": "http://localhost:4500/products/canon-canon-rf-100-500mm-f-4-5-7-1-l-is-usm-lens-1242595",
+          "url": "https://parkcameras.bettercommerce.tech/products/canon-canon-rf-100-500mm-f-4-5-7-1-l-is-usm-lens-1242595",
           "displayOrder": 11,
           "active": 1
         },
@@ -57,7 +57,7 @@
           "group": "PDP",
           "urlCode": "pdp-pre-launch-interested-in",
           "name": "Pre Launch Interested In",
-          "url": "http://localhost:4500/products/modifli-modifli-mavic-air-skin-white-combo-9702660m",
+          "url": "https://parkcameras.bettercommerce.tech/products/modifli-modifli-mavic-air-skin-white-combo-9702660m",
           "displayOrder": 12,
           "active": 1
         },
@@ -65,7 +65,7 @@
           "group": "Brand",
           "urlCode": "brand-brand-directory",
           "name": "Brand Directory",
-          "url": "http://localhost:4500/brands",
+          "url": "https://parkcameras.bettercommerce.tech/brands",
           "displayOrder": 28,
           "active": 1
         },
@@ -73,7 +73,7 @@
           "group": "Brand",
           "urlCode": "brand-brand-rich-landing-page",
           "name": "Brand Rich Landing Page",
-          "url": "http://localhost:4500/brands/canon-27552",
+          "url": "https://parkcameras.bettercommerce.tech/brands/canon-27552",
           "displayOrder": 29,
           "active": 1
         },
@@ -81,7 +81,7 @@
           "group": "Brand",
           "urlCode": "brand-brand-standard-plp",
           "name": "Brand Standard PLP",
-          "url": "http://localhost:4500/brands/benq-28234",
+          "url": "https://parkcameras.bettercommerce.tech/brands/benq-28234",
           "displayOrder": 30,
           "active": 1
         },
@@ -89,7 +89,7 @@
           "group": "Category",
           "urlCode": "category-category-rich-landing-page",
           "name": "Category Rich Landing Page",
-          "url": "http://localhost:4500/category/camera-lenses",
+          "url": "https://parkcameras.bettercommerce.tech/category/camera-lenses",
           "displayOrder": 31,
           "active": 1
         },
@@ -97,7 +97,7 @@
           "group": "Category",
           "urlCode": "category-category-plp",
           "name": "Category PLP",
-          "url": "http://localhost:4500/category/drones",
+          "url": "https://parkcameras.bettercommerce.tech/category/drones",
           "displayOrder": 32,
           "active": 1
         },
@@ -105,7 +105,7 @@
           "group": "TradeIn",
           "urlCode": "trade-in",
           "name": "TradeIn",
-          "url": "http://localhost:4500/sell-or-part-exchange",
+          "url": "https://parkcameras.bettercommerce.tech/sell-or-part-exchange",
           "displayOrder": 33,
           "active": 1
         },
@@ -113,7 +113,7 @@
           "group": "My Account",
           "urlCode": "register-interest",
           "name": "I'm Interested In",
-          "url": "http://localhost:4500/my-account/register-interest",
+          "url": "https://parkcameras.bettercommerce.tech/my-account/register-interest",
           "displayOrder": 34,
           "active": 1
         },
@@ -121,7 +121,7 @@
           "group": "Blogs",
           "urlCode": "blogs",
           "name": "Blogs",
-          "url": "http://localhost:4500/blog",
+          "url": "https://parkcameras.bettercommerce.tech/blog",
           "displayOrder": 35,
           "active": 1
         },
@@ -129,7 +129,7 @@
           "group": "Store Locator",
           "urlCode": "store-locator",
           "name": "Store Locator",
-          "url": "http://localhost:4500/store-locator",
+          "url": "https://parkcameras.bettercommerce.tech/store-locator",
           "displayOrder": 36,
           "active": 1
         }
