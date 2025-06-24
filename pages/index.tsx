@@ -41,6 +41,8 @@ import SectionHomeProductCardNew from '@components/SectionHomeProductCardNew'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
 import ImageCollection from '@components/home/ImageCollection'
 import ProductTabs from '@components/Product/ProductTabs'
+import Prev from '@components/shared/NextPrevIcon/Prev'
+import Next from '@components/shared/NextPrevIcon/Next'
 // Optimize dynamic imports with loading priorities
 const SectionHero2 = dynamic(() => import('@components/SectionHero/SectionHero2'), { ssr: true })
 const Loader = dynamic(() => import('@components/ui/LoadingDots'), { ssr: true })
@@ -190,7 +192,8 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
   const handleNewProductsClick = useCallback(() => {
     handleTabChange("newProducts");
   }, [handleTabChange]);
-
+  const swiperRef = useRef<any>(null);
+  const swiperRefCard = useRef<any>(null)
   const cleanPath = removeQueryString(router.asPath)
   const redirectHref = useMemo(() => {
     if (!isGuestUser && user?.userId && user?.id !== Guid.empty && isB2BUser(user)) { // if loggedIn with B2b user
@@ -473,9 +476,14 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       <Link href={heading?.beinspiredheading_buttonlink} className='justify-end w-24 text-xs font-normal text-right text-black underline' passHref>See more</Link>
                     </div>
                   ))}
-                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                  <div className='relative'>
+                  <div className="flex justify-between mb-2 slider-out-btn">
+                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                  </div>
+                   <Swiper slidesPerView={1.3} spaceBetween={30}  ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
                     {pageContents?.tocategoryinspired?.map((item: any, pId: number) => (
-                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                         <div key={pId} className={`product-card-item home-product-card`}>
                           <Link href={sanitizeRelativeUrl(`/${item?.tocategoryinspired_link}`)}>
                             <div className='relative flex flex-col rounded-lg'>
@@ -486,6 +494,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       </SwiperSlide>
                     ))}
                   </Swiper>
+                   </div> 
                 </div>
               }
               {pageContents?.competitioncard?.length > 0 &&
@@ -496,9 +505,14 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       <Link href={heading?.competitionheading_buttonlink} className='justify-end w-24 text-xs font-normal text-right text-black underline' passHref>See more</Link>
                     </div>
                   ))}
-                  <Swiper slidesPerView={1.3} spaceBetween={4} navigation={true} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                  <div className='relative'>
+                  <div className="flex justify-between mb-2 slider-out-btn">
+                    <Prev onClickPrev={() => swiperRefCard.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRefCard.current?.swiper?.slideNext()} />
+                  </div>
+                 <Swiper slidesPerView={1.3}  ref={swiperRefCard} spaceBetween={30} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
                     {pageContents?.competitioncard?.map((item: any, pId: number) => (
-                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                         <div key={pId} className={`product-card-item home-product-card`}>
                           <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
                             <div className='relative flex flex-col rounded-lg'>
@@ -519,6 +533,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       </SwiperSlide>
                     ))}
                   </Swiper>
+                  </div>
                 </div>
               }
             </div>

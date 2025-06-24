@@ -3502,3 +3502,12 @@ select {
 	position: relative;
     right: -23px;
 }
+@media (max-width: 767px) {
+	.slider-out-btn {
+	display: none  !important;
+	}
+	.container, .container-pdp{
+		padding-left: 15px !important;
+		padding-right: 15px !important;
+	}
+}

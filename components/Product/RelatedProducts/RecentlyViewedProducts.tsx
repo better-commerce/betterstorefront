@@ -120,7 +120,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
   useEffect(() => {
     handleReferralInfo()
   }, [])
-  const swiperRef = useRef<any>(null);
+  const swiperRecently = useRef<any>(null);
   return (
     recentlyViewedProducts?.length > 0 && (
       <div className={`flex flex-col w-full container-ffx py-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-0'}`}>
@@ -135,10 +135,10 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
           {isLoading ? (<LoadingDots />) : (
             <>
             <div className="flex justify-between mb-2 slider-out-btn">
-              <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
-              <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+              <Prev onClickPrev={() => swiperRecently.current?.swiper?.slidePrev()} />
+              <Next onClickNext={() => swiperRecently.current?.swiper?.slideNext()} />
             </div>
-                        <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRef} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 16 }, 1024: { slidesPerView: 4, spaceBetween: 16 }, 1800: { slidesPerView: productPerRow, spaceBetween: 16 }, }} className={`${isMobile ? 'mob-navigation-hide' : ''} mySwiper`}>
+                        <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRecently} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 16 }, 1024: { slidesPerView: 4, spaceBetween: 16 }, 1800: { slidesPerView: productPerRow, spaceBetween: 16 }, }} className={`${isMobile ? 'mob-navigation-hide' : ''} mySwiper`}>
               {recentlyViewedProducts?.map((product: any, pid: number) => {
                 return (
                   <SwiperSlide key={pid} className="height-equal">
