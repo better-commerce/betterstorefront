@@ -117,6 +117,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [selectedOption, setSelectedOption] = useState("new");
   const [quantity, setQuantity] = useState(1);
   const [isSubmitReview, setSubmitReview] = useState(false)
+  const baseUrl = "https://parkcameras.bettercommerce.tech/"
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   // CHECK TRENDING PRODUCTS FROM ENGAGE
   let similarProduct = []
@@ -1128,9 +1129,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           shortname='parkcameras'
           config={
             {
-              url: product?.link,
-              identifier: product?.stockCode,
-              title: product?.name,
+              url: `${baseUrl}${product?.link}` || '',
+              identifier: product?.stockCode || '',
+              title: product?.name || 'Product Discussion',
               language: 'en-GB'
             }
           }
