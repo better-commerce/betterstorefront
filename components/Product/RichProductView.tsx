@@ -17,16 +17,72 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import { HeartIcon } from "@heroicons/react/24/outline";
 import KitPrice from "@components/KitPrice";
-import { CURRENT_THEME } from "@components/utils/constants";
-import { useState } from "react";
+import { CURRENT_THEME, NEXT_STOCK_CHECK } from "@components/utils/constants";
+import { Fragment, useState } from "react";
+import { AxiosRequestConfig } from "axios";
+import { RequestMethod } from "bc-payments-sdk/dist/constants";
+import { callApi } from "@framework/utils/api-util";
+import { Dialog, Transition } from "@headlessui/react";
+import ButtonClose from "@components/shared/ButtonClose/ButtonClose";
+import Loader from "@components/Loader";
 const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCard'))
 const AvailableOffers = dynamic(() => import('@components/Product/EffectiveAvailableOffers'))
 export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts }: any) {
   const translate = useTranslation()
-  const [showFallback, setShowFallback] = useState(false);
+  const [stockCheckModalOpen, setStockCheckModel] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [stockCheckData, setStockCheckData] = useState<any>([])
+  const stockCheck = async ({ stockCode }: any) => {
+    try {
+      setLoading(true); // ✅ Show loader
+      const config: AxiosRequestConfig = {
+        url: NEXT_STOCK_CHECK,
+        method: RequestMethod.POST,
+        data: { StockCode: stockCode }
+      };
+      const stockResult = await callApi(config);
+      setStockCheckData(stockResult.data);
+      setStockCheckModel(true);
+    } catch (error) {
+      console.error('Stock check failed', error);
+    } finally {
+      setLoading(false); // ✅ Hide loader in all cases
+    }
+  };
+
+
+  const setStockCheckClose = () => {
+    setStockCheckModel(false);
+  }
+  const groupedInventoryItems = () => {
+    const groupedByCenter: any = {};
+    stockCheckData.forEach((item: any) => {
+      if (!groupedByCenter[item.DeliveryCenterName]) {
+        groupedByCenter[item.DeliveryCenterName] = {
+          centerCode: item.DeliveryCenterCode,
+          items: []
+        };
+      }
+      groupedByCenter[item.DeliveryCenterName].items.push(item);
+    });
+
+    // Get unique inventory types across all items
+    const inventoryTypes = Array.from(new Set(stockCheckData.map((item: any) => item.InventoryType)));
+    return { centers: groupedByCenter, types: inventoryTypes };
+  };
+
+  const grouped = stockCheckData.reduce((acc: any, item: any) => {
+    const name = item.DeliveryCenterName;
+    acc[name] = (acc[name] || 0) + item.StockOnHand;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const deliveryCenters = Object.keys(grouped);
+
   const bestPrice = promotions?.promotions?.bestAvailablePromotion?.additionalInfo10
   return (
     <div className='flex gap-6 flex-mob-col'>
+      {loading && <Loader />}
       <div className='w-full lg:w-[60%]'>
         <div className="space-y-4">
           <div>
@@ -193,7 +249,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     {featureToggle?.features?.enableStoreStockCheck &&
                       <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
                         <MyLocationIcon className='w-4 h-4' />
-                        <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+                        <span
+                          className='cursor-pointer hover:underline dark:text-black'
+                          onClick={() => stockCheck({ stockCode: product?.stockCode })}
+                        >
+                          {loading ? 'Checking...' : translate('label.store.checkStoreStockText')}
+                        </span>
                       </div>
                     }
                     {product?.currentStock > 1 ? (
@@ -355,6 +416,59 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
           </div>
         )}
       </div>
+      <Transition appear show={stockCheckModalOpen} as={Fragment}>
+        <Dialog as="div" className="fixed inset-0 z-50 cart-z-index-9999" onClose={setStockCheckClose} >
+          <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
+              <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
+            </Transition.Child>
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span className="inline-block align-middle" aria-hidden="true">
+              &#8203;
+            </span>
+            <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
+              <div className="relative inline-flex w-full max-w-2xl max-h-full xl:py-8 z-[99999]">
+                <div className="flex flex-1 w-full max-h-full p-4 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-white shadow-xl lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
+                  <span className="absolute z-50 end-3 top-3">
+                    <ButtonClose onClick={setStockCheckClose} />
+                  </span>
+                  <div className="flex-1 overflow-y-auto hiddenScrollbar">
+                    <div className="">
+                      <div className="flex flex-col w-full mb-5 pb-3 border-b border-gray-200">
+                        <h3 className="font-semibold text-black text-xl">Available inventory in stores</h3>
+                      </div>
+                      {stockCheckData?.length > 0 ? (
+                        <table className="table-auto border w-full text-sm">
+                          <thead>
+                            <tr>
+                              {deliveryCenters.map(center => (
+                                <th key={center} className="border px-4 py-2 text-center font-bold bg-gray-100">
+                                  {center}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              {deliveryCenters.map(center => (
+                                <td key={center} className="border px-4 py-2 text-center">
+                                  {grouped[center]}
+                                </td>
+                              ))}
+                            </tr>
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div className="text-left py-2 text-gray-400 text-xl">No inventory found for this product</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   )
 }

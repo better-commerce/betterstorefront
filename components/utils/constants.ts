@@ -53,6 +53,7 @@ export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/com
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
 export const STORE_LOCATOR_API = '/api/v1/oms/store'
+export const STORE_STOCK_CHECK ='api/v1/oms/stock/stockCode'
 export const BASE_SEARCH_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search`
 export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/shipping-method`
 export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
@@ -227,6 +228,7 @@ export const NEXT_UPDATE_STATUS_RFQ = '/api/b2b/request-for-quote/status-update'
 
 // Store Locator
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
+export const NEXT_STOCK_CHECK = '/api/get-stock-check'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
 export const NEXT_GET_ALL_MEMBERSHIP_PLANS = '/api/membership/get-all-plans'
 export const NEXT_GET_STORES_DETAILS = '/api/store-locator/get-store-details'
