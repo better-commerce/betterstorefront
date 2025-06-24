@@ -3464,8 +3464,8 @@ select {
 .container, .container-pdp{
 	max-width: 1536px !important;
 	width: 100% !important;
-    padding-right: 20px !important ;
-   padding-left: 20px !important;
+    padding-right: 30px !important ;
+   padding-left: 30px !important;
 }
 @media (min-width: 767px) and (max-width: 1300px) {
 .small-sm-gap{
@@ -3474,4 +3474,40 @@ select {
 .font-28 {
     font-size: 22px !important;
 }
+}
+.slider-out-btn{
+	position: absolute;
+    width: 100%;
+    transform: translateY(-50%);
+    top: 50%;
+}
+.slider-out-btn button{
+    height: 75px !important;
+    border-radius: 0 !important;
+    width: auto !important;
+    padding: 0;
+    line-height: 35px;
+    border-radius: 25px;
+    font-size: 18px;
+    text-align: center;
+	color: white !important;
+    background: rgba(0, 0, 0, 0.2);
+    transition: background 0.45s cubic-bezier(0.22, 0.61, 0.35, 1);
+}
+.slider-out-btn  .nc-Prev{
+    position: relative;
+    left: -23px;
+}
+.slider-out-btn .nc-Next{
+	position: relative;
+    right: -23px;
+}
+@media (max-width: 767px) {
+	.slider-out-btn {
+	display: none  !important;
+	}
+	.container, .container-pdp{
+		padding-left: 15px !important;
+		padding-right: 15px !important;
+	}
 }
