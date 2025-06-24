@@ -30,9 +30,7 @@ export default function getShippingMethods() {
     method = 'GET_ALL',
     cookies,
   }: Props) {
-    const url =
-      SHIPPING_ENDPOINT +
-      `?basketId=${basketId}&shipToCountryIso=${countryCode}&postCode=${postCode}`
+    const url = `${CHECKOUT_ENDPOINT}/${basketId}/shipping-methods?countryCode=${countryCode}&postCode=${postCode}`
     try {
       const response: any = await fetcher({
         url,
