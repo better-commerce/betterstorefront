@@ -25,7 +25,7 @@ export default function RichLandingCategory({ category, deviceInfo, filterBrandD
         }
         <LinkGroup data={category?.linkGroups} deviceInfo={deviceInfo} />
         {productDataToPass?.results?.length > 0 &&
-          <div className="container !px-4 pt-8 mx-auto">
+          <div className="container pt-8 mx-auto">
             <div className="flex pt-4 mb-2 border-t border-gray-400 gap-x-6">
               <h2 className="block font-semibold text-black heading dark:text-black">Featured {category?.name}</h2>
               {!featureToggle.features?.enableForPCSite && <button onClick={onToggleBrandListPage} className='text-lg font-normal text-black underline'>See more</button>}

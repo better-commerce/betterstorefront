@@ -11,7 +11,7 @@ export default function LinkGroup({ data }: any) {
     <>
       <section className="flex flex-col gap-4 pt-8">
         {data?.map((grp: any, grpIdx: number) => (
-          <div className="container !px-4 mx-auto" key={`linkGrp-${grpIdx}`}>
+          <div className="container mx-auto" key={`linkGrp-${grpIdx}`}>
             <h2 className="pt-4 mb-6 font-semibold text-black border-t border-gray-400 heading">{grp?.name}</h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
               {grp?.items?.length > 0 && grp?.items?.map((item: any, cdx: number) => (

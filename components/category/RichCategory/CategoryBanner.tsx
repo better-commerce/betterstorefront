@@ -25,7 +25,7 @@ export default function CategoryBanner({ data }: any) {
         </div>
       </section>
       <section className="pt-2 bg-white">
-        <div className="container !px-4 mx-auto">
+        <div className="container mx-auto">
           {/* <div className="relative z-10 p-6 mx-auto -mt-20 bg-white shadow-md md:w-3/4 lg:w-2/3">
             <h2 className="mb-4 text-2xl font-bold text-gray-800">Choosing a Landscape Camera & Lens on a Budget</h2>
             <p className="mb-4 text-sm text-gray-600">

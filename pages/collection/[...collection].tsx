@@ -697,7 +697,7 @@ function CollectionPage(props: any) {
                 {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
                   <>
                     <div className="col-span-12 bg-transparent fixing-main-section dark:bg-white d--none-amm">
-                      <div className='container !px-4'>
+                      <div className='container'>
                         <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
                           <li className='flex items-center text-10-mob sm:text-sm'>
                             <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
@@ -724,7 +724,7 @@ function CollectionPage(props: any) {
                       {featureToggle.features?.enableForPCSite ? (
                         <>
                           {renderFeaturedProduct()}
-                          <div className={`${featureToggle.features?.enableForPCSite ? 'sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                          <div className={`${featureToggle.features?.enableForPCSite ? '!px-0 py-4' : ' w-full'} col-span-12`}>
                             {isMobile ? (
                               <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             ) : (
@@ -748,7 +748,7 @@ function CollectionPage(props: any) {
                         </>
                       ) : (
                         <>
-                          <div className={`${featureToggle.features?.enableForPCSite ? ' container sticky-filter-container !px-0 py-4' : ' w-full'} col-span-12`}>
+                          <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0 py-4' : ' w-full'} col-span-12`}>
                             {isMobile ? (
                               <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                             ) : (
