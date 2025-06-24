@@ -26,7 +26,8 @@ import {
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { useTranslation } from '@commerce/utils/use-translation'
 import HomeProductCardMin from '@components/HomeProductCardMin'
-
+import Prev from '@components/shared/NextPrevIcon/Prev'
+import Next from '@components/shared/NextPrevIcon/Next'
 export default function RecentlyViewedProduct({ isHome = false, deviceInfo, config, featureToggle, defaultDisplayMembership, productPerRow }: any) {
   const translate = useTranslation()
   const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
@@ -119,7 +120,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
   useEffect(() => {
     handleReferralInfo()
   }, [])
-
+  const swiperRef = useRef<any>(null);
   return (
     recentlyViewedProducts?.length > 0 && (
       <div className={`flex flex-col w-full container-ffx py-6 border-t border-gray-200 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-0'}`}>
@@ -130,9 +131,14 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
             <h2 className="mb-5 font-semibold text-gray-900 uppercase font-18"> {translate('common.label.recentlyViewedText')} </h2>
           )}
         </div>
-        <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad slider-equal-height">
+        <div className="mt-4 default-sm mobile-slider-no-arrow relative m-hide-navigation sm:mb-0 vertical-prod-list-ipad slider-equal-height">
           {isLoading ? (<LoadingDots />) : (
-            <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRefRecently} navigation={true} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 16 }, 1024: { slidesPerView: 4, spaceBetween: 16 }, 1800: { slidesPerView: productPerRow, spaceBetween: 16 }, }} className={`${isMobile ? 'mob-navigation-hide' : ''} mySwiper`}>
+            <>
+            <div className="flex justify-between mb-2 slider-out-btn">
+              <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
+              <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+            </div>
+                        <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRef} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 16 }, 1024: { slidesPerView: 4, spaceBetween: 16 }, 1800: { slidesPerView: productPerRow, spaceBetween: 16 }, }} className={`${isMobile ? 'mob-navigation-hide' : ''} mySwiper`}>
               {recentlyViewedProducts?.map((product: any, pid: number) => {
                 return (
                   <SwiperSlide key={pid} className="height-equal">
@@ -145,6 +151,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
                 )
               })}
             </Swiper>
+            </>
           )}
         </div>
       </div>
