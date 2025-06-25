@@ -3547,3 +3547,6 @@ select {
     height: fit-content;
 }
 }
+.top-sticky-wrapper .blue-add-btn .add-green-btn .nc-Button, .top-sticky-wrapper .pc-primary-btn .nc-Button, .top-sticky-wrapper .pc-button{
+ padding:0 30px !important
+}
