@@ -358,7 +358,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                       {featureToggle?.features?.enableStoreStockCheck &&
                         <div className='flex flex-row w-full mt-3 /!my-4 items-center gap-x-1 /justify-end'>
                           <MyLocationIcon className='w-4 h-4' />
-                          <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
+                          <span
+                            className='cursor-pointer hover:underline dark:text-black'
+                            onClick={() => stockCheck({ stockCode: product?.stockCode })}
+                          >
+                            {loading ? 'Checking...' : translate('label.store.checkStoreStockText')}
+                          </span>
                         </div>
                       }
                       {product?.currentStock > 1 ? (
@@ -428,21 +433,21 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
             </span>
             <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
               <div className="relative inline-flex w-full max-w-2xl max-h-full xl:py-8 z-[99999]">
-                <div className="flex flex-1 w-full max-h-full p-4 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-white shadow-xl lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
+                <div className="flex flex-1 w-full max-h-full p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
                   <span className="absolute z-50 end-3 top-3">
                     <ButtonClose onClick={setStockCheckClose} />
                   </span>
                   <div className="flex-1 overflow-y-auto hiddenScrollbar">
                     <div className="">
-                      <div className="flex flex-col w-full mb-5 pb-3 border-b border-gray-200">
-                        <h3 className="font-semibold text-black text-xl">Available inventory in stores</h3>
+                      <div className="flex flex-col w-full pb-3 mb-5 border-b border-gray-200">
+                        <h3 className="text-xl font-semibold text-black">Available inventory in stores</h3>
                       </div>
                       {stockCheckData?.length > 0 ? (
-                        <table className="table-auto border w-full text-sm">
+                        <table className="w-full text-sm border table-auto">
                           <thead>
                             <tr>
                               {deliveryCenters.map(center => (
-                                <th key={center} className="border px-4 py-2 text-center font-bold bg-gray-100">
+                                <th key={center} className="px-4 py-2 font-bold text-center bg-gray-100 border">
                                   {center}
                                 </th>
                               ))}
@@ -451,7 +456,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           <tbody>
                             <tr>
                               {deliveryCenters.map(center => (
-                                <td key={center} className="border px-4 py-2 text-center">
+                                <td key={center} className="px-4 py-2 text-center border">
                                   {grouped[center]}
                                 </td>
                               ))}
@@ -459,7 +464,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           </tbody>
                         </table>
                       ) : (
-                        <div className="text-left py-2 text-gray-400 text-xl">No inventory found for this product</div>
+                        <div className="py-2 text-xl text-left text-gray-400">No inventory found for this product</div>
                       )}
                     </div>
                   </div>
