@@ -80,24 +80,9 @@ const Prices: FC<PricesProps> = ({
         )}
 
         {/* Non-member Price Display */}
-        {/** Only show "Limited time deal" if discount is present */}
-        {nonMemberDiscountPercentage > 0 && (
-          <div className="flex mb-3">
-            <span className="inline-block px-2 py-1 text-xs font-semibold text-white bg-red-600 rounded">
-              Limited time deal
-            </span>
-          </div>
-        )}
-
         {price?.raw?.withTax !== 0 ? (
           <div className={`flex ${nonMemberDiscountPercentage > 0 ? "flex-col" : "flex-row"} items-start text-sm font-semibold text-gray-400 price`}>
             <div className="flex items-center gap-x-1">
-              {/* Discount Percentage */}
-              {/* {nonMemberDiscountPercentage > 0 && (
-                  <span className="mr-2 font-normal text-red-600 font-32">
-                  -{nonMemberDiscountPercentage < 1 ? nonMemberDiscountPercentage.toFixed(2) : Math.round(nonMemberDiscountPercentage)}%
-                </span>
-              )} */}
               {featureToggle?.features?.enableForPCSite ? (
                 (() => {
                   const rawPrice = isIncludeVAT ? price?.formatted?.withTax : price?.formatted?.withoutTax;
@@ -108,12 +93,29 @@ const Prices: FC<PricesProps> = ({
 
                   return (
                     <span className="inline-flex items-center gap-6 mr-2">
-                      <span className="relative">
+                      <span className="relative inline-flex items-start">
                         <span className="text-sm mr-0.5">{symbol}</span>
                         <span className="font-semibold font-32">{main}</span>
                         {decimal && (<span className="text-xs absolute top-0 right-[-1.1rem]">{decimal}</span>)}
                       </span>
-                      {saving > 0 && <span className="px-2 py-0.5 font-28 font-normal italic">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
+                      <span className="flex items-center mt-2">
+                        {/* Strike-through list price if there's a discount */}
+                        {isIncludeVAT ? (
+                          listPrice?.raw?.withTax > 0 &&
+                          listPrice?.raw?.withTax > price?.raw?.withTax && (
+                            <span className="px-1 pl-1 text-sm font-normal text-gray-400">
+                              Was: <span className="line-through ">{listPrice?.formatted?.withTax}</span>
+                            </span>
+                          )
+                        ) : (
+                          listPrice?.raw?.withoutTax > 0 &&
+                          listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
+                            <span className="px-1 pl-1 text-sm font-normal text-gray-400">
+                              Was: <span className="line-through ">{listPrice?.formatted?.withoutTax}</span>
+                            </span>
+                          )
+                        )}
+                      </span>
                     </span>
                   );
                 })()
@@ -122,24 +124,7 @@ const Prices: FC<PricesProps> = ({
               )}
             </div>
             <div className="flex items-center">
-              <span className="flex items-center mt-2">
-                {/* Strike-through list price if there's a discount */}
-                {isIncludeVAT ? (
-                  listPrice?.raw?.withTax > 0 &&
-                  listPrice?.raw?.withTax > price?.raw?.withTax && (
-                    <span className="px-1 pl-1 text-xs font-normal text-gray-400">
-                      Was: <span className="line-through ">{listPrice?.formatted?.withTax}</span>
-                    </span>
-                  )
-                ) : (
-                  listPrice?.raw?.withoutTax > 0 &&
-                  listPrice?.raw?.withoutTax > price?.raw?.withoutTax && (
-                    <span className="px-1 pl-1 text-xs font-normal text-gray-400">
-                      Was: <span className="line-through ">{listPrice?.formatted?.withoutTax}</span>
-                    </span>
-                  )
-                )}
-              </span>
+              {saving > 0 && <span className="px-2 py-0.5 text-white rounded mt-1 bg-emerald-500 font-semibold text-xs italic">Save {price?.currencySymbol}{saving.toFixed(2)}</span>}
               <span className="ml-1 text-xs font-normal text-gray-400">
                 {featureToggle?.features?.enableMembership &&
                   `${translate("label.membership.nonMemberPriceText")}`}
@@ -150,6 +135,7 @@ const Prices: FC<PricesProps> = ({
                   : translate("label.orderSummary.excVATText")}
               </span>}
             </div>
+
           </div>
         ) : (
           <div className="font-semibold text-green">
