@@ -10,6 +10,7 @@ import Prices from "@components/Prices";
 import dynamic from "next/dynamic";
 import MyLocationIcon from "@components/shared/icons/MyLocationIcon";
 import { useTranslation } from "@commerce/utils/use-translation";
+import { useUI } from '@components/ui';
 const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
 const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const BuyNowButton = dynamic(() => import('@components/ui/BuyNowButton'))
@@ -28,11 +29,14 @@ import Loader from "@components/Loader";
 import StickyBar from './StickyBar'
 const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCard'))
 const AvailableOffers = dynamic(() => import('@components/Product/EffectiveAvailableOffers'))
+import cartHandler from '@components/services/cart';
+import { basketId as getBasketId } from '@components/ui/context';
 export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts, showStickyBar, stickyBarOnAddToBasket }: any) {
   const translate = useTranslation()
   const [stockCheckModalOpen, setStockCheckModel] = useState(false)
   const [loading, setLoading] = useState(false);
   const [stockCheckData, setStockCheckData] = useState<any>([])
+  const { openCart, setCartItems } = useUI();
   const stockCheck = async ({ stockCode }: any) => {
     try {
       setLoading(true); // ✅ Show loader
@@ -81,6 +85,33 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
   const deliveryCenters = Object.keys(grouped);
 
   const bestPrice = promotions?.promotions?.bestAvailablePromotion?.additionalInfo10
+
+  // Always use the correct used product (default to first)
+  const selectedUsedProduct = usedProduct?.[0];
+
+  const handleAddNewProductToBasket = async () => {
+    if (buttonConfig.action) {
+      await buttonConfig.action();
+      openCart();
+    }
+  };
+
+  const handleAddUsedProductToBasket = async () => {
+    const used = selectedUsedProduct;
+    if (!used) return;
+    const item = await cartHandler().addToCart({
+      basketId: getBasketId(),
+      productId: used.recordId,
+      qty: 1,
+      manualUnitPrice: used?.price?.raw?.withoutTax,
+      stockCode: used?.stockCode,
+      userId: user?.userId,
+      isAssociated: user?.isAssociated,
+    }, 'ADD', { data: used });
+    setCartItems(item);
+    openCart();
+  };
+
   return (
     <>
       <div className='flex gap-6 flex-mob-col'>
@@ -92,7 +123,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                 <h3 className='text-sm font-semibold text-black uppercase'>{product?.brand}</h3>
               }
               <h1 className="mb-2 text-xl font-semibold heading sm:text-2xl product-name-h2 dark:text-black">
-                {selectedOption === "new" ? product?.name : usedProduct?.at(0)?.name}
+                {selectedOption === "new" ? product?.name : selectedUsedProduct?.name}
               </h1>
               {product?.condition != 'pre-launch' && <div className="flex flex-col gap-3">
                 <ReviewBadge reviewCountdata={product?.reviewCount} ratingdata={product?.rating} />
@@ -105,7 +136,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                 )}
                 {selectedOption === "used" && product?.condition != 'pre-launch' && (
                   <>
-                    <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={usedProduct?.at(0)?.price} listPrice={usedProduct?.at(0)?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={selectedUsedProduct?.price} listPrice={selectedUsedProduct?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </>
                 )}
               </div>
@@ -134,7 +165,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   <h2 className="text-sm font-semibold text-[#1E1E1E]">Effective price <span className="hidden opacity-0">{bestPrice}----{JSON.stringify(promotions?.promotions?.bestAvailablePromotion)}</span>
                     <span className="block text-xs italic font-normal text-gray-500">after <strong>{product?.price?.currencySymbol}{cashbackAmount}</strong> cashback and voucher</span>
                   </h2>
-                  {selectedOption === "used" ? <span className="ml-2 text-xl font-bold text-red-700">{product?.price?.currencySymbol}{(bestPrice ? usedProduct?.at(0)?.price?.raw?.withTax - cashbackAmount : usedProduct?.at(0)?.price?.raw?.withTax - cashbackAmount)?.toFixed(2)}</span> :
+                  {selectedOption === "used" ? <span className="ml-2 text-xl font-bold text-red-700">{product?.price?.currencySymbol}{(bestPrice ? selectedUsedProduct?.price?.raw?.withTax - cashbackAmount : selectedUsedProduct?.price?.raw?.withTax - cashbackAmount)?.toFixed(2)}</span> :
                     <span className="ml-2 text-xl font-bold text-red-700">{product?.price?.currencySymbol}{(bestPrice ? bestPrice - cashbackAmount : product?.price?.raw?.withTax - cashbackAmount)?.toFixed(2)}</span>
                   }
                 </div>
@@ -214,7 +245,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
             }
             {renderSellableType()}
             {product?.condition != 'pre-launch' ? <div className='flex short-descriptionc'>
-              <LongDescription data={selectedOption === "new" ? product?.shortDescription : usedProduct?.at(0)?.shortDescription || product?.shortDescription} heading="" />
+              <LongDescription data={selectedOption === "new" ? product?.shortDescription : selectedUsedProduct?.shortDescription || product?.shortDescription} heading="" />
             </div> :
               <div
                 className="text-sm text-gray-800 description-html"
@@ -371,7 +402,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         {product?.currentStock > 0 && product?.currentStock === 1 && (
                           <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
                         )}
-                        <UsedProductCard products={usedProduct[0]} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
+                        <UsedProductCard products={selectedUsedProduct} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                       </>
                     )}
                   </div>
@@ -421,15 +452,15 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
       </div>
       {showStickyBar && (
         <StickyBar
-          name={selectedOption === "new" ? product?.name : usedProduct?.at(0)?.name}
-          sellPrice={selectedOption === "new" ? product?.price?.formatted?.withTax : usedProduct?.at(0)?.price?.formatted?.withTax}
-          wasPrice={selectedOption === "new" ? product?.listPrice?.formatted?.withTax : usedProduct?.at(0)?.listPrice?.formatted?.withTax}
+          name={selectedOption === "new" ? product?.name : selectedUsedProduct?.name}
+          sellPrice={selectedOption === "new" ? product?.price?.formatted?.withTax : selectedUsedProduct?.price?.formatted?.withTax}
+          wasPrice={selectedOption === "new" ? product?.listPrice?.formatted?.withTax : selectedUsedProduct?.listPrice?.formatted?.withTax}
           effectivePrice={cashbackAmount ? (
             selectedOption === "used"
-              ? `${product?.price?.currencySymbol}${((promotions?.promotions?.bestAvailablePromotion?.additionalInfo10 ? usedProduct?.at(0)?.price?.raw?.withTax - cashbackAmount : usedProduct?.at(0)?.price?.raw?.withTax - cashbackAmount)?.toFixed(2))}`
+              ? `${product?.price?.currencySymbol}${((promotions?.promotions?.bestAvailablePromotion?.additionalInfo10 ? selectedUsedProduct?.price?.raw?.withTax - cashbackAmount : selectedUsedProduct?.price?.raw?.withTax - cashbackAmount)?.toFixed(2))}`
               : `${product?.price?.currencySymbol}${((promotions?.promotions?.bestAvailablePromotion?.additionalInfo10 ? promotions?.promotions?.bestAvailablePromotion?.additionalInfo10 - cashbackAmount : product?.price?.raw?.withTax - cashbackAmount)?.toFixed(2))}`
           ) : undefined}
-          onAddToBasket={stickyBarOnAddToBasket}
+          onAddToBasket={selectedOption === "new" ? handleAddNewProductToBasket : handleAddUsedProductToBasket}
           isEngravingAvailable={isEngravingAvailable}
           product={product}
           buttonConfig={buttonConfig}

@@ -38,7 +38,7 @@ const StickyBar: React.FC<StickyBarProps> = ({
         <div className="font-semibold text-base md:text-lg md:max-w-xs text-gray-900">{name}</div>
         <div className=''>
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-extrabold text-primary-600 drop-shadow-sm">{sellPrice}</span>
+          <span className="text-2xl font-bold text-primary-600 drop-shadow-sm">{sellPrice}</span>
           {wasPrice && wasPrice !== sellPrice && (
             <span className="text-lg text-gray-400">Was <span className='line-through'>{wasPrice}</span></span>
           )}
