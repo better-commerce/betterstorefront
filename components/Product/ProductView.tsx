@@ -1,5 +1,5 @@
 // React & Next.js
-import { useState, useEffect, useMemo, Fragment } from 'react'
+import { useState, useEffect, useMemo, Fragment, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import Router from 'next/router'
 
@@ -748,11 +748,22 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const attrGroup = groupBy(product?.customAttributes, 'key')
   const tabProducts = groupBy(relatedProducts?.relatedProducts || [], (item) => item?.groupNameList?.at(0)?.relatedTypeCode);
 
+  const productTabsRef = useRef<HTMLDivElement>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      if (!productTabsRef.current) return;
+      const rect = productTabsRef.current.getBoundingClientRect();
+      setShowStickyBar(rect.top <= 0);
+    }
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   if (!product) {
     return null
   }
-
-
 
   const bundleAddToCart = async () => {
     const item = await cartHandler().addToCart(
@@ -817,7 +828,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   }, [product])
 
-
   const showGwpDetails = () => {
     setShowGwpDetail(true)
   }
@@ -841,7 +851,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         <XMarkIcon className="w-8 h-8 mt-3 text-white border-2 rounded-sm hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
       </button>
     ) : null;
-
 
   const customRenderItem = (item: any) => {
     return (
@@ -1013,7 +1022,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return (
       featureToggle?.features?.enableRichPDP ? (
         <>
-          <RichProductView product={product} cashbackAmount={cashbackAmount} cashbackDescription={cashbackDescription} selectedOption={selectedOption} kitsProducts={kitsProducts?.['Bundle']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} promotions={promotions} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} /></>
+          <RichProductView product={product} cashbackAmount={cashbackAmount} cashbackDescription={cashbackDescription} selectedOption={selectedOption} kitsProducts={kitsProducts?.['Bundle']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} promotions={promotions} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}   deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} showStickyBar={showStickyBar}
+          />
+        </>
       ) : (
         <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
       )
@@ -1195,7 +1206,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
-      {featureToggle?.features?.enableEngage &&
+      {featureToggle?.features?.enableRichPDP &&
         <ProductSocialProof data={analyticsData} featureToggle={featureToggle} />
       }
       <main className="mt-2 container-pdp sm:mt-5 lg:mt-11 dark:bg-white">
@@ -1397,7 +1408,9 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         </div>
         {featureToggle?.features?.enableRichPDPTabs && (
-          <ProductTabs tabs={productTabs} defaultActiveTab="overview" />
+          <div ref={productTabsRef}>
+            <ProductTabs tabs={productTabs} defaultActiveTab="overview" />
+          </div>
         )}
         {featureToggle.features?.enableForPCSite && usedProducts?.Used?.length > 0 && renderUsedRelatedSection()}
       </main>

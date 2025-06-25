@@ -1349,6 +1349,7 @@ h6 {
 @media screen and (max-width: 900px) {
 	.text-10-mob {
 		font-size: 10px !important;
+		line-height: 14px !important;
 	}
 }
 
@@ -3506,6 +3507,9 @@ select {
 	cursor: auto !important;
 }
 @media (max-width: 767px) {
+	.top-sticky-wrapper{
+		display: none !important;
+	}
 	.mob-width-full.mobile-cart-width{
 		width: 100% !important;
 		max-width: 100% !important;
@@ -3538,4 +3542,17 @@ select {
 }
 .promo-info-sec{
   font-size: 10px  !important;
+}
+@media (min-width: 1025px) {
+.pdp-info-sticky{
+	position: sticky;
+    top: 140px;
+    z-index: 10;
+    height: fit-content;
+}
+}
+.top-sticky-wrapper .blue-add-btn .add-green-btn .nc-Button, .top-sticky-wrapper .pc-primary-btn .nc-Button, .top-sticky-wrapper .pc-button{
+ padding:0 30px !important;
+ font-size: 15px !important;
+ min-width: 168px !important;
 }

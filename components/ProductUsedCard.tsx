@@ -206,7 +206,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         )}
         {!isGuestUser && user?.userId &&
           <>
-            <div className="flex mt-6 mb-6 sm:mt-4 !text-sm w-full buy-btn">
+            <div className="flex mt-6 mb-3 sm:mt-4 !text-sm w-full buy-btn">
               <BuyNowButton title="Buy Now" action={buttonConfig?.action} buttonType={buttonConfig.type || 'cart'} />
             </div>
           </>
@@ -222,11 +222,11 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </div>
         </div> */}
         <div className='w-full'>
-          <button type="button" onClick={handleWishList} className="flex items-center justify-center w-full h-auto px-4 py-2 text-[#767676] bg-white border border-[#767676] rounded-md hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
+          <button type="button" onClick={handleWishList} className="flex rounded-md items-center justify-center group w-full h-auto px-4 py-2 text-[#767676] bg-white hover:text-pink sm:px-2 hover:border-pink" >
             {isInWishList ? (
-              <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 text-red-700 font-semibold" />
+              <HeartIcon className="flex-shrink-0 w-4 h-4 mr-2 font-semibold text-red-700" />
             ) : (
-              <HeartIcon className="flex-shrink-0 w-3 h-3 text-black mr-2 font-semibold" />)}
+              <HeartIcon className="flex-shrink-0 w-3 h-3 mr-2 font-semibold text-black group-hover:text-red-700" />)}
             <span className='text-xs text-black font-semibold'> Add to Wishlist </span>
           </button>
         </div>
