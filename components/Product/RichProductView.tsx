@@ -194,6 +194,11 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                             {product?.name}
                           </h2>
                           <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t w-full">
+                                {product?.currentStock > 1 ? (
+                                  <p className="font-normal block text-xs mb-1 text-green-600">In stock</p>
+                                 ) : (
+                                   <><p className="text-xs block font-normal mb-1 text-red-600">Out of stock</p></>
+                               )}
                             <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </p>
                         </div>
@@ -207,6 +212,11 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                               {item?.name}
                             </h2>
                             <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t border-[#D9D9D9] w-full">
+                                {item?.currentStock > 1 ? (
+                                  <p className="font-normal block text-xs mb-1 text-green-600">In stock</p>
+                                 ) : (
+                                   <><p className="text-xs block font-normal mb-1 text-red-600">Out of stock</p></>
+                               )}
                               <KitPrice price={item?.price} listPrice={item?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                             </p>
                           </Link>
