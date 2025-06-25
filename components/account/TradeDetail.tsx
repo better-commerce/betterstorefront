@@ -533,6 +533,9 @@ export default function TradeInDetail() {
           </div>
           </div>
           )}
+          {agreementSigned && !tradeDetail?.value?.agreementPreSigned && (
+            <button onClick={() => {handlePreSignAgreement(isChecked); window.location.reload()}} className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full mt-3"> Accept </button>
+          )}
           {canUpdateShippingAddress(tradeDetail?.value?.status) && <button
             onClick={() => {router.push(`/sell-or-part-exchange?quoteId=${tradeDetail?.value?.id}&currentStep=4`); handlePreSignAgreement(isChecked)}}
             className="py-2 px-6 text-white bg-[#2d4d9c] flex items-center gap-1 justify-center rounded w-full mt-3">
