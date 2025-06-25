@@ -32,10 +32,10 @@ const StickyBar: React.FC<StickyBarProps> = ({
   const translate = useTranslation();
 
   return (
-    <div className="fixed top-[141px] left-0 right-0 z-50 top-sticky-wrappe w-full">
-      <div className='container bg-white/95 backdrop-blur-md shadow-xl rounded-b-2xl flex items-center justify-between px-6 py-3 border-b border-gray-100 transition-all duration-300'>
+    <div className="fixed top-[141px] left-0 right-0 z-[9] top-sticky-wrapper bg-white/95 backdrop-blur-md shadow-xl px-6 py-3 border-b border-gray-100 transition-all duration-300">
+      <div className='container flex items-center justify-between'>
       <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
-        <div className="font-semibold text-base md:text-lg truncate max-w-[200px] md:max-w-xs text-gray-900">{name}</div>
+        <div className="font-semibold text-base md:text-lg md:max-w-xs text-gray-900">{name}</div>
         <div className=''>
         <div className="flex items-center gap-2">
           <span className="text-2xl font-extrabold text-primary-600 drop-shadow-sm">{sellPrice}</span>
