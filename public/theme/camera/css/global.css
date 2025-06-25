@@ -3552,5 +3552,7 @@ select {
 }
 }
 .top-sticky-wrapper .blue-add-btn .add-green-btn .nc-Button, .top-sticky-wrapper .pc-primary-btn .nc-Button, .top-sticky-wrapper .pc-button{
- padding:0 30px !important
+ padding:0 30px !important;
+ font-size: 15px !important;
+ min-width: 168px !important;
 }
