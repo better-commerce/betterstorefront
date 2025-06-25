@@ -188,7 +188,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                       <h1 className="mb-2 text-sm text-gray-700">
                         Configuration: <span className="font-semibold text-black">{product?.name}</span>
                       </h1>
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 mb-2">
                         <div className="pt-2 relative rounded-md border-2 text-center bg-[#F5F5F5] justify-center transition-all hover:border-blue-500/50 flex flex-col active-clr">
                           <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
                             {product?.name}
