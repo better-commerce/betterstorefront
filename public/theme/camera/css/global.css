@@ -3539,3 +3539,11 @@ select {
 .promo-info-sec{
   font-size: 10px  !important;
 }
+@media (min-width: 1025px) {
+.pdp-info-sticky{
+	position: sticky;
+    top: 140px;
+    z-index: 10;
+    height: fit-content;
+}
+}

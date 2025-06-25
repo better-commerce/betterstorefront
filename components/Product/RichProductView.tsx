@@ -227,7 +227,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
           )}
         </div>
       </div>
-      <div className='w-full lg:w-[40%]'>
+      <div className='w-full lg:w-[40%] pdp-info-sticky'>
         <div className="w-full p-0 border rounded-lg shadow-md">
           {/* New Product Option */}
           {product?.condition != 'pre-launch' ? (
