@@ -31,7 +31,7 @@ const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCar
 const AvailableOffers = dynamic(() => import('@components/Product/EffectiveAvailableOffers'))
 import cartHandler from '@components/services/cart';
 import { basketId as getBasketId } from '@components/ui/context';
-export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts, showStickyBar, stickyBarOnAddToBasket }: any) {
+export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, buyingProducts, showStickyBar, stickyBarOnAddToBasket }: any) {
   const translate = useTranslation()
   const [stockCheckModalOpen, setStockCheckModel] = useState(false)
   const [loading, setLoading] = useState(false);
@@ -183,7 +183,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     <img src="/theme/camera/image/pc-point-icon.svg" alt="icon" />
                     <p className="text-xs text-black">Earn <ParkPoint price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} /> Park Points. <a href="#" className="font-semibold link-clr primary-text-blue">Details</a></p>
                   </div>
-                  {kitsProducts?.length > 0 && (
+                  {buyingProducts?.length > 0 && (
                     <div className="w-full">
                       <h1 className="mb-2 text-sm text-gray-700">
                         Configuration: <span className="font-semibold text-black">{product?.name}</span>
@@ -202,7 +202,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                             <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </p>
                         </div>
-                        {kitsProducts?.map((item: any, index: number) => (
+                        {buyingProducts?.map((item: any, index: number) => (
                           <Link
                             key={index}
                             href={sanitizeRelativeUrl(`/${item?.slug}`)}
