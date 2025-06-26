@@ -351,7 +351,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         {!isGuestUser && user?.userId && product?.condition != 'pre-launch' &&
                           <>
                             <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
-                              <BuyNowButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                              <BuyNowButton 
+                                title="Buy Now" 
+                                action={buttonConfig.action} 
+                                buttonType={buttonConfig.type || 'cart'} 
+                                disabled={selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory}
+                              />
                             </div>
                           </>
                         }
