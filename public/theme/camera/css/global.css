@@ -3556,3 +3556,7 @@ select {
  font-size: 15px !important;
  min-width: 168px !important;
 }
+.out-of-stock-btn{
+ opacity: 0.5 !important;
+ cursor: not-allowed !important;
+}

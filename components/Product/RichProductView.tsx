@@ -31,7 +31,7 @@ const UsedProductCard = dynamic(() => import('@components/Product/UsedProductCar
 const AvailableOffers = dynamic(() => import('@components/Product/EffectiveAvailableOffers'))
 import cartHandler from '@components/services/cart';
 import { basketId as getBasketId } from '@components/ui/context';
-export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, kitsProducts, showStickyBar, stickyBarOnAddToBasket }: any) {
+export default function RichProductView({ product, selectedOption, isGuestUser, cashbackAmount, cashbackDescription, handleWishList, isInWishList, promotions, maxBasketItemsCount, isEngravingAvailable, user, showMobileCaseButton, quantity, buttonConfig, setQuantity, setSelectedOption, usedProduct, attrGroup, createProductInterest, featureToggle, defaultDisplayMembership, deviceInfo, selectedAttrData, renderRelatedProducts, renderVariants, showEngravingModal, renderSellableType, setOpenStockCheckModal, openStoreLocatorModal, onStoreStockCheck, isMobile, weloveAttribute, buyingProducts, showStickyBar, stickyBarOnAddToBasket }: any) {
   const translate = useTranslation()
   const [stockCheckModalOpen, setStockCheckModel] = useState(false)
   const [loading, setLoading] = useState(false);
@@ -177,13 +177,18 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   <div className="text-sm font-medium text-[#757575] link-para" dangerouslySetInnerHTML={{ __html: cashbackDescription }}></div>
                 </div>
               </div>}
-              {selectedOption === "new" && product?.condition != 'pre-launch' && (
+              {promotions?.promotions?.availablePromotions?.length > 0 && (
+                <div className="flex w-full">
+                  <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
+                </div>
+              )}
+                            {selectedOption === "new" && product?.condition != 'pre-launch' && (
                 <>
                   <div className="flex items-center w-full my-3 gap-x-2">
                     <img src="/theme/camera/image/pc-point-icon.svg" alt="icon" />
                     <p className="text-xs text-black">Earn <ParkPoint price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} /> Park Points. <a href="#" className="font-semibold link-clr primary-text-blue">Details</a></p>
                   </div>
-                  {kitsProducts?.length > 0 && (
+                  {buyingProducts?.length > 0 && (
                     <div className="w-full">
                       <h1 className="mb-2 text-sm text-gray-700">
                         Configuration: <span className="font-semibold text-black">{product?.name}</span>
@@ -202,7 +207,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                             <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </p>
                         </div>
-                        {kitsProducts?.map((item: any, index: number) => (
+                        {buyingProducts?.map((item: any, index: number) => (
                           <Link
                             key={index}
                             href={sanitizeRelativeUrl(`/${item?.slug}`)}
@@ -225,11 +230,6 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     </div>
                   )}
                 </>
-              )}
-              {promotions?.promotions?.availablePromotions?.length > 0 && (
-                <div className="flex w-full">
-                  <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
-                </div>
               )}
             </div>
             {attrGroup['product.relatedproducts']?.length > 0 &&
@@ -351,7 +351,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         {!isGuestUser && user?.userId && product?.condition != 'pre-launch' &&
                           <>
                             <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
-                              <BuyNowButton title="Buy Now" action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
+                              <BuyNowButton 
+                                title="Buy Now" 
+                                action={buttonConfig.action} 
+                                buttonType={buttonConfig.type || 'cart'} 
+                                disabled={selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory}
+                              />
                             </div>
                           </>
                         }
