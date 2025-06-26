@@ -177,7 +177,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   <div className="text-sm font-medium text-[#757575] link-para" dangerouslySetInnerHTML={{ __html: cashbackDescription }}></div>
                 </div>
               </div>}
-              {selectedOption === "new" && product?.condition != 'pre-launch' && (
+              {promotions?.promotions?.availablePromotions?.length > 0 && (
+                <div className="flex w-full">
+                  <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
+                </div>
+              )}
+                            {selectedOption === "new" && product?.condition != 'pre-launch' && (
                 <>
                   <div className="flex items-center w-full my-3 gap-x-2">
                     <img src="/theme/camera/image/pc-point-icon.svg" alt="icon" />
@@ -225,11 +230,6 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                     </div>
                   )}
                 </>
-              )}
-              {promotions?.promotions?.availablePromotions?.length > 0 && (
-                <div className="flex w-full">
-                  <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
-                </div>
               )}
             </div>
             {attrGroup['product.relatedproducts']?.length > 0 &&
