@@ -73,7 +73,7 @@ export default function RecentlyViewedProduct({ isHome = false, deviceInfo, conf
           localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED)!
         )
         prodStockCodes = tryParseJson(recentProductsJson) || []
-        console.log("---prodStockCodes---", prodStockCodes)
+        
         async function fetchProductsByStockCodes() {
           const data = { sortBy: '', sortOrder: '', currentPage: 1, pageSize: 10, filters: [], stockCodes: prodStockCodes, }
           setIsLoading(true)
