@@ -267,8 +267,8 @@ export default function WalletDetail() {
                 ) : (
                   <>
                     <div className="flex flex-col justify-center w-full py-10">
-                      <WalletIcon className="w-10 h-10 mx-auto text-gray-300" />
-                      <h4 className="text-xl font-semibold text-center text-gray-300">{translate('label.myAccount.noBankTransferHistoryText')}</h4>
+                      <WalletIcon className="w-10 h-10 mx-auto text-gray-300 dark:text-black" />
+                      <h4 className="text-xl font-semibold text-center text-gray-300 dark:text-black">{translate('label.myAccount.noBankTransferHistoryText')}</h4>
                     </div>
                   </>
                 )}
