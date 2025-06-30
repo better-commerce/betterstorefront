@@ -94,7 +94,7 @@ export default function AddressItem({
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
                 <div className='flex items-center justify-between w-full'>
-                  <span className="font-semibold uppercase font-20">
+                  <span className="font-semibold uppercase font-20 dark:text-black">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
@@ -112,7 +112,7 @@ export default function AddressItem({
                 </div>
               </div>
               <div className="flex flex-col items-center justify-betweenlg:flex-row">
-                <div className="flex flex-col w-full text-md font-regular">
+                <div className="flex flex-col w-full text-md font-regular dark:text-black">
                   <span className='mt-2'>{item?.address1}</span>
                   <span>{item?.address2}</span>
                   <span>
@@ -141,11 +141,11 @@ export default function AddressItem({
             <div className='flex flex-col w-full px-5 py-5 mt-0 mb-0 border rounded-lg '>
               <div className='flex justify-between w-full gap-2'>
                 <div className='flex items-center justify-between w-full'>
-                  <span className="font-semibold uppercase font-20">
+                  <span className="font-semibold uppercase font-20 dark:text-black">
                     {item?.firstName + ' ' + item?.lastName}
                   </span>
                   {item?.label && (
-                    <span className="px-2 font-semibold text-black uppercase rounded-xl bg-slate-200 font-12">
+                    <span className="px-2 font-semibold text-black dark:text-black uppercase rounded-xl bg-slate-200 font-12">
                       {label}
                     </span>
                   )}
@@ -159,7 +159,7 @@ export default function AddressItem({
                 </div>
               </div>
               <div className="flex flex-col items-center justify-between lg:flex-row">
-                <div className="flex flex-col w-full text-md font-regular">
+                <div className="flex flex-col w-full text-md font-regular dark:text-black">
                   <span className='mt-2'>{item?.address1}</span>
                   <span>{item?.address2}</span>
                   <span>{item?.address3}</span>

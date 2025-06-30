@@ -180,10 +180,10 @@ export default function WalletDetail() {
             {walletEnabled ? (
               <div className="w-full pb-10 mx-auto bg-white">
                 <div className="p-4 mb-6 text-center bg-gray-100 rounded-lg">
-                  <h3 className="text-lg font-medium">{translate('label.myAccount.walletCurrentBalanceText')}</h3>
+                  <h3 className="text-lg font-medium dark:text-black">{translate('label.myAccount.walletCurrentBalanceText')}</h3>
                   <p className="text-3xl font-bold text-sky-500">{walletDetail?.formattedBalance}</p>
                 </div>
-                <h3 className="mb-3 text-lg font-medium">{translate('label.myAccount.walletTransactionHistoryText')}</h3>
+                <h3 className="mb-3 text-lg font-medium dark:text-black">{translate('label.myAccount.walletTransactionHistoryText')}</h3>
                 {isLoadingTransactions && <Loader />}
                 {walletTransactions?.items?.length > 0 ? (
                   <>
@@ -191,18 +191,18 @@ export default function WalletDetail() {
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                           <tr className="bg-gray-200">
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.dateText')}</th>
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.product.specifications.typeText')}</th>
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.referenceText')}</th>
-                            <th className="p-2 font-semibold text-right border font-sm">{translate('label.myAccount.amountText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.myAccount.dateText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.product.specifications.typeText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.myAccount.referenceText')}</th>
+                            <th className="p-2 font-semibold text-right border font-sm dark:text-black">{translate('label.myAccount.amountText')}</th>
                           </tr>
                         </thead>
                         <tbody className='bg-white divide-y divide-gray-200'>
                           {walletTransactions?.items.map((txn: any, index: number) => (
                             <tr key={index} className="text-sm bg-white border-b shadow-none border-slate-200 hover:shadow hover:bg-gray-100">
-                              <td className="p-2 border">{moment(new Date(txn.createdOn)).format(DATE_FORMAT)}</td>
-                              <td className="p-2 border">{txn.transactionType}</td>
-                              <td className="p-2 border">{txn.transactionRef}</td>
+                              <td className="p-2 border dark:text-black">{moment(new Date(txn.createdOn)).format(DATE_FORMAT)}</td>
+                              <td className="p-2 border dark:text-black">{txn.transactionType}</td>
+                              <td className="p-2 border dark:text-black">{txn.transactionRef}</td>
                               <td className={`border p-2 text-right font-semibold ${txn.transactionType === "Credit" ? "text-green-600" : "text-red-600"}`} >
                                 {txn.transactionType === "Debit" ? "-" : "+"}£{txn.amount}
                               </td>
@@ -226,7 +226,7 @@ export default function WalletDetail() {
                   </>
                 )}
 
-                <h3 className="mt-5 mb-3 text-lg font-medium">{translate('label.myAccount.bankTransferHistoryText')}</h3>
+                <h3 className="mt-5 mb-3 text-lg font-medium dark:text-black">{translate('label.myAccount.bankTransferHistoryText')}</h3>
                 {isLoadingBankTransactions && <Loader />}
                 {bankTransferTransactions?.items?.length > 0 ? (
                   <>
@@ -234,23 +234,23 @@ export default function WalletDetail() {
                       <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                           <tr className="bg-gray-200">
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.dateText')}</th>
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.bankNameText')}</th>
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.AccountNoText')}</th>
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.orderDetails.statusText')}</th>
-                            <th className="p-2 font-semibold text-left border font-sm">{translate('label.myAccount.sortCodeText')}</th>
-                            <th className="p-2 font-semibold text-right border font-sm">{translate('label.myAccount.amountText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.myAccount.dateText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.myAccount.bankNameText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.myAccount.AccountNoText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.orderDetails.statusText')}</th>
+                            <th className="p-2 font-semibold text-left border font-sm dark:text-black">{translate('label.myAccount.sortCodeText')}</th>
+                            <th className="p-2 font-semibold text-right border font-sm dark:text-black">{translate('label.myAccount.amountText')}</th>
                           </tr>
                         </thead>
                         <tbody className='bg-white divide-y divide-gray-200'>
                           {bankTransferTransactions?.items.map(({ data }: any, index: number) => (
                             <tr key={index} className="text-sm bg-white border-b shadow-none border-slate-200 hover:shadow hover:bg-gray-100">
-                              <td className="p-2 border">{moment(new Date(data.createdOn)).format(DATE_FORMAT)}</td>
-                              <td className="p-2 border">{data.bankName}</td>
-                              <td className="p-2 border">{data.accountNumber}</td>
-                              <td className="p-2 border">{data.statusLabel}</td>
-                              <td className="p-2 border">{data.sortCode}</td>
-                              <td className={`border p-2 text-right font-semibold`} >
+                              <td className="p-2 border dark:text-black">{moment(new Date(data.createdOn)).format(DATE_FORMAT)}</td>
+                              <td className="p-2 border dark:text-black">{data.bankName}</td>
+                              <td className="p-2 border dark:text-black">{data.accountNumber}</td>
+                              <td className="p-2 border dark:text-black">{data.statusLabel}</td>
+                              <td className="p-2 border dark:text-black">{data.sortCode}</td>
+                              <td className={`border p-2 text-right font-semibold dark:text-black`} >
                                 {data?.formattedAmount}
                               </td>
                             </tr>
