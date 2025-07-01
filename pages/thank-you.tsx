@@ -27,9 +27,10 @@ import { ContentSnippetInjector } from '@components/common/Content'
 import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { Cookie } from '@framework/utils/constants'
+import { Cookie, RAKUTEN_MID } from '@framework/utils/constants'
 import { RakutenCustomerStatusType } from '@components/services/analytics/events/rakuten'
 import commerce from '@lib/api/commerce'
+import Cookies from 'js-cookie'
 
 export default function OrderConfirmation({ config, featureToggle, customerStatusType }: any) {
   const { recordAnalytics } = useAnalytics()
@@ -47,6 +48,8 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
   const [copied, setCopied] = useState(false)
   const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
   const { setOrderId, orderId, user, cartItems, setGuestUser, setIsGuestUser, guestUser, isGuestUser, resetIsPaymentLink, } = useUI()
+  const [rakutenMOP, setRakutenMOP] = useState<any>({})
+
   const shareOptionsConfig = [
     {
       name: 'email',
@@ -275,6 +278,26 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
     }
     if (window !== undefined && window?.ch_session && order?.orderNo) {
       window.ch_purchase_complete_before(orderData)
+    }
+
+    if (featureToggle?.features?.enableRakutenAnalytics) {
+      const raw = Cookies.get('siteID') || ''
+      const [encodedSiteID, nowGmtStr] = raw?.split('|')
+      const siteID = decodeURIComponent(encodedSiteID)
+      const dt = new Date(nowGmtStr)
+      // Build yyyy, mm, dd, hh and mm (UTC)
+      const pad = (n: number) => String(n).padStart(2, '0')
+      const yyyy = dt.getUTCFullYear()
+      const mm = pad(dt.getUTCMonth() + 1)
+      const dd = pad(dt.getUTCDate())
+      const hh = pad(dt.getUTCHours())
+      const min = pad(dt.getUTCMinutes())
+      const formattedGMT = `${yyyy}${mm}${dd}_${hh}${min}`
+      const skulist = encodeURIComponent((order?.items?.map((x: any) => x?.sku || x?.stockCode) || [])?.join('|'))
+      const qlist = encodeURIComponent((order?.items?.map((x: any) => x?.qty || 1) || [])?.join('|'))
+      const amtlist = encodeURIComponent((order?.items?.map((x: any) => x?.totalPrice?.raw?.withTax * x?.qty * 100) || [])?.join('|'))
+      const namelist = encodeURIComponent((order?.items?.map((x: any) => x?.name) || [])?.join('|'))
+      setRakutenMOP({ mid: RAKUTEN_MID, ord: order?.orderNo || '', tr: siteID, land: formattedGMT, skulist, qlist, amtlist, cur: order?.currencyCode, namelist })
     }
   }, [order?.orderNo])
 
@@ -750,6 +773,10 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
       {(!isSnippetLoaded && snippets?.length > 0) && (
         <ContentSnippetInjector snippets={snippets} />
       )}
+
+      {featureToggle?.features?.enableRakutenAnalytics && rakutenMOP && 
+        <img src={`http://track.linksynergy.com/eventnvppixel?mid=${rakutenMOP?.mid}&ord=${rakutenMOP?.ord}&tr=${rakutenMOP?.tr}&land=${rakutenMOP?.land}&skulist=${rakutenMOP?.skulist}&qlist=${rakutenMOP?.qlist}&amtlist=${rakutenMOP?.amtlist}&cur=${rakutenMOP?.cur}&namelist=${rakutenMOP?.namelist}`} width="1" height="1" border="0" />
+      }
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { getOrderId } from "@framework/utils/app-util";
 import { AnalyticsEventType } from "..";
 import { EmptyString } from "@components/utils/constants";
+import { RAKUTEN_MID } from "@framework/utils/constants";
 
 export enum RakutenCustomerStatusType {
   NEW = "New",
@@ -24,7 +25,7 @@ export const RAKUTEN_ANALYTICS_EVENTS: any = {
         [AnalyticsEventType.PURCHASE]: {
             transformMap: {
                 affiliateConfig: {
-                    ranMID: "47484",
+                    ranMID: RAKUTEN_MID,
                     discountType: "item",
                     includeStatus: "false",
                     taxRate: 20,

@@ -40,6 +40,7 @@ export const CIPHER_ENCRYPTION_KEY = process.env.CIPHER_ENCRYPTION_KEY
 export const GOOGLE_MAP_API_KEY = process.env.GOOGLE_MAP_API_KEY
 // google analytics
 export const GA4_DISABLED = stringToBoolean(process.env.GA4_DISABLED)
+export const RAKUTEN_MID = process.env.RAKUTEN_MID
 
 export const ERROR_LOG_ENABLED = stringToBoolean(process.env.ERROR_LOG_ENABLED)
 export const ERROR_LOG_OUTPUT_DIR = process.env.ERROR_LOG_OUTPUT_DIR
