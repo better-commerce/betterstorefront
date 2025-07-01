@@ -47,6 +47,7 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import ReviewInput from './Reviews/ReviewInput'
 import { getItem } from '@components/utils/localStorage'
 import { content } from 'tailwind.config'
+import FinanceCalculator from './FinanceCalculator'
 
 // Dynamically imported components
 const ProductDescription = dynamic(() => import('./ProductDescription'))
@@ -117,6 +118,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [selectedOption, setSelectedOption] = useState("new");
   const [quantity, setQuantity] = useState(1);
   const [isSubmitReview, setSubmitReview] = useState(false)
+  const [loanCalculatorOpen, setLoanCalculatorOpen] = useState(false)
   const baseUrl = "https://parkcameras.bettercommerce.tech/"
   const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   // CHECK TRENDING PRODUCTS FROM ENGAGE
@@ -1144,6 +1146,15 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       )
     },
     {
+      id: 'Used',
+      label: 'Used',
+      content: (
+        <div className="space-y-4">
+          <FinanceCalculator loanCalculatorOpen={loanCalculatorOpen} />
+        </div>
+      )
+    },
+    {
       id: 'QnA',
       label: 'Q&A',
       content: (
@@ -1420,7 +1431,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         </div>
         {featureToggle?.features?.enableRichPDPTabs && (
           <div ref={productTabsRef}>
-            <ProductTabs tabs={productTabs} defaultActiveTab="overview" />
+            <ProductTabs tabs={productTabs} defaultActiveTab="overview" setLoanCalculatorOpen={setLoanCalculatorOpen} />
           </div>
         )}
         {featureToggle.features?.enableForPCSite && usedProducts?.Used?.length > 0 && renderUsedRelatedSection()}

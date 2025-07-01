@@ -13,6 +13,7 @@ export const SHARED_SECRET = process.env.BETTERCOMMERCE_SHARED_SECRET
 export const BASE_URL = process.env.BETTERCOMMERCE_BASE_URL
 export const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 export const REVIEW_BASE_URL = process.env.BETTERCOMMERCE_REVIEW_BASE_URL
+export const N8N_BASE_URL = process.env.N8N_BASE_URL
 export const STATIC_BRANDS_PATH_ENABLED = stringToBoolean( process.env.STATIC_BRANDS_PATH_ENABLED )
 export const OMS_BASE_URL = process.env.OMS_BASE_URL
 export const BC_API_BASE_URL = process.env.BC_API_BASE_URL
