@@ -4,9 +4,9 @@ export default function Service({ services }: any) {
   return (
     <div className='flex flex-col w-full mt-6 bg-white sm:mt-8'>
       {services?.map((data: any, dataIdx: number) => (
-        <div className='container flex items-center w-full gap-10 mx-auto justify-normal' key={`service-${dataIdx}`}>
+        <div className='container flex flex-col sm:flex-row mt-6 sm:mt-0 items-center w-full gap-4 sm:gap-10 mx-auto justify-normal' key={`service-${dataIdx}`}>
           <div><img src={data?.service_image} className='w-48 h-auto' alt={data?.service_title} /></div>
-          <div className='flex flex-col justify-start w-full p-6 mt-6'>
+          <div className='flex flex-col justify-start w-full p-6 mt-2 sm:p-6 sm:mt-6'>
             <h3 className='text-2xl font-semibold text-[#2d4d9c] uppercase'>{data?.service_title}</h3>
             <div className='w-full mx-auto mb-4 text-xl font-normal text-left text-black sm:w-full sm:mb-8 cms-para-xl' dangerouslySetInnerHTML={{ __html: data?.service_description }}></div>
             <div className='flex flex-1'>

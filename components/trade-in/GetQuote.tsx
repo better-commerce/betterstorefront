@@ -196,14 +196,14 @@ export default function GetQuote({ quoteData, nextSteps, setShippingData, user, 
                             </div>
 
                           </td>
-                          <td className="px-3 w-[20%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
+                          <td className="px-3 w-[25%] sm:w-[20%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">{"£"}{item?.price}</td>
                         </tr>
                       ))}
                     </tbody>
                     <tfoot className={`${allItemsRejected ? 'bg-red-100' : 'bg-gray-100'}`}>
                       <tr className='flex w-full'>
                         <td className="py-3 pl-3 w-[70%] text-xl font-semibold text-left text-black whitespace-nowrap">Total</td>
-                        <td className="px-3 py-3 w-[30%] text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
+                        <td className="px-3 py-3 w-[40%] sm:w-[30%] text-xl font-semibold text-right text-black whitespace-nowrap">£{updatedQuoteDetail?.value?.grandTotal}</td>
                       </tr>
                     </tfoot>
                   </table>

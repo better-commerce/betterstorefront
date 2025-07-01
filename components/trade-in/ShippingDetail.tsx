@@ -467,12 +467,12 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
             {userAddress?.length > 0 && <TradeNewAddress getAddressNew={getAddress} setUserAddress={setUserAddress} />}
           </div>
           {user?.userId ? (
-            <div className="grid grid-cols-3 gap-4 text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
               {userAddress?.length > 0 ? userAddress?.map((address: any, addIdx: number) => {
                 const isSelected = selectedUserAddress === addIdx;
                 return (
                   <div
-                    className={`flex flex-col gap-2 p-4 border rounded cursor-pointer ${isSelected ? "bg-sky-100 border-[#2d4d9c]" : "border-gray-200 hover:border-gray-400"}`}
+                    className={`flex flex-col gap-2 p-4 border dark:text-black rounded cursor-pointer ${isSelected ? "bg-sky-100 border-[#2d4d9c]" : "border-gray-200 hover:border-gray-400"}`}
                     key={`address-${addIdx}`}
                     onClick={() => setSelectedUserAddress(addIdx)}
                   >
@@ -533,14 +533,14 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                         </div>
                         {/* <img src={store?.image} alt={store?.name} className="w-full h-auto" /> */}
                         <div className="grid grid-cols-12 gap-1">
-                          <div className='col-span-12 text-sm sm:col-span-6 sm:text-lg'>
+                          <div className='col-span-12 text-sm sm:col-span-6 sm:text-lg dark:text-black'>
                             <h2 className="mt-2 mb-1 text-sm font-semibold text-gray-700 uppercase sm:mb-4">Address:</h2>
-                            <p>{store?.name}</p>
-                            <p>{store?.street}</p>
-                            {store?.street2 && <p>{store?.street2}</p>}
-                            <p>{store?.city}, {store?.country}, {store?.postCode}</p>
-                            <p className="mt-4 mb-1 text-sm font-semibold text-gray-700 uppercase sm:mb-4">Opening Hours:</p>
-                            <div className="flex flex-col text-xs font-normal divide-x divide-gray-200 sm:text-sm" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
+                            <p className="dark:text-black">{store?.name}</p>
+                            <p className="dark:text-black">{store?.street}</p>
+                            {store?.street2 && <p className="dark:text-black">{store?.street2}</p>}
+                            <p className="dark:text-black">{store?.city}, {store?.country}, {store?.postCode}</p>
+                            <p className="mt-4 mb-1 text-sm font-semibold text-gray-700 uppercase sm:mb-4 dark:text-black">Opening Hours:</p>
+                            <div className="flex flex-col text-xs font-normal divide-x divide-gray-200 sm:text-sm dark:text-black" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
                           </div>
                           <div className='col-span-12 sm:col-span-6'>
                             <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
@@ -652,11 +652,11 @@ export default function ShippingDetail({ nextSteps, quoteData, shippingData, set
                       <p className="text-gray-600">Info: {info?.join(', ')}</p>
 
                       <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
-                      <p>{address?.organisation}</p>
-                      {address?.property && <p>{address?.property}</p>}
-                      <p>{address?.street}</p>
-                      {address?.locality && <p>{address?.locality}</p>}
-                      <p>{address?.town}, {address?.postCode}</p>
+                      <p className="dark:text-black">{address?.organisation}</p>
+                      {address?.property && <p className="dark:text-black">{address?.property}</p>}
+                      <p className="dark:text-black">{address?.street}</p>
+                      {address?.locality && <p className="dark:text-black">{address?.locality}</p>}
+                      <p className="dark:text-black">{address?.town}, {address?.postCode}</p>
 
                       <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
                       <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200">

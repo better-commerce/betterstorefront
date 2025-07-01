@@ -35,7 +35,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.order.myOrdersText'),
         mtext: translate('label.order.myOrdersText'),
         props: 'orders',
-        head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7" />,
+        head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account/orders',
         displayOrder: 1
       },
@@ -44,7 +44,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.myAccount.myReturnsText'),
         mtext: translate('label.myAccount.myReturnsText'),
         props: 'returns',
-        head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7" />,
+        head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account/returns',
         displayOrder: 6
       },
@@ -53,7 +53,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.wishlist.wishlistText'),
         mtext: translate('label.wishlist.wishlistText'),
         props: 'wishlist',
-        head: <HeartIcon className="text-gray-500 w-7 h-7" />,
+        head: <HeartIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account/wishlist',
         displayOrder: 10
       },
@@ -62,7 +62,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.myAccount.mySavedAddressText'),
         mtext: translate('label.myAccount.mySavedAddressText'),
         props: 'address-book',
-        head: <BookOpenIcon className="text-gray-500 w-7 h-7" />,
+        head: <BookOpenIcon className="text-gray-500 w-7 h-7 dark:text-gray-800"/>,
         href: '/my-account/address-book',
         displayOrder: 8
       },
@@ -71,7 +71,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.myAccount.myDetailsHeadingText'),
         mtext: translate('label.myAccount.myDetailsHeadingText'),
         props: 'details',
-        head: <UserIcon className="text-gray-500 w-7 h-7" />,
+        head: <UserIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account',
         displayOrder: 9
       }
@@ -104,7 +104,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.myAccount.dataPackText'),
         mtext: translate('label.myAccount.dataPackText'),
         props: 'data-pack',
-        head: <ServerIcon className="text-gray-500 w-7 h-7" />,
+        head: <ServerIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: "/my-account/data-pack",
         displayOrder: 7
       })
@@ -118,7 +118,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
             text: translate('label.myAccount.referAFriendText'),
             mtext: translate('label.myAccount.referAFriendText'),
             props: 'refer-a-friend',
-            head: <EllipsisHorizontalCircleIcon className="text-gray-500 w-7 h-7" />,
+            head: <EllipsisHorizontalCircleIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
             href: "/my-account/refer-a-friend",
             displayOrder: 11
           })
@@ -133,7 +133,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           text: translate('label.myAccount.myCompanyMenus.order'),
           mtext: translate('label.myAccount.myCompanyMenus.order'),
           props: 'orders',
-          head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7" />,
+          head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
           href: '/my-account/my-company/orders',
           displayOrder: 4
         },
@@ -142,7 +142,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           text: translate('label.myAccount.myCompanyMenus.quote'),
           mtext: translate('label.myAccount.myCompanyMenus.quote'),
           props: 'quotes',
-          head: <ListBulletIcon className="text-gray-500 w-7 h-7" />,
+          head: <ListBulletIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
           href: '/my-account/my-company/quotes',
           displayOrder: 3
         },
@@ -151,7 +151,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           text: translate('label.myAccount.myCompanyMenus.invoice'),
           mtext: translate('label.myAccount.myCompanyMenus.invoice'),
           props: 'invoice',
-          head: <QueueListIcon className="text-gray-500 w-7 h-7" />,
+          head: <QueueListIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
           href: '/my-account/my-company/invoices',
           displayOrder: 5
         },
@@ -160,7 +160,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           text: translate('label.myAccount.myCompanyMenus.BuyingList'),
           mtext: translate('label.myAccount.myCompanyMenus.BuyingList'),
           props: 'buying-list',
-          head: <ShoppingBagIcon className="text-gray-500 w-7 h-7" />,
+          head: <ShoppingBagIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
           href: '/my-account/my-company/buying-list',
           displayOrder: 1
         },
@@ -169,7 +169,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           text: translate('label.myAccount.myCompanyMenus.requestQuote'),
           mtext: translate('label.myAccount.myCompanyMenus.requestQuote'),
           props: 'request-for-quotes',
-          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
           href: '/my-account/request-for-quote',
           displayOrder: 2
         },
@@ -178,7 +178,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           text: translate('label.myAccount.myCompanyText'),
           mtext: translate('label.myAccount.myCompanyText'),
           props: 'my-company',
-          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7" />,
+          head: <BuildingOffice2Icon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
           href: '/my-account/my-company',
           displayOrder: 8
         }
@@ -190,7 +190,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.wishlist.myStore'),
         mtext: translate('label.wishlist.myStore'),
         props: 'my-store',
-        head: <BuildingStorefrontIcon className="text-gray-500 w-7 h-7" />,
+        head: <BuildingStorefrontIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-store/recommendations',
         displayOrder: 11,
         childMenu: [
@@ -199,7 +199,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
             text: translate('label.myAccount.recommendedForYouText'),
             mtext: translate('label.myAccount.recommendedForYouText'),
             props: 'myStoreRecommendation',
-            head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="Recommended" />,
+            head: <StarIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" title="Recommended" />,
             href: '/my-store/recommendations',
           },
           {
@@ -207,7 +207,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
             text: translate('label.myAccount.browsingHistoryText'),
             mtext: translate('label.myAccount.browsingHistoryText'),
             props: 'myStoreRecommendation',
-            head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="Recommended" />,
+            head: <StarIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" title="Recommended" />,
             href: '/my-store',
           },
           {
@@ -215,7 +215,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
             text: translate('label.myAccount.improveRecommendationText'),
             mtext: translate('label.myAccount.improveRecommendationText'),
             props: 'myStoreRecommendation',
-            head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="Recommended" />,
+            head: <StarIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" title="Recommended" />,
             href: '/my-store/improve-recommendations',
           }
         ]
@@ -228,7 +228,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           text: translate('label.membership.myMembershipText'),
           mtext: translate('label.membership.myMembershipText'),
           props: 'myStore',
-          head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="Membership" />,
+          head: <StarIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" title="Membership" />,
           href: '/my-account/membership',
           displayOrder: 13
         })
@@ -240,7 +240,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.myAccount.iAmIntrestedInText'),
         mtext: translate('label.myAccount.iAmIntrestedInText'),
         props: 'register-interest',
-        head: <HandThumbUpIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        head: <HandThumbUpIcon className="text-gray-500 w-7 h-7 dark:text-gray-800"  title="trade in" />,
         href: '/my-account/register-interest',
         displayOrder: 13
       })
@@ -251,7 +251,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.myAccount.tradeInText'),
         mtext: translate('label.myAccount.tradeInText'),
         props: 'tradein',
-        head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        head: <StarIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" title="trade in" />,
         href: '/my-account/tradein',
         displayOrder: 14
       })
@@ -262,7 +262,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         text: translate('label.myAccount.myWalletText'),
         mtext: translate('label.myAccount.myWalletText'),
         props: 'wallet',
-        head: <WalletIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        head: <WalletIcon className="text-gray-500 w-7 h-7  dark:text-gray-800" title="trade in" />,
         href: '/my-account/wallet',
         displayOrder: 15
       })

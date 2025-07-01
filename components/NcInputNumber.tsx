@@ -46,7 +46,7 @@ const NcInputNumber: FC<NcInputNumberProps> = ({
   const renderLabel = () => {
     return (
       <div className="flex flex-col">
-        <span className="font-medium text-neutral-800 dark:text-neutral-200">
+        <span className="font-medium text-neutral-800 dark:text-neutral-800">
           {label}
         </span>
         {desc && (

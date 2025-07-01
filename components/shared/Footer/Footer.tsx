@@ -183,7 +183,7 @@ const Footer = ({ navItems = [], featureToggle }: any) => {
               <div className="col-span-2 md:col-span-1 footer-logo">
                 <Logo />
               </div>
-              <div className="flex justify-start gap-2 mt-10 sm:mb-4">
+              <div className="flex justify-start gap-2 mt-10 sm:mb-4 -ml-[20px]">
                 <ReviewSection templateId="53aa8807dec7e10d38f59f32" templateSize="S" widgetClass="trustpilot-widget" />
               </div>
               <div className="flex justify-start gap-2 mt-10">

@@ -121,8 +121,8 @@ export default function TradeInTable() {
                           {getStatusLabel(item?.status ?? "Unknown")}
                         </span>
                       </td>
-                      <td className="px-4 py-2 text-sm text-right border">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
-                      <td className="px-4 py-2 text-sm text-right border">
+                      <td className="px-4 py-2 text-sm text-right border dark:text-black">{item.grandTotal > 0 ? `£${item?.grandTotal}` : ''}</td>
+                      <td className="px-4 py-2 text-sm text-right border dark:text-black">
                         {moment(new Date(item.created)).format(DATE_FORMAT)}</td>
                       <td className="px-4 py-2 text-right border">
                         <Link href={`/my-account/tradein/${item?.id}`} passHref className="text-sm underline text-sky-600">{translate('common.label.viewDetailsText')}</Link>

@@ -8,7 +8,7 @@ export const useConfig: any = () => {
         text: translate('label.order.myOrdersText'),
         mtext: translate('label.order.myOrdersText'),
         props: 'orders',
-        head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7" />,
+        head: <ClipboardDocumentListIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account/orders',
         displayOrder: 1
       },
@@ -17,7 +17,7 @@ export const useConfig: any = () => {
         text: translate('label.myAccount.myReturnsText'),
         mtext: translate('label.myAccount.myReturnsText'),
         props: 'returns',
-        head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7" />,
+        head: <ArrowPathRoundedSquareIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account/returns',
         displayOrder: 3
       },
@@ -26,7 +26,7 @@ export const useConfig: any = () => {
         text: translate('label.wishlist.wishlistText'),
         mtext: translate('label.wishlist.wishlistText'),
         props: 'wishlist',
-        head: <HeartIcon className="text-gray-500 w-7 h-7" />,
+        head: <HeartIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account/wishlist',
         displayOrder: 7
       },
@@ -35,7 +35,7 @@ export const useConfig: any = () => {
         text: translate('label.myAccount.mySavedAddressText'),
         mtext: translate('label.myAccount.mySavedAddressText'),
         props: 'address-book',
-        head: <BookOpenIcon className="text-gray-500 w-7 h-7" />,
+        head: <BookOpenIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account/address-book',
         displayOrder: 8
       },
@@ -44,7 +44,7 @@ export const useConfig: any = () => {
         text: translate('label.myAccount.myDetailsHeadingText'),
         mtext: translate('label.myAccount.myDetailsHeadingText'),
         props: 'details',
-        head: <UserIcon className="text-gray-500 w-7 h-7" />,
+        head: <UserIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
         href: '/my-account',
         displayOrder: 9
       }
