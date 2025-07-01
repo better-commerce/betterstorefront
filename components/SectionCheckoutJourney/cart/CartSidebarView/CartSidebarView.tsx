@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import axios from 'axios'
 import { FC } from 'react'
-import { useUI } from '@components/ui/context'
+import { useUI, basketId as generateBasketId } from '@components/ui/context'
 import { useEffect, useState, Fragment } from 'react'
 import { matchStrings, stringFormat, tryParseJson, } from '@framework/utils/parse-util'
 import useCart from '@components/services/cart'
@@ -10,7 +10,7 @@ import { XMarkIcon, CheckCircleIcon, ArrowRightIcon } from '@heroicons/react/24/
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, SITE_ORIGIN_URL, BASKET_PROMO_TYPES, } from '@components/utils/constants'
-import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, resetBasket, } from '@framework/utils/app-util'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/Layout/Layout'
@@ -28,9 +28,13 @@ import BasketGroupProduct from '@components/cart/BasketGroupProduct'
 import { groupCartItemsById } from '@components/utils/cart'
 import { round, sortBy } from 'lodash'
 import { ProductType } from '@framework/utils/enums'
+import { CURRENT_THEME } from '@components/utils/constants'
+import Cookies from 'js-cookie'
+const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
+
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
-  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, setBasketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
@@ -148,8 +152,13 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }, [basketId, cartItems])
 
   const handleCartItems = async () => {
-    const items = await getCart({ basketId })
-    setCartItems(items)
+    const items: any = await getCart({ basketId })
+    if (items?.isPartialPayment && items?.partialPayableAmount?.raw === 0) {
+      resetBasket(setBasketId, generateBasketId)
+      setCartItems({ lineItems: [] })
+    } else {
+      setCartItems(items)
+    }
   }
 
   const handleCartItemsLoadAsync = async () => {
@@ -543,7 +552,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
   }, [cartItems?.lineItems])
 
   const css = { maxWidth: '100%', height: 'auto' }
-    return (
+  return (
     <>
       <Transition.Root show={cartSidebarOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 overflow-hidden z-99" onClose={handleClose} >
@@ -553,7 +562,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
             </Transition.Child>
             <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child as={Fragment} enter="transform transition ease-in-out duration-500 sm:duration-700" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leaveFrom="translate-x-0" leaveTo="translate-x-full" >
-                <div className="w-screen max-w-md">
+                <div className="w-screen max-w-md mob-width-full mobile-cart-width">
                   <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
                     <div className="flex-1">
                       <div className="sticky top-0 flex items-start justify-between px-4 py-4 mb-1 bg-white shadow z-99 sm:px-6">
@@ -573,7 +582,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           </button>
                         </div>
                       </div>
-                      <div className="mt-2">
+                      <div className="mt-2 btn-hide-cut">
                         <div className="flow-root">
                           <ul role="list" className="px-4">
                             {userCartItems?.map((product: any, productIdx: number) => {
@@ -658,6 +667,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                     reValidateData={reValidateData}
                                     soldOutMessage={soldOutMessage}
                                     getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                                    insertToLocalWishlist={insertToLocalWishlist}
+                                    featureToggle={featureToggle}
                                   />
                                   {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                                     (child: any, idx: number) => (
@@ -682,6 +693,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                                           getLineItemSizeWithoutSlug
                                         }
                                         key={idx}
+                                        insertToLocalWishlist={insertToLocalWishlist}
+                                        featureToggle={featureToggle}
                                       />
                                     )
                                   )}
@@ -720,8 +733,8 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                           )}
                           {!isEmpty && relatedProductData && (
                             <>
-                              <div className="flex flex-col px-4 mt-0 cart-related-prod sm:px-6">
-                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title={translate('common.label.frequentlyBoughtTogetherText')} handleQuickAddToBag={handleQuickAddToBag} deviceInfo={deviceInfo} />
+                              <div className="flex flex-col px-4 mt-0 cart-related-prod cart-slider-sec sm:px-6">
+                                <RelatedProducts relatedProducts={relatedProductData} productPerColumn={1.8} checkout_refrence={true} title={translate('common.label.frequentlyBoughtTogetherText')} handleQuickAddToBag={handleQuickAddToBag} featureToggle={featureToggle} deviceInfo={deviceInfo} />
                               </div>
                             </>
                           )}
@@ -759,9 +772,26 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <p className='text-sm'>{cartItems?.grandTotal?.formatted?.tax}</p>
                           </div>
                         }
-                        <div className="flex justify-between py-4 font-bold text-gray-900 font-20">
+                        {(cartItems?.isPartialPayment && cartItems?.partialPayments?.length > 0) && (
+                          <>
+                            {cartItems?.partialPayments?.map((payment: any, index: number) => (
+                              <div key={index} className="flex justify-between py-2 text-sm text-green-600">
+                                <p className='text-sm'>{translate('label.orderSummary.paidText')}{`(${payment?.method})`}</p>
+                                <p className='text-sm'>{payment?.paidAmount?.formatted}</p>
+                              </div>
+                            ))}
+                          </>
+                        )}
+                        <div className="flex items-center justify-between py-4 font-bold text-gray-900 font-20">
                           <p className="font-20 link-button">{translate('label.orderSummary.totalText')}</p>
-                          <p className="font-20 link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
+                          {cartItems?.isPartialPayment ? (
+                            <span className="flex flex-col">
+                              <p className="text-sm text-gray-600 line-through link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
+                              <p className="font-20 link-button"> {' '} {cartItems?.partialPayableAmount?.formatted}{' '} </p>
+                            </span>
+                          ) : (
+                            <p className="font-20 link-button"> {' '} {cartItems?.grandTotal?.formatted?.withTax}{' '} </p>
+                          )}
                         </div>
                       </div>
                     )}
@@ -771,18 +801,24 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     )}
                     {cartItems?.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
-                        <Link href="/checkout" onClick={() => {
-                          handleClose()
-                          beginCheckout(cartItems)
-                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
-                          <span className='flex flex-col justify-start pl-5 text-left'>
-                            <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
-                            <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
-                          </span>
-                          <span className='flex items-center gap-2 pr-5'>
-                            <span>{translate('label.orderSummary.placeOrderBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
-                          </span>
-                        </Link>
+                        <>
+                          <Link href={featureToggle?.features?.defaultCheckoutRoute || '/checkout'} onClick={() => {
+                            handleClose()
+                            beginCheckout(cartItems)
+                          }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
+                            <span className='flex flex-col justify-start pl-5 text-left'>
+                              {cartItems?.isPartialPayment ? (
+                                <span>{cartItems?.partialPayableAmount?.formatted}</span>
+                              ) : (
+                                <span>{cartItems?.grandTotal?.formatted?.withTax}</span>
+                              )}
+                              <span className='font-light font-12'>{translate('label.orderSummary.totalText')}</span>
+                            </span>
+                            <span className='flex items-center gap-2 pr-5'>
+                              <span>{translate('label.basket.checkoutBtnText')}</span> <ArrowRightIcon className="w-4 h-4 text-white" />
+                            </span>
+                          </Link>
+                        </>
                       </div>
                     }
                   </div>

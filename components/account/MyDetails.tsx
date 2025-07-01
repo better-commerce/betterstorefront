@@ -155,7 +155,7 @@ export default function MyDetails() {
                         </div>
                       ))}
                       <ContactPreferences hideSubmitBtn={true} customSubmit={submitContactPreferences} setCustomSubmit={setSubmitContactPreferences}/>
-                      <div className="flex w-full sm:mt-10 sm:flex-col sm:w-6/12">
+                      <div className="flex w-full sm:mt-10 sm:flex-col sm:w-6/12 pc-primary-btn">
                         <Button
                           type="submit"
                           onClick={handleSubmit}

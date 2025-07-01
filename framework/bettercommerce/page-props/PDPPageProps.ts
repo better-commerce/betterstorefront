@@ -30,7 +30,7 @@ export class PDPPageProps extends BasePagePropsProvider implements IPagePropsPro
         relatedProductUID: Redis.Key.PDP.RelatedProduct + '_' + currentLocale,
         pdpLookBookUID: Redis.Key.PDP.PDPLookBook + '_' + currentLocale,
         pdpCacheImageUID: Redis.Key.PDP.PDPCacheImage + '_' + currentLocale,
-        availablePromoUID: Redis.Key.PDP.AvailablePromo + '_' + currentLocale,
+        availablePromoUID: Redis.Key.PDP.AvailablePromo + '_' + slug + '_' + currentLocale,
         productCategoryUID: Redis.Key.PDP.ProductsByCat + '_' + currentLocale,
     }
     const cachedData = await getDataByUID([

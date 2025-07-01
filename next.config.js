@@ -16,7 +16,7 @@ module.exports = withCommerceConfig({
     instrumentationHook: true,
   },
   images: {
-    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech','cdn.shopify.com'],
+    domains: ['liveocxcdn.azureedge.net', 'liveocxstorage.blob.core.windows.net','dtz3um9jw7ngl.cloudfront.net', 'devocxstorage.blob.core.windows.net', 'www.imagedelivery.space', 'liveocx.imgix.net', 'livebccdn-euhthweyb6ckdcec.z01.azurefd.net', 'cdnbs.bettercommerce.tech', 'cdn.shopify.com'],
     cacheDuration: 31536000,
   },
   //assetPrefix: isProd ? 'https://cdnbs.bettercommerce.tech' : '',  
@@ -84,6 +84,7 @@ module.exports = withCommerceConfig({
     BETTERCMS_BASE_URL: process.env.BETTERCMS_BASE_URL,
     BETTERCMS_API_VERSION: process.env.BETTERCMS_API_VERSION,
     BETTERCMS_API_URL: process.env.BETTERCMS_API_URL,
+    MAPP_NEWSLETTER_API_BASE_URL: process.env.MAPP_NEWSLETTER_API_BASE_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     SITE_SECURITY_HEADERS: process.env.SITE_SECURITY_HEADERS,
     SITE_HOST: process.env.SITE_HOST,
@@ -112,7 +113,11 @@ module.exports = withCommerceConfig({
     GOOGLE_MAP_API_KEY: process.env.GOOGLE_MAP_API_KEY,
     ENGAGE_QUERY_BASE_URL: process.env.ENGAGE_QUERY_BASE_URL,
     FIND_ADDRESS_KEY: process.env.FIND_ADDRESS_KEY,
+    GET_ADDRESS_IO_KEY: process.env.GET_ADDRESS_IO_KEY,
     KIT_BUILDER_API_URL: process.env.KIT_BUILDER_API_URL,
-
+    ALLOW_UNAUTHORIZED_REQUESTS: process.env.ALLOW_UNAUTHORIZED_REQUESTS,
+    BC_API_BASE_URL: process.env.BC_API_BASE_URL,
+    CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE: process.env.CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE,
+    CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE: process.env.CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE,
   },
 })

@@ -278,7 +278,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
             <div className="flex flex-col mt-0">
               <div className="flex items-center justify-between gap-2 mb-2 -mt-1 font-normal text-left cursor-text text">
                 <input name={'promotion-code'} placeholder={translate('label.promotion.applyPromotionText')} onChange={handleChange} value={value} className="w-full min-w-0 placeholder-gray-500 border cursor-text text-left border-gray-300 !font-medium rounded-md dark:text-black" required />
-                <button onClick={async () => await applyCouponInput('applyInput', value)} type="submit" title={translate('common.label.applyText')} className={`flex items-center justify-center btn btn-secondary w-full !font-medium`} >
+                <button onClick={async () => await applyCouponInput('applyInput', value)} type="submit" title={translate('common.label.applyText')} className={`flex items-center justify-center btn btn-secondary w-full btn-sm-cls !font-medium`} >
                   {translate('common.label.applyText')}
                 </button>
               </div>

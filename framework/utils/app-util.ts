@@ -261,3 +261,35 @@ export const downloadBase64AsFile = (base64: string, fileName: string, fileMime:
 export function removeTitleTags(html: string): string {
   return html.replace(/<title[^>]*>.*?<\/title>/g, '');
 }
+
+export const updateQueryParams = (router: NextRouter, newParams: any = {}, removeParams: string[] = []) => {
+  // Create a URL instance from the current window location.
+  const url = new URL(window.location.href);
+
+  // Get the current search parameters.
+  const searchParams = new URLSearchParams(url.search);
+
+  // Remove any query parameters specified in the removeParams array.
+  removeParams.forEach((param: string) => {
+      searchParams.delete(param);
+  });
+
+  // Add or update new query parameters from the newParams object.
+  Object.entries(newParams).forEach(([key, value]: any) => {
+      // If the new value is null or undefined, we can remove the param.
+      if (value === null || value === undefined) {
+          searchParams.delete(key);
+      } else {
+          searchParams.set(key, value);
+      }
+  });
+
+  // Rebuild the URL using the updated query parameters.
+  // Note: If there are no query params, searchParams.toString() returns an empty string.
+  const queryString = searchParams.toString();
+  const newUrl = `${url.pathname}${queryString ? `?${queryString}` : ''}`;
+
+  // Use Next.js router to push the new URL.
+  // Shallow routing avoids running data fetching methods again.
+  router.push(newUrl, undefined, { shallow: true });
+};

@@ -21,7 +21,7 @@ interface BasketItem {
   price: number;
 }
 
-const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUpdatePromoCode = () => { } }: any) => {
+const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUpdatePromoCode = () => { }, featureToggle }: any) => {
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, isGuestUser, setAlert } = useUI()
   const [referralAvailable, setReferralAvailable] = useState(false)
@@ -164,17 +164,18 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
         )
         : (
           <div className="h-auto card-summary right-panel-basket">
-            <h3 className="mb-4 font-semibold text-black">Order Summary</h3>
+            <h3 className="mb-2 font-semibold text-black font-text-normal text-bg-white">Order Summary</h3>
+            <div className='inner-card-cart'>
             {/* product list start */}
-            <div className="w-full px-4 py-2 bg-white rounded shadow cart-items hover:bg-white">
+            <div className={`w-full cart-items  ${featureToggle?.features?.enableForPCSite ?'':'bg-white hover:bg-white px-4 py-2 rounded shadow'}`}>
               <Disclosure defaultOpen={true}>
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
+                    {!featureToggle?.features?.enableForPCSite && <Disclosure.Button className="flex items-center justify-between w-full gap-2 text-sm font-light text-left text-black normal-case">
                       <span className='font-semibold text-black'>{userCartItems?.length}{' '}{userCartItems?.length > 1 ? 'items' : 'item'}</span>
                       <i className={`${open ? 'rotate-180 transform' : ''} sprite-icons sprite-dropdown`} />
-                    </Disclosure.Button>
-                    <Disclosure.Panel className="px-0 pt-3 pb-2">
+                    </Disclosure.Button>}
+                    <Disclosure.Panel className="px-0">
                       <div className="w-full max-basket-panel">
                         <SplitDeliveryBasketItems cartItem={userCartItems} cart={basket} config={config} />
                       </div>
@@ -189,6 +190,7 @@ const BasketDetails = ({ basket, deviceInfo, config, promotionsUpdate = [], onUp
               </h3>
             )}
             <Summary basket={basket} groupedPromotions={groupedPromotions} deviceInfo={deviceInfo} basketPromos={basketPromos} getBasketPromos={getBasketPromos} promotionsUpdate={promotionsUpdate} onUpdatePromoCode={onUpdatePromoCode} />
+            </div>
           </div>
         )
       }

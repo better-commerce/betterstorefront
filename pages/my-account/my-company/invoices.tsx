@@ -73,7 +73,7 @@ function MyInvoices({ deviceInfo }: any) {
     if (res?.data) {
       generatePDF(res?.data?.base64Pdf, order);
     } else {
-      console.log('invoice Details not found')
+      //console.log('invoice Details not found')
     }
     hideOverlayLoaderState()
   }
@@ -100,7 +100,7 @@ function MyInvoices({ deviceInfo }: any) {
   }
 
   return (
-    <div className={'orders bg-white dark:bg-transparent'}>
+    <div className={'orders bg-white dark:bg-transparent pb-8'}>
       <div>
         <h1 className="text-xl font-normal sm:text-2xl dark:text-black"> Invoices </h1>
         {isLoading ? (
@@ -109,7 +109,7 @@ function MyInvoices({ deviceInfo }: any) {
           <>
             {data?.result?.length > 0 ? (
               <>
-                <div className="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                <div className="mt-4 overflow-x-auto sm:overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                   <table className="min-w-full divide-y divide-gray-300">
                     <thead className="bg-gray-50">
                       <tr>

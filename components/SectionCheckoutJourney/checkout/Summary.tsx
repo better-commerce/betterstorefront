@@ -3,30 +3,14 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { EmptyString } from '@components/utils/constants'
 import { vatIncluded } from '@framework/utils/app-util'
 
-const Summary = ({
-  basket,
-  groupedPromotions,
-  deviceInfo,
-  basketPromos,
-  getBasketPromos,
-  setBasket = () => { },
-  membership,
-}: any) => {
+const Summary = ({ basket, groupedPromotions, deviceInfo, basketPromos, getBasketPromos, setBasket = () => { }, membership, }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
+
   return (
     <>
       <div className="w-full px-4 sm:px-0">
-        <div className="mt-4">
-          <PromotionInput
-            deviceInfo={deviceInfo}
-            basketPromos={basketPromos}
-            items={basket}
-            getBasketPromoses={getBasketPromos}
-            setBasket={setBasket}
-            membership={membership}
-          />
-        </div>
+        <PromotionInput deviceInfo={deviceInfo} basketPromos={basketPromos} items={basket} getBasketPromoses={getBasketPromos} setBasket={setBasket} membership={membership} />
         <dl className="space-y-2 sm:space-y-2">
           <div
             className={
@@ -126,12 +110,31 @@ const Summary = ({
               </dd>
             </div>
           }
+          {(basket?.isPartialPayment && basket?.partialPayments?.length > 0) && (
+            <>
+              {basket?.partialPayments?.map((payment: any, idx: number) => (
+                <div key={idx} className="flex items-center justify-between pt-2 sm:pt-1 ">
+                  <dt className="flex items-center text-green-600 font-14">
+                    <span>{translate('label.orderSummary.paidText')}{`(${payment?.method})`}</span>
+                  </dt>
+                  <dd className="font-semibold text-green-600 text-md">
+                    {payment?.paidAmount?.formatted}
+                  </dd>
+                </div>
+              ))}
+            </>
+          )}
 
-          <div className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
+          <div className={`flex items-center items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
             <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
-            <dd className="font-bold text-black font-18">
-              {basket?.grandTotal?.formatted?.withTax}
-            </dd>
+            {basket?.isPartialPayment ? (
+              <span className="flex flex-col"> 
+                <dd className="text-sm text-black line-through">{basket?.grandTotal?.formatted?.withTax}</dd>
+                <dd className="font-bold text-black font-18">{basket?.partialPayableAmount?.formatted}</dd>
+              </span>
+            ) : (
+              <dd className="font-bold text-black font-18">{basket?.grandTotal?.formatted?.withTax}</dd>
+            )}
           </div>
         </dl >
       </div >

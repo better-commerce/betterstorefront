@@ -84,6 +84,8 @@
             "addedText": "adăugat",
             "noBasketAvailableText": "Nu există coș disponibil, vă rugăm să creați unul nou",
             "totalAmountText": "Suma Totală",
+            "orderAmountText": "Suma Comenzii",
+            "pendingOrderAmountText": "Sumă Neplătită",
             "checkoutBtnText": "Finalizați Comanda",
             "multipleCodesApplyText": "Puteți aplica mai multe coduri",
             "getItByText": "Obțineți-l până la",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV este necesar",
                 "cvvInvalidText": "CVV este invalid",
                 "chequeNoText": "Număr cec",
-                "chequeNumberLabelText": "Număr cec"
+                "chequeNumberLabelText": "Număr cec",
+                "enterAmountToPayLabelText": "Introduceți suma de plată de la {paymentMethodName}"
             }
         },
         "collection": {
@@ -463,6 +466,7 @@
                 "productRequired": "Este necesar cel puțin un produs"
             },
             "myDetailsHeadingText": "Profilul meu",
+            "tradeInText":"Schimb",
             "editYourDetailsText": "Simte-te liber să editezi orice detalii pentru a-ți actualiza contul.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Eroare la preluarea retururilor"
@@ -504,7 +508,38 @@
             "noLookbookAvaiableText": "Nu este disponibil niciun lookbook",
             "shopTheLookText": "Cumpără look-ul",
             "confirmPasswordText": "Confirmă parola",
-            "addNewUserText": "Adaugă utilizator nou"
+            "addNewUserText": "Adaugă utilizator nou",
+            "myTradeInText": "Trade In-ul meu",
+            "quoteText": "Ofertă",
+            "createdText": "Creat",
+            "tradeInSectionFeedbackMessage": "Sperăm că vă place noua noastră secțiune Trade In de pe site-ul nostru. Încă lucrăm la îmbunătățiri, dar dacă observați ceva care nu funcționează conform așteptărilor, vă rugăm să ne trimiteți un e-mail cu capturi de ecran (dacă este posibil) la",
+            "queryEmailInstruction": "Dacă aveți o întrebare, vă rugăm să trimiteți un e-mail la",
+            "myWalletText": "Portofelul Meu",
+            "walletActivationMessage": "Vă rugăm să așteptați în timp ce activăm portofelul dvs. și generăm informațiile despre portofel.",
+            "transferToBankText": "Transferă în Bancă",
+            "addBankDetailsText": "Adăugați Detalii Bancare",
+            "enableWalletText": "Activează Portofel",
+            "walletCurrentBalanceText": "Soldul Curent al Portofelului",
+            "walletTransactionHistoryText": "Istoricul Tranzacțiilor Portofelului",
+            "dateText": "Data",
+            "amountText": "Sumă",
+            "referenceText": "Referință",
+            "noTransactionHistoryMessage": "Nu există istoric de tranzacții disponibil.",
+            "noBankTransferHistoryText": "Nu este disponibil transfer bancar",
+            "bankTransferHistoryText": "Istoricul Transferurilor Bancare",
+            "bankNameText": "Numele Băncii",
+            "AccountNoText": "Nr. Cont",
+            "sortCodeText": "Cod de Sortare",
+            "walletDisabledMessage": "Portofelul este dezactivat. Activați-l pentru a vedea soldul și tranzacțiile.",
+            "roleRequiredText": "Rolul este obligatoriu",
+            "selectRoleText": "Selectează un rol",
+            "zoneRequiredText": "Zona este obligatorie",
+            "selectZoneText": "Selectează o zonă",
+            "branchRequiredText": "Filiala este obligatorie",
+            "selectBranchText": "Selectează o filială",
+            "countryRequiredText": "Țara este obligatorie",
+            "selectCountryText": "Selectează o țară",
+            "iAmIntrestedInText": "Sunt interesat de"
         },
         "navBar": {
             "currencyText": "Valută",
@@ -598,6 +633,7 @@
             "freeText": "Gratuit",
             "additionalChargesText": "Taxe suplimentare",
             "taxText": "Taxă",
+            "paidText": "Plătit",
             "youPayText": "Plătești",
             "placeOrderBtnText": "Plasează Comanda",
             "loseDeliveryText": "Vei pierde livrarea gratuită!",
@@ -1319,6 +1355,7 @@
             "userAlreadyExistsErrorMsg": "Utilizatorul există deja",
             "tokenInvalidErrorMsg": "Ups! Token invalid",
             "tokenExpiredErrorMsg": "Ups! Token expirat sau invalid",
+            "sessionExpiredErrorMsg": "Sesiunea a expirat. Va rugam sa va relogati.",
             "companyNotFoundErrorMsg": "Compania nu a fost găsită.",
             "cartItemMaxAddedErrorMsg": "Limita de produse adăugate în coș a fost atinsă. Vă rugăm să eliminați unele produse și încercați din nou.",
             "addressAddedSuccessfullyMsg": "Adresa nouă a fost adăugată cu succes",
@@ -1374,7 +1411,12 @@
                 "upiNotSupportedErrorMsg": "Plata UPI nu este acceptată.",
                 "paymentAlreadyCompletedErrorMsg": "Plata pentru coșul tău a fost deja completată.",
                 "notEnoughCreditErrorMsg": "Nu sunt suficiente fonduri disponibile.",
-                "paymentMethodNotSupportedErrorMsg": "Metoda de plată nu este acceptată."
+                "walletNotFoundErrorMsg": "Portofelul nu a fost găsit.",
+                "notEnoughBalanceErrorMsg": "Sold insuficient disponibil.",
+                "paymentMethodNotSupportedErrorMsg": "Metoda de plată nu este acceptată.",
+                "paymentAmountRequiredErrorMsg": "Suma plății este obligatorie.",
+                "paymentAmountMinValueErrorMsg": "Suma minimă de plată este {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Valoarea plății nu poate depăși {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Parola trebuie să aibă minimum 8 caractere și cel puțin 1 literă mare.",

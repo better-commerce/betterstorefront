@@ -18,7 +18,7 @@ export default function ProgressBar() {
             transition: 'width 1s ease-in-out',
             width: `${progressPercent}%`,
           }}
-          className="flex flex-col justify-center text-center text-white bg-orange-500 shadow-none whitespace-nowrap"
+          className="flex flex-col justify-center text-center text-white bg-orange-500 shadow-none bg-progress-bar whitespace-nowrap"
         ></div>
       </div>
     </div>

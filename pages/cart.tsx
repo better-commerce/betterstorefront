@@ -816,6 +816,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                         reValidateData={reValidateData}
                         soldOutMessage={soldOutMessage}
                         getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                        featureToggle={featureToggle}
                       />
                       {product?.itemType !== ProductType.BUNDLE && product.children?.map(
                         (child: any, idx: number) => (
@@ -834,6 +835,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                             soldOutMessage={soldOutMessage}
                             getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                             key={idx}
+                            featureToggle={featureToggle}
                           />
                         )
                       )}
@@ -904,7 +906,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 text-slate-50 dark:text-slate-50 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
-                      {translate('label.orderSummary.placeOrderBtnText')}
+                      {translate('label.basket.checkoutBtnText')}
                     </button>
                   </Link>
                 </div>
@@ -973,6 +975,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                 reValidateData={reValidateData}
                                 soldOutMessage={soldOutMessage}
                                 getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
+                                featureToggle={featureToggle}
                               />
                               {product?.itemType !== ProductType.BUNDLE && product.children?.map((child: any, idx: number) => (
                                 <CartSideBarProductCard
@@ -990,6 +993,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                                   soldOutMessage={soldOutMessage}
                                   getLineItemSizeWithoutSlug={getLineItemSizeWithoutSlug}
                                   key={idx}
+                                  featureToggle={featureToggle}
                                 />
                               ))}
                             </>
@@ -1058,7 +1062,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                 <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-white shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
-                      {translate('label.orderSummary.placeOrderBtnText')}
+                      {translate('label.basket.checkoutBtnText')}
                     </button>
                   </Link>
                 </div>

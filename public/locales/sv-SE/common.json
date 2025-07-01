@@ -84,6 +84,8 @@
             "addedText": "tillagd",
             "noBasketAvailableText": "Ingen väska tillgänglig, skapa en ny",
             "totalAmountText": "Totalt belopp",
+            "orderAmountText": "Order Amount",
+            "pendingOrderAmountText": "Utestående belopp",
             "checkoutBtnText": "Kassa",
             "multipleCodesApplyText": "Du kan tillämpa flera koder",
             "getItByText": "Få det innan",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV krävs",
                 "cvvInvalidText": "CVV är ogiltigt",
                 "chequeNoText": "Checknummer",
-                "chequeNumberLabelText": "Checknummer"
+                "chequeNumberLabelText": "Checknummer",
+                "enterAmountToPayLabelText": "Ange belopp att betala från {paymentMethodName}"
             }
         },
         "collection": {
@@ -463,6 +466,7 @@
                 "productRequired": "Minst en produkt är obligatorisk"
             },
             "myDetailsHeadingText": "Min profil",
+            "tradeInText":"Inbytesköp",
             "editYourDetailsText": "Känn dig fri att redigera dina uppgifter nedan så att ditt konto är helt uppdaterat.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oj! Fel vid hämtning av returer"
@@ -504,7 +508,38 @@
             "noLookbookAvaiableText": "Inget lookbook tillgängligt",
             "shopTheLookText": "Shoppa looken",
             "confirmPasswordText": "Bekräfta lösenord",
-            "addNewUserText": "Lägg till ny användare"
+            "addNewUserText": "Lägg till ny användare",
+            "myTradeInText": "Min Trade In",
+            "quoteText": "Offert",
+            "createdText": "Skapad",
+            "tradeInSectionFeedbackMessage": "Vi hoppas att du gillar vår nya Trade In-sektion på vår webbplats. Vi arbetar fortfarande med förbättringar, men om du upptäcker något som inte fungerar som förväntat, vänligen skicka oss ett e-postmeddelande med skärmdumpar (om möjligt) till",
+            "queryEmailInstruction": "Om du har en fråga, vänligen skicka ett e-postmeddelande till",
+            "myWalletText": "Min Plånbok",
+            "walletActivationMessage": "Vänligen vänta medan vi aktiverar din plånbok och genererar plånboksinformation.",
+            "transferToBankText": "Överför till Bank",
+            "addBankDetailsText": "Lägg till Bankuppgifter",
+            "enableWalletText": "Aktivera Plånbok",
+            "walletCurrentBalanceText": "Plånbokens Nuvarande Saldo",
+            "walletTransactionHistoryText": "Plånbokens Transaktionshistorik",
+            "dateText": "Datum",
+            "amountText": "Belopp",
+            "referenceText": "Referens",
+            "noTransactionHistoryMessage": "Ingen transaktionshistorik tillgänglig.",
+            "noBankTransferHistoryText": "Ingen banköverföring tillgänglig",
+            "bankTransferHistoryText": "Banköverföringshistorik",
+            "bankNameText": "Banknamn",
+            "AccountNoText": "Kontonr.",
+            "sortCodeText": "Sorteringskod",
+            "walletDisabledMessage": "Plånboken är inaktiverad. Aktivera den för att se saldo och transaktioner.",
+            "roleRequiredText": "Roll krävs",
+            "selectRoleText": "Välj en roll",
+            "zoneRequiredText": "Zon krävs",
+            "selectZoneText": "Välj en zon",
+            "branchRequiredText": "Filial krävs",
+            "selectBranchText": "Välj en filial",
+            "countryRequiredText": "Land krävs",
+            "selectCountryText": "Välj ett land",
+            "iAmIntrestedInText": "Jag är intresserad av"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -598,6 +633,7 @@
             "freeText": "Gratis",
             "additionalChargesText": "Tilläggsavgifter",
             "taxText": "Moms",
+            "paidText": "Betalt",
             "youPayText": "Du betalar",
             "placeOrderBtnText": "Lägg beställning",
             "loseDeliveryText": "Du är på väg att förlora fri leverans!",
@@ -1319,6 +1355,7 @@
             "userAlreadyExistsErrorMsg": "Användare finns redan",
             "tokenInvalidErrorMsg": "Oj! Token är ogiltig",
             "tokenExpiredErrorMsg": "Oj! Token är utgången eller ogiltig",
+            "sessionExpiredErrorMsg": "Din session har utgått. Vänligen logga in igen.",
             "companyNotFoundErrorMsg": "Företag inte hittat.",
             "cartItemMaxAddedErrorMsg": "Maximalt antal varor i kundvagnen nått. Vänligen ta bort några varor och försök igen.",
             "addressAddedSuccessfullyMsg": "Ny adress tillagd framgångsrikt",
@@ -1374,7 +1411,12 @@
                 "upiNotSupportedErrorMsg": "UPI-betalning stöds inte.",
                 "paymentAlreadyCompletedErrorMsg": "Betalningen för din kundvagn är redan genomförd.",
                 "notEnoughCreditErrorMsg": "Inte tillräckligt med kredit.",
-                "paymentMethodNotSupportedErrorMsg": "Betalningsmetoden stöds inte."
+                "walletNotFoundErrorMsg": "Plånbok hittades inte.",
+                "notEnoughBalanceErrorMsg": "Inte tillräckligt med saldo tillgängligt.",
+                "paymentMethodNotSupportedErrorMsg": "Betalningsmetoden stöds inte.",
+                "paymentAmountRequiredErrorMsg": "Betalningsbelopp krävs.",
+                "paymentAmountMinValueErrorMsg": "Minsta betalningsbelopp är {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Betalningsvärdet får inte överstiga {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Lösenordet måste vara minst 8 tecken långt och innehålla minst 1 versal.",

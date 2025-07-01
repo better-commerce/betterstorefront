@@ -126,6 +126,7 @@ export async function getStaticProps({
           destination: errorUrl,
           permanent: false,
         },
+        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
       }
     }
   }

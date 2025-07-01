@@ -1,18 +1,12 @@
 // Package Imports
 import Script from 'next/script'
 import Router from 'next/router'
-import {
-  CheckoutPaymentSourceType,
-  CheckoutPaymentType,
-  CheckoutPaymentRequest,
-  PaymentMethodTypeId,
-  PaymentMethodType,
-} from 'bc-payments-sdk'
+import { CheckoutPaymentSourceType, CheckoutPaymentType, CheckoutPaymentRequest, PaymentMethodTypeId, PaymentMethodType, PaymentSelectionType, } from 'bc-payments-sdk'
 import { Frames, CardNumber, ExpiryDate, Cvv } from 'frames-react'
 import { withTranslation } from 'react-i18next'
 
 // Component Imports
-import BasePaymentButton, { IDispatchState } from '../BasePaymentButton'
+import BasePaymentButton, { IDispatchState, IPartialPaymentProps } from '../BasePaymentButton'
 import { IPaymentButtonProps } from '../BasePaymentButton'
 
 // Other Imports
@@ -21,7 +15,7 @@ import { LocalStorage, Payments } from '@components/utils/payment-constants'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_PHONE_COUNTRY_CODE, EmptyString, Messages, } from '@components/utils/constants'
 import { getItem, setItem } from '@components/utils/localStorage'
-import { roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { roundToDecimalPlaces, stringFormat } from '@framework/utils/parse-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
 
 export const CARD_PAYMENT_3DS_ENABLED = true
@@ -34,7 +28,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
    * CTor
    * @param props
    */
-  constructor(props: IPaymentButtonProps & IDispatchState) {
+  constructor(props: IPaymentButtonProps & IDispatchState & IPartialPaymentProps) {
     super(props)
     this.state = {
       confirmed: false,
@@ -54,30 +48,31 @@ class CheckoutPaymentButton extends BasePaymentButton {
    * @param uiContext {Object} Method for dispatching global ui state changes.
    * @param dispatchState {Function} Method for dispatching state changes.
    */
-  private async onPay(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    dispatchState: Function
-  ) {
+  private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
     const { translate }: any = this.props
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+    
+    const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+    if (amountToBePaid <= 0) {
+      const errMsg = translate('common.message.checkout.paymentAmountRequiredErrorMsg')
+      dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+      return Promise.reject(new Error(errMsg));
+    }
+
+    const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+    if (validateAmount) {
+      const errMsg = stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount })
+      dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+      return Promise.reject(new Error(errMsg));
+    }
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
-    const { state, result: orderResult } = await super.confirmOrder(
-      paymentMethod,
-      basketOrderInfo,
-      uiContext,
-      dispatchState
-    )
+    const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
       super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.CHECKOUT)
       uiContext?.hideOverlayLoaderState()
     } else {
-      this.setState({
-        confirmed: false,
-        formLoaded: false,
-        scriptLoaded: false,
-      })
+      this.setState({ confirmed: false, formLoaded: false, scriptLoaded: false, })
       uiContext?.hideOverlayLoaderState()
       if (state) {
         dispatchState(state)
@@ -88,19 +83,14 @@ class CheckoutPaymentButton extends BasePaymentButton {
   }
 
   private onScriptReady(): void {
-    this.setState({
-      scriptLoaded: true,
-    })
+    this.setState({ scriptLoaded: true, })
   }
 
   private onFrameReady(): void {
-    const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any =
-      this.props
+    const { paymentMethod, basketOrderInfo, uiContext, dispatchState }: any = this.props
     this.onPay(this.state.paymentMethod, basketOrderInfo, uiContext, dispatchState)
 
-    this.setState({
-      formLoaded: true,
-    })
+    this.setState({ formLoaded: true, })
   }
 
   private onCardSubmitted(): void {
@@ -111,9 +101,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
   private onCardTokenized(ev: any): void { }
 
   private onCardValidationChanged(): void {
-    this.setState({
-      disabledFormSubmit: !Frames.isCardValid(),
-    })
+    this.setState({ disabledFormSubmit: !Frames.isCardValid(), })
   }
 
   private onCardBinChanged(ev: any): void {
@@ -133,23 +121,16 @@ class CheckoutPaymentButton extends BasePaymentButton {
     // catch the error
   }
 
-  private onCapturePayment(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    dispatchState: Function
-  ) {
+  private onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
     let that = this
-    const { translate }: any = this.props
+    const { translate, paymentType, partialAmount = 0 }: any = this.props
     const orderInfo = getOrderInfo()
     const orderResult: any = orderInfo?.orderResponse
     const redirectConfirmUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
-    const redirectCancelUrl = `${window.location.origin}${this.state?.paymentMethod?.settings?.find(
-      (x: any) => x?.key === 'CancelUrl'
-    )?.value || EmptyString
-      }`
+    const redirectCancelUrl = `${window.location.origin}${this.state?.paymentMethod?.settings?.find((x: any) => x?.key === 'CancelUrl')?.value || EmptyString}`
     if (orderResult) {
       const orderId = orderResult?.id
+      const amountToBePaid = this.isFullPayment() ? (basketOrderInfo?.basket?.isPartialPayment ? basketOrderInfo?.basket?.partialPayableAmount?.raw : orderResult?.grandTotal?.raw?.withTax) : partialAmount
 
       Frames.submitCard()
         .then((ev: any) => {
@@ -157,7 +138,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
           if (token) {
             const data: CheckoutPaymentRequest = {
               source: { type: CheckoutPaymentSourceType.TOKEN, token: token, },
-              amount: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
+              amount: roundToDecimalPlaces(amountToBePaid),
               currency: orderResult?.currencyCode,
               payment_type: CheckoutPaymentType.Regular,
               reference: getOrderId(orderInfo?.order),
@@ -188,17 +169,8 @@ class CheckoutPaymentButton extends BasePaymentButton {
                   number: uiContext?.user?.mobile || basketOrderInfo?.shippingAddress?.phoneNo || EmptyString,
                 },
               },
-              processing_channel_id:
-                paymentMethod?.settings?.find(
-                  (x: any) => x.key === 'MotoUserName'
-                )?.value || EmptyString,
-              metadata: {
-                udf1: orderId,
-                udf2: orderResult?.basketId,
-                udf3: basketOrderInfo?.customerId,
-                udf4: getOrderId(orderInfo?.order),
-                udf5: '',
-              },
+              processing_channel_id: paymentMethod?.settings?.find((x: any) => x.key === 'MotoUserName')?.value || EmptyString,
+              metadata: { udf1: orderId, udf2: orderResult?.basketId, udf3: basketOrderInfo?.customerId, udf4: getOrderId(orderInfo?.order), udf5: '', paymentType, partialAmount, },
               success_url: redirectConfirmUrl,
               failure_url: redirectCancelUrl,
               '3ds': {
@@ -207,20 +179,11 @@ class CheckoutPaymentButton extends BasePaymentButton {
               },
             }
 
-            requestPayment(that.state?.paymentMethod?.systemName, {
-              ...data,
-            }).then((paymentResult: any) => {
+            requestPayment(that.state?.paymentMethod?.systemName, { ...data, }).then((paymentResult: any) => {
               if (paymentResult?.id) {
                 const orderResponse = getItem(LocalStorage.Key.ORDER_RESPONSE)
                 if (orderResponse) {
-                  setItem(LocalStorage.Key.ORDER_RESPONSE, {
-                    ...orderResponse,
-                    p: {
-                      t: PaymentMethodTypeId.CHECKOUT,
-                      i: paymentResult?.id,
-                      c: paymentResult?.customer?.id,
-                    },
-                  })
+                  setItem(LocalStorage.Key.ORDER_RESPONSE, { ...orderResponse, p: { t: PaymentMethodTypeId.CHECKOUT, i: paymentResult?.id, c: paymentResult?.customer?.id, }, })
                 }
 
                 if (that.state.threeDSEnabled) {
@@ -244,7 +207,9 @@ class CheckoutPaymentButton extends BasePaymentButton {
                 }
               }
             }).catch((error: any) => {
-              console.log(error)
+              //console.log(error)
+              uiContext?.hideOverlayLoaderState()
+              dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
             })
           } else {
             uiContext?.hideOverlayLoaderState()
@@ -261,7 +226,9 @@ class CheckoutPaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { dispatchState }: any = this.props
+    const { dispatchState, setPaymentType, setPartialAmount }: any = this.props
+    setPaymentType(PaymentSelectionType.FULL)
+    setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
 
     if (this.props?.paymentModeLoadedCallback) {
@@ -277,11 +244,8 @@ class CheckoutPaymentButton extends BasePaymentButton {
    */
   public render() {
     const that = this
-    const { uiContext, translate } = this.props
-    const publicKey = super.getPaymentMethodSetting(
-      this?.state?.paymentMethod,
-      'accountcode'
-    )
+    const { uiContext, translate, basketOrderInfo: basketOrderInfoFromProps } = this.props
+    const publicKey = super.getPaymentMethodSetting(this?.state?.paymentMethod, 'accountcode')
     const config = {
       debug: process.env.NODE_ENV === 'development',
       publicKey: publicKey,
@@ -297,60 +261,62 @@ class CheckoutPaymentButton extends BasePaymentButton {
 
     return (
       <>
-        {!this.state.confirmed &&
-          this.baseRender({
-            ...this?.props,
-            ...{
-              onPay: async (
-                paymentMethod: any,
-                basketOrderInfo: any,
-                uiContext: any,
-                dispatchState: Function
-              ) => {
-                uiContext?.setOverlayLoaderState({
-                  visible: true,
-                  message: translate('common.message.loaderLoadingText'),
-                })
-                that.setState({ confirmed: true })
-              },
-            },
-          })}
+        {!this.state.confirmed && (
+          <>
+            {!this.isAlreadyUsedForPartialPayment() && (
+              <>
+                {this.baseRender({
+                  ...this?.props,
+                  ...{
+                    onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => {
+                      debugger
+                      basketOrderInfo = basketOrderInfo || basketOrderInfoFromProps
+                      dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+    
+                      const amountToBePaid = that.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (that.props?.partialAmount || 0)
+                      if (amountToBePaid <= 0) {
+                        const errMsg = translate('common.message.checkout.paymentAmountRequiredErrorMsg')
+                        dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+                        return
+                      }
+
+                      const validateAmount = that.isValidPaymentAmount(basketOrderInfo, that.props)
+                      if (validateAmount) {
+                        const errMsg = stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount })
+                        dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+                        return
+                      }
+                      uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.message.loaderLoadingText'), })
+                      that.setState({ confirmed: true })
+                    },
+                  },
+                })}
+              </>
+            )}
+          </>
+        )}
 
         {this.state.confirmed && !this.state.formLoaded && (
-          <Script
-            src={Payments.CHECKOUT_FRAMES_SCRIPT_SRC_V2}
-            strategy="lazyOnload"
-            onReady={() => that.onScriptReady()}
-          />
+          <Script src={Payments.CHECKOUT_FRAMES_SCRIPT_SRC_V2} strategy="lazyOnload" onReady={() => that.onScriptReady()} />
         )}
 
         {that.state?.scriptLoaded && (
           <div className="checkout-frame-container">
-            <h5 className="mb-6 font-semibold text-black font-18">
-              {translate('label.checkout.debitCreditDetailsText')}
-            </h5>
+            <h5 className="mb-6 font-semibold text-black font-18"> {translate('label.checkout.debitCreditDetailsText')} </h5>
             <Frames
               config={config}
               ready={() => that.onFrameReady()}
               frameValidationChanged={(ev: any) => {
                 if (that.state.validations?.length === 0) {
-                  that.setState({
-                    validations: [ev],
-                  })
+                  that.setState({ validations: [ev], })
                 } else {
-                  const findElem = that.state.validations.find(
-                    (x: any) => x?.element === ev.element
-                  )
+                  const findElem = that.state.validations.find((x: any) => x?.element === ev.element)
                   if (!findElem) {
-                    that.setState({
-                      validations: that.state.validations.concat([ev]),
-                    })
+                    that.setState({ validations: that.state.validations.concat([ev]), })
                   } else {
                     findElem.isEmpty = ev.isEmpty
                     findElem.isValid = ev.isValid
-                    that.setState({
-                      validations: that.state.validations.concat([findElem]),
-                    })
+                    that.setState({ validations: that.state.validations.concat([findElem]), })
                   }
                 }
               }}
@@ -369,22 +335,14 @@ class CheckoutPaymentButton extends BasePaymentButton {
                 <CardNumber />
 
                 {that.state.validations.length > 0 &&
-                  that.state.validations.find(
-                    (x: any) => x?.element === ELEM_CARD_NUMBER
-                  ) &&
-                  that.state.validations.find(
-                    (x: any) => x?.element === ELEM_CARD_NUMBER
-                  )?.isEmpty ? (
+                  that.state.validations.find((x: any) => x?.element === ELEM_CARD_NUMBER) &&
+                  that.state.validations.find((x: any) => x?.element === ELEM_CARD_NUMBER)?.isEmpty ? (
                   <span className="text-red-600">Card number is required</span>
                 ) : (
                   <>
                     {that.state.validations.length > 0 &&
-                      that.state.validations.find(
-                        (x: any) => x?.element === ELEM_CARD_NUMBER
-                      ) &&
-                      !that.state.validations.find(
-                        (x: any) => x?.element === ELEM_CARD_NUMBER
-                      )?.isValid && (
+                      that.state.validations.find((x: any) => x?.element === ELEM_CARD_NUMBER) &&
+                      !that.state.validations.find((x: any) => x?.element === ELEM_CARD_NUMBER)?.isValid && (
                         <span className="text-red-600">
                           Card number is invalid
                         </span>
@@ -398,24 +356,16 @@ class CheckoutPaymentButton extends BasePaymentButton {
                   <ExpiryDate />
 
                   {that.state.validations.length > 0 &&
-                    that.state.validations.find(
-                      (x: any) => x?.element === ELEM_EXPIRY_DATE
-                    ) &&
-                    that.state.validations.find(
-                      (x: any) => x?.element === ELEM_EXPIRY_DATE
-                    )?.isEmpty ? (
+                    that.state.validations.find((x: any) => x?.element === ELEM_EXPIRY_DATE) &&
+                    that.state.validations.find((x: any) => x?.element === ELEM_EXPIRY_DATE)?.isEmpty ? (
                     <span className="text-red-600">
                       Expiry date is required
                     </span>
                   ) : (
                     <>
                       {that.state.validations.length > 0 &&
-                        that.state.validations.find(
-                          (x: any) => x?.element === ELEM_EXPIRY_DATE
-                        ) &&
-                        !that.state.validations.find(
-                          (x: any) => x?.element === ELEM_EXPIRY_DATE
-                        )?.isValid && (
+                        that.state.validations.find((x: any) => x?.element === ELEM_EXPIRY_DATE) &&
+                        !that.state.validations.find((x: any) => x?.element === ELEM_EXPIRY_DATE)?.isValid && (
                           <span className="text-red-600">
                             Expiry date is invalid
                           </span>
@@ -431,22 +381,14 @@ class CheckoutPaymentButton extends BasePaymentButton {
                   </span>
 
                   {that.state.validations.length > 0 &&
-                    that.state.validations.find(
-                      (x: any) => x?.element === ELEM_CVV
-                    ) &&
-                    that.state.validations.find(
-                      (x: any) => x?.element === ELEM_CVV
-                    )?.isEmpty ? (
+                    that.state.validations.find((x: any) => x?.element === ELEM_CVV) &&
+                    that.state.validations.find((x: any) => x?.element === ELEM_CVV)?.isEmpty ? (
                     <span className="text-red-600">CVV is required</span>
                   ) : (
                     <>
                       {that.state.validations.length > 0 &&
-                        that.state.validations.find(
-                          (x: any) => x?.element === ELEM_CVV
-                        ) &&
-                        !that.state.validations.find(
-                          (x: any) => x?.element === ELEM_CVV
-                        )?.isValid && (
+                        that.state.validations.find((x: any) => x?.element === ELEM_CVV) &&
+                        !that.state.validations.find((x: any) => x?.element === ELEM_CVV)?.isValid && (
                           <span className="text-red-600">CVV is invalid</span>
                         )}
                     </>
@@ -460,18 +402,7 @@ class CheckoutPaymentButton extends BasePaymentButton {
                     ...that?.props,
                     ...{
                       disabled: that.state.disabledFormSubmit,
-                      onPay: (
-                        paymentMethod: any,
-                        basketOrderInfo: any,
-                        uiContext: any,
-                        dispatchState: Function
-                      ) =>
-                        that.onCapturePayment(
-                          that.state.paymentMethod,
-                          basketOrderInfo,
-                          uiContext,
-                          dispatchState
-                        ),
+                      onPay: (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function ) => that.onCapturePayment(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
                       btnTitle: translate('label.checkout.payText'),
                     },
                   })}

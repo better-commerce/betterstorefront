@@ -22,10 +22,11 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   if (pageProps?.notFound) {
     if (process.env.npm_lifecycle_event === 'build') {
       return {
-        notFound: true
+        notFound: true,
+        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
       }
     }
-    return notFoundRedirect();
+    return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), };
   }
 
   if (pageProps?.isRedirect) {
@@ -34,6 +35,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
         destination: pageProps?.redirect,
         permanent: false,
       },
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
     }
   }
 

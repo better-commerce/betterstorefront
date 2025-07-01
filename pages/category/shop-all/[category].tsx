@@ -2,18 +2,12 @@ import { useReducer, useState, useEffect } from 'react'
 import Link from 'next/link'
 import NextHead from 'next/head'
 import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic'
 import useSwr from 'swr'
-import axios from 'axios'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/navigation'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { Redis } from '@framework/utils/redis-constants'
 import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
-import { getCategoryProducts } from '@framework/api/operations'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection, } from 'framework/utils/app-util'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { maxBasketItemsCount, setPageScroll, notFoundRedirect, logError } from '@framework/utils/app-util'
@@ -22,35 +16,18 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { postData } from '@components/utils/clientFetcher'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
-import CompareSelectionBar from '@components/Product/ProductCompare/compareSelectionBar'
 import { useUI } from '@components/ui'
-import { CURRENT_THEME, EmptyGuid, EmptyObject, EmptyString, EngageEventTypes, NEXT_GET_CATALOG_PRODUCTS, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { CURRENT_THEME, EmptyObject, EmptyString, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { PHASE_PRODUCTION_BUILD } from 'next/constants'
-import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
-const ProductCard = dynamic(() => import('@components/ProductCard'))
-const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
-const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { Guid } from '@commerce/types'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import FeaturedCategory from '@components/category/FeaturedCategory'
-import FeaturedBanner from '@components/category/FeaturedBanner'
-import LandingFeaturedCategory from '@components/category/LandingFeaturedCategory'
-import FeaturedBrand from '@components/category/FeaturedBrand'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import BrandFilterTop from '@components/Product/Filters/BrandFilterTop'
-import Loader from '@components/Loader'
 import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { AnalyticsEventType } from '@components/services/analytics'
-import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
+import CategoryList from '@components/category/CategoryList'
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -105,6 +82,7 @@ export async function getStaticProps(context: any) {
           destination: errorUrl,
           permanent: false,
         },
+        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
       }
     }
   }
@@ -144,13 +122,13 @@ export async function getStaticProps(context: any) {
 
   if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
     if (categorySlugUIDData?.status === "NotFound") {
-      return notFoundRedirect()
+      return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), }
     }
   }
 
   if (categorySlugUIDData && categorySlugUIDData?.id) {
     if (!categoryProductUIDData) {
-      const categoryProductUIDData = await getCategoryProducts(categorySlugUIDData?.id, { [Cookie.Key.LANGUAGE]: locale })
+      const categoryProductUIDData = await commerce.getCategoryProducts(categorySlugUIDData?.id, { [Cookie.Key.LANGUAGE]: locale })
       await setData([{ key: cachedDataUID.categoryProductUID, value: categoryProductUIDData }])
       return {
 
@@ -539,6 +517,10 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
   const onToggleBrandListPage = () => {
     router.push(`/category/shop-all/${slug?.replace('category/', '')}`)
   }
+  const filterBrandData = ({ key, brand }: any) => {
+    clearAll()
+    dispatch({ type: PAGE, payload: 1 })
+  }
   const breadCrumbData: any = [
     {
       "slug": {
@@ -568,119 +550,56 @@ function CategoryLandingPage({ category, slug, products, deviceInfo, config, fea
         <meta property="og:description" content={category?.metaDescription} key="ogdesc" />
       </NextHead>
       <section className="main-section fixing-main-section dark:bg-white">
-        <div className="container mx-auto mt-2 bg-transparent dark:bg-white">
-          <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <Link href="/category" passHref>
-                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Category</span>
-              </Link>
-            </li>
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-              </span>
-            </li>
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <Link href={`/${category?.link}`} passHref>
-                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {category?.name}</span>
-              </Link>
-            </li>
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-              </span>
-            </li>
-            <li className='flex items-center text-10-mob sm:text-sm'>
-              <Link href="#" passHref>
-                <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {category?.name}</span>
-              </Link>
-            </li>
-          </ol>
-        </div>
-        <div className="container">
-          <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-            <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
-              {category?.name.toLowerCase()}
-            </h1>
-            {category?.description &&
-              <div className='w-full'>
-                <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2' : 'text-sm mt-4'}`}>
-                  <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
-                </span>
-              </div>
-            }
-          </div>
-        </div>
-        <div className="container mx-auto">
-          {category?.subCategories?.filter((x: any) => x.isFeatured == true).length > 0 &&
-            <FeaturedCategory featuredCategory={category?.subCategories} />
-          }
-          {category?.featuredBrand?.length > 0 &&
-            <BrandFilterTop featuredBrand={category?.featuredBrand} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-          }
-          {productDataToPass?.results?.length > 0 &&
-            <>
-              <div className='flex justify-between w-full pb-2 mt-1 mb-2 align-center'>
-                <span className="inline-block mt-2 text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text">  {productDataToPass?.total} {productDataToPass?.total > 1 ? translate('common.label.itemPluralText') : translate('common.label.itemSingularText')}</span>
-                <div className="flex justify-end align-bottom">
-                  <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
-                </div>
-              </div>
-              <hr className='border-slate-200 dark:border-slate-200' />
-            </>
-          }
-          {productDataToPass?.results?.length > 0 ? (
-            <div className="grid grid-cols-1 mx-auto sm:grid-cols-12">
-              {isValidating ? (
-                <Loader />
-              ) : (
-                <>
-                  {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
-                    <>
-                      {isMobile ? (
-                        <ProductMobileFilters handleFilters={handleFilters} products={products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      ) : (
-                        <>
-                          {!featureToggle?.features?.enableHorizontalFilter ? (
-                            <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                          ) : (
-                            <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                          )}
-                        </>
-                      )}
-                      <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9'}`}>
-                        {isMobile ? null : (
-                          <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                        )}
-                        <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                      </div>
-                    </>
-                  ) : (
-                    <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
-                      <ProductFiltersTopBar products={productDataToPass} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    </div>
-                  ))}
-                </>
-              )}
-              <CompareSelectionBar name={category?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} />
-              <div className='flex flex-col w-full col-span-12 overflow-hidden'>
-                <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
-                <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+        {!featureToggle.features?.enableForPCSite &&
+          <>
+            <div className="container mx-auto my-2 bg-transparent dark:bg-white">
+              <div className="mt-2 bg-transparent dark:bg-white">
+                <ol role="list" className="flex items-center space-x-0 truncate sm:mb-4 sm:space-x-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                  <li className='flex items-center text-10-mob sm:text-sm'>
+                    <Link href="/category" passHref>
+                      <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">Category</span>
+                    </Link>
+                  </li>
+                  <li className='flex items-center text-10-mob sm:text-sm'>
+                    <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                      <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                    </span>
+                  </li>
+                  <li className='flex items-center text-10-mob sm:text-sm'>
+                    <Link href={`/${category?.link}`} passHref>
+                      <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500" > {category?.name}</span>
+                    </Link>
+                  </li>
+                  <li className='flex items-center text-10-mob sm:text-sm'>
+                    <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                      <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                    </span>
+                  </li>
+                  <li className='flex items-center text-10-mob sm:text-sm'>
+                    <Link href="#" passHref>
+                      <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > All {category?.name}</span>
+                    </Link>
+                  </li>
+                </ol>
               </div>
             </div>
-          ) : (
-            <div className="p-4 py-8 mx-auto text-center sm:p-32 max-w-7xl">
-              <h4 className="text-3xl font-bold text-gray-300">
-                {translate('common.label.noProductAvailableText')} {category?.name}
-              </h4>
+            <div className="container">
+              <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+                <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+                  {category?.name.toLowerCase()}
+                </h1>
+                {category?.description &&
+                  <div className='w-full'>
+                    <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`}>
+                      <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-sm mt-2 mb-2' : 'text-sm mt-4'}`} dangerouslySetInnerHTML={{ __html: category?.description }} ></span>
+                    </span>
+                  </div>
+                }
+              </div>
             </div>
-          )}
-        </div>
+          </>
+        }
+        <CategoryList shopAll={true} featureToggle={featureToggle} category={category} handleFilters={handleFilters} productDataToPass={productDataToPass} state={state} data={data} excludeOOSProduct={excludeOOSProduct} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} isCompared={isCompared} defaultDisplayMembership={defaultDisplayMembership} closeCompareProducts={closeCompareProducts} onEnableOutOfStockItems={onEnableOutOfStockItems} isValidating={isValidating} isMobile={isMobile} products={products} handleSortBy={handleSortBy} clearAll={clearAll} removeFilter={removeFilter} isProductCompare={isProductCompare} showCompareProducts={showCompareProducts} handlePageChange={handlePageChange} campaignData={campaignData} />
       </section>
     </>
   )

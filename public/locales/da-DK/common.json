@@ -84,6 +84,8 @@
             "addedText": "tilføjet",
             "noBasketAvailableText": "Ingen kurv tilgængelig, opret venligst en ny",
             "totalAmountText": "Samlet beløb",
+            "orderAmountText": "Ordrebeløb",
+            "pendingOrderAmountText": "Afventende beløb",
             "checkoutBtnText": "Gå til betaling",
             "multipleCodesApplyText": "Du kan anvende flere koder",
             "getItByText": "Få det inden",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV er påkrævet",
                 "cvvInvalidText": "CVV er ugyldig",
                 "chequeNoText": "Checknummer",
-                "chequeNumberLabelText": "Checknummer"
+                "chequeNumberLabelText": "Checknummer",
+                "enterAmountToPayLabelText": "Indtast beløb, der skal betales fra {paymentMethodName}"
             }
         },
         "collection": {
@@ -463,6 +466,7 @@
                 "productRequired": "Mindst ét produkt er påkrævet"
             },
             "myDetailsHeadingText": "Min profil",
+            "tradeInText":"Byttehandel",
             "editYourDetailsText": "Du kan frit redigere dine oplysninger nedenfor, så din konto er fuldt opdateret.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ups! Fejl under hentning af returneringer"
@@ -504,7 +508,38 @@
             "noLookbookAvaiableText": "Ingen Lookbook tilgængelig",
             "shopTheLookText": "Shop looket",
             "confirmPasswordText": "Bekræft adgangskode",
-            "addNewUserText": "Tilføj ny bruger"
+            "addNewUserText": "Tilføj ny bruger",
+            "myTradeInText": "Min Trade In",
+            "quoteText": "Tilbud",
+            "createdText": "Oprettet",
+            "tradeInSectionFeedbackMessage": "Vi håber du kan lide vores nye Trade In-sektion på hjemmesiden. Vi arbejder stadig på forbedringer, men hvis du oplever noget, der ikke fungerer som forventet, bedes du sende os en e-mail med skærmbilleder (hvis muligt) til",
+            "queryEmailInstruction": "Hvis du har en forespørgsel, bedes du sende en e-mail til",
+            "myWalletText": "Min Pung",
+            "walletActivationMessage": "Vent venligst mens vi aktiverer din pung og genererer punginformation.",
+            "transferToBankText": "Overfør til Bank",
+            "addBankDetailsText": "Tilføj Bankoplysninger",
+            "enableWalletText": "Aktivér Pung",
+            "walletCurrentBalanceText": "Pungens Nuværende Saldo",
+            "walletTransactionHistoryText": "Pungens Transaktionshistorik",
+            "dateText": "Dato",
+            "amountText": "Beløb",
+            "referenceText": "Reference",
+            "noTransactionHistoryMessage": "Ingen transaktionshistorik tilgængelig.",
+            "noBankTransferHistoryText": "Ingen bankoverførsel tilgængelig",
+            "bankTransferHistoryText": "Bankoverførsel Historik",
+            "bankNameText": "Banknavn",
+            "AccountNoText": "Kontonr.",
+            "sortCodeText": "Sorteringskode",
+            "walletDisabledMessage": "Pung er deaktiveret. Aktivér den for at se saldo og transaktioner.",
+            "roleRequiredText": "Rolle er påkrævet",
+            "selectRoleText": "Vælg en rolle",
+            "zoneRequiredText": "Zone er påkrævet",
+            "selectZoneText": "Vælg en zone",
+            "branchRequiredText": "Filial er påkrævet",
+            "selectBranchText": "Vælg en filial",
+            "countryRequiredText": "Land er påkrævet",
+            "selectCountryText": "Vælg et land",
+            "iAmIntrestedInText": "Jeg er interesseret i"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -598,6 +633,7 @@
             "freeText": "Gratis",
             "additionalChargesText": "Yderligere gebyrer",
             "taxText": "Moms",
+            "paidText": "Betalt",
             "youPayText": "Du betaler",
             "placeOrderBtnText": "Læg ordre",
             "loseDeliveryText": "Du er ved at miste gratis levering!",
@@ -1318,6 +1354,7 @@
             "userAlreadyExistsErrorMsg": "Bruger eksisterer allerede",
             "tokenInvalidErrorMsg": "Ups! Token er ugyldigt",
             "tokenExpiredErrorMsg": "Ups! Token er udløbet eller ugyldigt",
+            "sessionExpiredErrorMsg": "Din session er udløbet. Log venligst ind igen.",
             "companyNotFoundErrorMsg": "Virksomhed ikke fundet.",
             "cartItemMaxAddedErrorMsg": "Kurvgrænse for varer er nået. Fjern venligst nogle varer og prøv igen.",
             "addressAddedSuccessfullyMsg": "Ny adresse blev tilføjet med succes",
@@ -1373,7 +1410,12 @@
                 "upiNotSupportedErrorMsg": "UPI-betaling understøttes ikke.",
                 "paymentAlreadyCompletedErrorMsg": "Betalingen for din kurv er allerede gennemført.",
                 "notEnoughCreditErrorMsg": "Ikke nok kredit tilgængelig.",
-                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden understøttes ikke."
+                "walletNotFoundErrorMsg": "Pung ikke fundet.",
+                "notEnoughBalanceErrorMsg": "Ikke nok saldo tilgængelig.",
+                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden understøttes ikke.",
+                "paymentAmountRequiredErrorMsg": "Betalingsbeløb er påkrævet.",
+                "paymentAmountMinValueErrorMsg": "Minimumsbetalingsbeløbet er {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Betalingsværdien kan ikke overstige {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Adgangskode skal have mindst 8 tegn og mindst 1 stort bogstav.",

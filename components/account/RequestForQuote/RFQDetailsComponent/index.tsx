@@ -129,7 +129,7 @@ export default function RFQDetailsComponent({ rfqId, rfqData, fetchRFQData }: an
             <div className="flex flex-col"><hr className="my-2 border-dashed border-slate-200 dark:border-slate-700" /></div>
             <div className="flex flex-col w-full my-4">
                 <h4 className="font-bold text-18 text-secondary-full-opacity ">{translate('label.myAccount.rfq.lineItems')}</h4>
-                <div className="mt-4 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                <div className="mt-4 overflow-x-auto sm:overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                     <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                             <tr>

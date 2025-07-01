@@ -23,7 +23,8 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       brandId = '',
       pageSize = 20,
       stockCodes = [],
-      excludeOOSProduct = true
+      excludeOOSProduct = true,
+      includeFreeProduct = true,
     } = query
     const data: any = {
       freeText,
@@ -37,7 +38,8 @@ export default function getAllProductsOperation({}: OperationContext<any>) {
       categoryId,
       brandId,
       stockCodes,
-      excludeOOSProduct
+      excludeOOSProduct,
+      includeFreeProduct
     }
 
     if (filters?.length) {

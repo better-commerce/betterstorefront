@@ -62,10 +62,7 @@ export default function ProductCompare({
                   <div className="sticky top-0 z-10 flex items-start justify-between w-full px-6 border py-7 bg-sky-100">
                     <div className="container flex items-center justify-between mx-auto">
                       <Dialog.Title className="flex items-center gap-5 text-lg font-medium uppercase">
-                        <ArrowLeftIcon
-                          onClick={() => closeCompareProducts()}
-                          className="w-4 h-4 text-black"
-                        />{' '}
+                        <ArrowLeftIcon onClick={() => closeCompareProducts()} className="w-4 h-4 text-black" />{' '}
                         {translate('label.product.comparingItemsText1')} {products?.length} {translate('common.label.itemSingularText')}
                       </Dialog.Title>
                       <div className="flex items-center ml-3 h-7">
@@ -80,7 +77,7 @@ export default function ProductCompare({
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-12 md:grid-cols-12 sm:grid-cols-3">
                       <div className="md:col-span-2 sm:col-span-1">
                         <div className="flex flex-col items-start justify-start w-full p-2 text-left">
-                          <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent min-h-[370px]"></div>
+                          <div className="sticky top-0 z-10 flex flex-col w-full bg-transparent min-h-[400px]"></div>
                           <span className="flex items-center justify-start w-full pb-3 my-3 font-medium text-left text-black font-14">
                             {translate('common.label.ratingsText')}
                           </span>
@@ -95,25 +92,7 @@ export default function ProductCompare({
                         </div>
                       </div>
                       <div className="md:col-span-10 sm:col-span-2">
-                        <Swiper
-                          spaceBetween={10}
-                          slidesPerView={1.1}
-                          navigation={false}
-                          loop={false}
-                          breakpoints={{
-                            640: {
-                              slidesPerView: 2.5,
-                            },
-                            768: {
-                              slidesPerView: 2.5,
-                            },
-                            1024: {
-                              slidesPerView: 5.2,
-                            },
-                          }}
-                          className="grid grid-cols-5 gap-3 mySwier"
-                        >
-                          {' '}
+                        <Swiper spaceBetween={10} slidesPerView={1.1} navigation={false} loop={false} breakpoints={{ 640: { slidesPerView: 2.5, }, 768: { slidesPerView: 2.5, }, 1024: { slidesPerView: 5.2, }, }} className="grid grid-cols-5 gap-3 mySwier" >
                           {products?.map((product: any, productIdx: number) => (
                             <div key={`compare-product-${productIdx}`}>
                               <SwiperSlide>

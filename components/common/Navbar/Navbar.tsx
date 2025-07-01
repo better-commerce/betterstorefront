@@ -420,7 +420,7 @@ const Navbar: FC<Props & IExtraProps> = ({ config, configSettings, currencies, l
               ))}
             </Popover.Group>
           )}
-          <div className="flex items-center justify-end flex-1 cart-icon-dark-white">
+          <div className="flex items-center justify-end flex-1 cart-icon-dark-white border-pc">
             <Searchbar onClick={setShowSearchBar} keywords={keywords} />
             <Account title={title} config={accountDropdownConfig} deviceInfo={deviceInfo} />
             <div className="hidden sm:flex ">

@@ -1,7 +1,8 @@
 import { useTranslation } from '@commerce/utils/use-translation'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { memo } from 'react'
 
-export default function InfiniteScrollComponent({ component, total, fetchData, currentNumber }: any) {
+function InfiniteScrollComponent({ component, total, fetchData, currentNumber }: any) {
   const translate = useTranslation()
   return (
     <InfiniteScroll
@@ -19,3 +20,6 @@ export default function InfiniteScrollComponent({ component, total, fetchData, c
     </InfiniteScroll>
   )
 }
+
+// Memoize the component to prevent unnecessary re-renders
+export default memo(InfiniteScrollComponent)

@@ -1,30 +1,27 @@
 // Package Imports
 import { withTranslation } from 'react-i18next'
 import { Stripe, StripeElements } from '@stripe/stripe-js'
-import {
-  Elements,
-  ElementsConsumer,
-  PaymentElement,
-} from '@stripe/react-stripe-js'
+import { Elements, ElementsConsumer, PaymentElement, } from '@stripe/react-stripe-js'
 
 // Component Imports
-import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
+import BasePaymentButton, { IDispatchState, IPartialPaymentProps } from './BasePaymentButton'
 import { IPaymentButtonProps } from './BasePaymentButton'
 
 // Other Imports
 import { EmptyString, Messages } from '@components/utils/constants'
 import getStripe from '@components/utils/get-stripe'
 import { initPayment } from '@framework/utils/payment-util'
-import { PaymentMethodType } from 'bc-payments-sdk'
+import { PaymentMethodType, PaymentSelectionType } from 'bc-payments-sdk'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
+import { stringFormat } from '@framework/utils/parse-util'
 
 class StripePaymentButton extends BasePaymentButton {
   /**
    * CTor
    * @param props
    */
-  constructor(props: IPaymentButtonProps & IDispatchState) {
+  constructor(props: IPaymentButtonProps & IDispatchState & IPartialPaymentProps) {
     super(props)
     this.state = {
       paymentMethod: super.getPaymentMethod(props?.paymentMethod),
@@ -41,68 +38,42 @@ class StripePaymentButton extends BasePaymentButton {
    * @param uiContext {Object} Object for accessing global state context.
    * @param dispatchState {Function} Method for dispatching state changes.
    */
-  private async onPay(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    dispatchState: Function
-  ) {
-    const { translate }: any = this.props
-    uiContext?.setOverlayLoaderState({
-      visible: true,
-      message: translate('common.label.initiatingOrderText'),
-    })
+  private async onPay(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) {
+    const { translate, paymentType, partialAmount }: any = this.props
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
 
-    const { state, result: orderResult } = await super.confirmOrder(
-      paymentMethod,
-      basketOrderInfo,
-      uiContext,
-      dispatchState
-    )
+    const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+    if (amountToBePaid <= 0) {
+      const errMsg = translate('common.message.checkout.paymentAmountRequiredErrorMsg')
+      dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+      return Promise.reject(new Error(errMsg));
+    }
+
+    const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+    if (validateAmount) {
+      const errMsg = stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount })
+      dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+      return Promise.reject(new Error(errMsg));
+    }
+    uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
+
+    const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
       super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.STRIPE)
-      const {
-        id: orderId,
-        orderNo,
-        grandTotal,
-        currencyCode,
-      } = orderResult?.result
+      const { id: orderId, orderNo, grandTotal, currencyCode, } = orderResult?.result
       const stripePromise = getStripe()
-      const appearance = {
-        theme: 'stripe',
-      }
-      const data = {
-        amount: grandTotal.raw.withTax,
-        currency: currencyCode,
-        receipt_email: uiContext?.user?.email,
-        description: `Order ${orderId} for basket ${basketOrderInfo?.basketId}`,
-      }
-      uiContext?.setOverlayLoaderState({
-        visible: true,
-        message: translate('common.label.initiatingPaymentText'),
-      })
-      const clientResult: any = await initPayment(
-        this.state?.paymentMethod?.systemName,
-        data
-      )
-      this.setState({
-        clientSecret: clientResult?.client_secret,
-        stripePromise: stripePromise,
-        stripeOptions: {
-          clientSecret: clientResult?.client_secret,
-          appearance,
-        },
-      })
+      const appearance = { theme: 'stripe', }
+      const data = { amount: grandTotal.raw.withTax, currency: currencyCode, receipt_email: uiContext?.user?.email, description: `Order ${orderId} for basket ${basketOrderInfo?.basketId}`, metadata: { orderId, paymentType, partialAmount }, }
+      uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingPaymentText'), })
+      const clientResult: any = await initPayment(this.state?.paymentMethod?.systemName, data)
+      this.setState({ clientSecret: clientResult?.client_secret, stripePromise: stripePromise, stripeOptions: { clientSecret: clientResult?.client_secret, appearance, }, })
       uiContext?.hideOverlayLoaderState()
     } else {
       uiContext?.hideOverlayLoaderState()
       if (state) {
         dispatchState(state)
       } else {
-        dispatchState({
-          type: 'SET_ERROR',
-          payload: translate('common.message.requestCouldNotProcessErrorMsg'),
-        })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
   }
@@ -117,14 +88,7 @@ class StripePaymentButton extends BasePaymentButton {
    * @param elements {Object}
    * @returns
    */
-  private async onCapturePayment(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    dispatchState: Function,
-    stripe: Stripe,
-    elements: StripeElements
-  ) {
+  private async onCapturePayment(paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function, stripe: Stripe, elements: StripeElements) {
     const { translate }: any = this.props
     // Block native form submission.
     if (!stripe || !elements) {
@@ -135,10 +99,7 @@ class StripePaymentButton extends BasePaymentButton {
 
     const submitResult = await elements.submit()
     if (!submitResult?.error) {
-      uiContext?.setOverlayLoaderState({
-        visible: true,
-        message: translate('common.label.pleaseWaitText'),
-      })
+      uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.pleaseWaitText'), })
       const returnUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
 
       // Get a reference to a mounted CardElement. Elements knows how
@@ -156,10 +117,7 @@ class StripePaymentButton extends BasePaymentButton {
 
       if (error) {
         uiContext?.hideOverlayLoaderState()
-        dispatchState({
-          type: 'SET_ERROR',
-          payload: translate('common.message.requestCouldNotProcessErrorMsg'),
-        })
+        dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
       }
     }
   }
@@ -168,7 +126,9 @@ class StripePaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { dispatchState }: any = this.props
+    const { dispatchState, setPaymentType, setPartialAmount }: any = this.props
+    setPaymentType(PaymentSelectionType.FULL)
+    setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
   }
 
@@ -182,29 +142,22 @@ class StripePaymentButton extends BasePaymentButton {
 
     return (
       <>
-        {!this.state.clientSecret &&
-          this.baseRender({
-            ...this?.props,
-            ...{
-              onPay: async (
-                paymentMethod: any,
-                basketOrderInfo: any,
-                uiContext: any,
-                dispatchState: Function
-              ) =>
-                await that.onPay(
-                  that.state.paymentMethod,
-                  basketOrderInfo,
-                  uiContext,
-                  dispatchState
-                ),
-            },
-          })}
+        {!this.state.clientSecret && (
+          <>
+            {!that.isAlreadyUsedForPartialPayment() && (
+              <>
+                {this.baseRender({
+                  ...this?.props,
+                  ...{
+                    onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onPay(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
+                  },
+                })}
+              </>
+            )}
+          </>
+        )}
         {this.state.stripeOptions && (
-          <Elements
-            stripe={this.state.stripePromise}
-            options={this.state.stripeOptions}
-          >
+          <Elements stripe={this.state.stripePromise} options={this.state.stripeOptions}>
             <ElementsConsumer>
               {({ stripe, elements }: any) => (
                 <form id="payment-form">
@@ -213,20 +166,7 @@ class StripePaymentButton extends BasePaymentButton {
                   {this.baseRender({
                     ...this?.props,
                     ...{
-                      onPay: async (
-                        paymentMethod: any,
-                        basketOrderInfo: any,
-                        uiContext: any,
-                        dispatchState: Function
-                      ) =>
-                        await that.onCapturePayment(
-                          that.state.paymentMethod,
-                          basketOrderInfo,
-                          uiContext,
-                          dispatchState,
-                          stripe,
-                          elements
-                        ),
+                      onPay: async (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => await that.onCapturePayment(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState, stripe, elements),
                       disabled: !stripe || !elements,
                       btnTitle: translate('label.checkout.payText'),
                     },

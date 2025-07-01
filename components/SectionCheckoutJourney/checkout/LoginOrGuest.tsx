@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { DeliveryType, EmptyString, Messages, } from '@components/utils/constants'
+import { DeliveryType, EmptyString, Messages, CURRENT_THEME  } from '@components/utils/constants'
 import { LoadingDots, useUI } from '@components/ui'
 import { guestLoginCheckout2Schema } from './config'
 import ShippingAddressForm from './ShippingAddressForm'
@@ -54,10 +54,7 @@ const LoginOrGuest: React.FC<any> = ({
       .string()
       .min(8, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
       .max(24, Messages.Validations.Login['PASSWORD_MIN_LENGTH_MESSAGE'])
-      .required(Messages.Validations.ResetPassword['PASSWORD_REQUIRED_MESSAGE'])
-      .matches(Messages.Validations.RegularExpressions.PASSWORD_VALIDATION, {
-        message: Messages.Validations.ResetPassword.PASSWORD_VALIDATION_MESSAGE,
-      }),
+      .required(Messages.Validations.ResetPassword['PASSWORD_REQUIRED_MESSAGE']),
   })
   const loginCheckoutFormik = useFormik({
     initialValues: {
@@ -109,9 +106,11 @@ const LoginOrGuest: React.FC<any> = ({
           billingCountries={billingCountries}
           searchAddressByPostcode={searchAddressByPostcode}
           onSubmit={onSubmit}
+          featureToggle={featureToggle}
           useSameForBilling={false}
           shouldDisplayEmail={false}
           appConfig={appConfig}
+
         />
       )
     } else {
@@ -158,7 +157,7 @@ const LoginOrGuest: React.FC<any> = ({
               <span className="font-12 dark:text-black">
                 {translate('label.checkout.checkoutWithoutLoginText')} 
               <button
-                  className="py-4 pl-1 font-semibold text-orange-600"
+                  className={`py-4 pl-1 font-semibold text-orange-600 ${CURRENT_THEME === 'camera' ? 'text-black' : ''}`}
                   onClick={onToggleLoginView}
                 >
                   {isLogin ? translate('label.checkout.guestCheckoutText') :translate('label.checkout.loginText')}
@@ -170,6 +169,12 @@ const LoginOrGuest: React.FC<any> = ({
             className="flex flex-col gap-4"
             onSubmit={loginCheckoutFormik.handleSubmit}
           >
+            <div className='w-full'>
+            {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="email" className="text-sm">
+                   {translate('label.myAccount.emailAddressText')}
+                   </label>
+            )}
             <input
               className="block w-full rounded border-0 h-12 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6 dark:bg-white"
               type="text"
@@ -184,6 +189,13 @@ const LoginOrGuest: React.FC<any> = ({
                   {loginCheckoutFormik.errors.email}
                 </span>
               )}
+            </div>
+            <div className='w-full'>
+            {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="password" className="text-sm">
+                  {translate('label.myAccount.passwordText')}
+                   </label>
+            )}
             <input
               className="block w-full rounded border-0 h-12 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6 dark:bg-white"
               type="password"
@@ -198,13 +210,16 @@ const LoginOrGuest: React.FC<any> = ({
                   {loginCheckoutFormik.errors.password}
                 </span>
               )}
-            <button
+            </div>
+              <div className='w-full'>
+              <button
               type="submit"
-              className="px-1 py-3 btn-c btn-primary disabled:cursor-not-allowed disabled:opacity-60 lg:py-2 sm:px-4"
+              className="w-full px-1 py-3 btn-c btn-width-auto btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 lg:py-2 sm:px-4"
               disabled={loginCheckoutFormik.isSubmitting}
             >
               {loginCheckoutFormik.isSubmitting ? <LoadingDots /> : translate('label.login.loginBtnText')}
             </button>
+              </div>
           </form>
         </>
       ) : (
@@ -219,7 +234,7 @@ const LoginOrGuest: React.FC<any> = ({
               <span className="font-12 dark:text-black">
                 {translate('label.checkout.haveAnAccountText')} 
                 <button
-                  className="py-4 pl-1 font-semibold text-orange-600"
+                  className={`py-4 pl-1 font-semibold text-orange-600 ${CURRENT_THEME === 'camera' ? 'text-black' : ''}`}
                   onClick={onToggleLoginView}
                 >
                   {isLogin ? translate('label.checkout.guestCheckoutText') :translate('label.checkout.loginText')}
@@ -231,6 +246,12 @@ const LoginOrGuest: React.FC<any> = ({
             className="flex flex-col gap-1 my-0 sm:gap-4 sm:my-2"
             onSubmit={guestCheckoutFormik.handleSubmit}
           >
+            <div className='w-full'>
+            {featureToggle?.features?.enableInputLabel  && (
+                    <label htmlFor="email" className="text-sm">
+                   {translate('label.myAccount.emailAddressText')}
+                   </label>
+              )}
             <input
               className="block w-full rounded border-0 h-12 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6 dark:bg-white"
               type="text"
@@ -244,14 +265,17 @@ const LoginOrGuest: React.FC<any> = ({
                 {guestCheckoutFormik.errors.email}
               </span>
             )}
+            </div>
             {featureToggle?.features?.enableCollectDeliveryOption && (
+              <div className="flex justify-end w-full btn-start-sec">
               <button
-                className="border border-black btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn lg:py-2 py-3 sm:px-4 px-1 self-end"
+                className="self-end px-1 py-3 border border-black park-bg-secondary btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn lg:py-2 sm:px-4"
                 type="submit"
                 disabled={guestCheckoutFormik.isSubmitting}
               >
                 {translate('label.checkout.saveAndContinueToDeliveryText')}
               </button>
+              </div>
             )}
           </form>
           {!featureToggle?.features?.enableCollectDeliveryOption && (

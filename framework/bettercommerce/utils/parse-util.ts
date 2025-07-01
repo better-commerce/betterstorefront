@@ -18,6 +18,8 @@ export const stringToBoolean = (stringValue: string | undefined): boolean => {
   if (stringValue) {
     switch (stringValue.toLowerCase()) {
       case 'true':
+      case 'True':
+      case 'TRUE':
       case '1':
       case 'on':
       case 'yes':

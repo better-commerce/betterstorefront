@@ -824,6 +824,9 @@ export const UIProvider: React.FC<any> = (props) => {
         return
       }
       const newCartData = processCartData(payload);
+      if (newCartData?.messageCode && !["C001"].includes(newCartData?.messageCode)) {
+        setAlert({ type: 'error', msg: newCartData?.message })
+      }
       setItem('cartItems', newCartData)
 
       if (newCartData?.lineItems?.length == 0) {
@@ -868,6 +871,10 @@ export const UIProvider: React.FC<any> = (props) => {
   const setUser = useCallback(
     (payload: any) => {
       setItem('user', payload)
+      if (payload?.userId) {
+        Cookies.set(Cookie.Key.SITE_USER_ID, payload?.userId)
+        Cookies.set(Cookie.Key.SITE_USER_HAS_MEMBERSHIP, payload?.hasMembership)
+      }  
       if (payload?.companyId) {
         Cookies.set(Cookie.Key.COMPANY_ID, payload?.companyId)
       } else {
@@ -932,6 +939,8 @@ export const UIProvider: React.FC<any> = (props) => {
 
       const logoutUser = (isSilentLogout: boolean) => {
         removeItem('user')
+        Cookies.remove(Cookie.Key.SITE_USER_ID)
+        Cookies.remove(Cookie.Key.SITE_USER_HAS_MEMBERSHIP)
         dispatch({ type: 'SET_WISHLIST', payload: [] })
         setItem('wishListItems', [])
         setItem('cartItems', { lineItems: [] })

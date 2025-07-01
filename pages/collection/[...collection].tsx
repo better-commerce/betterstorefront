@@ -1,5 +1,5 @@
 // Base Imports
-import { useReducer, useEffect, useState, } from 'react'
+import { useReducer, useEffect, useState, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 
 // Package Imports
@@ -20,23 +20,25 @@ import os from 'os'
 import { postData } from '@components/utils/clientFetcher'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { generateUri, removeQueryString, serverSideMicrositeCookies, } from '@commerce/utils/uri-util'
-import { CURRENT_THEME, EmptyGuid, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
-import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, setPageScroll } from '@framework/utils/app-util'
+import { CURRENT_THEME, EmptyString, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { maxBasketItemsCount, notFoundRedirect, obfuscateHostName, sanitizeRelativeUrl, setPageScroll } from '@framework/utils/app-util'
 import { LoadingDots } from '@components/ui'
 import { IPLPFilterState, useUI } from '@components/ui/context'
-import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import OutOfStockFilter from '@components/Product/Filters/OutOfStockFilter'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
 import { getSecondsInMinutes, } from '@framework/utils/parse-util'
 import { useTranslation } from '@commerce/utils/use-translation'
-const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
-const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'))
-const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'))
-const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'))
-const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'))
-const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'))
-const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
-const PLPFilterSidebar = dynamic(() => import('@components/Product/Filters/PLPFilterSidebarView'))
+import useDebounce from '@commerce/utils/use-debounce'
+// Optimize dynamic imports with loading priority
+const ProductGridWithFacet = dynamic(() => import('@components/Product/Grid'), { ssr: true })
+const ProductGrid = dynamic(() => import('@components/Product/Grid/ProductGrid'), { ssr: true })
+const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'), { ssr: true })
+const ProductFiltersTopBar = dynamic(() => import('@components/Product/Filters/FilterTopBar'), { ssr: false })
+const ProductFilterRight = dynamic(() => import('@components/Product/Filters/filtersRight'), { ssr: false })
+const ProductMobileFilters = dynamic(() => import('@components/Product/Filters'), { ssr: false })
+const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'), { ssr: false })
+const PLPFilterSidebar = dynamic(() => import('@components/Product/Filters/PLPFilterSidebarView'), { ssr: false })
 import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
@@ -47,6 +49,9 @@ import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection }
 import Loader from '@components/Loader'
 import { AnalyticsEventType } from '@components/services/analytics'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
+// import Prices from '@components/Prices' // Unused import
+import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
+import CollectionBanner from '@components/collection/CollectionBanner'
 
 declare const window: any
 export const ACTION_TYPES = {
@@ -111,7 +116,7 @@ function CollectionPage(props: any) {
   const { deviceInfo, config, featureToggle, campaignData, defaultDisplayMembership, } = props
 
   if (!props?.id) {
-    console.log('collection', JSON.stringify(props))
+    //console.log('collection', JSON.stringify(props))
     //return <></>
   }
 
@@ -136,15 +141,19 @@ function CollectionPage(props: any) {
   const { isCompared } = useUI()
   adaptedQuery.currentPage ? (adaptedQuery.currentPage = Number(adaptedQuery.currentPage)) : false
   adaptedQuery.filters ? (adaptedQuery.filters = JSON.parse(adaptedQuery.filters)) : false
-  const initialState = {
+  // Removed duplicate initialState and state declarations
+  // Memoize the initial state to prevent unnecessary recalculations
+  const initialState = useMemo(() => ({
     ...DEFAULT_STATE,
     collectionId: props?.id,
     // Setting initial filters from query string
     filters: filters ? filters : [],
-  }
+  }), [props?.id, filters])
+
   const [state, dispatch] = useReducer(reducer, initialState)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
-  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
+  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0])
+
   const {
     data: collection,
     data = {
@@ -166,6 +175,9 @@ function CollectionPage(props: any) {
     ([url, body]: any) => postData(url, body),
     {
       revalidateOnFocus: false,
+      dedupingInterval: 5000, // Dedupe identical requests within 5 seconds
+      focusThrottleInterval: 10000, // Throttle revalidation on focus
+      errorRetryCount: 3, // Retry failed requests 3 times
     }
   )
 
@@ -211,35 +223,45 @@ function CollectionPage(props: any) {
     setPLPFilterSelection(state?.filters)
   }, [state?.filters])
 
-  const onEnableOutOfStockItems = (val: boolean) => {
+  // Memoize the out of stock items handler
+  const onEnableOutOfStockItems = useCallback((val: boolean) => {
     setExcludeOOSProduct(!val)
     // clearAll()
     dispatch({ type: PAGE, payload: 1 })
-  }
+  }, [])
 
+  // Optimize filter state updates with memoization
   useEffect(() => {
     if (productDataToPass) {
-      setPLPFilterState({
+      const newFilterState = {
         ...plpFilterState,
         filters: productDataToPass?.filters || [],
         sortBy: productDataToPass?.sortBy || '',
         sortList: productDataToPass?.sortList || [],
-        results: productDataToPass?.results?.length || 0, // products length
+        results: productDataToPass?.results?.length || 0,
         total: productDataToPass?.total || 0,
         currentPage: productDataToPass?.currentPage || 0,
         pages: productDataToPass?.pages || 0,
-      })
-    }
-  }, [productDataToPass])
+      }
 
+      // Only update if state has actually changed
+      if (JSON.stringify(newFilterState) !== JSON.stringify(plpFilterState)) {
+        setPLPFilterState(newFilterState)
+      }
+    }
+  }, [productDataToPass, plpFilterState])
+
+  // Optimize loading state updates
   useEffect(() => {
     const loadingState = !error && !collection
-    setPLPFilterState({
-      ...plpFilterState,
-      loading: loadingState,
-    })
-    setSwrLoading(loadingState)
-  }, [error, collection])
+    if (plpFilterState.loading !== loadingState) {
+      setPLPFilterState({
+        ...plpFilterState,
+        loading: loadingState,
+      })
+      setSwrLoading(loadingState)
+    }
+  }, [error, collection, plpFilterState])
 
   useEffect(() => {
     if (productDataToPass?.results?.length > 0) {
@@ -251,24 +273,30 @@ function CollectionPage(props: any) {
     }
   }, [productDataToPass])
 
+  // Optimize data processing with useMemo
   useEffect(() => {
-    const dataToPass = IS_INFINITE_SCROLL ? productListMemory?.products : data?.products // productListMemory?.products
-    if (dataToPass?.results?.length > 0) {
-      setProductDataToPass(dataToPass)
-    } else {
-      setProductDataToPass(null)
+    const dataToPass = IS_INFINITE_SCROLL ? productListMemory?.products : data?.products
+    // Only update state if data has changed to prevent unnecessary re-renders
+    if (JSON.stringify(dataToPass) !== JSON.stringify(productDataToPass)) {
+      if (dataToPass?.results?.length > 0) {
+        setProductDataToPass(dataToPass)
+      } else {
+        setProductDataToPass(null)
+      }
     }
-  }, [productListMemory?.products, data?.products])
+  }, [productListMemory?.products, data?.products, productDataToPass])
 
-  const setFilter = (filters: any) => {
+  // Memoize the filter setter - used in child components
+  const setFilter = useCallback((filters: any) => {
     dispatch({ type: SET_FILTERS, payload: filters })
-  }
-  const removeFilter = (key: string) => {
+  }, [])
+  // Memoize the filter removal handler
+  const removeFilter = useCallback((key: string) => {
     if (filters?.length == 1) {
       routeToPLPWithSelectedFilters(router, [])
     }
     dispatch({ type: REMOVE_FILTERS, payload: key })
-  }
+  }, [filters, router])
 
   useEffect(() => {
     //if (IS_INFINITE_SCROLL) {
@@ -291,7 +319,8 @@ function CollectionPage(props: any) {
     //}
   }, [data?.products?.results?.length, data])
 
-  const handlePageChange = (page: any, redirect = true) => {
+  // Memoize the page change handler to prevent unnecessary re-renders
+  const handlePageChange = useCallback((page: any, redirect = true) => {
     if (redirect) {
       router.push(
         {
@@ -310,18 +339,20 @@ function CollectionPage(props: any) {
         behavior: 'smooth',
       })
     }
-  }
+  }, [router])
 
-  const handleInfiniteScroll = () => {
+  // Memoize the infinite scroll handler
+  const handleInfiniteScroll = useCallback(() => {
     if (
       data?.products?.pages &&
       data?.products?.currentPage < data?.products?.pages
     ) {
       dispatch({ type: PAGE, payload: data?.products?.currentPage + 1 })
     }
-  }
+  }, [data?.products?.pages, data?.products?.currentPage])
 
-  const handleFilters = (filter: any, type: string) => {
+  // Memoize the filter handler
+  const handleFilters = useCallback((filter: any, type: string) => {
     if (filters?.length == 1 && type == REMOVE_FILTERS) {
       routeToPLPWithSelectedFilters(router, [])
     }
@@ -330,9 +361,10 @@ function CollectionPage(props: any) {
       payload: filter,
     })
     dispatch({ type: PAGE, payload: 1 })
-  }
+  }, [filters, router])
 
-  const handleSortBy = (payload: any) => {
+  // Memoize the sort handler
+  const handleSortBy = useCallback((payload: any) => {
     router.push({
       pathname: router.pathname,
       query: { ...router.query, sortBy: payload },
@@ -341,11 +373,12 @@ function CollectionPage(props: any) {
       type: SORT_BY,
       payload: payload,
     })
-  }
-  const clearAll = () => {
+  }, [router])
+  // Memoize the clear all handler
+  const clearAll = useCallback(() => {
     routeToPLPWithSelectedFilters(router, [])
     dispatch({ type: CLEAR })
-  }
+  }, [router])
   const css = { maxWidth: '100%', height: 'auto' }
 
   const defaultYOffset = () => {
@@ -357,39 +390,47 @@ function CollectionPage(props: any) {
 
   const [position, setPosition] = useState(defaultYOffset())
 
+  // Create debounced scroll handlers
+  const debouncedHandleScroll = useDebounce((moving: number) => {
+    setVisible(position > moving)
+    setPosition(moving)
+  }, 100)
+
+  const debouncedTrackScroll = useDebounce((ev: any) => {
+    // Check if ev.currentTarget exists, otherwise use window scroll values
+    const scrollX = ev?.currentTarget?.scrollX ?? window.scrollX ?? 0
+    const scrollY = ev?.currentTarget?.scrollY ?? window.scrollY ?? 0
+    setPageScroll(window?.location, scrollX, scrollY)
+  }, 100)
+
+  // Optimize scroll event handling with debounce
   useEffect(() => {
     const handleScroll = () => {
       if (typeof window !== 'undefined') {
-        let moving = window.pageYOffset
-
-        setVisible(position > moving)
-        setPosition(moving)
+        debouncedHandleScroll(window.pageYOffset)
       }
+    }
+
+    const trackScroll = (ev: any) => {
+      debouncedTrackScroll(ev)
     }
 
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', handleScroll)
-    }
 
-    const trackScroll = (ev: any) => {
-      setPageScroll(window?.location, ev.currentTarget.scrollX, ev.currentTarget.scrollY)
-    }
-
-    const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
-    if (isScrollEnabled) {
-      window?.addEventListener('scroll', trackScroll)
-      return () => {
-        window?.removeEventListener('scroll', trackScroll)
+      const isScrollEnabled = SCROLLABLE_LOCATIONS.find((x: string) => location.pathname.startsWith(x))
+      if (isScrollEnabled) {
+        window?.addEventListener('scroll', trackScroll)
       }
-    } /*else {
-      resetPageScroll()
-    }*/
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
+      return () => {
+        window.removeEventListener('scroll', handleScroll)
+        if (isScrollEnabled) {
+          window?.removeEventListener('scroll', trackScroll)
+        }
+      }
     }
-
-  }, [])
+  }, [position, debouncedHandleScroll, debouncedTrackScroll])
 
   useEffect(() => {
     // for engage
@@ -398,6 +439,7 @@ function CollectionPage(props: any) {
     }
   }, [])
 
+  // Track if user is scrolling up or down
   const [visible, setVisible] = useState(true)
   const [appliedFilters, setAppliedFilters] = useState<any[]>([])
 
@@ -418,24 +460,76 @@ function CollectionPage(props: any) {
     setAppliedFilters(currentFilters)
   }, [state?.filters, data?.products?.filters])
 
-  const totalResults = appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
+  // Memoize computed values to prevent unnecessary recalculations
+  const totalResults = useMemo(() => {
+    return appliedFilters?.length > 0 ? data?.products?.total : props?.products?.total || data?.products?.results?.length
+  }, [appliedFilters?.length, data?.products?.total, props?.products?.total, data?.products?.results?.length])
   const [openPLPSidebar, setOpenPLPSidebar] = useState(false)
-  const handleTogglePLPSidebar = () => {
-    setOpenPLPSidebar(!openPLPSidebar)
-  }
+  // Memoize the sidebar toggle handler
+  const handleTogglePLPSidebar = useCallback(() => {
+    setOpenPLPSidebar((prev) => !prev)
+  }, [])
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
   }
 
-  const showCompareProducts = () => {
+  // Memoize product comparison handlers
+  const showCompareProducts = useCallback(() => {
     setProductCompare(true)
-  }
+  }, [])
 
-  const closeCompareProducts = () => {
+  const closeCompareProducts = useCallback(() => {
     setProductCompare(false)
-  }
+  }, [])
   const cleanPath = removeQueryString(router.asPath)
+  // Memoize featured products
+  const topFeaturedProduct = useMemo(() => {
+    return productDataToPass?.results?.filter((p: any) => [1, 2, 3, 4, 5, 6].includes(p.displayOrder))
+  }, [productDataToPass?.results])
+  // Memoize the featured product renderer for better performance
+  const renderFeaturedProduct = useCallback(() => {
+    return (
+      <>
+        {topFeaturedProduct?.length > 0 &&
+          <div className='flex flex-col w-full gap-4 p-2 mt-4 bg-[#F5F5F5] border-t-2 sm:col-span-12 border-sky-700'>
+            <div className='flex flex-col justify-end w-full text-right'>
+              <h4 className='text-xs font-normal primary-text-blue'>Featured {props?.name}</h4>
+            </div>
+            <Swiper slidesPerView={3.1} spaceBetween={4} navigation={true} loop={true} className="flex items-start justify-start w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
+              {topFeaturedProduct?.map((product: any, pIdx: number) => (
+                <SwiperSlide key={`horizontal-slider-${pIdx}`}>
+                  <div className='grid items-center grid-cols-12 gap-2' key={`featured-${pIdx}`}>
+                    <div className='col-span-4'>
+                      <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
+                        <img
+                          src={generateUri(product?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
+                          className={`${featureToggle?.features?.enableForPCSite ? 'object-contain object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`}
+                          alt={product?.name}
+                          width={400}
+                          height={400}
+                          loading="lazy"
+                        />
+                      </Link>
+                    </div>
+                    <div className='flex flex-col col-span-8 gap-3'>
+                      <Link href={sanitizeRelativeUrl(`/${product?.slug || product?.link}`)} passHref>
+                        <h4 className='text-sm font-normal text-left text-black hover:underline hover:primary-text-blue'>{product?.name}</h4>
+                      </Link>
+                      <div className='flex items-center justify-start gap-1 text-xs'>
+                        <span className='text-lg font-semibold text-black'>{product?.price?.formatted?.withTax}</span>
+                        <span className='text-gray-400 line-through'>{product?.listPrice?.formatted?.withTax}</span>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        }
+      </>
+    );
+  }, [topFeaturedProduct, featureToggle?.features?.enableForPCSite]);
   return (
     <>
       <NextHead>
@@ -452,6 +546,25 @@ function CollectionPage(props: any) {
         <meta property="og:url" content={absPath || SITE_ORIGIN_URL + cleanPath} key="ogurl" />
       </NextHead>
       {props?.hostName && (<input className="inst" type="hidden" value={props?.hostName} />)}
+      {!featureToggle.features?.enableForPCSite &&
+        <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white margin-top-20-am">
+          <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+              </Link>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+              </span>
+            </li>
+            <li className='flex items-center text-10-mob sm:text-sm'>
+              <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+            </li>
+          </ol>
+        </div>
+      }
       <div className='flex flex-col dark:bg-white fixing-main-section'>
         {props?.customInfo3 == 'vertical' && (
           <>
@@ -466,7 +579,18 @@ function CollectionPage(props: any) {
                           <div className="relative w-full h-auto px-0 collection-multi-vimage">
                             <Link legacyBehavior href={img?.link || '#'} passHref >
                               <span style={{ paddingTop }} className="block">
-                                <img src={generateUri(imgUrl, 'h=1600&fm=webp&q=50') || IMG_PLACEHOLDER} alt="Collection Banner" className="object-contain" onLoad={({ target }) => { const { naturalWidth, naturalHeight } = target as HTMLImageElement; setPaddingTop(`calc(100% / (${naturalWidth} / ${naturalHeight})`) }} />
+                                <img
+                                  src={generateUri(imgUrl, 'h=1600&fm=webp&q=50') || IMG_PLACEHOLDER}
+                                  alt="Collection Banner"
+                                  className="object-contain"
+                                  width={1600}
+                                  height={500}
+                                  loading={idx < 2 ? "eager" : "lazy"}
+                                  onLoad={({ target }) => {
+                                    const { naturalWidth, naturalHeight } = target as HTMLImageElement;
+                                    setPaddingTop(`calc(100% / (${naturalWidth} / ${naturalHeight})`)
+                                  }}
+                                />
                               </span>
                             </Link>
                             <div className="absolute z-10 text-left bottom-3 left-4">
@@ -499,7 +623,15 @@ function CollectionPage(props: any) {
                     return (
                       <div className="w-full h-auto px-0" key={`banner-image-${idx}`} >
                         <Link legacyBehavior href={img?.link || '#'}>
-                          <a> <img src={imgUrl} width={1920} height={460} alt="banner" /> </a>
+                          <a>
+                            <img
+                              src={imgUrl}
+                              width={1920}
+                              height={460}
+                              alt="banner"
+                              loading={idx < 2 ? "eager" : "lazy"}
+                            />
+                          </a>
                         </Link>
                       </div>
                     )
@@ -509,86 +641,183 @@ function CollectionPage(props: any) {
             </div>
           </>
         )}
-        {props?.customInfo3 == 'Horizontal' || (props?.customInfo3 == 'horizontal' && props?.images?.length > 0 && (
-          <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0" >
-            {props?.images?.map((img: any, idx: number) => (
-              <SwiperSlide key={`horizontal-slider-${idx}`}>
-                <Link href={img.link || '#'}>
-                  <img style={css} width={1920} height={500} src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} alt={props?.name || 'Collection Banner'} className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer" />
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ))}
-      </div>
-      <div className="container mx-auto mt-2 bg-transparent fixing-main-section dark:bg-white">
-        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
-          <li className='flex items-center text-10-mob sm:text-sm'>
-            <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
-              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
-            </Link>
-          </li>
-          <li className='flex items-center text-10-mob sm:text-sm'>
-            <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-              <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-            </span>
-          </li>
-          <li className='flex items-center text-10-mob sm:text-sm'>
-            <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
-          </li>
-        </ol>
-      </div>
-      <div className="container pt-5 mx-auto bg-transparent sm:pb-24 header-space dark:bg-white">
-        {props?.breadCrumbs && (
-          <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
-        )}
-        <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
-          <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
-            {props?.name?.toLowerCase()}
-          </h1>
-          {props?.description &&
-            <div className='flex justify-between w-full align-bottom'>
-              <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
-            </div>
-          }
-        </div>
-        <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
-          <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
-          <div className="flex justify-end align-bottom">
-            <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+        {(props?.customInfo3?.toLowerCase() === 'horizontal' && props?.images?.length > 0) && (
+          <div className={`${CURRENT_THEME === 'ammega' ? 'container' : 'w-full'}`}>
+            <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
+              {props?.images?.map((img: any, idx: number) => (
+                <SwiperSlide key={`horizontal-slider-${idx}`}>
+                  <Link href={img.link || '#'}>
+                    <img
+                      style={css}
+                      width={1920}
+                      height={500}
+                      src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
+                      alt={props?.name || 'Collection Banner'}
+                      className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer"
+                      loading={idx < 2 ? "eager" : "lazy"}
+                    />
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
-        </div>
-        <hr className='border-slate-200 dark:border-slate-200' />
+        )}
+      </div>
+      <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 collection-full-container' : ' pt-5 header-space'} container mx-auto bg-transparent sm:pb-24 dark:bg-white`}>
+        {!featureToggle.features?.enableForPCSite &&
+          <>
+            {props?.breadCrumbs && (
+              <BreadCrumbs items={props?.breadCrumbs} currentProduct={props} />
+            )}
+            <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+              <h1 className="block text-2xl font-semibold capitalize sm:text-3xl lg:text-4xl dark:text-black">
+                {props?.name?.toLowerCase()}
+              </h1>
+              {props?.description &&
+                <div className='flex justify-between w-full align-bottom'>
+                  <div className="block mt-4 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: props?.description }}></div>
+                </div>
+              }
+            </div>
+            <div className='flex justify-between w-full pb-1 mt-1 mb-1 align-center'>
+              <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} ${translate('common.label.resultsText')}`}</span>
+              <div className="flex justify-end align-bottom">
+                <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+              </div>
+            </div>
+            <hr className='border-slate-200 dark:border-slate-200' />
+          </>
+        }
         {
-          <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
+          <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden pc-overflow-visible lg:grid-cols-12 sm:mt-0 ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
             {isValidating ? (
               <Loader />
             ) : (
               <>
                 {props?.allowFacets && productDataToPass?.filters?.length > 0 ? (
                   <>
-                    {isMobile ? (
-                      <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                    ) : (
-                      <>
-                        {!featureToggle?.features?.enableHorizontalFilter ? (
-                          <ProductFilterRight handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                        ) : (
-                          <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
-                        )}
-                      </>
-                    )}
-                    <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12' : 'sm:col-span-9'}`}>
-                      {isMobile ? null : (
-                        <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      )}
-                      {productDataToPass?.results.length > 0 && <ProductGridWithFacet products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                    <div className="col-span-12 bg-transparent fixing-main-section dark:bg-white d--none-amm">
+                      <div className='container'>
+                        <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                          <li className='flex items-center text-10-mob sm:text-sm'>
+                            <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                              <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+                            </Link>
+                          </li>
+                          <li className='flex items-center text-10-mob sm:text-sm'>
+                            <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                              <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                            </span>
+                          </li>
+                          <li className='flex items-center text-10-mob sm:text-sm'>
+                            <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+                          </li>
+                        </ol>
+                      </div>
                     </div>
+                    {featureToggle.features?.enableForPCSite &&
+                      <>
+                        <CollectionBanner props={props} deviceInfo={deviceInfo} />
+                      </>
+                    }
+                    <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'} ${featureToggle?.features?.enableForPCSite ? 'container' : ''}`}>
+                      {featureToggle.features?.enableForPCSite ? (
+                        <>
+                          {renderFeaturedProduct()}
+                          <div className={`${featureToggle.features?.enableForPCSite ? '!px-0 py-4' : ' w-full'} col-span-12`}>
+                            {isMobile ? (
+                              <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            ) : (
+                              <>
+                                {!featureToggle?.features?.enableHorizontalFilter ? (
+                                  <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                ) : (
+                                  <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                )}
+                              </>
+                            )}
+                          </div>
+                          <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className='flex items-center justify-between w-full gap-0'>
+                              <div className='flex justify-start gap-3'>
+                                <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
+                              </div>
+                              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0 py-4' : ' w-full'} col-span-12`}>
+                            {isMobile ? (
+                              <ProductMobileFilters handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            ) : (
+                              <>
+                                {!featureToggle?.features?.enableHorizontalFilter ? (
+                                  <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                ) : (
+                                  <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="category" />
+                                )}
+                              </>
+                            )}
+                          </div>
+                        </>
+                      )}
+                      {isMobile ? null : (
+                        !featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                      )}
+                      {productDataToPass?.results.length > 0 && <><ProductGridWithFacet isPagination={true} products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+
+                      </>}
+                    </div>
+                    {featureToggle.features?.enableForPCSite && <div className={`${featureToggle.features?.enableForPCSite ? ' container' : ''} col-span-12`}>
+                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
+                    </div>}
                   </>
                 ) : (
                   <div className="col-span-12">
-                    <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                    {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                    {featureToggle.features?.enableForPCSite &&
+                      <>
+                        <div className="col-span-12 bg-transparent fixing-main-section dark:bg-white">
+                          <div className='container'>
+                            <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:pb-2 sm:px-0 md:px-0 lg:px-0 2xl:px-0 dark:bg-white" >
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <Link href={CURRENT_THEME != 'green' ? '/collection' : '/'} passHref>
+                                  <span className="font-light hover:text-gray-900 dark:text-slate-500 text-slate-500">{CURRENT_THEME != 'green' ? 'Collections' : 'Home'}</span>
+                                </Link>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black">
+                                  <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                </span>
+                              </li>
+                              <li className='flex items-center text-10-mob sm:text-sm'>
+                                <span className="font-semibold text-black hover:text-gray-900 dark:text-black" > {props?.name}</span>
+                              </li>
+                            </ol>
+                          </div>
+                        </div>
+                        <CollectionBanner props={props} deviceInfo={deviceInfo} />
+                        <div className={`grid lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 ${featureToggle.features?.enableForPCSite ? 'container' : ''}`}>
+                          {renderFeaturedProduct()}
+                          <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                            <div className='flex items-center justify-between w-full gap-0'>
+                              <div className='flex justify-start gap-3'>
+                                <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {swrLoading ? <LoadingDots /> : `${totalResults ?? 0} items in ${props?.name}`}</span>
+                              </div>
+                              <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    }
+                    <div className={`${featureToggle?.features?.enableForPCSite ? 'container' : 'w-full'}`}>
+                      {!featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />}
+                      {productDataToPass?.results.length > 0 && <ProductGrid products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                    </div>
+                    {featureToggle.features?.enableForPCSite && <div className={`${featureToggle.features?.enableForPCSite ? ' container' : ''} col-span-12`}>
+                      <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
+                    </div>}
                   </div>
                 )}
               </>
@@ -620,7 +849,7 @@ function CollectionPage(props: any) {
           <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
         </div>
         <div className={`w-full text-left py-3 border-t`}>
-          {props?.customInfo1 &&
+          {!featureToggle.features?.enableForPCSite && props?.customInfo1 &&
             <div className='flex w-full'>
               <div className="block mt-4 text-xs text-neutral-500 dark:text-neutral-400 dynamic-html-data" dangerouslySetInnerHTML={{ __html: props?.customInfo1 }}></div>
             </div>
@@ -665,7 +894,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
   const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
-    return notFoundRedirect()
+    return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), };
   }
 
   if (pageProps?.isRedirect) {
@@ -674,6 +903,7 @@ export async function getStaticProps({ params, locale, locales, ...context }: an
         destination: pageProps?.redirect,
         permanent: false,
       },
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
     }
   }
 

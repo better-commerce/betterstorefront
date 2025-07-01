@@ -84,6 +84,8 @@
       "addedText": "hinzugefügt",
       "noBasketAvailableText": "Kein Warenkorb verfügbar, bitte erstellen Sie einen neuen",
       "totalAmountText": "Gesamtbetrag",
+      "orderAmountText": "Bestellbetrag",
+      "pendingOrderAmountText": "Ausstehender Betrag",
       "checkoutBtnText": "Zur Kasse",
       "multipleCodesApplyText": "Sie können mehrere Codes anwenden",
       "getItByText": "Erhalten Sie es bis",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "CVC ist erforderlich",
         "cvvInvalidText": "CVC ist ungültig",
         "chequeNoText": "Schecknummer",
-        "chequeNumberLabelText": "Schecknummer"
+        "chequeNumberLabelText": "Schecknummer",
+        "enterAmountToPayLabelText": "Geben Sie den zu zahlenden Betrag von {paymentMethodName} ein"
       }
     },
     "collection": {
@@ -463,6 +466,7 @@
         "productRequired": "Mindestens ein Produkt ist erforderlich"
       },
       "myDetailsHeadingText": "Meine Profile",
+      "tradeInText":"Inzahlungnahme",
       "editYourDetailsText": "Bearbeiten Sie unten Ihre Details, damit Ihr Konto immer auf dem neuesten Stand ist.",
       "myOrders": {
         "fetchReturnsErrorMsg": "Hoppla! Fehler beim Abrufen von Rücksendungen"
@@ -504,7 +508,38 @@
       "noLookbookAvaiableText": "Kein Lookbook verfügbar",
       "shopTheLookText": "Shoppen Sie den Look",
       "confirmPasswordText": "Passwort bestätigen",
-      "addNewUserText": "Neuen Benutzer hinzufügen"
+      "addNewUserText": "Neuen Benutzer hinzufügen",
+      "myTradeInText": "Mein Trade In",
+      "quoteText": "Angebot",
+      "createdText": "Erstellt",
+      "tradeInSectionFeedbackMessage": "Wir hoffen, Ihnen gefällt unser neuer Trade In-Bereich auf unserer Website. Wir arbeiten noch an Verbesserungen, aber wenn Sie etwas entdecken, das nicht wie erwartet funktioniert, senden Sie uns bitte eine E-Mail mit Screenshots (wenn möglich) an",
+      "queryEmailInstruction": "Wenn Sie eine Frage haben, senden Sie bitte eine E-Mail an",
+      "myWalletText": "Mein Wallet",
+      "walletActivationMessage": "Bitte warten Sie, während wir Ihr Wallet aktivieren und Wallet-Informationen generieren.",
+      "transferToBankText": "Auf Bankkonto überweisen",
+      "addBankDetailsText": "Bankdaten hinzufügen",
+      "enableWalletText": "Wallet aktivieren",
+      "walletCurrentBalanceText": "Aktueller Wallet-Saldo",
+      "walletTransactionHistoryText": "Wallet-Transaktionsverlauf",
+      "dateText": "Datum",
+      "amountText": "Betrag",
+      "referenceText": "Referenz",
+      "noTransactionHistoryMessage": "Kein Transaktionsverlauf verfügbar.",
+      "noBankTransferHistoryText": "Keine Banküberweisung möglich",
+      "bankTransferHistoryText": "Banküberweisungsverlauf",
+      "bankNameText": "Bankname",
+      "AccountNoText": "Kontonr.",
+      "sortCodeText": "Bankleitzahl",
+      "walletDisabledMessage": "Wallet ist deaktiviert. Aktivieren Sie es, um Kontostand und Transaktionen anzuzeigen.",
+      "roleRequiredText": "Rolle ist erforderlich",
+      "selectRoleText": "Bitte wählen Sie eine Rolle aus",
+      "zoneRequiredText": "Zone ist erforderlich",
+      "selectZoneText": "Bitte wählen Sie eine Zone aus",
+      "branchRequiredText": "Filiale ist erforderlich",
+      "selectBranchText": "Bitte wählen Sie eine Filiale aus",
+      "countryRequiredText": "Land ist erforderlich",
+      "selectCountryText": "Bitte wählen Sie ein Land aus",
+      "iAmIntrestedInText": "Ich interessiere mich für"
     },
     "navBar": {
       "currencyText": "Währung",
@@ -598,6 +633,7 @@
       "freeText": "Kostenlos",
       "additionalChargesText": "Zusätzliche Gebühren",
       "taxText": "Steuer",
+      "paidText": "Bezahlt",
       "youPayText": "Sie zahlen",
       "placeOrderBtnText": "Bestellung aufgeben",
       "loseDeliveryText": "Sie verlieren gerade die kostenlose Lieferung!",
@@ -1318,6 +1354,7 @@
       "userAlreadyExistsErrorMsg": "Benutzer existiert bereits",
       "tokenInvalidErrorMsg": "Hoppla! Token ist ungültig",
       "tokenExpiredErrorMsg": "Hoppla! Token ist abgelaufen oder ungültig",
+      "sessionExpiredErrorMsg": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
       "companyNotFoundErrorMsg": "Unternehmen nicht gefunden.",
       "cartItemMaxAddedErrorMsg": "Maximale Anzahl von Warenkorbartikeln erreicht. Bitte entfernen Sie einige Artikel und versuchen Sie es erneut.",
       "addressAddedSuccessfullyMsg": "Neue Adresse erfolgreich hinzugefügt",
@@ -1372,7 +1409,12 @@
         "upiNotSupportedErrorMsg": "UPI-Zahlung wird nicht unterstützt.",
         "paymentAlreadyCompletedErrorMsg": "Die Zahlung für Ihren Warenkorb wurde bereits abgeschlossen.",
         "notEnoughCreditErrorMsg": "Nicht genügend Guthaben verfügbar.",
-        "paymentMethodNotSupportedErrorMsg": "Zahlungsmethode wird nicht unterstützt."
+        "walletNotFoundErrorMsg": "Brieftasche nicht gefunden.",
+        "notEnoughBalanceErrorMsg": "Nicht genügend Guthaben verfügbar.",
+        "paymentMethodNotSupportedErrorMsg": "Zahlungsmethode wird nicht unterstützt.",
+        "paymentAmountRequiredErrorMsg": "Zahlungsbetrag ist erforderlich.",
+        "paymentAmountMinValueErrorMsg": "Der Mindestzahlungsbetrag beträgt {currencySymbol}{paymentAmount}.",
+        "paymentAmountCannotExceedErrorMsg": "Der Zahlungsbetrag darf {currencySymbol}{paymentAmount} nicht überschreiten."
       },
       "password": {
         "passwordValidationMsg": "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens 1 Großbuchstaben enthalten.",

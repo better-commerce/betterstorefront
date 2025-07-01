@@ -1,26 +1,47 @@
 // Package Imports
-//import qs from 'querystring'
-//import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import { CookieSerializeOptions, serialize } from 'cookie'
 
 // Other Imports
-//import { Cookie } from '@framework/utils/constants'
-//import { decrypt } from '@framework/utils/cipher'
-import { EmptyString, SITE_HOST } from '@components/utils/constants'
+import { SessionIdCookieKey, SITE_HOST } from '@components/utils/constants'
+import { decrypt } from '@framework/utils/cipher'
+import { Cookie } from '@framework/utils/constants'
 
+/**
+ * apiRouteGuard is a middleware that checks for the following conditions
+ * before calling the original API route handler:
+ * - Checks if the user's token is expired
+ * - Checks if the request's origin and referer match the site's host
+ *
+ * If any of the conditions are not met, it will return a 401 Unauthorized response
+ *
+ * @param {Function} handler - The original API route handler
+ * @returns {Function} - The middleware function
+ */
 export default function apiRouteGuard(handler: any) {
   return async (req: any, res: any) => {
+
+    if (isUserTokenExpired(req)) {
+      const expirationConfig: CookieSerializeOptions = { path: '/', expires: new Date(0), httpOnly: process.env.NODE_ENV === 'production', sameSite: 'lax', secure: process.env.NODE_ENV === 'production', }
+      const expiredCookies = [
+        serialize(Cookie.Key.USER_TOKEN, '', expirationConfig),
+        serialize(Cookie.Key.SITE_USER_ID, '', expirationConfig),
+        serialize(Cookie.Key.SITE_USER_HAS_MEMBERSHIP, '', expirationConfig),
+        serialize(SessionIdCookieKey, '', expirationConfig),
+        serialize(Cookie.Key.COMPANY_ID, '', expirationConfig),
+        serialize(Cookie.Key.BASKET_ID, '', expirationConfig),
+        serialize(Cookie.Key.IS_PAYMENT_LINK, '', expirationConfig),
+      ];
+      res.setHeader('Set-Cookie', expiredCookies);
+      //res.setHeader('Clear-Site-Data', '"storage"');
+      //res.setHeader('X-Clear-Storage', 'user,wishListItems,cartItems,isPaymentLink')
+      res.setHeader('Location', `/my-account/login?reason=session_expired`);
+      return res.status(302).end();
+    }
+
     let siteHostValid = undefined
     let siteOriginValid = undefined
     let siteRefererValid = undefined
-    let token = EmptyString
-
-    /**
-     * TODO [GS, 08-Sep-23]: Temporarily commented.
-     */
-    /*const cookies = qs.decode(req?.headers?.cookie, '; ')
-    if (cookies[Cookie.Key.API_TOKEN]) {
-      token = cookies[Cookie.Key.API_TOKEN] as string
-    }*/
 
     const siteHost = req?.headers?.host
     const siteOrigin = req?.headers?.origin
@@ -37,22 +58,8 @@ export default function apiRouteGuard(handler: any) {
       )
     }
 
-    if (/*token ||*/ siteRefererValid || (siteHostValid && siteOriginValid)) {
+    if (siteRefererValid || (siteHostValid && siteOriginValid)) {
       try {
-        /*if (token) {
-          const decryptedToken = decrypt(token)
-          const jwtResult: any = jwt.decode(decryptedToken)
-          if (jwtResult?.exp) {
-            const expiryTime = jwtResult?.exp * 1000
-            const nowTime = new Date().getTime()
-
-            if (nowTime >= expiryTime) {
-              // Token is expired
-              return res.status(401).json({ error: 'Unauthorized' })
-            }
-          }
-        }*/
-
         // Call the original API route handler
         return await handler(req, res)
       } catch (error) {
@@ -61,4 +68,33 @@ export default function apiRouteGuard(handler: any) {
     }
     return res.status(401).json({ error: 'Unauthorized' })
   }
+}
+
+/**
+ * Checks if the user token in the request cookies has expired.
+ * @param req Request object
+ * @returns True if the user token has expired, false otherwise
+ */
+function isUserTokenExpired(req: any) {
+  let userToken = req?.cookies?.[Cookie.Key.USER_TOKEN]
+
+  if (userToken) {
+    let decryptedUserToken = ""
+    try {
+      decryptedUserToken = decrypt(userToken)
+    } catch (error) {
+    }
+
+    if (decryptedUserToken) {
+      const jwtResult: any = jwt.decode(decryptedUserToken)
+      if (jwtResult?.exp) {
+        const expiryDate = new Date(jwtResult?.exp * 1000)
+        if (expiryDate < new Date()) {
+          return true
+        }
+      }
+    }
+  }
+
+  return false
 }

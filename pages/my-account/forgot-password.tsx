@@ -15,8 +15,9 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { AnalyticsEventType } from '@components/services/analytics'
+import LoginSideBanner from '@components/account/LoginWithBanner/LoginSideBanner'
 
-function ForgotPasswordPage() {
+function ForgotPasswordPage({featureToggle}:any) {
   const { recordAnalytics } = useAnalytics()
   const { setAlert } = useUI()
   const translate = useTranslation()
@@ -104,34 +105,76 @@ function ForgotPasswordPage() {
         <meta property="og:title" content={translate('label.myAccount.forgotPasswordText')} key="ogtitle" />
         <meta property="og:description" content={translate('label.myAccount.forgotPasswordText')} key="ogdesc" />
       </NextHead>
-
-      <section>
-        <div className="pt-16 pb-10 sm:pt-24 sm:pb-10 lg:max-w-7xl lg:mx-auto lg:px-8 header-space">
-          <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-            <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
-              <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-900 justify-center">
-                {translate('label.myAccount.forgotPasswordText')}
-              </h1>
-            </div>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center w-full px-5 py-5 font-semibold sm:w-1/2" >
-              {config.map((field: any, Idx: any) => {
-                return (
-                  <div key={Idx} className="w-full mb-4">
-                    <label className="text-neutral-800 dark:text-neutral-800">{field.label}</label>
-                    <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
-                    {emailStatus !== '' && emailStatus !== Messages.Validations.ResetPassword.VALID_EMAIL && (
-                      <div className="w-full text-red-600">{emailStatus}</div>
-                    )}
+                 {featureToggle?.features?.enableBannerLogin ? (
+                  <>
+                  <div className="min-h-screen flex flex-col md:flex-row btn-primary-clr form-input-label">
+                  <div className="w-full md:w-1/2 h-full">
+                  <div className="px-10 pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
+                  <div className='w-full'>
+                    <img src="/theme/camera/image/pc-blue-logo.png" alt="pc-logo"/>
                   </div>
-                )
-              })}
-              <Button type="submit" className="w-full btn btn-primary" loading={isLoading} disabled={isLoading} >
-                {!isLoading && translate('common.label.submitText')}
-              </Button>
-            </form>
-          </div>
-        </div>
-      </section>
+                  <div className="flex flex-col items-start justify-center px-0 sm:px-6 lg:px-0">
+                    <div className="flex flex-col items-start justify-center px-0 sm:px-6 lg:px-0">
+                      <h1 className="mt-10 mb-10 flex flex-col items-start text-xl leading-[115%] md:text-4xl md:leading-[115%] font-normal text-neutral-900 dark:text-neutral-900 justify-center">
+                        {translate('label.myAccount.forgotPasswordText')}
+                      </h1>
+                    </div>
+                    <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center w-full px-0 py-5 font-semibold sm:w-1/2" >
+                      {config.map((field: any, Idx: any) => {
+                        return (
+                          <div key={Idx} className="w-full mb-4">
+                            <label className="text-neutral-800 dark:text-neutral-800">{field.label}</label>
+                            <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
+                            {emailStatus !== '' && emailStatus !== Messages.Validations.ResetPassword.VALID_EMAIL && (
+                              <div className="w-full text-red-600">{emailStatus}</div>
+                            )}
+                          </div>
+                        )
+                      })}
+                      <Button type="submit" className="w-full btn btn-primary park-bg-secondary" loading={isLoading} disabled={isLoading} >
+                        {!isLoading && translate('common.label.submitText')}
+                      </Button>
+                    </form>
+                  </div>
+                   </div>
+                  </div>
+                    {/* Sidebar Banner Section */}
+                      <div className="w-full md:w-1/2 h-screen mob-p-d-none">
+                       <LoginSideBanner />
+                    </div>
+                  </div>
+                   </>
+                    ) : (
+                      <>
+                      <section>
+                          <div className="pt-16 pb-10 sm:pt-24 sm:pb-10 lg:max-w-7xl lg:mx-auto lg:px-8 header-space">
+                            <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+                              <div className="flex flex-col items-center justify-center px-4 sm:px-6 lg:px-0">
+                                <h1 className="mt-20 mb-10 flex items-center text-3xl leading-[115%] md:text-5xl md:leading-[115%] font-semibold text-neutral-900 dark:text-neutral-900 justify-center">
+                                  {translate('label.myAccount.forgotPasswordText')}
+                                </h1>
+                              </div>
+                              <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center w-full px-5 py-5 font-semibold sm:w-1/2" >
+                                {config.map((field: any, Idx: any) => {
+                                  return (
+                                    <div key={Idx} className="w-full mb-4">
+                                      <label className="text-neutral-800 dark:text-neutral-800">{field.label}</label>
+                                      <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
+                                      {emailStatus !== '' && emailStatus !== Messages.Validations.ResetPassword.VALID_EMAIL && (
+                                        <div className="w-full text-red-600">{emailStatus}</div>
+                                      )}
+                                    </div>
+                                  )
+                                })}
+                                <Button type="submit" className="w-full btn btn-primary" loading={isLoading} disabled={isLoading} >
+                                  {!isLoading && translate('common.label.submitText')}
+                                </Button>
+                              </form>
+                            </div>
+                          </div>
+                        </section>
+                      </>
+              )}
     </>
   )
 }

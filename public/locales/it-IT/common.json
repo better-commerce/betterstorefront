@@ -84,6 +84,8 @@
             "addedText": "aggiunto",
             "noBasketAvailableText": "Nessun carrello disponibile, crea un nuovo",
             "totalAmountText": "Importo Totale",
+            "orderAmountText": "Importo Ordine",
+            "pendingOrderAmountText": "Importo in Sospeso",
             "checkoutBtnText": "Pagamento",
             "multipleCodesApplyText": "Puoi applicare più codici",
             "getItByText": "Ricevilo entro",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV richiesto",
                 "cvvInvalidText": "CVV non valido",
                 "chequeNoText": "Numero Assegno",
-                "chequeNumberLabelText": "Numero Assegno"
+                "chequeNumberLabelText": "Numero Assegno",
+                "enterAmountToPayLabelText": "Inserisci l'importo da pagare da {paymentMethodName}"
             }
         },
         "exchangeReason": {
@@ -265,6 +268,9 @@
             "exchangeItemText": "Cambia articolo",
             "exchangeConfirmText": "Sei sicuro di voler cambiare questo articolo?",
             "dontExchangeText": "Non cambiare"
+        },
+        "common":{
+            "myAccountText": "Il Mio Account"
         },
         "filters": {
             "clearAllText": "Pulisci tutto",
@@ -433,6 +439,7 @@
                 "productRequired": "Almeno un prodotto è obbligatorio"
             },
             "myDetailsHeadingText": "Il Mio Profilo",
+            "tradeInText":"Permuta",
             "editYourDetailsText": "Sentiti libero di modificare i tuoi dettagli qui sotto per tenere il tuo account sempre aggiornato.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Ops! Errore nel recupero dei resi"
@@ -474,7 +481,38 @@
             "noLookbookAvaiableText": "Nessun Lookbook disponibile",
             "shopTheLookText": "Compra il look",
             "confirmPasswordText": "Conferma la password",
-            "addNewUserText": "Aggiungi nuovo utente"
+            "addNewUserText": "Aggiungi nuovo utente",
+            "myTradeInText": "Il mio Trade In",
+            "quoteText": "Preventivo",
+            "createdText": "Creato",
+            "tradeInSectionFeedbackMessage": "Speriamo ti piaccia la nostra nuova sezione Trade In sul nostro sito web. Stiamo ancora lavorando a miglioramenti, ma se noti qualcosa che non funziona come previsto, inviaci un'e-mail con screenshot (se possibile) a",
+            "queryEmailInstruction": "Se hai una domanda, invia un'e-mail a",
+            "myWalletText": "Il Mio Portafoglio",
+            "walletActivationMessage": "Attendi mentre attiviamo il tuo portafoglio e generiamo le informazioni del portafoglio.",
+            "transferToBankText": "Trasferisci alla Banca",
+            "addBankDetailsText": "Aggiungi Dettagli Bancari",
+            "enableWalletText": "Abilita Portafoglio",
+            "walletCurrentBalanceText": "Saldo Attuale del Portafoglio",
+            "walletTransactionHistoryText": "Cronologia Transazioni del Portafoglio",
+            "dateText": "Data",
+            "amountText": "Importo",
+            "referenceText": "Riferimento",
+            "noTransactionHistoryMessage": "Nessuna cronologia transazioni disponibile.",
+            "noBankTransferHistoryText": "Nessun bonifico bancario disponibile",
+            "bankTransferHistoryText": "Cronologia Bonifici Bancari",
+            "bankNameText": "Nome della Banca",
+            "AccountNoText": "Conto N.",
+            "sortCodeText": "Codice di Ordinamento",
+            "walletDisabledMessage": "Il portafoglio è disabilitato. Abilitalo per visualizzare il saldo e le transazioni.",
+            "roleRequiredText": "Il ruolo è obbligatorio",
+            "selectRoleText": "Seleziona un ruolo",
+            "zoneRequiredText": "La zona è obbligatoria",
+            "selectZoneText": "Seleziona una zona",
+            "branchRequiredText": "La filiale è obbligatoria",
+            "selectBranchText": "Seleziona una filiale",
+            "countryRequiredText": "Il paese è obbligatorio",
+            "selectCountryText": "Seleziona un paese",
+            "iAmIntrestedInText": "Sono interessato a"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -568,6 +606,7 @@
             "freeText": "Gratuito",
             "additionalChargesText": "Costi aggiuntivi",
             "taxText": "Imposta",
+            "paidText": "Pagato",
             "youPayText": "Totale da pagare",
             "placeOrderBtnText": "Effettua Ordine",
             "loseDeliveryText": "Stai per perdere la Spedizione Gratuita!",
@@ -1003,6 +1042,7 @@
             "expandText": "Espandi",
             "collapseText": "Riduci",
             "youtubeVideoPlayerAltText": "Lettore video YouTube",
+            "logOutText": "Esci",
             "removeText": "Rimuovi",
             "defaultText": "Predefinito",
             "editText": "Modifica",
@@ -1224,6 +1264,7 @@
             "userAlreadyExistsErrorMsg": "L'utente esiste già",
             "tokenInvalidErrorMsg": "Oops! Il token non è valido",
             "tokenExpiredErrorMsg": "Oops! Il token è scaduto o non valido",
+            "sessionExpiredErrorMsg": "La tua sessione è scaduta. Effettua nuovamente l'accesso.",
             "companyNotFoundErrorMsg": "Azienda non trovata.",
             "cartItemMaxAddedErrorMsg": "Limite massimo di articoli nel carrello raggiunto. Rimuovi alcuni articoli e riprova.",
             "addressAddedSuccessfullyMsg": "Nuovo indirizzo aggiunto con successo",
@@ -1279,7 +1320,12 @@
                 "upiNotSupportedErrorMsg": "Il pagamento UPI non è supportato.",
                 "paymentAlreadyCompletedErrorMsg": "Il pagamento per il tuo carrello è già stato completato.",
                 "notEnoughCreditErrorMsg": "Credito insufficiente.",
-                "paymentMethodNotSupportedErrorMsg": "Metodo di pagamento non supportato."
+                "walletNotFoundErrorMsg": "Portafoglio non trovato.",
+                "notEnoughBalanceErrorMsg": "Saldo insufficiente disponibile.",
+                "paymentMethodNotSupportedErrorMsg": "Metodo di pagamento non supportato.",
+                "paymentAmountRequiredErrorMsg": "Importo del pagamento obbligatorio.",
+                "paymentAmountMinValueErrorMsg": "L'importo minimo del pagamento è {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Il valore del pagamento non può superare {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "La password deve avere almeno 8 caratteri e almeno 1 lettera maiuscola.",

@@ -2,23 +2,31 @@ import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import { useUI } from '@components/ui'
 import { useConfig } from '@components/utils/myAccount'
-import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon } from '@heroicons/react/24/outline'
+import { stringToBoolean } from '@framework/utils/parse-util'
+import { BuildingOffice2Icon, EllipsisHorizontalCircleIcon, BuildingStorefrontIcon, ServerIcon, WalletIcon, HandThumbUpIcon } from '@heroicons/react/24/outline'
 import { StarIcon } from "@heroicons/react/24/outline";
 import { ArrowPathRoundedSquareIcon, BookOpenIcon, ClipboardDocumentListIcon, HeartIcon, ListBulletIcon, QueueListIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
 
-function SideMenu({ deviceInfo, featureToggle }: any) {
-  const config = useConfig();
+function SideMenu({ deviceInfo, featureToggle, config }: any) {
+  const configNew = useConfig();
   const translate = useTranslation()
   const { isMobile, isIPadorTablet } = deviceInfo
   const { user, referralProgramActive, myAccountActiveTab } = useUI()
   let isB2B = user?.companyId !== Guid.empty
+  const allowEnableWallet =
+    stringToBoolean(
+      config?.configSettings
+        ?.find((x: any) => x.configType === 'DomainSettings')
+        ?.configKeys?.find((x: any) => x.key === 'DomainSettings.EnableWallet')
+        ?.value || ''
+    )
   let newConfig: any = []
-  if (config && typeof window !== 'undefined') {
-    const hasMyCompany = config.some(
+  if (configNew && typeof window !== 'undefined') {
+    const hasMyCompany = configNew.some(
       (item: any) => item?.props === 'my-company'
     )
-    const hasReferral = config.some(
+    const hasReferral = configNew.some(
       (item: any) => item?.props === 'refer-a-friend'
     )
     newConfig = [
@@ -104,7 +112,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
     if (!isB2B) {
       if (referralProgramActive) {
         if (!hasReferral) {
-          newConfig = [...config]
+          newConfig = [...configNew]
           newConfig.push({
             type: 'tab',
             text: translate('label.myAccount.referAFriendText'),
@@ -116,7 +124,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           })
         }
       } else {
-        newConfig = [...config]
+        newConfig = [...configNew]
       }
     } else if (!hasMyCompany) {
       newConfig.push(
@@ -226,6 +234,39 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
         })
       }
     }
+    if (featureToggle?.features?.enableTradeIn) {
+      newConfig.push({
+        type: 'tab',
+        text: translate('label.myAccount.iAmIntrestedInText'),
+        mtext: translate('label.myAccount.iAmIntrestedInText'),
+        props: 'register-interest',
+        head: <HandThumbUpIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        href: '/my-account/register-interest',
+        displayOrder: 13
+      })
+    }
+    if (featureToggle?.features?.enableTradeIn) {
+      newConfig.push({
+        type: 'tab',
+        text: translate('label.myAccount.tradeInText'),
+        mtext: translate('label.myAccount.tradeInText'),
+        props: 'tradein',
+        head: <StarIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        href: '/my-account/tradein',
+        displayOrder: 14
+      })
+    }
+    if (allowEnableWallet) {
+      newConfig.push({
+        type: 'tab',
+        text: translate('label.myAccount.myWalletText'),
+        mtext: translate('label.myAccount.myWalletText'),
+        props: 'wallet',
+        head: <WalletIcon className="text-gray-500 w-7 h-7 dark:invert" title="trade in" />,
+        href: '/my-account/wallet',
+        displayOrder: 15
+      })
+    }
   }
   return (
     <>
@@ -291,7 +332,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
           </div>
         </>
       ) : (
-        <div className="flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50">
+        <div className={`flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50 ${featureToggle?.features?.enableForPCSite ? 'sidebar_inner_section' : ''}`}>
           {newConfig.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
             <>
               {item.text == myAccountActiveTab ? (
@@ -301,8 +342,8 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                     shallow={true}
                     href={item.href}
                     passHref
-                    className={`block py-3 pl-2 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
-                      ? 'border-l-sky-500 border-l-2 slate-200 font-semibold dark:text-black icon-text-black'
+                    className={`block py-3 pl-4 flex-shrink-0 text-sm sm:text-base ${item.text == myAccountActiveTab
+                      ? 'border-l-sky-500 border-l-2 slate-200 font-semibold dark:text-black icon-text-black  pc-bg-active'
                       : 'border-white border-l-2 pl-2 text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                       }`}
                   >
@@ -316,7 +357,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                         href={itemChild?.href}
                         passHref
                         className={`block py-1 pl-4 mt-2 flex-shrink-0 text-xs ${itemChild.text == myAccountActiveTab
-                          ? 'border-l-sky-500 border-l-2 pl-2 font-semibold dark:text-slate-200 icon-text-black'
+                          ? 'border-l-sky-500 border-l-2 pl-2 font-semibold dark:text-slate-200 icon-text-black pc-bg-active'
                           : 'border-white border-l-2 pl-2 text-slate-500 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-800'
                           }`}
                       >
@@ -331,7 +372,7 @@ function SideMenu({ deviceInfo, featureToggle }: any) {
                     shallow={true}
                     href={item.href}
                     passHref
-                    className="flex-shrink-0 block py-3 pl-2 text-sm sm:text-base"
+                    className="flex-shrink-0 block py-3 pl-4 text-sm sm:text-base"
                   >
                     <span className="inline-block text-black sm:hidden dark:text-white">
                       {isMobile ? item?.head : item?.mtext}

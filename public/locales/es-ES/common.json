@@ -84,6 +84,8 @@
       "addedText": "agregado",
       "noBasketAvailableText": "No hay cesta disponible, por favor crea una nueva",
       "totalAmountText": "Cantidad total",
+      "orderAmountText": "Importe del pedido",
+      "pendingOrderAmountText": "Importe pendiente",
       "checkoutBtnText": "Pagar",
       "multipleCodesApplyText": "Puede aplicar varios códigos",
       "getItByText": "Recíbelo para",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "Se requiere el CVV",
         "cvvInvalidText": "El CVV no es válido",
         "chequeNoText": "Número de cheque",
-        "chequeNumberLabelText": "Número de cheque"
+        "chequeNumberLabelText": "Número de cheque",
+        "enterAmountToPayLabelText": "Ingrese el monto a pagar desde {paymentMethodName}"
       }
     },
     "collection": {
@@ -462,6 +465,7 @@
         "productRequired": "Se requiere al menos un producto"
       },
       "myDetailsHeadingText": "Mis Profile",
+      "tradeInText": "Compraventa",
       "editYourDetailsText": "Siéntete libre de editar cualquiera de tus detalles a continuación para que tu cuenta esté totalmente actualizada.",
       "myOrders": {
         "fetchReturnsErrorMsg": "¡Vaya! Error al recuperar devoluciones"
@@ -503,7 +507,38 @@
       "noLookbookAvaiableText": "No hay Lookbook Disponible",
       "shopTheLookText": "Compra el look",
       "confirmPasswordText": "Confirmar Contraseña",
-      "addNewUserText": "Agregar nuevo usuario"
+      "addNewUserText": "Agregar nuevo usuario",
+      "myTradeInText": "Mi Trade In",
+      "quoteText": "Presupuesto",
+      "createdText": "Creado",
+      "tradeInSectionFeedbackMessage": "Esperamos que te guste nuestra nueva sección de Trade In en nuestro sitio web. Todavía estamos trabajando en mejoras, pero si ves algo que no funciona como se esperaba, envíanos un correo electrónico con capturas de pantalla (si es posible) a",
+      "queryEmailInstruction": "Si tienes alguna consulta, envía un correo electrónico a",
+      "myWalletText": "Mi Monedero",
+      "walletActivationMessage": "Por favor espere mientras activamos su monedero y generamos la información del monedero.",
+      "transferToBankText": "Transferir al Banco",
+      "addBankDetailsText": "Añadir Datos Bancarios",
+      "enableWalletText": "Habilitar Monedero",
+      "walletCurrentBalanceText": "Saldo Actual del Monedero",
+      "walletTransactionHistoryText": "Historial de Transacciones del Monedero",
+      "dateText": "Fecha",
+      "amountText": "Cantidad",
+      "referenceText": "Referencia",
+      "noTransactionHistoryMessage": "No hay historial de transacciones disponible.",
+      "noBankTransferHistoryText": "No bank transfer available",
+      "bankTransferHistoryText": "Historial de Transferencias Bancarias",
+      "bankNameText": "Nombre del Banco",
+      "AccountNoText": "Nº de Cuenta",
+      "sortCodeText": "Código de Sorteo",
+      "walletDisabledMessage": "El monedero está deshabilitado. Actívelo para ver el saldo y las transacciones.",
+      "roleRequiredText": "El rol es obligatorio",
+      "selectRoleText": "Por favor seleccione un rol",
+      "zoneRequiredText": "La zona es obligatoria",
+      "selectZoneText": "Por favor seleccione una zona",
+      "branchRequiredText": "La sucursal es obligatoria",
+      "selectBranchText": "Por favor seleccione una sucursal",
+      "countryRequiredText": "El país es obligatorio",
+      "selectCountryText": "Por favor seleccione un país",
+      "iAmIntrestedInText": "Estoy interesado en"
     },
     "navBar": {
       "currencyText": "Moneda",
@@ -597,6 +632,7 @@
       "freeText": "Gratis",
       "additionalChargesText": "Cargos Adicionales",
       "taxText": "Impuesto",
+      "paidText": "Pagado",
       "youPayText": "Tú Pagas",
       "placeOrderBtnText": "Realizar Pedido",
       "loseDeliveryText": "¡Estás a punto de perder la Entrega Gratuita!",
@@ -1318,6 +1354,7 @@
       "userAlreadyExistsErrorMsg": "El usuario ya existe",
       "tokenInvalidErrorMsg": "¡Ups! El token no es válido",
       "tokenExpiredErrorMsg": "¡Ups! El token ha caducado o no es válido",
+      "sessionExpiredErrorMsg": "Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.",
       "companyNotFoundErrorMsg": "Empresa no encontrada.",
       "cartItemMaxAddedErrorMsg": "Se ha alcanzado el límite máximo de artículos en el carrito. Por favor, elimina algunos artículos e inténtalo de nuevo.",
       "addressAddedSuccessfullyMsg": "Nueva dirección añadida exitosamente",
@@ -1372,7 +1409,12 @@
         "upiNotSupportedErrorMsg": "El pago UPI no es compatible.",
         "paymentAlreadyCompletedErrorMsg": "El pago de tu carrito ya se ha completado.",
         "notEnoughCreditErrorMsg": "No hay suficiente crédito disponible.",
-        "paymentMethodNotSupportedErrorMsg": "El método de pago no es compatible."
+        "walletNotFoundErrorMsg": "Cartera no encontrada.",
+        "notEnoughBalanceErrorMsg": "Saldo insuficiente disponible.",
+        "paymentMethodNotSupportedErrorMsg": "El método de pago no es compatible.",
+        "paymentAmountRequiredErrorMsg": "Se requiere el importe del pago.",
+        "paymentAmountMinValueErrorMsg": "El importe mínimo de pago es {currencySymbol}{paymentAmount}.",
+        "paymentAmountCannotExceedErrorMsg": "El valor del pago no puede exceder {currencySymbol}{paymentAmount}."
       },
       "password": {
         "passwordValidationMsg": "La contraseña debe tener un mínimo de 8 caracteres y al menos 1 letra mayúscula.",

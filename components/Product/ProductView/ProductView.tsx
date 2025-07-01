@@ -48,6 +48,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+import { getItem } from '@components/utils/localStorage'
 const Preview = dynamic(() => import('@components/Product/ProductCard/Preview'))
 const AttributesHandler = dynamic(() => import('@components/Product/ProductView/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -281,6 +282,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (typeof window !== 'undefined') {
           //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          const cartItems = getItem('cartItems')
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
           if (currentPage) {
@@ -355,6 +357,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (typeof window !== 'undefined') {
               //debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+              const cartItems = getItem('cartItems')
               recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
               if (currentPage) {
@@ -517,6 +520,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       }
     }
   }
+  const cashbackAmount = product?.customAttributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
+  const cashbackDescription = product?.customAttributes?.find(((item: any) => item?.key == "cashback.description"))?.value
 
   const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
   SwiperCore.use([Navigation])
@@ -658,7 +663,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             {product?.name}
           </h2>
           <div className="flex items-center justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <Prices cashbackAmount={cashbackAmount} contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             <div className="h-6 border-s border-slate-300 dark:border-slate-700"></div>
             <div className="flex items-center">
               <Link href={`#productReview`} className="flex items-center text-sm font-medium" >

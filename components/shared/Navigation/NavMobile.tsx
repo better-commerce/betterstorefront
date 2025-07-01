@@ -53,10 +53,10 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
                 </ul>
               </Disclosure.Panel>
             )}
-               {i?.contentBody && (
+            {i?.contentBody && (
               <Disclosure.Panel>
                 <ul className="grid grid-cols-2 pl-3 mt-2 space-2 nav-submenu-level">
-                <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: removeTitleTags(i?.contentBody), }} ></div>
+                  <div className="w-full menu-html menu-data" dangerouslySetInnerHTML={{ __html: removeTitleTags(i?.contentBody), }} ></div>
                 </ul>
               </Disclosure.Panel>
             )}
@@ -112,8 +112,8 @@ const NavMobile: React.FC<NavMobileProps> = ({ data, navItems, onClickClose, fea
   };
 
   return (
-    <div className="w-full h-screen py-2 overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-white divide-neutral-100 dark:divide-neutral-800">
-      <div className="px-5 pb-2">
+    <div className="w-full h-screen overflow-y-auto transition transform bg-white divide-y-2 shadow-lg ring-1 dark:ring-neutral-700 dark:bg-white divide-neutral-100 dark:divide-neutral-800">
+      <div className={`px-5 bg-header-clr ${featureToggle?.features?.enablePCTopHeader ? ' py-5' : ' py-2'}`}>
         <Logo />
         <span className="absolute p-1 right-2 top-4">
           <ButtonClose onClick={onClickClose} />

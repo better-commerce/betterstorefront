@@ -16,7 +16,12 @@ const getProductApiMiddleware = async (req: any, res: any) => {
       query: req.body.slug,
       cookies: req.cookies,
     })
-    res.status(200).json({ ...response, ...mapObject(response, getProductTransformMap)?.data })
+    res
+      .status(200)
+      .json({
+        ...response,
+        ...mapObject(response, getProductTransformMap)?.data,
+      })
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
@@ -35,21 +40,30 @@ export const getProductTransform = (product: any) => ({
   availability: product?.availability,
   //barCodes: product?.barCodes,
   //barcode: product?.barcode,
-  brand: product?.brand,
   //brandId: product?.brandId,
   //brandLogo: product?.brandLogo,
   //brandRecordId: product?.brandRecordId,
+  brand: product?.brand,
   breadCrumbs: product?.breadCrumbs,
   //buyingIncrements: product?.buyingIncrements,
   //canonicalTags: product?.canonicalTags,
   classification: product?.classification,
   //collections: product?.collections,
-  componentProducts: product?.componentProducts,
   //componentsInStock: product?.componentsInStock,
-  //condition: product?.condition,
+  componentProducts: product?.componentProducts,
+  condition: product?.condition,
   //couponProvider: product?.couponProvider,
   currentStock: product?.currentStock,
-  customAttributes: product?.customAttributes?.length ? product?.customAttributes?.map((attribute: any) => ({ compareAtPDP: attribute?.compareAtPDP, compareAtPLP: attribute?.compareAtPLP, display: attribute?.display, key: attribute?.key, value: attribute?.value, valueText: attribute?.valueText, })) : new Array<any>(),
+  customAttributes: product?.customAttributes?.length
+    ? product?.customAttributes?.map((attribute: any) => ({
+        compareAtPDP: attribute?.compareAtPDP,
+        compareAtPLP: attribute?.compareAtPLP,
+        display: attribute?.display,
+        key: attribute?.key,
+        value: attribute?.value,
+        valueText: attribute?.valueText,
+      }))
+    : new Array<any>(),
   cutOffTime: product?.cutOffTime,
   deliveryETA: product?.deliveryETA,
   //deliveryMessage: product?.deliveryMessage,
@@ -73,6 +87,7 @@ export const getProductTransform = (product: any) => ({
   //isDiscontinued: product?.isDiscontinued,
   isGiftWrapApplied: product?.isGiftWrapApplied,
   //isVisible: product?.isVisible,
+  itemPerCarton: product?.itemPerCarton,
   //launchDate: product?.launchDate,
   link: product?.link,
   listPrice: product?.listPrice,
@@ -96,6 +111,7 @@ export const getProductTransform = (product: any) => ({
   reviews: product?.reviews,
   //seoAvailability: product?.seoAvailability,
   //seoName: product?.seoName,
+  sellableType: product?.sellableType,
   shortDescription: product?.shortDescription,
   //soldIndependently: product?.soldIndependently,
   //stockAvailabilityMessage: product?.stockAvailabilityMessage,
@@ -114,16 +130,15 @@ export const getProductTransform = (product: any) => ({
 })
 
 export const getProductTransformMap = {
-
-/**
- * Transforms the API response to include only the necessary product data.
- *
- * @param {Object} response - The API response object containing product details.
- * @returns {Object} - An object with the transformed product data.
- */
+  /**
+   * Transforms the API response to include only the necessary product data.
+   *
+   * @param {Object} response - The API response object containing product details.
+   * @returns {Object} - An object with the transformed product data.
+   */
   data: (response: any) => ({
     product: getProductTransform(response?.product),
-  })
+  }),
 }
 
 export default apiRouteGuard(getProductApiMiddleware)

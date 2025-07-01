@@ -15,6 +15,7 @@ export const AUTH_URL = process.env.BETTERCOMMERCE_AUTH_URL
 export const REVIEW_BASE_URL = process.env.BETTERCOMMERCE_REVIEW_BASE_URL
 export const STATIC_BRANDS_PATH_ENABLED = stringToBoolean( process.env.STATIC_BRANDS_PATH_ENABLED )
 export const OMS_BASE_URL = process.env.OMS_BASE_URL
+export const BC_API_BASE_URL = process.env.BC_API_BASE_URL
 export const ORG_ID = process.env.NEXT_PUBLIC_ORG_ID
 export const CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE = stringToNumber( process.env.CLEARPAY_PAYMENT_ALLOWED_MIN_ORDER_VALUE )
 export const CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE = stringToNumber( process.env.CLEARPAY_PAYMENT_ALLOWED_MAX_ORDER_VALUE )
@@ -63,6 +64,8 @@ export module Cookie {
     export const SESSION_ID = 'sessionId'
     export const BASKET_ID = 'basketId'
     export const ORDER_ID = 'orderId'
+    export const SITE_USER_ID = 'suuid'
+    export const SITE_USER_HAS_MEMBERSHIP = 'suhm'
     export const COMPANY_ID = 'CompanyId'
     export const GOOGLE_TRANSLATE = 'googtrans'
     export const KIT_BASKET_ID = 'kitBasketId'

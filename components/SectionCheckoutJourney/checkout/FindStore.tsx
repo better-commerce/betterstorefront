@@ -26,23 +26,37 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
       if (!postCode) return
       setLoading(true)
 
-      const items = basket?.lineItems?.length ? basket?.lineItems?.map((item: any) => ({ stockCode: item?.stockCode, qty: item?.qty })) : []
-      //const { data } = await axios.post(NEXT_STORE_LOCATOR, {
+      const items = basket?.lineItems?.length
+        ? basket?.lineItems?.map((item: any) => ({
+          stockCode: item?.stockCode,
+          qty: item?.qty
+        }))
+        : []
+
       const { data } = await axios.post(NEXT_CLICK_AND_COLLECT, {
         items,
-        postCode,
+        postCode
       })
+
       setLoading(false)
+
       if (data?.length) {
         setStores(data)
+        handleStoreSelection(data[0]) // ✅ Auto-select first store
       } else {
         setStores(null)
-        setAlert({ type: AlertType.ERROR, msg: translate('common.message.noStoreFoundErrorMsg') })
+        setSelectedStore(null)
+        setAlert({
+          type: AlertType.ERROR,
+          msg: translate('common.message.noStoreFoundErrorMsg')
+        })
       }
     } catch (error) {
       console.error(error)
+      setLoading(false)
     }
   }
+
 
   // Function to handle store selection
   const handleStoreSelection = (store: any) => {
@@ -75,12 +89,13 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
       <form onSubmit={handleFetchStores} className="grid border border-gray-200 sm:border-0 rounded-md sm:rounded-none sm:p-0 p-2 grid-cols-1 mt-0 bg-[#fbfbfb] sm:bg-transparent sm:mt-4 gap-2">
         <input
           type="text"
-          className="font-semibold text-black placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default rounded"
+          className="font-semibold text-black rounded placeholder:text-gray-400 placeholder:font-normal checkout-input-field dark:bg-white dark:text-black input-check-default"
           placeholder={translate('common.label.enterPostcodePlaceholder')}
           value={postCode}
+          autoFocus={true}
           onChange={handlePostCode}
         />
-        <button className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn-primary btn" disabled={!postCode || loading}>
+        <button className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 disabled:cursor-not-allowed disabled:opacity-60 btn-c btn" disabled={!postCode || loading}>
           {loading ? <LoadingDots /> : translate('label.store.findStoresText')}
         </button>
       </form>
@@ -100,26 +115,26 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                   <div className="check-panel">
                     <span
                       className={`rounded-check rounded-full check-address ${selectedStore?.Id === store?.Id
-                        ? 'bg-black border border-black'
+                        ? 'bg-black border border-black p-check-inpt'
                         : 'bg-white border border-gray-600'
                         }`}
                     ></span>
                   </div>
                   <div>
                     <div>
-                      <h2 className="text-base font-semibold mb-1">
+                      <h2 className="mb-1 text-base font-semibold">
                         {store?.Name}
                       </h2>
-                      <span className="text-gray-500 mb-1 font-semibold">
+                      <span className="mb-1 font-semibold text-gray-500">
                         {store?.Distance < 0.1 ? <>{translate(lessThanAMileTextKey)}</> : <>{store?.Distance}{' '}{translate('common.label.milesText')}</>}
                       </span>
                       <br />
-                      {store?.AvailableToCollectIn && <span className="text-black mr-1 text-base">
+                      {store?.AvailableToCollectIn && <span className="mr-1 text-base text-black">
                         {store?.AvailableToCollectIn}
                       </span>}
                       <br />
-                      {/* <p className="text-black mb-1">{store.City}</p>
-                        <span className="text-black mr-1 text-base">
+                      {/* <p className="mb-1 text-black">{store.City}</p>
+                        <span className="mr-1 text-base text-black">
                           {store?.PostCode}
                         </span> */}
                     </div>
@@ -128,19 +143,19 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                   {
                     selectedStore?.Id === store?.Id && (
                       <div>
-                        <span className="text-black mr-1 text-base">
+                        <span className="mr-1 text-base text-black">
                           {store?.Address1}
                         </span>
                         <br />
-                        <span className="text-black mr-1 text-base">
+                        <span className="mr-1 text-base text-black">
                           {store?.Address2}
                         </span>
                         <br />
-                        <span className="text-black mr-1 text-base">
+                        <span className="mr-1 text-base text-black">
                           {store?.City}{' '}{store?.PostCode}
                         </span>
                         <br />
-                        <span className="text-black mr-1 text-base">
+                        <span className="mr-1 text-base text-black">
                           {store?.County}
                         </span>
                       </div>
@@ -148,7 +163,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                   }
                 </div>
                 {/* {selectedStore?.id === store.id && (
-                      <button className='ml-8 px-1 py-3 mb-2 border border-black btn-primary lg:py-2 sm:px-4' onClick={handleCollectFromStore}>Collect from Store</button>
+                      <button className='px-1 py-3 mb-2 ml-8 border border-black btn-primary lg:py-2 sm:px-4' onClick={handleCollectFromStore}>Collect from Store</button>
                   )} */}
               </div>
             </>

@@ -10,6 +10,7 @@ import {
 import { useTranslation } from '@commerce/utils/use-translation'
 import axios from 'axios'
 import { useUI } from '@components/ui/context'
+import { Guid } from '@commerce/types'
 
 const TransferBasket = ({
   isOpen,
@@ -28,6 +29,7 @@ const TransferBasket = ({
   let index = 0
 
   const fetchB2BUsers = async () => {
+    if (!user?.companyId || (user?.companyId && user?.companyId === Guid.empty)) return [];
     let { data: b2bUsers } = await axios.post(NEXT_B2B_GET_USERS, {
       companyId: user?.companyId,
     })

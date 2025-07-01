@@ -4,7 +4,7 @@ import apiRouteGuard from '../base/api-route-guard'
 
 async function categoryProducts(req: any, res: any) {
   try {
-    const response = await getCategoryProducts(req.body.categoryId, req.cookies)
+    const response = await getCategoryProducts()(req.body.categoryId, req.cookies)
     res.status(200).json(response)
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)

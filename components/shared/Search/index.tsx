@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { MagnifyingGlassIcon, StarIcon, XMarkIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -18,9 +18,10 @@ import ProductTag from '@components/Product/ProductTag'
 import Prices from '@components/Prices'
 import { AnalyticsEventType } from '@components/services/analytics'
 import useAnalytics from '@components/services/analytics/useAnalytics'
-
+import usePreventScroll from 'hooks/usePreventScroll'
 export default function Search(props: any) {
   const { recordAnalytics } = useAnalytics()
+  usePreventScroll(); // Prevent scroll when search is open
   const { closeWrapper = () => { }, keywords, maxBasketItemsCount, deviceInfo, featureToggle, defaultDisplayMembership, searchDefaultSortBy } = props;
   const Router = useRouter()
   const [inputValue, setInputValue] = useState('')
@@ -29,7 +30,6 @@ export default function Search(props: any) {
   const [path, setCurrentPath] = useState(Router.asPath)
   const translate = useTranslation()
   const SearchEntity = EVENTS_MAP.ENTITY_TYPES.Search
-
   useEffect(() => {
     const fetchItems = async () => {
       setIsLoading(true)
@@ -71,9 +71,9 @@ export default function Search(props: any) {
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
       <div className='top-0 left-0 right-0 w-full h-40 nc-HeadBackgroundCommon 2xl:h-28 bg-primary-50 dark:bg-primary-50 '></div>
-      <div className="absolute text-gray-900 cursor-pointer h-9 w-9 right-10 top-10 mobile-hidden black-icon-svg" onClick={closeWrapper} >
-        <XMarkIcon />
-      </div>
+      <button  type="button" className="absolute text-gray-900 cursor-pointer h-12 w-12 flex items-center justify-center z-50 right-10 top-10 mobile-hidden black-icon-svg" onClick={closeWrapper} >
+        <XMarkIcon className='h-9 w-9' />
+      </button>
       <div className="absolute z-10 flex flex-col items-center justify-center w-full px-4 py-5 mt-4 sm:mt-10 sm:px-10 top-5">
         <div className="w-full mx-auto mb-4 sm:w-3/5">
           <div className="flex flex-row items-center justify-center px-1 rounded-sm mob-center-align">
@@ -89,7 +89,7 @@ export default function Search(props: any) {
             </div>
           </div>
         </div>
-        <div className="w-full mt-10 sm:w-3/5 p-[1px] border-gray-100 gap-x-6 gap-y-4 grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 max-panel-search overflow-y-scroll max-h-[70vh] pb-10">
+        <div className={`${featureToggle?.features?.enableForPCSite ? 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-2' : 'grid grid-cols-1 sm:mx-0 md:grid-cols-4 px-3 sm:px-4 lg:grid-cols-4 mt-10'} w-full sm:w-3/5 p-[1px] border-gray-100 gap-x-4 gap-y-4 max-panel-search overflow-y-scroll pc-overflow-auto max-h-[70vh] pb-10 customScrollbar`}>
           {isLoading &&
             rangeMap(12, (i) => (
               <div key={i} className="mx-auto mt-20 rounded-md shadow-md w-60 h-72" >
@@ -101,46 +101,100 @@ export default function Search(props: any) {
                 </div>
               </div>
             ))}
-          {products?.map((product: any, idx: number) => {
-            return (
-              <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
-                <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
-                  <Link href={`/${product.slug}`} className="block">
-                    <div className="flex w-full h-0 aspect-w-11 aspect-h-12"
-                      onClick={() => {
-                        if (inputValue) {
-                          const location = window.location
-                          pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
-                        }
-                      }}>
-                      <img src={generateUri(product?.image, 'h=270&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
+          {featureToggle?.features?.enableForPCSite ? (
+            <>
+              {products?.map((product: any, idx: number) => {
+                const cashbackAmount = product?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
+                return (
+                  <Link href={`/${product.slug}`} className={`grid grid-cols-12 border border-gray-200 pc-grid`} key={`search-${idx}`} onClick={() => {
+                    closeWrapper();
+                    if (inputValue) {
+                      const location = window.location
+                      pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
+                    }
+                  }}>
+                    <div className='col-span-12'>
+                      <div className="relative flex-shrink-0 overflow-hidden group">
+                        <div className="block">
+                          <div className="flex w-full">
+                            <img src={generateUri(product?.image, 'h=170&fm=webp') || IMG_PLACEHOLDER} className="object-contain object-top w-auto h-[180px] mx-auto" alt={product?.name} />
+                          </div>
+                        </div>
+                        <div className={CLASSES}>
+                          <ProductTag product={product} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className='col-span-12 border-l border-gray-200'>
+                      <div className="space-y-4 px-2.5 pt-5 pb-2.5">
+                        <div>
+                          <h2 className="text-sm text-base font-semibold text-left">{product?.brand}</h2>
+                          <h2 className="text-base font-semibold text-left transition-colors dark:text-black nc-ProductCard__title">{product?.name}</h2>
+                          <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
+                        </div>
+                        <div className="flex items-end justify-between product-card-panel">
+                          <Prices cashbackAmount={cashbackAmount} price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                          {product?.reviewCount > 0 &&
+                            <div className="flex items-center mb-0.5">
+                              <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
+                              <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
+                                {product?.rating || ""} ({product?.reviewCount || 0} reviews)
+                              </span>
+                            </div>
+                          }
+                        </div>                        
+                      </div>
                     </div>
                   </Link>
-                  <div className={CLASSES}>
-                    <ProductTag product={product} />
-                  </div>
-                </div>
-
-                <div className="space-y-4 px-2.5 pt-5 pb-2.5">
-                  <div>
-                    <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] dark:text-black nc-ProductCard__title">{product?.name}</h2>
-                    <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
-                  </div>
-                  <div className="flex items-end justify-between product-card-panel">
-                    <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                    {product?.reviewCount > 0 &&
-                      <div className="flex items-center mb-0.5">
-                        <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
-                        <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
-                          {product?.rating || ""} ({product?.reviewCount || 0} reviews)
-                        </span>
+                )
+              })}
+            </>
+          ) : (
+            <>
+              {products?.map((product: any, idx: number) => {
+                const cashbackAmount = product?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
+                return (
+                  <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
+                    <div onClick={closeWrapper} className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
+                      <Link href={`/${product.slug}`} className="block">
+                        <div className="flex w-full h-0 aspect-w-11 aspect-h-12"
+                          onClick={() => {
+                            if (inputValue) {
+                              const location = window.location
+                              pushSearchToNavigationStack(`${location.pathname}${location.search}`, inputValue)
+                            }
+                          }}>
+                          <img src={generateUri(product?.image, 'h=270&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full h-full drop-shadow-xl" alt={product?.name} />
+                        </div>
+                      </Link>
+                      <div className={CLASSES}>
+                        <ProductTag product={product} />
                       </div>
-                    }
+                    </div>
+
+                    <div className="space-y-4 px-2.5 pt-5 pb-2.5">
+                      <div>
+                        <h2 className="text-base font-semibold text-left transition-colors min-h-[60px] dark:text-black nc-ProductCard__title">{product?.name}</h2>
+                        <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1 text-left justify-start`}>{product?.classification?.mainCategoryName}</p>
+                      </div>
+                      <div className="flex items-end justify-between product-card-panel">
+                        <Prices cashbackAmount={cashbackAmount} price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        {product?.reviewCount > 0 &&
+                          <div className="flex items-center mb-0.5">
+                            <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
+                            <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">
+                              {product?.rating || ""} ({product?.reviewCount || 0} reviews)
+                            </span>
+                          </div>
+                        }
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )
-          })}
+                )
+              })}
+            </>
+          )}
+
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@ export const OPERATIONS = [
   'getCustomerWishlist',
   'getAllProductPaths',
   'getAllProducts',
+  'getCategoryProducts',
   'getAllRecentlyViewedProducts',
   'getProduct',
   'getProductPreview',
@@ -40,6 +41,9 @@ export const OPERATIONS = [
   'editAddress',
   'getWishlist',
   'createWishlist',
+  'createProductInterest',
+  'removeUserProductInterest',
+  'getUserInterestProducts',
   'removeItemFromWishlist',
   'createReview',
   'applyPromo',
@@ -63,7 +67,9 @@ export const OPERATIONS = [
   'getMembershipPlans',
   'getDataPack',
   'downloadDataPack',
-  'downloadInvoice'
+  'downloadInvoice',
+  'getBlogList',
+  'getBlogDetail'
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -104,6 +110,9 @@ export type Operations<P extends APIProvider> = {
   getOrders: {}
   getWishlist: {}
   createWishlist: {}
+  createProductInterest: {}
+  removeUserProductInterest: {}
+  getUserInterestProducts: {}
   removeItemFromWishlist: {}
   subscribe: {}
   priceMatch: {}
@@ -121,6 +130,8 @@ export type Operations<P extends APIProvider> = {
   getDataPack: {}
   downloadDataPack: {}
   downloadInvoice: {}
+  getBlogList: {}
+  getBlogDetail: {}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']
@@ -210,6 +221,7 @@ export type Operations<P extends APIProvider> = {
       } & OperationOptions
     ): Promise<T['data']>
   }
+  getCategoryProducts: {}
 
   getAllRecentlyViewedProducts: {
     <T extends getAllRecentlyViewedProductsOperation>(opts: {

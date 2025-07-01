@@ -5,6 +5,7 @@ import { TruckIcon, CubeIcon } from '@heroicons/react/24/outline'
 //
 import { useTranslation } from '@commerce/utils/use-translation'
 import withAddressSelection from './withAddressSelection'
+import { CURRENT_THEME } from '@components/utils/constants'
 
 interface DeliveryTypeSelectionProps {
   readonly basket: any
@@ -34,33 +35,39 @@ const DeliveryTypeSelection = ({ deliveryTypeMethod, setDeliveryTypeMethod, deli
             {deliveryMethods?.map(
               (deliveryMethod: any, deliveryIdx: any) =>
                 !!deliveryMethod.children.length && (
-                  <RadioGroup.Option key={deliveryIdx} value={deliveryMethod} className={({ checked, active }) => classNames(checked ? 'border-transparent' : 'border-gray-300', active ? 'ring-emerald-500' : '', 'relative bg-white border shadow-sm p-2 w-full flex rounded-md cursor-pointer focus:outline-none')}>
+                  <RadioGroup.Option key={deliveryIdx} value={deliveryMethod} className={({ checked, active }) => classNames(checked ? 'border-transparent' : 'border-gray-300', active ? 'ring-emerald-500' : '', 'relative bg-white border shadow-sm p-2 w-full flex rounded-md cursor-pointer focus:outline-none delivery-type-panel')}>
                     {({ checked, active }) => (
                       <>
                         <div className="flex flex-col w-full">
                           <div className="flex p-1 rounded">
-                            <RadioGroup.Label as="span" className="flex gap-x-5 font-bold text-gray-900 uppercase text-md">
-                              <div>
-                                <span className={classNames(active ? '' : '', checked ? 'bg-emerald-500' : 'bg-gray-100', 'flex items-center justify-center w-16 h-16 mb-3 rounded-full ')}>
+                            <RadioGroup.Label as="span" className="flex font-bold text-gray-900 uppercase gap-x-5 text-md">
+                              {CURRENT_THEME === 'camera' && ( 
+                                <div className={classNames(active ? '' : '', checked ? 'p-border-clr' : 'border-gray-600 border', 'w-5 h-5 flex rounded-full justify-center items-center mt-0.5')}>
+                                  <span 
+                                  className={classNames(active ? '' : '', checked ? 'p-border-clr p-bg-clr ' : 'border-white border bg-white', 'w-3 h-3 rounded-full')}></span>
+                                </div>
+                               )} 
+                              <div className='p-none'>
+                                <span className={classNames(active ? '' : '', checked ? 'p-border-clr' : 'bg-gray-100', 'flex items-center justify-center w-16 h-16 mb-3 rounded-full ')}>
                                   {deliveryMethod?.type == 1 ? (
                                     <>
-                                      <TruckIcon className={classNames(active ? '' : '', checked ? 'text-white' : 'text-gray-300', 'w-8 h-8 ')} />
+                                      <TruckIcon className={classNames(active ? '' : '', checked ? 'text-white' : 'text-gray-300', 'w-8 h-8 p-none ')} />
                                     </>
                                   ) : (
                                     <>
-                                      <CubeIcon className={classNames(active ? '' : '', checked ? 'text-white' : 'text-gray-300', 'w-8 h-8 ')} />
+                                      <CubeIcon className={classNames(active ? '' : '', checked ? 'text-white' : 'text-gray-300', 'w-8 h-8 p-none ')} />
                                     </>
                                   )}
                                 </span>
                               </div>
                               <div>
                                 <div>{deliveryMethod.title}</div>
-                                <div className="flex mt-1 text-sm text-gray-500 lowercase font-normal">{deliveryMethod.content}</div>
+                                <div className="flex mt-1 text-sm font-normal text-gray-500 lowercase">{deliveryMethod.content}</div>
                               </div>
                             </RadioGroup.Label>
                           </div>
                         </div>
-                        <div className={classNames(active ? 'border' : 'border', checked ? 'border-emerald-500' : 'border-transparent', 'absolute -inset-px pointer-events-none rounded')} aria-hidden="true" />
+                        <div className={classNames(active ? 'border' : 'border', checked ? 'p-border-clr' : 'border-transparent', 'absolute -inset-px pointer-events-none rounded')} aria-hidden="true" />
                       </>
                     )}
                   </RadioGroup.Option>

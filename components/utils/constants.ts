@@ -3,12 +3,17 @@ import { toNumber } from 'lodash'
 
 //BETTERCOMMERCE ENDPOINTS
 export const HOMEPAGE_SLUG = `/`
+export const BLOG_PAGE_ID = 'e05bbda5-32fd-418e-87df-adda1bb3ce1d'
+export const BLOG_COLS = 'hero.hero_title,hero.hero_description,hero.hero_image'
 export const KIT_BRAND_PLATFORM = '/api/v1/kit-builder/brand-platform'
 export const KIT_BRAND_CATEGORY = '/api/v1/kit-builder/category'
-export const KIT_BRAND_PRODUCTS = '/api/v1/kit-builder/product/by-brand-platform'
-export const KIT_BRAND_PROD_BY_CAT = '/api/v1/kit-builder/product/by-kit-category'
+export const KIT_BRAND_PRODUCTS =
+  '/api/v1/kit-builder/product/by-brand-platform'
+export const KIT_BRAND_PROD_BY_CAT =
+  '/api/v1/kit-builder/product/by-kit-category'
 export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
+export const BLOG_LIST_ENDPOINT = `/api/${process.env.BETTERCMS_API_VERSION}/page/list`
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
@@ -48,6 +53,7 @@ export const ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/com
 export const CREATE_ADDRESS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/address/create`
 export const CATALOG_SEARCH = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search/r`
 export const STORE_LOCATOR_API = '/api/v1/oms/store'
+export const STORE_STOCK_CHECK ='api/v1/oms/stock/stockCode'
 export const BASE_SEARCH_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/search`
 export const SHIPPING_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/shipping-method`
 export const CHECKOUT_ENDPOINT = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/checkout`
@@ -78,19 +84,22 @@ export const REFERRAL_VOUCHERS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/co
 // Membership API endpoints
 export const MEMBERSHIP_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/membership`
 export const NEXT_MEMBERSHIP_BENEFITS = '/api/membership/benefits'
-export const NEXT_DOWNLOAD_VOUCHERS =   `/api/membership/download-voucher`
+export const NEXT_DOWNLOAD_VOUCHERS = `/api/membership/download-voucher`
 
 export const FACEBOOK_SHARE_STRING = `https://www.facebook.com/sharer/sharer.php`
 export const TWITTER_SHARE_STRING = `https://twitter.com/intent/tweet`
 export const LIVE_CHAT_TIME = '07:30am-5:30pm'
 //LOCAL ENDPOINTS
-export const NEXT_PRODUCT_BY_KIT_CATEGORY = '/api/kitbuilder/product-by-category'
+export const NEXT_PRODUCT_BY_KIT_CATEGORY =
+  '/api/kitbuilder/product-by-category'
 export const NEXT_GET_COUNTRIES = '/api/countries'
 export const NEXT_CLICK_AND_COLLECT = '/api/shipping-plans/click-collect'
 export const NEXT_SHIPPING_PLANS = '/api/shipping-plans/plans'
 export const NEXT_UPDATE_DELIVERY_INFO = '/api/shipping-plans/update-delivery'
-export const NEXT_UPDATE_CHECKOUT2_ADDRESS = '/api/basket/update-checkout2-address'
-export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY = '/api/delivery/click-collect-store'
+export const NEXT_UPDATE_CHECKOUT2_ADDRESS =
+  '/api/basket/update-checkout2-address'
+export const NEXT_CLICK_AND_COLLECT_STORE_DELIVERY =
+  '/api/delivery/click-collect-store'
 export const NEXT_API_PRICE_MATCH_ENDPOINT = `/api/price-match`
 export const NEXT_API_KEYWORDS_ENDPOINT = '/api/keywords'
 export const NEXT_API_NOTIFY_ME_ENDPOINT = `/api/notify-me/`
@@ -201,6 +210,9 @@ export const NEXT_REFERRAL_CLICK_ON_INVITE =
   '/api/customer/referral/referral-click-on-invite'
 export const NEXT_REFERRAL_INFO = '/api/customer/referral/referral-info'
 export const NEXT_REFERRAL_VOUCHERS = '/api/customer/referral/referral-vouchers'
+export const NEXT_CUSTOMER_PRODUCT_INTEREST = '/api/customer/product-interest'
+export const NEXT_DELETE_CUSTOMER_PRODUCT_INTEREST = '/api/customer/remove-user-product-interest'
+export const NEXT_GET_CUSTOMER_PRODUCT_INTEREST = '/api/customer/get-user-interest-products'
 export const NEXT_GET_ADDON_PRODUCTS = `/api/get-addon-products`
 export const NEXT_COMPARE_ATTRIBUTE = '/api/compare-attributes'
 export const NEXT_LOG_ACTIVITY = '/api/log/activity'
@@ -216,6 +228,7 @@ export const NEXT_UPDATE_STATUS_RFQ = '/api/b2b/request-for-quote/status-update'
 
 // Store Locator
 export const NEXT_STORE_LOCATOR = '/api/store-locator/get-stores'
+export const NEXT_STOCK_CHECK = '/api/get-stock-check'
 export const NEXT_GET_ALL_STORES = '/api/store-locator/get-all-stores'
 export const NEXT_GET_ALL_MEMBERSHIP_PLANS = '/api/membership/get-all-plans'
 export const NEXT_GET_STORES_DETAILS = '/api/store-locator/get-store-details'
@@ -233,6 +246,77 @@ export const NEXT_GET_PLACE_DETAILS =
 export const GET_ALL_STORES = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores/all`
 export const GET_STORES_DETAILS = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
 export const POST_STORE_BY_POSTALCODE = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/stores`
+
+//TRADE IN JOURNEY NEXT APP ENDPOINTS
+
+export const NEXT_TRADE_IN_GUEST_LOGIN = `/api/trade-in/post-guest-login`
+export const NEXT_TRADE_IN_LOGIN = `/api/trade-in/post-login`
+export const NEXT_TRADE_IN_LOGIN_USER = `/api/trade-in/quote-as-user`
+export const NEXT_TRADE_IN_LOGGED_IN_QUOTE_SEND = `/api/trade-in/post-quote`
+export const NEXT_TRADE_IN_GET_QUOTE_BY_ID = `/api/trade-in/get-quote-by-id`
+export const NEXT_TRADE_IN_GET_ASSESSMENT_STATUS = `/api/trade-in/update-assessment-status`
+export const NEXT_TRADE_IN_PRE_SIGN_AGREEMENT = `/api/trade-in/set-pre-sign-agreement`
+export const NEXT_TRADE_IN_POST_QUOTE_SAVE_BY_ID = `/api/trade-in/post-quote-save-by-id`
+export const NEXT_TRADE_IN_PRODUCT_BY_STOCKCODE = `/api/trade-in/get-product-by-stockcode`
+export const NEXT_TRADE_IN_PRODUCTS = `/api/trade-in/get-products`
+export const NEXT_TRADE_IN_SAVE_ADDRESS = `/api/trade-in/post-quote-address`
+export const NEXT_TRADE_IN_USER_TOKEN = `/api/trade-in/get-user-token`
+export const NEXT_TRADE_IN_QUOTE_LINE_LEVEL_STATUS = `/api/trade-in/set-line-level-status`
+export const NEXT_TRADE_IN_GET_SHIPPING_METHODS = `/api/trade-in/get-shipping-methods`
+export const NEXT_TRADE_IN_GET_STORES = `/api/trade-in/get-stores`
+export const NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD = `/api/trade-in/update-shipping-method`
+export const NEXT_TRADE_IN_UPDATE_STORE_ADDRESS = `/api/trade-in/update-store-address`
+export const NEXT_TRADE_IN_CUSTOMERS = `/api/trade-in/customers`
+export const NEXT_TRADE_IN_CUSTOMER_TRADES = `/api/trade-in/customer-trades`
+export const NEXT_TRADE_IN_QUOTE_CANCEL_BY_CUSTOMER = `/api/trade-in/cancel-quote-by-customer`
+export const NEXT_TRADE_IN_AMEND_PRODUCT = `/api/trade-in/assessments/amend-product`
+export const NEXT_TRADE_IN_GET_ASSESSMENT = `/api/trade-in/assessments/get-assessment`
+export const NEXT_TRADE_IN_UPDATE_PRODUCT_STOCKCODE = `/api/trade-in/assessments/update-product-stockcode`
+export const NEXT_TRADE_IN_UPDATE_PRODUCT_ACCESSORIES = `/api/trade-in/assessments/update-product-accessories`
+export const NEXT_TRADE_IN_UPDATE_PRODUCT_CONDITION = `/api/trade-in/assessments/update-product-condition`
+export const NEXT_TRADE_IN_UPDATE_PRODUCT_NOTES = `/api/trade-in/assessments/update-product-notes`
+export const NEXT_TRADE_IN_SCHEDULE_DELIVERY = `/api/trade-in/schedule-deliveries`
+export const NEXT_TRADE_IN_PACKING_SLIP = `/api/trade-in/get-packing-slip`
+export const NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS = `/api/deliveries/pickup-locations`
+
+//TRADE IN JOURNEY API ENDPOINTS
+export const TRADE_IN_MODULE_CODE=`tradein`
+export const TRADE_IN_GUEST_LOGIN = `/${TRADE_IN_MODULE_CODE}/customers/guest`
+export const TRADE_IN_LOGIN = `/${TRADE_IN_MODULE_CODE}/customers/authenticate`
+export const TRADE_IN_LOGGED_IN_QUOTE_SEND = `/${TRADE_IN_MODULE_CODE}/quotes`
+export const TRADE_IN_GET_QUOTE_BY_ID = `/${TRADE_IN_MODULE_CODE}/quotes`
+export const TRADE_IN_GET_QUOTES = `/${TRADE_IN_MODULE_CODE}/quotes`
+export const TRADE_IN_PRODUCTS = `/${TRADE_IN_MODULE_CODE}/products`
+export const TRADE_IN_USER_TOKEN = `/${TRADE_IN_MODULE_CODE}/users/login`
+export const TRADE_IN_GET_SHIPPING_METHODS = `/${TRADE_IN_MODULE_CODE}/deliveries/shipping-method`
+export const TRADE_IN_GET_STORES = `/${TRADE_IN_MODULE_CODE}/stores`
+export const TRADE_IN_GET_CUSTOMER = `/${TRADE_IN_MODULE_CODE}/customers`
+export const TRADE_IN_GET_ASSESSMENT_STATUS = `/${TRADE_IN_MODULE_CODE}/assessments`
+export const TRADE_IN_DPD_PICKUP_LOCATIONS = `/${TRADE_IN_MODULE_CODE}/deliveries/pickup-locations`
+export const TRADE_IN_GET_DELIVERY_ID = `/${TRADE_IN_MODULE_CODE}/deliveries/schedule-delivery`
+export const TRADE_IN_GET_PACKING_SLIP = `/${TRADE_IN_MODULE_CODE}/deliveries`
+
+// WALLET NEXT APP ENDPOINTS 
+
+export const NEXT_WALLET_ENABLE_CUSTOMER_WALLET = `/api/wallet/enable-customer-wallet`
+export const NEXT_WALLET_GET_CUSTOMER_WALLET = `/api/wallet/get-customer-wallet`
+export const NEXT_WALLET_GET_CUSTOMER_WALLET_TRANSACTIONS = `/api/wallet/get-customer-wallet-transaction`
+export const NEXT_WALLET_GET_BANK_TRANSFERS = `/api/wallet/bank-transfers/list-transactions`
+export const NEXT_WALLET_GET_CUSTOMER_BANKS = `/api/wallet/get-customer-bank-list`
+export const NEXT_WALLET_ASSOCIATE_TO_CUSTOMER = `/api/wallet/associate-customer-wallet`
+export const NEXT_WALLET_GET_BALANCE = `/api/wallet/get-balance`
+export const NEXT_GET_CUSOMER_BANK_LIST = '/api/wallet/customer-bank/get-list'
+export const NEXT_BANK_TRANSFER = '/api/wallet/bank-transfers/create'
+export const NEXT_CUSTOMER_BANK_CREATE = '/api/wallet/customer-bank/create'
+
+//TRADE IN JOURNEY API ENDPOINTS
+export const WALLET_MODULE_CODE=`wallet`
+export const WALLET_ENABLE_CUSTOMER_WALLET = `/${WALLET_MODULE_CODE}/wallets/enable`
+export const WALLET_GET_CUSTOMER_WALLET = `/${WALLET_MODULE_CODE}/wallets`
+export const WALLET_WALLET_ASSOCIATE_TO_CUSTOMER = `api/${process.env.NEXT_PUBLIC_API_VERSION}/commerce/customer`
+export const GET_CUSOMER_BANK_LIST = `/${WALLET_MODULE_CODE}/customer-bank`
+export const BANK_TRANSFER = `/${WALLET_MODULE_CODE}/bank-transfer`
+export const BANK_DETAILS = `/${WALLET_MODULE_CODE}/customer-bank`
 
 //CONSTANTS
 
@@ -327,7 +411,6 @@ export module Messages {
       export const MOBILE_NUMBER =
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
       export const EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-      ///^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       export const FULL_NAME = /^[a-zA-Z 0-9\-]*$/
       export const ADDRESS_LINE = /^[a-zA-Z0-9,\-/.'()&#+_ ]*$/
       export const ADDRESS_LABEL = /^[a-zA-Z 0-9\-]*$/
@@ -348,8 +431,10 @@ export module Messages {
         /^(?:ordered|unordered)[(](.*)[)]$/i
       export const APLHABETS_WITH_SPACES = /^[a-zA-Z ]+$/i
       export const EMPTY_SPACE = /\S/
-      export const REPLACE_ALL_SPECIAL_CHARACTERS = /[&\/\\#, +()$~%.'":*?<>{}]/g
-      export const EXTRACT_SLUG = /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/;
+      export const REPLACE_ALL_SPECIAL_CHARACTERS =
+        /[&\/\\#, +()$~%.'":*?<>{}]/g
+      export const EXTRACT_SLUG =
+        /^https?:\/\/[^\/]+(?:\/\w{2}-\w{2})?\/(products\/[^?]+)/
     }
 
     export const Login: any = {
@@ -543,7 +628,8 @@ export module Messages {
     CART_ITEM_QTY_MAX_ADDED: 'You have added the maximum available quantity.',
     PAYMENT_METHOD_NOT_SUPPORTED:
       'This card is not supported for this transaction. Please retry using a different card.',
-    SHIPPING_OPTIONS_NOT_FOUND: 'Sorry, we could not find suitable shipping method for this order. Please contact customer service for assistance.',
+    SHIPPING_OPTIONS_NOT_FOUND:
+      'Sorry, we could not find suitable shipping method for this order. Please contact customer service for assistance.',
   }
 
   export const ManageUser: any = {
@@ -571,11 +657,11 @@ export module PageActions {
   }
 }
 
-export const RFQStatusStyles:any = {
+export const RFQStatusStyles: any = {
   Cancelled: 'text-red-600',
   Recieved: 'text-gray-600',
-  QuoteCreated: 'text-emerald-600', 
-};
+  QuoteCreated: 'text-emerald-600',
+}
 
 export const ALERT_TIMER = 5000
 
@@ -586,7 +672,33 @@ export const EmptyString = ''
 export const collectionSlug = 'you-may-also-like'
 export const CLOTH_SIZE_ATTRIB_NAME = 'clothing.size'
 export const CLOTH_COLOUR_ATTRIB_NAME = 'global.colour'
-export const IGNORE_QUERY_KEYS = ['iref', 'ireftp', 'storecode', 'urlcode', 'demo', 'sortBy', 'currentPage', 'freeText']
+export const IGNORE_QUERY_KEYS = [
+  'iref',
+  'ireftp',
+  'storecode',
+  'urlcode',
+  'demo',
+  'sortBy',
+  'currentPage',
+  'freeText',
+]
+
+export enum TradeInItemCondition {
+  LIKE_NEW = 'LikeNew',
+  EXCELLENT = 'Excellent',
+  VERY_GOOD = 'VeryGood',
+  GOOD = 'Good',
+  WELL_USED = 'WellUsed',
+  FAULTY = 'Faulty',
+}
+
+export enum TradeInSteps {
+  ENTER_ITEM = 1,
+  CONFIRM_DETAIL = 2,
+  GET_QUOTE = 3,
+  SHIPPING_DETAILS = 4,
+  FINAL_DETAILS = 5,
+}
 
 export enum OrderStatus {
   PENDING = 'Pending',
@@ -623,6 +735,56 @@ export enum OrderStatus {
   CANCELLED_BY_CUSTOMER = 'CancelledByCustomer',
   CANCELLED_BY_STORE = 'CancelledByStore',
 }
+
+export enum QuoteStatus {
+  AwaitingQuotation = "Awaiting Quotation",
+  Quoted = "Quoted",
+  QuoteAccepted = "QuoteAccepted",
+  QuoteRejected = "QuoteRejected",
+  QuoteExpired = "Quote Expired",
+  CollectionArranged = "Collection Arranged",
+  ParcelArrived = "Parcel Arrived",
+  Assessment = "Assessment",
+  FurtherAssessment = "Further Assessment",
+  Assessed = "Assessed",
+  TradeInComplete = "Trade-In Complete",
+  AssessedFullReject = "Assessed Full Reject",
+  AssessedPartialReject = "Assessed Partial Reject",
+  TradeInFullReject = "Trade-In Full Reject",
+  TradeInCompletePartialReject = "Trade-In Complete Partial Reject",
+  CompleteBookedIntoStock = "Complete Booked Into Stock",
+  CompleteBookedIntoStockPartialReturn = "Complete Booked Into Stock Partial Return",
+  FullReturn = "Full Return",
+  TradeInCompleteFullReturn = "Trade-In Complete Full Return",
+  CancelledByCustomer = "Cancelled By Customer",
+  CancelledByBusiness = "Cancelled By Business",
+}
+
+export enum QuoteItemStatus {
+  Submitted = "Submitted",
+  PriceNeeded = "Price Needed",
+  Accepted = "Accepted",
+  Rejected = "Rejected",
+  Expired = "Expired",
+  AssessmentInProgress = "Assessment In Progress",
+  AssessedRejectedByBusiness = "Assessed Rejected By Business",
+  AssessedRejectedByCustomer = "Assessed Rejected By Customer",
+  AssessmentAccepted = "Assessment Accepted",
+  StockBookedIn = "Stock Booked In",
+}
+
+export enum AssessmentStatus {
+  Pending = "Pending",
+  InProgress = "In Progress",
+  AccessoriesChecked = "Accessories Checked",
+  ItemChecked = "Item Checked",
+  ImagesUploaded = "Images Uploaded",
+  Approved = "Approved",
+  RejectedByCustomer = "Rejected By Customer",
+  RejectedByBusiness = "Rejected By Business",
+}
+
+export const UNCHANGEABLE_STATUSES = ["Rejected", "AssessmentApproved", "AssessedPartialReject", "AssessmentRejectedByCustomer", "AssessmentAccepted", "CancelledByBusiness", "CancelledByCustomer", "AssessedRejectedByBusiness", ];
 
 export const PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES =
   process.env.PDP_REVIEW_ACCEPTABLE_IMAGE_MIMES
@@ -715,7 +877,7 @@ export enum DocumentTypes {
 
 export enum DeleteModalType {
   ENGRAVING = 'engraving',
-  PRODUCT = 'product'
+  PRODUCT = 'product',
 }
 
 export enum EngageEventTypes {
@@ -756,3 +918,55 @@ export const BASKET_PROMO_TYPES = {
   KIT: 23,
 }
 
+export enum AssessmentStatusType {
+  PENDING = 1,
+  IN_PROGRESS = 2,
+  ACCESSORIES_CHECKED = 3,
+  ITEM_CHECKED = 4,
+  IMAGES_UPLOADED = 5,
+  SUBMITTED = 6,
+  APPROVED = 7,
+  REJECTED_BY_CUSTOMER = 8,
+  REJECTED_BY_BUSINESS = 9,
+}
+
+export enum QuoteStatusType {
+  AWAITING_QUOTATION = 0,
+  QUOTED = 1,
+  QUOTE_ACCEPTED = 2,
+  QUOTE_REJECTED = 3,
+  QUOTE_EXPIRED = 4,
+  COLLECTION_ARRANGED = 5,
+  PARCEL_ARRIVED = 6,
+  ASSESSMENT = 7,
+  FURTHER_ASSESSMENT = 8,
+  ASSESSED = 9,
+  TRADE_IN_COMPLETE = 10,
+  ASSESSED_FULL_REJECT = 11,
+  ASSESSED_PARTIAL_REJECT = 12,
+  TRADE_IN_COMPLETE_PARTIAL_REJECT = 13,
+  TRADE_IN_FULL_REJECT = 14,
+  COMPLETE_BOOKED_INTO_STOCK = 15,
+  COMPLETE_BOOKED_INTO_STOCK_PARTIAL_RETURN = 16,
+  TRADE_IN_COMPLETE_FULL_RETURN = 17,
+  CANCELLED_BY_CUSTOMER = 18,
+  CANCELLED_BY_BUSINESS = 19,
+}
+
+export enum QuoteItemStatusType {
+  SUBMITTED = 0,
+  PRICE_NEEDED = 1,
+  QUOTED = 2,
+  ACCEPTED = 3,
+  REJECTED = 4,
+  EXPIRED = 5,
+  ASSESSMENT_IN_PROGRESS = 6,
+  FURTHER_ASSESSMENT = 7,
+  ASSESSED = 8,
+  ASSESSED_REJECTED_BY_BUSINESS = 9,
+  ASSESSED_REJECTED_BY_CUSTOMER = 10,
+  ASSESSMENT_ACCEPTED = 11,
+  STOCK_BOOKED_IN = 12,
+  CANCELLED_BY_CUSTOMER = 13,
+  CANCELLED_BY_BUSINESS = 14,
+}

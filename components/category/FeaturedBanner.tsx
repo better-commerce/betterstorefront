@@ -1,4 +1,4 @@
-import { generateUri } from "@commerce/utils/uri-util";
+  import { generateUri } from "@commerce/utils/uri-util";
 import { IMG_PLACEHOLDER } from "@components/utils/textVariables";
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'

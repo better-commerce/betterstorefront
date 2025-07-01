@@ -84,6 +84,8 @@
             "addedText": "добавлено",
             "noBasketAvailableText": "Нет доступной корзины, создайте новую",
             "totalAmountText": "Общая сумма",
+            "orderAmountText": "Сумма заказа",
+            "pendingOrderAmountText": "Ожидаемая сумма",
             "checkoutBtnText": "Оформить заказ",
             "multipleCodesApplyText": "Вы можете применить несколько кодов",
             "getItByText": "Получите это до",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV обязателен",
                 "cvvInvalidText": "CVV неверен",
                 "chequeNoText": "Номер чека",
-                "chequeNumberLabelText": "Номер чека"
+                "chequeNumberLabelText": "Номер чека",
+                "enterAmountToPayLabelText": "Введите сумму для оплаты с {paymentMethodName}"
             }
         },
         "collection": {
@@ -463,6 +466,7 @@
                 "productRequired": "Необходимо хотя бы одно товар"
             },
             "myDetailsHeadingText": "Мой профиль",
+            "tradeInText":"Обмен",
             "editYourDetailsText": "Не стесняйтесь редактировать любые данные, чтобы ваш аккаунт был актуален.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Упс! Ошибка при получении возвратов"
@@ -504,7 +508,38 @@
             "noLookbookAvaiableText": "Нет доступных lookbook",
             "shopTheLookText": "Купить образ",
             "confirmPasswordText": "Подтвердите пароль",
-            "addNewUserText": "Добавить нового пользователя"
+            "addNewUserText": "Добавить нового пользователя",
+            "myTradeInText": "Мой Trade In",
+            "quoteText": "Предложение",
+            "createdText": "Создано",
+            "tradeInSectionFeedbackMessage": "Мы надеемся, что вам понравится наш новый раздел Trade In на нашем сайте. Мы все еще работаем над улучшениями, но если вы заметите что-то, что не работает должным образом, пожалуйста, отправьте нам электронное письмо со скриншотами (если возможно) на",
+            "queryEmailInstruction": "Если у вас есть вопрос, пожалуйста, отправьте письмо на",
+            "myWalletText": "Мой Кошелек",
+            "walletActivationMessage": "Пожалуйста, подождите, пока мы активируем ваш кошелек и сгенерируем информацию о кошельке.",
+            "transferToBankText": "Перевести в Банк",
+            "addBankDetailsText": "Добавить Банковские Реквизиты",
+            "enableWalletText": "Включить Кошелек",
+            "walletCurrentBalanceText": "Текущий Баланс Кошелька",
+            "walletTransactionHistoryText": "История Операций Кошелька",
+            "dateText": "Дата",
+            "amountText": "Сумма",
+            "referenceText": "Ссылка",
+            "noTransactionHistoryMessage": "История операций недоступна.",
+            "noBankTransferHistoryText": "Банковский перевод недоступен",
+            "bankTransferHistoryText": "История Банковских Переводов",
+            "bankNameText": "Название Банка",
+            "AccountNoText": "Номер Счета",
+            "sortCodeText": "Сортировочный Код",
+            "walletDisabledMessage": "Кошелек отключен. Включите его для просмотра баланса и операций.",
+            "roleRequiredText": "Требуется указать роль",
+            "selectRoleText": "Пожалуйста, выберите роль",
+            "zoneRequiredText": "Требуется указать зону",
+            "selectZoneText": "Пожалуйста, выберите зону",
+            "branchRequiredText": "Требуется указать филиал",
+            "selectBranchText": "Пожалуйста, выберите филиал",
+            "countryRequiredText": "Требуется указать страну",
+            "selectCountryText": "Пожалуйста, выберите страну",
+            "iAmIntrestedInText": "Я заинтересован в"
         },
         "navBar": {
             "currencyText": "Валюта",
@@ -598,6 +633,7 @@
             "freeText": "Бесплатно",
             "additionalChargesText": "Дополнительные расходы",
             "taxText": "Налог",
+            "paidText": "Оплачено",
             "youPayText": "Вы платите",
             "placeOrderBtnText": "Оформить заказ",
             "loseDeliveryText": "Вы собираетесь потерять бесплатную доставку!",
@@ -1319,6 +1355,7 @@
             "userAlreadyExistsErrorMsg": "Пользователь уже существует",
             "tokenInvalidErrorMsg": "Упс! Токен недействителен",
             "tokenExpiredErrorMsg": "Упс! Токен истек или недействителен",
+            "sessionExpiredErrorMsg": "Ваша сессия истекла. Пожалуйста, войдите снова.",
             "companyNotFoundErrorMsg": "Компания не найдена.",
             "cartItemMaxAddedErrorMsg": "Достигнут предел товаров в корзине. Пожалуйста, удалите некоторые товары и попробуйте снова.",
             "addressAddedSuccessfullyMsg": "Новый адрес успешно добавлен",
@@ -1374,7 +1411,12 @@
                 "upiNotSupportedErrorMsg": "UPI оплата не поддерживается.",
                 "paymentAlreadyCompletedErrorMsg": "Оплата за вашу корзину уже завершена.",
                 "notEnoughCreditErrorMsg": "Недостаточно доступного кредита.",
-                "paymentMethodNotSupportedErrorMsg": "Способ оплаты не поддерживается."
+                "walletNotFoundErrorMsg": "Кошелёк не найден.",
+                "notEnoughBalanceErrorMsg": "Недостаточно средств.",
+                "paymentMethodNotSupportedErrorMsg": "Способ оплаты не поддерживается.",
+                "paymentAmountRequiredErrorMsg": "Требуется сумма платежа.",
+                "paymentAmountMinValueErrorMsg": "Минимальная сумма платежа — {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Сумма платежа не может превышать {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Пароль должен содержать минимум 8 символов и хотя бы одну заглавную букву.",

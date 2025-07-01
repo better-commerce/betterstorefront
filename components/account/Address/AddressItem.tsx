@@ -181,21 +181,6 @@ export default function AddressItem({
                         </button>
                       </>
                     )}
-
-                    {item?.label && (
-                      <span className="py-2 text-sm font-medium text-[#00739e;]">
-                        {label}
-                      </span>
-                    )}
-                    
-                    {item?.isDefault && (
-                      <>
-                        <span className="text-gray-300">|</span>
-                        <span className="py-2 text-sm font-medium text-[#00739e;]">
-                          {translate('common.label.defaultText')}
-                        </span>
-                      </>
-                    )}
                   </div>
 
                 </div>

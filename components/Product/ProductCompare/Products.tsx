@@ -327,6 +327,7 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
     }
     return product?.currentStock < 1
   }
+  const cashbackAmount = product?.customAttributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
 
   return (
     <>
@@ -347,10 +348,10 @@ const Products: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
             {product?.name}
           </div>
           <div className="px-0 text-xs font-bold text-left text-black sm:text-xs">
-            <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <Prices cashbackAmount={cashbackAmount} price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           </div>
         </Link>
-        <div className="absolute bottom-0 left-0 right-0 flex flex-col">
+        <div className="absolute bottom-0 left-0 right-0 flex flex-col add-btn-plp">
           {isOutOfStock(product) ? (
             <ButtonNotifyMe product={product} className="text-sm font-medium rounded-md" />
           ) : (

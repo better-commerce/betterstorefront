@@ -1,167 +1,684 @@
-import { useState } from "react";
+import Loader from "@components/Loader";
+import TradeNewAddress from "@components/account/Address/TradeNewAddress";
+import { useUI } from "@components/ui";
+import { NEXT_ADDRESS, NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS, NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, TradeInItemCondition, EmptyString, NEXT_TRADE_IN_SCHEDULE_DELIVERY } from '@components/utils/constants';
+import { NEXT_TRADE_IN_GET_QUOTE_BY_ID, NEXT_TRADE_IN_GET_STORES, NEXT_TRADE_IN_SAVE_ADDRESS } from "@components/utils/constants";
+import { callApi } from "@framework/utils/api-util";
+import { logError } from "@framework/utils/app-util";
+import { useTranslation } from '@commerce/utils/use-translation'
+import { AxiosRequestConfig } from 'axios';
+import { RequestMethod } from "bc-payments-sdk/dist/constants";
+import { ChangeEvent, useEffect, useState } from "react";
+import { AlertType, StoreType } from "@framework/utils/enums";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+interface ShippingDetailProps {
+  nextSteps: any;
+  quoteData: any;
+  shippingData: any;
+  setDeliveryData: any;
+  deviceInfo: any;
+}
 
-export default function ShippingDetail({ shipping, isStore, setSelectedStore, showStores, showDpdStore, dpd, nextStep, stores }: any) {
-  const [selectedCameraStore, setSelectedCameraStore] = useState<any>(null);
+interface DPDAddress {
+  organisation: string;
+  property: string;
+  street: string;
+  locality: string;
+  town: string;
+  county: string;
+  postCode: string;
+  countryCode: string;
+}
+
+export default function ShippingDetail({ nextSteps, quoteData, shippingData, setDeliveryData, deviceInfo }: ShippingDetailProps) {
+  const [selectedCameraStore, setSelectedCameraStore] = useState<any>(0);
+  const { setAlert, user } = useUI()
+  const { isMobile } = deviceInfo
+  const translate = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSummary, setShowSummary] = useState(false);
+  const [storeData, setStoreData] = useState<any>([])
+  const [isStoreOpen, setStoreOpen] = useState<any>(0)
+  const [addressData, setAddressData] = useState({ addressType: 2, street: "", street2: "", city: "", state: "", country: "", postcode: "" });
+  const [pickupShopAddressData, setPickupShopAddressData] = useState({ addressType: 3, street: "", street2: "", city: "", state: "", country: "", postcode: "" });
+  const [userAddress, setUserAddress] = useState<any>([])
+  const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>(null)
+  const [selectedUserAddress, setSelectedUserAddress] = useState<any>(null);
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+  const [postCode, setPostCode] = useState<string>('')
+  const [isStoreAvailable, setIsStoreAvailable] = useState<boolean>(false);
+  const [storeList, setStoreList] = useState([])
+  const [isValidPostCode, setIsValidPostCode] = useState(true);
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAddressData((prev) => ({ ...prev, [name]: value }));
+
+    // Remove validation error as user types
+    setValidationErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+  const validateAddressForm = () => {
+    let errors: { [key: string]: string } = {};
+    if (!addressData.street.trim()) errors.street = "Street is required";
+    if (!addressData.street2.trim()) errors.street2 = "Street2 is required";
+    if (!addressData.city.trim()) errors.city = "City is required";
+    if (!addressData.state.trim()) errors.state = "State is required";
+    if (!addressData.country.trim()) errors.country = "Country is required";
+    if (!addressData.postcode.trim()) errors.postcode = "Postcode is required";
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const submitStoreDropOff = async () => {
+    setIsLoading(true);
+    const store = storeData?.value?.[selectedCameraStore];
+
+    try {
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_UPDATE_STORE_ADDRESS, method: RequestMethod.POST, data: { id: quoteData?.value?.id, storeId: store?.id, } };
+      const response = await callApi(config);
+
+      if (response?.data?.isSuccess) {
+        // Fetch updated quote only if the response is successful
+        const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteData?.value?.id } };
+        const responseNew = await callApi(config);
+
+        const configDelivery: AxiosRequestConfig = { url: NEXT_TRADE_IN_SCHEDULE_DELIVERY, method: RequestMethod.POST, data: { quoteId: quoteData?.value?.id } };
+        const responseDelivery = await callApi(configDelivery);
+        setDeliveryData(responseDelivery?.data)
+        nextSteps(responseNew?.data);
+      }
+    } catch (error) {
+      logError(error)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  const submitRequest = async (isStoreDropOff = false) => {
+    if (!validateAddressForm() && !user?.userId) return;
+
+    setIsLoading(true);
+
+    const getAddressPayload = () => {
+      if (isStoreOpen === StoreType.PICKUP_SHOP) {
+        return pickupShopAddressData
+      }
+
+      if (isStoreDropOff && selectedCameraStore !== null) {
+        const selectedStore = storeData?.value?.[selectedCameraStore];
+        return {
+          addressType: 2, // Store drop-off
+          street: selectedStore?.street || "-",
+          street2: selectedStore?.street2 || "-",
+          city: selectedStore?.city || "-",
+          state: "-",
+          country: selectedStore?.country || "",
+          postcode: selectedStore?.postCode || "",
+        };
+      }
+
+      if (user?.userId && selectedUserAddress !== null) {
+        const address = userAddress[selectedUserAddress];
+        return {
+          addressType: 1, // User's saved address
+          street: address?.address1 || "-",
+          street2: address?.address2 || "-",
+          city: address?.city || "-",
+          state: address?.state || "-",
+          country: address?.country || "",
+          postcode: address?.postCode || "",
+        };
+      }
+
+      return { ...addressData, addressType: 1 }; // DPD collection
+    };
+
+    const requestBody = { ...getAddressPayload(), id: quoteData?.value?.id };
+
+    try {
+      // Execute API calls concurrently
+      await Promise.all([
+        callApi({ url: NEXT_TRADE_IN_SAVE_ADDRESS, method: RequestMethod.POST, data: requestBody }),
+        callApi({ url: NEXT_TRADE_IN_UPDATE_SHIPPING_METHOD, method: RequestMethod.POST, data: { id: quoteData?.value?.id, shippingMethodId: selectedShippingMethod?.iId } })
+      ]);
+
+      // Fetch updated quote
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_QUOTE_BY_ID, method: RequestMethod.POST, data: { id: quoteData?.value?.id } };
+      const responseNew = await callApi(config);
+
+      const configDelivery: AxiosRequestConfig = { url: NEXT_TRADE_IN_SCHEDULE_DELIVERY, method: RequestMethod.POST, data: { quoteId: quoteData?.value?.id } };
+      const responseDelivery = await callApi(configDelivery);
+      setDeliveryData(responseDelivery?.data)
+
+      nextSteps(responseNew?.data);
+    } catch (error) {
+      logError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  const selectShipping = async (method: any) => {
+    setSelectedShippingMethod(method);
+    setStoreOpen(method?.iId);
+
+    if (!method?.iId) return;
+
+    setIsLoading(true);
+
+    try {
+      if (method.iId === 2) {
+        // Fetch store data only if not already available
+        if (!storeData || Object.keys(storeData).length === 0) {
+          const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_GET_STORES, method: RequestMethod.POST };
+          const storeResult = await callApi(config);
+          setStoreData(storeResult?.data || {});
+        }
+      } else if (method.iId === 1) {
+        // Fetch address only if not already available
+        if (!userAddress || Object.keys(userAddress).length === 0) {
+          await getAddress();
+        }
+      }
+    } catch (error) {
+      logError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getAddress = async () => {
+    if (!user?.userId || (userAddress && Object.keys(userAddress).length > 0)) return; // Avoid refetching
+
+    try {
+      const config: AxiosRequestConfig = { url: NEXT_ADDRESS, method: RequestMethod.POST, data: { id: user?.userId } };
+      const response = await callApi(config)
+      setUserAddress(response.data || {});
+      return response.data;
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+  const fetchDPDStoreList = async () => {
+    if (!postCode || !validatePostCode(postCode)) return
+    setIsLoading(true);
+    try {
+      const config: AxiosRequestConfig = { url: NEXT_TRADE_IN_DPD_PICKUP_LOCATIONS, method: RequestMethod.POST, data: { currentPage: 1, pageSize: 20, postCode } };
+      const { data } = await callApi(config)
+      if (data?.length) {
+        setStoreList(data)
+        setIsStoreAvailable(true)
+        const storeDetails = data[0]?.pickupLocation?.address;
+        setPickupShopAddressData({
+          addressType: 3,
+          street: storeDetails?.street || EmptyString,
+          street2: storeDetails?.locality || storeDetails?.organisation || EmptyString,
+          city: storeDetails?.town || EmptyString,
+          state: storeDetails?.county || storeDetails?.town || EmptyString,
+          country: storeDetails?.countryCode || EmptyString,
+          postcode: storeDetails?.postCode || EmptyString,
+        });
+      } else {
+        setAlert({ type: AlertType.ERROR, msg: translate('common.message.noAddressFoundErrorMsg') });
+      }
+    } catch (error) {
+      logError(error)
+      setStoreList([])
+      setIsStoreAvailable(false)
+      setAlert({ type: AlertType.ERROR, msg: translate('label.addressBook.updateFailedText') });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const validatePostCode = (postCode: string) => {
+    const trimmed = postCode?.trim()?.toUpperCase();
+    const isValid = /^([A-Z]{1,2}\d{1,2}[A-Z]?)\s?(\d[A-Z]{2})$/i.test(trimmed);
+    setIsValidPostCode(isValid)
+    return isValid
+  }
+
+  const handleStoreSelect = (storeDetails: DPDAddress) => {
+    setPickupShopAddressData({
+      addressType: 3,
+      street: storeDetails?.street || EmptyString,
+      street2: storeDetails?.locality || storeDetails?.organisation || EmptyString,
+      city: storeDetails?.town || EmptyString,
+      state: storeDetails?.county || storeDetails?.town || EmptyString,
+      country: storeDetails?.countryCode || EmptyString,
+      postcode: storeDetails?.postCode || EmptyString,
+    });
+  }
+
+  useEffect(() => {
+    if (userAddress?.length > 0) {
+      const defaultAddressIndex = userAddress.findIndex((address: any) => address?.isDefault);
+      setSelectedUserAddress(defaultAddressIndex);
+    }
+  }, [userAddress]);
+
   return (
     <>
-      <div className='flex justify-start flex-1 mt-6'>
-        <button className="px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300" >
-          View Trade in summary
+      {isLoading && <Loader />}
+      <div className="flex justify-start flex-1 mt-6">
+        <button onClick={() => setShowSummary(!isSummary)} className="px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded disabled:bg-gray-300" >
+          {isSummary ? "Hide Trade in summary" : "View Trade in summary"}
         </button>
       </div>
+
+      {isSummary &&
+        <div className='flex flex-col w-full overflow-hidden shadow ring-2 ring-sky-600 sm:rounded'>
+          {isMobile ? (
+            <>
+              <table className='flex flex-col divide-y divide-gray-300'>
+                <thead className="bg-gray-50">
+                  <tr className='flex w-full'>
+                    <th className="py-3.5 pl-2 w-[80%] pr-3 text-left text-sm font-semibold text-gray-900">Trade in Product</th>
+                    <th className="px-3 py-3.5 w-[20%] text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                    <tr key={`item-${itemIdx}`} className="flex w-full break-words bg-white hover:bg-gray-100">
+                      <td className="flex gap-1 py-3 pl-2 w-[80%] pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                        <span className="w-10"><img src={item?.parentProductImageUrl} className='inline-block w-10 h-auto' alt={item?.parentProductName} /></span>
+                        <div className='flex flex-col justify-center w-full gap-1 text-left'>
+                          <span className="font-semibold text-left text-black whitespace-normal">
+                            {item?.parentProductName}{" "}
+                            <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                          </span>
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Condition: </strong>
+                            {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                              item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                                item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                  item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                    item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                      item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                        'N/A'
+                            }
+                          </span>
+                          {item?.accessories?.length > 0 && (
+                            <span className="text-xs text-left text-gray-600">
+                              <strong>Accessories: </strong>
+                              {item.accessories
+                                .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                                .map((acc: any) => acc?.name) // Extract names
+                                .join(", ") // Join with commas
+                              }
+                            </span>
+                          )}
+                          <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                        </div>
+                      </td>
+                      <td className="px-3 w-[20%] py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                        {"£"}{item?.price}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className='flex w-full'>
+                    <td className="py-4 pl-3 w-[70%] text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                    <td className="px-3 py-4 w-[30%] text-xl font-semibold text-right text-black whitespace-nowrap">
+                      £{quoteData?.value?.grandTotal}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </>
+          ) : (
+            <>
+              <table className='min-w-full divide-y divide-gray-300'>
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Trade in Product</th>
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Quote Value</th>
+                    <th scope="col" className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {quoteData?.value?.items?.sort((a: any, b: any) => a?.parentProductName?.localeCompare(b?.parentProductName))?.map((item: any, itemIdx: number) => (
+                    <tr key={`item-${itemIdx}`} className="bg-white hover:bg-gray-100">
+                      <td className="flex gap-5 py-3 pl-4 pr-3 text-sm font-medium text-left text-gray-900 justify-normal whitespace-nowrap sm:pl-6">
+                        <img src={item?.parentProductImageUrl} className='inline-block w-auto h-16' alt={item?.parentProductName} />
+                        <div className='flex flex-col justify-center w-full gap-1 text-left'>
+                          <span className="font-semibold text-left text-black">
+                            {item?.parentProductName}{" "}
+                            <span className="text-xs font-medium text-black"> ({item?.parentStockCode}) </span>
+                          </span>
+                          <span className="text-xs text-left text-gray-600">
+                            <strong>Condition: </strong>
+                            {item?.condition == TradeInItemCondition.WELL_USED ? 'Well Used' :
+                              item?.condition == TradeInItemCondition.GOOD ? 'Good' :
+                                item?.condition == TradeInItemCondition.VERY_GOOD ? 'Very Good' :
+                                  item?.condition == TradeInItemCondition.EXCELLENT ? 'Excellent' :
+                                    item?.condition == TradeInItemCondition.LIKE_NEW ? 'Like New' :
+                                      item?.condition == TradeInItemCondition.FAULTY ? 'Faulty' :
+                                        'N/A'
+                            }
+                          </span>
+                          {item?.accessories?.length > 0 && (
+                            <span className="text-xs text-left text-gray-600">
+                              <strong>Accessories: </strong>
+                              {item.accessories
+                                .sort((a: any, b: any) => a.name.localeCompare(b.name)) // Sort alphabetically
+                                .map((acc: any) => acc?.name) // Extract names
+                                .join(", ") // Join with commas
+                              }
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-3 py-3 text-sm font-semibold text-right text-black whitespace-nowrap">
+                        {"£"}{item?.price}
+                      </td>
+                      <td className={`whitespace-nowrap justify-end pr-2`} align="right">
+                        <span className={`${item?.status == "Accepted" ? 'bg-emerald-100 border-emerald-400 text-emerald-600' : 'bg-red-100 border-red-400 text-red-600'} px-2 py-1 text-xs border font-semibold whitespace-nowrap rounded`}>{item?.status}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td className="py-4 pl-6 text-xl font-semibold text-left text-black whitespace-nowrap">Quote Total</td>
+                    <td className="px-3 py-4 text-xl font-semibold text-right text-black whitespace-nowrap">
+                      £{quoteData?.value?.grandTotal}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </>
+          )}
+        </div>
+      }
       <div className='flex flex-col w-full'>
         <h3 className='text-lg font-normal text-left text-black'>Select from the following options to get your equipment to Park Cameras:</h3>
       </div>
-      <div className="grid grid-cols-3 gap-4">
-        {shipping?.map((ship: any, shipIdx: number) => (
-          <div key={`condition-${shipIdx}`} className={`flex flex-col group w-full px-4 py-4 text-center border rounded cursor-pointer transition ${ship?.id === isStore ? "bg-gray-200 text-black shadow-lg" : "bg-white border-gray-200 hover:shadow-md"}`} onClick={() => setSelectedStore(ship?.id)} >
-            <h3 className={`font-semibold bg-[#2d4d9c] w-full py-3 text-xl ${ship?.id === isStore ? "text-white" : "text-white"}`} >
-              {ship?.name}
-            </h3>
-            <img src={ship?.image} className='object-cover w-full h-52' alt={ship?.name} />
-            <p className={`font-normal text-sm text-left leading-3 mt-4 ${ship?.id === isStore ? "text-black" : "text-gray-600 group-hover:text-[#2d4d9c]"}`} >
-              {ship?.desc}
-            </p>
-          </div>
-        ))}
-      </div>
+      {isMobile ? (
+        <Swiper slidesPerView={1.1} spaceBetween={4} navigation={true} loop={false} className={deviceInfo?.isMobile ? '' : ''} breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+          {shippingData?.value?.map((ship: any, shipIdx: number) => (
+            <SwiperSlide key={shipIdx} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+              <div key={`condition-${shipIdx}`} className={`flex flex-col group w-full text-center border rounded cursor-pointer transition ${ship?.iId === isStoreOpen ? "bg-sky-100 border-[#2d4d9c] text-black shadow-lg" : "bg-white border-gray-300 hover:shadow-md"}`} onClick={() => selectShipping(ship)}>
+                <h3 className={`rounded-t w-full font-medium py-3 text-md ${ship?.iId === isStoreOpen ? "bg-[#2d4d9c] text-white" : "bg-gray-200 text-black"}`} >
+                  {ship?.name}
+                </h3>
+                <img src={ship?.imageurl} className='object-cover w-full h-52' alt={ship?.name} />
+                <p className={`font-normal text-sm text-left leading-3 px-4 pb-3 mt-4 ${ship?.iId === isStoreOpen ? "text-black" : "text-gray-600 group-hover:text-[#2d4d9c]"}`} >
+                  {ship?.description}
+                </p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {shippingData?.value?.map((ship: any, shipIdx: number) => (
+            <div key={`condition-${shipIdx}`} className={`flex flex-col group w-full text-center border rounded cursor-pointer transition ${ship?.iId === isStoreOpen ? "bg-sky-100 border-[#2d4d9c] text-black shadow-lg" : "bg-white border-gray-300 hover:shadow-md"}`} onClick={() => selectShipping(ship)}>
+              <h3 className={`rounded-t w-full font-medium py-3 text-md ${ship?.iId === isStoreOpen ? "bg-[#2d4d9c] text-white" : "bg-gray-200 text-black"}`} >
+                {ship?.name}
+              </h3>
+              <img src={ship?.imageurl} className='object-cover w-full h-52' alt={ship?.name} />
+              <p className={`font-normal text-sm text-left leading-3 px-4 pb-3 mt-4 ${ship?.iId === isStoreOpen ? "text-black" : "text-gray-600 group-hover:text-[#2d4d9c]"}`} >
+                {ship?.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
 
-      {isStore == "1" &&
+
+      {!shippingData &&
+        <div className={`flex flex-col w-full gap-4`}>
+          {
+            ["street", "street2", "city", "state", "country", "postcode"].map((field) => (
+              <div className="flex flex-col gap-1" key={`fields-${field}`}>
+                <label className="text-sm font-medium text-left text-black capitalize">{field}</label>
+                <input
+                  type="text"
+                  name={field}
+                  placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
+                  value={addressData[field as keyof typeof addressData]}
+                  onChange={handleInputChange}
+                  className="p-2 text-sm font-normal text-black border border-gray-200 rounded"
+                />
+                {validationErrors[field] && <span className="text-xs text-left text-red-500">{validationErrors[field]}</span>}
+              </div>
+            ))
+          }
+          <button onClick={() => {
+            submitRequest();
+            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] flex justify-center items-center gap-1 rounded disabled:bg-gray-300">
+            Confirm collection from DPD <ChevronRightIcon className="w-5 h-5" />
+          </button>
+        </div>
+      }
+      {isStoreOpen == 1 &&
+        <div className={`flex flex-col w-full gap-4 ${user?.userId ? ' sm:w-full' : ' sm:w-5/12'}`}>
+          <div className='flex items-center justify-between w-full gap-1 mt-4'>
+            <h4 className='text-xl font-medium text-left text-black'>Your Address</h4>
+            {userAddress?.length > 0 && <TradeNewAddress getAddressNew={getAddress} setUserAddress={setUserAddress} />}
+          </div>
+          {user?.userId ? (
+            <div className="grid grid-cols-3 gap-4 text-left">
+              {userAddress?.length > 0 ? userAddress?.map((address: any, addIdx: number) => {
+                const isSelected = selectedUserAddress === addIdx;
+                return (
+                  <div
+                    className={`flex flex-col gap-2 p-4 border rounded cursor-pointer ${isSelected ? "bg-sky-100 border-[#2d4d9c]" : "border-gray-200 hover:border-gray-400"}`}
+                    key={`address-${addIdx}`}
+                    onClick={() => setSelectedUserAddress(addIdx)}
+                  >
+                    <p className="font-semibold text-black">{address?.firstName} {address?.lastName}</p>
+                    <p>{address?.address1} {address?.address2}</p>
+                    <p>{address?.address3}</p>
+                    <p>{address?.city} {address?.state}</p>
+                    <p>{address?.country} {address?.postCode}</p>
+                  </div>
+                );
+              }) : (
+                <TradeNewAddress getAddressNew={getAddress} setUserAddress={setUserAddress} />
+              )}
+            </div>
+          ) : (
+            ["street", "street2", "city", "state", "country", "postcode"].map((field) => (
+              <div className="flex flex-col gap-1" key={`fields-${field}`}>
+                <label className="text-sm font-medium text-left text-black capitalize">{field}</label>
+                <input
+                  type="text"
+                  name={field}
+                  placeholder={field.replace(/^\w/, (c) => c.toUpperCase())}
+                  value={addressData[field as keyof typeof addressData]}
+                  onChange={handleInputChange}
+                  className="p-2 text-sm font-normal text-black border border-gray-200 rounded"
+                />
+                {validationErrors[field] && <span className="text-xs text-left text-red-500">{validationErrors[field]}</span>}
+              </div>
+            ))
+          )}
+
+          <button onClick={() => {
+            submitRequest();
+            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded flex justify-center items-center gap-1 disabled:bg-gray-300">
+            Confirm collection from DPD  <ChevronRightIcon className="w-5 h-5" />
+          </button>
+        </div>
+      }
+      {isStoreOpen == 2 &&
+        <>
+          <div className='flex flex-col w-full gap-1 mt-4'>
+            <h4 className='text-xl font-medium text-left text-black'>Where would you like to drop off your items?</h4>
+          </div>
+          {isMobile ?
+            (
+              <Swiper slidesPerView={1.1} spaceBetween={4} navigation={true} loop={true} className={deviceInfo?.isMobile ? '' : ''} breakpoints={{ 640: { slidesPerView: 1.1 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                {storeData?.value?.map((store: any, index: number) => {
+                  const isSelected = selectedCameraStore === index;
+                  return (
+                    <SwiperSlide key={index} className="relative inline-flex flex-col h-auto text-left cursor-pointer sm:pr-12 height-auto-slide group lg:w-auto">
+                      <div key={index} className={`p-4 text-left border rounded shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`} onClick={() => setSelectedCameraStore(index)}>
+                        <div className="flex items-center w-full gap-2 pb-1 border-b border-gray-300 sm:mb-4">
+                          <input type="radio" name="store" checked={isSelected} onChange={() => setSelectedCameraStore(index)} className="relative w-5 h-5 text-blue-500 focus:ring-blue-400" />
+                          <h2 className="w-full text-sm font-semibold text-gray-700 uppercase sm:text-xl">
+                            {store?.name}
+                          </h2>
+                        </div>
+                        {/* <img src={store?.image} alt={store?.name} className="w-full h-auto" /> */}
+                        <div className="grid grid-cols-12 gap-1">
+                          <div className='col-span-12 text-sm sm:col-span-6 sm:text-lg'>
+                            <h2 className="mt-2 mb-1 text-sm font-semibold text-gray-700 uppercase sm:mb-4">Address:</h2>
+                            <p>{store?.name}</p>
+                            <p>{store?.street}</p>
+                            {store?.street2 && <p>{store?.street2}</p>}
+                            <p>{store?.city}, {store?.country}, {store?.postCode}</p>
+                            <p className="mt-4 mb-1 text-sm font-semibold text-gray-700 uppercase sm:mb-4">Opening Hours:</p>
+                            <div className="flex flex-col text-xs font-normal divide-x divide-gray-200 sm:text-sm" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
+                          </div>
+                          <div className='col-span-12 sm:col-span-6'>
+                            <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            ) : (
+              <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-2">
+                {storeData?.value?.map((store: any, index: number) => {
+                  const isSelected = selectedCameraStore === index;
+                  return (
+                    <div key={index} className={`p-4 text-left border rounded shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`} onClick={() => setSelectedCameraStore(index)}>
+                      <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
+                        <input type="radio" name="store" checked={isSelected} onChange={() => setSelectedCameraStore(index)} className="relative w-5 h-5 text-blue-500 focus:ring-blue-400" />
+                        <h2 className="w-full font-semibold text-gray-700 uppercase sm:text-xl !text-md">
+                          {store?.name}
+                        </h2>
+                      </div>
+                      {/* <img src={store?.image} alt={store?.name} className="w-full h-auto" /> */}
+                      <div className="grid grid-cols-12 gap-1">
+                        <div className='col-span-12 sm:col-span-6'>
+                          <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
+                          <p>{store?.name}</p>
+                          <p>{store?.street}</p>
+                          {store?.street2 && <p>{store?.street2}</p>}
+                          <p>{store?.city}, {store?.country}, {store?.postCode}</p>
+                          <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
+                          <div className="flex flex-col text-sm font-normal divide-x divide-gray-200" dangerouslySetInnerHTML={{ __html: store?.openingHours }}></div>
+                        </div>
+                        <div className='col-span-12 sm:col-span-6'>
+                          <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
+          }
+
+
+          <button onClick={() => {
+            submitStoreDropOff(); // Pass true for store drop-off
+            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded flex justify-center items-center gap-1 disabled:bg-gray-300">
+            Confirm Drop off to Park Cameras Store <ChevronRightIcon className="w-5 h-5" />
+          </button>
+        </>
+      }
+      {isStoreOpen == 3 &&
         <>
           <div className='flex flex-col w-full gap-1 mt-4'>
             <h4 className='text-xl font-medium text-left text-black'>DPD Store</h4>
             <p className='text-sm font-normal text-left text-gray-600'>You can drop your parcel off to any DPD store nationwide, please update below to find the most convenient one to you:</p>
             <div className='flex justify-start flex-1 w-full mt-2 sm:w-5/12'>
-              <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Postcode' />
-              <button className="px-10 py-3 text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300" onClick={() => showStores()}>
-                Find
-              </button>
+              <input
+                type="text"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPostCode(e.target.value)}
+                maxLength={8}
+                value={postCode}
+                className={`w-full rounded-md px-2 py-3 text-sm font-normal text-black bg-white border ${isValidPostCode ? 'border-gray-200' : 'border-red-500'
+                  } placeholder:text-gray-400`}
+                placeholder="Postcode"
+              />
+              <button className={`px-10 py-3 mx-1 text-sm text-white ${!postCode ? 'bg-[#39a029a4]' : 'bg-[#39a029]'} rounded disabled:bg-gray-300`} onClick={fetchDPDStoreList} > Find </button>
             </div>
+            {!isValidPostCode && postCode && (
+              <p className="flex mt-1 text-sm text-red-500">Please enter a valid postcode</p>
+            )}
           </div>
-          {showDpdStore &&
+          {isStoreAvailable &&
             <>
               <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-3">
-                {dpd.map((store: any, index: number) => (
-                  <div key={index} className="p-4 text-left bg-white border rounded shadow-lg">
-                    <h2 className="pb-1 mb-4 text-xl font-semibold text-gray-700 uppercase border-b border-gray-200">{store.name}</h2>
-                    <h2 className="mb-2 text-sm font-semibold text-gray-700 uppercase">Store Detail:</h2>
-                    <p className="text-gray-600">Distance: {store.distance}</p>
-                    <p className="text-gray-600">Info: {store.info.join(", ")}</p>
-                    <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
-                    <p>{store.address.store}</p>
-                    <p>{store.address.street}</p>
-                    {store.address.area && <p>{store.address.area}</p>}
-                    <p>{store.address.city}, {store.address.postcode}</p>
-                    <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
-                    <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200">
-                      {Object.entries(store.opening_hours).map(([day, hours]: any) => (
-                        <li className='grid grid-cols-2 px-3 pt-2' key={day}><span className='text-sm font-semibold text-black uppercase'>{day}</span> <span>{hours}</span></li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => {
-                nextStep();
-                document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }} className="px-10 py-3 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300">
-                Confirm Drop off at DPD Store
-              </button>
-            </>
-          }
-        </>
-      }
-      {isStore == "2" &&
-        <div className='flex flex-col w-full gap-4 sm:w-5/12'>
-          <div className='flex flex-col w-full gap-1 mt-4 mb-5'>
-            <h4 className='text-xl font-medium text-left text-black'>Your Address</h4>
-          </div>
-          <div className='flex flex-col justify-start w-full gap-1 text-left'>
-            <span className='text-sm font-normal text-black'>House No/Name</span>
-            <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
-          </div>
-          <div className='flex flex-col justify-start w-full gap-1 text-left'>
-            <span className='text-sm font-normal text-black'>Street</span>
-            <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
-          </div>
-          <div className='flex flex-col justify-start w-full gap-1 text-left'>
-            <span className='text-sm font-normal text-black'>Town</span>
-            <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
-          </div>
-          <div className='flex flex-col justify-start w-full gap-1 text-left'>
-            <span className='text-sm font-normal text-black'>Postcode</span>
-            <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
-          </div>
-          <div className='flex flex-col justify-start w-full gap-1 text-left'>
-            <span className='text-sm font-normal text-black'>Collection/Drop-off date</span>
-            <input type='text' value="" className='w-full px-2 py-3 text-sm font-normal text-black bg-white border border-gray-200 placeholder:text-gray-400' placeholder='Please search and Select Your Model' />
-          </div>
-          <button onClick={() => {
-            nextStep();
-            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }} className="px-10 py-3 mt-4 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300">
-            Confirm collection from DPD
-          </button>
-        </div>
-      }
-      {isStore == "3" &&
-        <>
-          <div className='flex flex-col w-full gap-1 mt-4'>
-            <h4 className='text-xl font-medium text-left text-black'>Where would you like to drop off your items?</h4>
-          </div>
-          <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2 lg:grid-cols-2">
-            {stores.map((store: any, index: number) => {
-              const isSelected = selectedCameraStore === index;
-              return (
-                <div
-                  key={index}
-                  className={`p-4 text-left border rounded shadow-lg cursor-pointer ${isSelected ? "border-blue-500 bg-gray-100 shadow-xl" : "bg-white"}`}
-                  onClick={() => setSelectedCameraStore(index)}
-                >
-                  <div className="flex items-center w-full gap-2 pb-1 mb-4 border-b border-gray-300">
-                    <input
-                      type="radio"
-                      name="store"
-                      checked={isSelected}
-                      onChange={() => setSelectedCameraStore(index)}
-                      className="relative w-5 h-5 text-blue-500 focus:ring-blue-400"
-                    />
-                    <h2 className="w-full text-xl font-semibold text-gray-700 uppercase">
-                      {store?.name}
-                    </h2>
-                  </div>
-                  <img src={store?.image} alt={store?.name} className="w-full h-auto" />
-                  <div className="grid grid-cols-12 gap-1">
-                    <div className='sm:col-span-6'>
+                {storeList?.map((store: any, index: number) => {
+                  const openingHours: Record<string, string> = {
+                    Monday: '',
+                    Tuesday: '',
+                    Wednesday: '',
+                    Thursday: '',
+                    Friday: '',
+                    Saturday: '',
+                    Sunday: '',
+                  };
+                  const dayMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                  store?.pickupLocation?.pickupLocationDriverWindow?.forEach((window: any) => {
+                    const day = dayMap[window?.pickupLocationDriverWindowDay % 7];
+                    const timeRange = `${window?.pickupLocationDriverWindowStartTime} - ${window?.pickupLocationDriverWindowEndTime}`;
+                    openingHours[day] = openingHours[day]
+                      ? `${openingHours[day]}, ${timeRange}`
+                      : timeRange;
+                  });
+                  const info = [
+                    store?.pickupLocation?.parkingAvailable ? "Parking" : "No Parking",
+                    store?.pickupLocation?.disabledAccess ? "Disabled Access" : "Access"
+                  ];
+                  const address: DPDAddress = store?.pickupLocation?.address;
+                  const isSelected = `${address?.postCode}-${address?.street}` === `${pickupShopAddressData?.postcode}-${pickupShopAddressData?.street}`;
+
+                  return (
+                    <div key={index} className={`p-4 text-left bg-white border rounded shadow-lg ${isSelected && 'border border-black'}`} onClick={() => handleStoreSelect(address)}>
+                      <h2 className="pb-1 mb-4 text-xl font-semibold text-gray-700 uppercase">{store?.pickupLocation?.shortName}</h2>
+
+                      <h2 className="mb-2 text-sm font-semibold text-gray-700 uppercase">Store Detail:</h2>
+                      <p className="text-gray-600">Distance: {store?.distance?.toFixed(2)} miles</p>
+                      <p className="text-gray-600">Info: {info?.join(', ')}</p>
+
                       <h2 className="mt-2 mb-4 text-sm font-semibold text-gray-700 uppercase">Address:</h2>
-                      <p>{store?.address?.store}</p>
-                      <p>{store?.address?.street}</p>
-                      {store?.address?.area && <p>{store?.address?.area}</p>}
-                      <p>{store?.address?.city}, {store?.address?.postcode}</p>
+                      <p>{address?.organisation}</p>
+                      {address?.property && <p>{address?.property}</p>}
+                      <p>{address?.street}</p>
+                      {address?.locality && <p>{address?.locality}</p>}
+                      <p>{address?.town}, {address?.postCode}</p>
+
                       <p className="mt-4 mb-4 text-sm font-semibold text-gray-700 uppercase">Opening Hours:</p>
                       <ul className="text-sm text-gray-700 border border-gray-200 divide-y divide-gray-200">
-                        {Object.entries(store?.opening_hours).map(([day, hours]: any) => (
-                          <li className='grid grid-cols-2 px-3 pt-2' key={day}>
-                            <span className='text-sm font-semibold text-black uppercase'>{day}</span>
-                            <span>{hours}</span>
+                        {Object.entries(openingHours)?.map(([day, hours]) => (
+                          <li className="grid grid-cols-2 px-3 pt-2" key={day}>
+                            <span className="text-sm font-semibold text-black uppercase">{day}</span>
+                            <span>{hours || 'Closed'}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div className='sm:col-span-6'>
-                      <iframe frameBorder="0" height="450" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2513.3276813845987!2d-0.15801428409022267!3d50.95464555878721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48758dbeae99ba11%3A0xe18db3c1e0dfadb9!2sPark%20Cameras!5e0!3m2!1sen!2suk!4v1593620065303!5m2!1sen!2suk" width="100%"></iframe>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <button onClick={() => {
-            nextStep();
-            document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }} className="px-10 py-3 w-full text-sm text-white bg-[#39a029] rounded disabled:bg-gray-300">
-            Confirm Drop off to Park Cameras Store
-          </button>
+                  );
+                })}
+              </div>
+              <button onClick={() => {
+                submitRequest();
+                document.getElementById("step-component")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }} className="w-full px-4 py-3 text-sm text-white bg-[#2d4d9c] rounded flex justify-center items-center gap-1 disabled:bg-gray-300">
+                Confirm Drop off at DPD Store <ChevronRightIcon className="w-5 h-5" />
+              </button>
+            </>
+          }
         </>
       }
     </>

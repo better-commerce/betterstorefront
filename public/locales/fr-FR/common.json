@@ -84,6 +84,8 @@
       "addedText": "ajouté",
       "noBasketAvailableText": "Aucun panier disponible, veuillez en créer un nouveau",
       "totalAmountText": "Montant total",
+      "orderAmountText": "Montant de la commande",
+      "pendingOrderAmountText": "Montant en attente",
       "checkoutBtnText": "Payer",
       "multipleCodesApplyText": "Vous pouvez appliquer plusieurs codes",
       "getItByText": "Recevez-le avant le",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "Le CVV est requis",
         "cvvInvalidText": "Le CVV n'est pas valide",
         "chequeNoText": "Numéro de chèque",
-        "chequeNumberLabelText": "Numéro de chèque"
+        "chequeNumberLabelText": "Numéro de chèque",
+        "enterAmountToPayLabelText": "Entrez le montant à payer depuis {paymentMethodName}"
       }
     },
     "collection": {
@@ -461,8 +464,9 @@
         "assignToRequired": "Le champ Attribué à est requis",
         "productRequired": "Au moins un produit est requis"
       },
-      "myDetailsHeadingText": "Mes Profile",
+      "": "Mes Profile",
       "editYourDetailsText": "N'hésitez pas à modifier vos coordonnées ci-dessous pour que votre compte soit totalement à jour.",
+      "tradeInText": "Reprise",
       "myOrders": {
         "fetchReturnsErrorMsg": "Oups ! Erreur lors de la récupération des retours"
       },
@@ -503,7 +507,38 @@
       "noLookbookAvaiableText": "Aucun Lookbook disponible",
       "shopTheLookText": "Achetez le look",
       "confirmPasswordText": "Confirmer le mot de passe",
-      "addNewUserText": "Ajouter un nouvel utilisateur"
+      "addNewUserText": "Ajouter un nouvel utilisateur",
+      "myTradeInText": "Mon Trade In",
+      "quoteText": "Devis",
+      "createdText": "Créé",
+      "tradeInSectionFeedbackMessage": "Nous espérons que vous apprécierez notre nouvelle section Trade In sur notre site Web. Nous travaillons encore sur des améliorations, mais si vous remarquez quelque chose qui ne fonctionne pas comme prévu, veuillez nous envoyer un e-mail avec des captures d'écran (si possible) à",
+      "queryEmailInstruction": "Si vous avez une question, veuillez envoyer un e-mail à",
+      "myWalletText": "Mon Portefeuille",
+      "walletActivationMessage": "Veuillez patienter pendant que nous activons votre portefeuille et générons les informations du portefeuille.",
+      "transferToBankText": "Transférer vers la Banque",
+      "addBankDetailsText": "Ajouter les Coordonnées Bancaires",
+      "enableWalletText": "Activer le Portefeuille",
+      "walletCurrentBalanceText": "Solde Actuel du Portefeuille",
+      "walletTransactionHistoryText": "Historique des Transactions du Portefeuille",
+      "dateText": "Date",
+      "amountText": "Montant",
+      "referenceText": "Référence",
+      "noTransactionHistoryMessage": "Aucun historique de transaction disponible.",
+      "noBankTransferHistoryText": "Aucun virement bancaire disponible",
+      "bankTransferHistoryText": "Historique des Virements Bancaires",
+      "bankNameText": "Nom de la Banque",
+      "AccountNoText": "N° de Compte",
+      "sortCodeText": "Code Banque",
+      "walletDisabledMessage": "Le portefeuille est désactivé. Activez-le pour voir le solde et les transactions.",
+      "roleRequiredText": "Le rôle est requis",
+      "selectRoleText": "Veuillez sélectionner un rôle",
+      "zoneRequiredText": "La zone est requise",
+      "selectZoneText": "Veuillez sélectionner une zone",
+      "branchRequiredText": "La succursale est requise",
+      "selectBranchText": "Veuillez sélectionner une succursale",
+      "countryRequiredText": "Le pays est requis",
+      "selectCountryText": "Veuillez sélectionner un pays",
+      "iAmIntrestedInText": "Je suis intéressé par"
     },
     "navBar": {
       "currencyText": "Devise",
@@ -597,6 +632,7 @@
       "freeText": "Gratuit",
       "additionalChargesText": "Frais supplémentaires",
       "taxText": "Taxe",
+      "paidText": "Payé",
       "youPayText": "Vous payez",
       "placeOrderBtnText": "Passer la commande",
       "loseDeliveryText": "Vous êtes sur le point de perdre la livraison gratuite !",
@@ -1317,6 +1353,7 @@
       "userAlreadyExistsErrorMsg": "L'utilisateur existe déjà",
       "tokenInvalidErrorMsg": "Oups ! Le jeton n'est pas valide",
       "tokenExpiredErrorMsg": "Oups ! Le jeton a expiré ou est invalide",
+      "sessionExpiredErrorMsg": "Votre session a expiré. Veuillez vous reconnecter.",
       "companyNotFoundErrorMsg": "Entreprise non trouvée.",
       "cartItemMaxAddedErrorMsg": "Limite d'articles dans le panier atteinte. Veuillez supprimer certains articles et réessayer.",
       "addressAddedSuccessfullyMsg": "Nouvelle adresse ajoutée avec succès",
@@ -1371,7 +1408,12 @@
         "upiNotSupportedErrorMsg": "Le paiement UPI n'est pas pris en charge.",
         "paymentAlreadyCompletedErrorMsg": "Le paiement de votre panier est déjà terminé.",
         "notEnoughCreditErrorMsg": "Crédit insuffisant disponible.",
-        "paymentMethodNotSupportedErrorMsg": "Le mode de paiement n'est pas pris en charge."
+        "walletNotFoundErrorMsg": "Portefeuille introuvable.",
+        "notEnoughBalanceErrorMsg": "Solde insuffisant disponible.",
+        "paymentMethodNotSupportedErrorMsg": "Le mode de paiement n'est pas pris en charge.",
+        "paymentAmountRequiredErrorMsg": "Le montant du paiement est requis.",
+        "paymentAmountMinValueErrorMsg": "Le montant minimum du paiement est de {currencySymbol}{paymentAmount}.",
+        "paymentAmountCannotExceedErrorMsg": "La valeur du paiement ne peut pas dépasser {currencySymbol}{paymentAmount}."
       },
       "password": {
         "passwordValidationMsg": "Le mot de passe doit comporter au moins 8 caractères et au moins 1 lettre majuscule.",

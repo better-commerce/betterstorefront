@@ -77,7 +77,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
         </NextHead>
       )}
       <div className="relative overflow-hidden nc-PageHome homepage-main dark:bg-white">
-        {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
+        {CURRENT_THEME === 'cam' ? <Hero banners={pageContents?.banner} featureToggle={featureToggle} deviceInfo={deviceInfo} /> : <SectionHero2 data={pageContents?.banner} />}
         {pageContents?.shopbygender?.length > 0 &&
           <div className='container relative flex flex-col pt-10 mt-0 sm:mt-24 mb-7 sm:mb-8 lg:mb-12'>
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
@@ -219,7 +219,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
           <div className='container flex flex-col pt-5 mx-auto bg-white sm:pt-10' key={`range-heading-${hIdx}`}>
             <h3 className='mb-4 text-xl font-semibold text-center uppercase sm:text-3xl text-sky-700 sm:mb-6'>{heading?.range_title}</h3>
             {pageContents?.newarrivals?.length > 0 || pageContents?.shoprange?.length > 0 &&
-              <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.newarrivals || pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <SectionSliderProductCard onlyImage={false} deviceInfo={deviceInfo} data={pageContents?.newarrivals || pageContents?.shoprange} heading={pageContents?.newarrivalheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
             }
           </div>
         ))}
@@ -258,7 +258,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
             </div>
           }
           {pageContents?.nevermisssale?.length > 0 &&
-            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <SectionSliderProductCard onlyImage={false} deviceInfo={deviceInfo} data={pageContents?.nevermisssale} heading={pageContents?.saleheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
           {pageContents?.brand?.length > 0 &&
             <div className='flex flex-col w-full p-8 bg-gray-50 nc-brandCard'>
@@ -268,7 +268,7 @@ function PreviewPage({ slug, pageContents, dealOfTheWeekProductPromoDetails, dev
             </div>
           }
           {pageContents?.popular?.length > 0 &&
-            <SectionSliderProductCard deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+            <SectionSliderProductCard onlyImage={false} deviceInfo={deviceInfo} data={pageContents?.popular} heading={pageContents?.popularheading} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
           }
           {pageContents?.dummydata?.length > 0 &&
             <div className={`flex w-full flex-col sm:mt-6 mt-6`}>

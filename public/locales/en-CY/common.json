@@ -84,6 +84,8 @@
         "addedText": "προστέθηκε",
         "noBasketAvailableText": "Δεν υπάρχει καλάθι, παρακαλώ δημιουργήστε ένα νέο",
         "totalAmountText": "Συνολικό ποσό",
+        "orderAmountText": "Ποσό παραγγελίας",
+        "pendingOrderAmountText": "Εκκρεμές ποσό",
         "checkoutBtnText": "Ολοκλήρωση παραγγελίας",
         "multipleCodesApplyText": "Μπορείτε να εφαρμόσετε πολλαπλούς κωδικούς",
         "getItByText": "Πάρτε το μέχρι",
@@ -246,7 +248,8 @@
         "cvvRequiredText": "Το CVV είναι απαιτούμενο",
         "cvvInvalidText": "Το CVV είναι άκυρο",
         "chequeNoText": "Αριθμός Επιταγής",
-        "chequeNumberLabelText": "Αριθμός Επιταγής"
+        "chequeNumberLabelText": "Αριθμός Επιταγής",
+        "enterAmountToPayLabelText": "Εισαγάγετε το ποσό προς πληρωμή από {paymentMethodName}"
         }
     },
     "collection": {
@@ -463,6 +466,7 @@
             "productRequired": "Απαιτείται τουλάχιστον ένα προϊόν"
         },
         "myDetailsHeadingText": "Το Προφίλ Μου",
+        "tradeInText": "Αλλαγή",
         "editYourDetailsText": "Μπορείτε να επεξεργαστείτε οποιοδήποτε από τα παρακάτω στοιχεία για να ενημερώσετε πλήρως τον λογαριασμό σας.",
         "myOrders": {
             "fetchReturnsErrorMsg": "Ωχ! Σφάλμα κατά την ανάκτηση των επιστροφών"
@@ -504,7 +508,38 @@
         "noLookbookAvaiableText": "Δεν Διαθέτουμε Lookbook",
         "shopTheLookText": "Αγοράστε το look",
         "confirmPasswordText": "Επιβεβαίωση Κωδικού",
-        "addNewUserText": "Προσθήκη νέου χρήστη"
+        "addNewUserText": "Προσθήκη νέου χρήστη",
+        "myTradeInText": "Η Αλλαγή Μου",
+        "quoteText": "Προσφορά",
+        "createdText": "Δημιουργήθηκε",
+        "tradeInSectionFeedbackMessage": "Ελπίζουμε να σας αρέσει η νέα μας ενότητα Αλλαγής στον ιστότοπό μας. Συνεχίζουμε να βελτιώνουμε, αλλά αν παρατηρήσετε κάτι που δεν λειτουργεί όπως θα έπρεπε, παρακαλώ στείλτε μας email με στιγμιότυπα οθόνης (αν είναι δυνατόν) στην διεύθυνση",
+        "queryEmailInstruction": "Αν έχετε κάποιο ερώτημα, παρακαλώ στείλτε email στην διεύθυνση",
+        "myWalletText": "Το Πορτοφόλι Μου",
+        "walletActivationMessage": "Παρακαλώ περιμένετε ενώ ενεργοποιούμε το πορτοφόλι σας και δημιουργούμε τις πληροφορίες του πορτοφολιού.",
+        "transferToBankText": "Μεταφορά στην Τράπεζα",
+        "addBankDetailsText": "Προσθήκη Τραπεζικών Στοιχείων",
+        "enableWalletText": "Ενεργοποίηση Πορτοφολιού",
+        "walletCurrentBalanceText": "Τρέχουσα Υπόλοιπο Πορτοφολιού",
+        "walletTransactionHistoryText": "Ιστορικό Συναλλαγών Πορτοφολιού",
+        "dateText": "Ημερομηνία",
+        "amountText": "Ποσό",
+        "referenceText": "Αναφορά",
+        "noTransactionHistoryMessage": "Δεν υπάρχει ιστορικό συναλλαγών.",
+        "noBankTransferHistoryText": "Δεν υπάρχει διαθέσιμη τραπεζική μεταφορά",
+        "bankTransferHistoryText": "Ιστορικό Τραπεζικών Μεταφορών",
+        "bankNameText": "Όνομα Τράπεζας",
+        "AccountNoText": "Αριθμός Λογαριασμού",
+        "sortCodeText": "Κωδικός Ταξινόμησης",
+        "walletDisabledMessage": "Το πορτοφόλι είναι απενεργοποιημένο. Ενεργοποιήστε το για να δείτε το υπόλοιπο και τις συναλλαγές.",
+        "roleRequiredText": "Ο ρόλος είναι υποχρεωτικός",
+        "selectRoleText": "Παρακαλούμε επιλέξτε έναν ρόλο",
+        "zoneRequiredText": "Η περιοχή είναι υποχρεωτική",
+        "selectZoneText": "Παρακαλούμε επιλέξτε μια περιοχή",
+        "branchRequiredText": "Η θυρίδα είναι υποχρεωτική",
+        "selectBranchText": "Παρακαλούμε επιλέξτε μια θυρίδα",
+        "countryRequiredText": "Η χώρα είναι υποχρεωτική",
+        "selectCountryText": "Παρακαλούμε επιλέξτε μια χώρα",
+        "iAmIntrestedInText": "Ενδιαφέρομαι για"
     },
     "navBar": {
         "currencyText": "Νόμισμα",
@@ -598,6 +633,7 @@
         "freeText": "Δωρεάν",
         "additionalChargesText": "Επιπλέον Χρεώσεις",
         "taxText": "Φόρος",
+        "paidText": "Πληρωμένο",
         "youPayText": "Πληρώνετε",
         "placeOrderBtnText": "Τοποθέτηση Παραγγελίας",
         "loseDeliveryText": "Πρόκειται να χάσετε Δωρεάν Αποστολή!",
@@ -1259,6 +1295,7 @@
             "userAlreadyExistsErrorMsg": "Ο χρήστης υπάρχει ήδη",
             "tokenInvalidErrorMsg": "Ωχ! Το token είναι άκυρο",
             "tokenExpiredErrorMsg": "Ωχ! Το token έχει λήξει ή είναι άκυρο",
+            "sessionExpiredErrorMsg": "Η συνεδρία σας έχει λήξει. Παρακαλώ συνδεθείτε ξανά.",
             "companyNotFoundErrorMsg": "Η εταιρεία δεν βρέθηκε.",
             "cartItemMaxAddedErrorMsg": "Το όριο του καλαθιού έχει φτάσει. Παρακαλώ αφαιρέστε κάποια αντικείμενα και προσπαθήστε ξανά.",
             "addressAddedSuccessfullyMsg": "Η νέα διεύθυνση προστέθηκε με επιτυχία",
@@ -1314,7 +1351,12 @@
                 "upiNotSupportedErrorMsg": "Η πληρωμή μέσω UPI δεν υποστηρίζεται.",
                 "paymentAlreadyCompletedErrorMsg": "Η πληρωμή για το καλάθι σας έχει ήδη ολοκληρωθεί.",
                 "notEnoughCreditErrorMsg": "Δεν υπάρχει αρκετή πίστωση.",
-                "paymentMethodNotSupportedErrorMsg": "Η μέθοδος πληρωμής δεν υποστηρίζεται."
+                "walletNotFoundErrorMsg": "Το πορτοφόλι δεν βρέθηκε.",
+                "notEnoughBalanceErrorMsg": "Μη διαθέσιμο επαρκές υπόλοιπο.",
+                "paymentMethodNotSupportedErrorMsg": "Η μέθοδος πληρωμής δεν υποστηρίζεται.",
+                "paymentAmountRequiredErrorMsg": "Απαιτείται ποσό πληρωμής.",
+                "paymentAmountMinValueErrorMsg": "Το ελάχιστο ποσό πληρωμής είναι {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Η τιμή πληρωμής δεν μπορεί να υπερβαίνει το {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες και τουλάχιστον 1 κεφαλαίο γράμμα.",

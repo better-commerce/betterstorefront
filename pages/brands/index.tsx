@@ -1,13 +1,12 @@
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import Layout from '@components/Layout/Layout'
 import getBrands from '@framework/api/endpoints/catalog/brands'
 import { useTranslation } from '@commerce/utils/use-translation'
 import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
@@ -19,9 +18,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
-
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
-
 const dataNormalize = (data: any = []) => {
   return data.reduce((acc: any, item: any) => {
     let ref = acc.findIndex(
@@ -73,8 +70,18 @@ function BrandsPage({ brands }: any) {
 
   function handleScrollView(letter: any) {
     letter?.preventDefault()
-    window.location.href = `#${letter?.target?.text?.toUpperCase()}`
-    window.scrollBy(0, -100)
+    const targetId = letter?.target?.text?.toUpperCase()
+    const element = document.getElementById(targetId)
+
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - 150 // 100px from top
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
   }
 
   const totalResults = normalizedBrands.map((i: any) => i?.results)?.flat()?.length
@@ -99,7 +106,7 @@ function BrandsPage({ brands }: any) {
         {/* Mobile menu */}
         <main className="container pb-24 mx-auto overflow-hidden theme-account-container">
           <div className="py-6 text-center sm:py-16">
-            <h1 className="text-2xl font-semibold text-gray-900 sm:text-5xl">
+            <h1 className={`text-2xl font-semibold text-gray-900 sm:text-5xl`}>
               {translate('common.label.brandsText')}
             </h1>
             <div className="flex flex-wrap items-center justify-center w-full py-5">

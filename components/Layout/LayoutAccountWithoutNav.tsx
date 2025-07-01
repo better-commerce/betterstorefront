@@ -184,7 +184,7 @@ const LayoutAccountWithoutNav: FC<Props & IExtraProps> = ({ children, config, pa
         {isLoading && <ProgressBar />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
         <div className={`text-base lg:pt-24 pt-12 border-b border-slate-200 bg-white dark:bg-white text-neutral-900 dark:text-neutral-200 theme-top`}>
-          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} locale={locale} />
           {displayAlert && <AlertRibbon />}
           <>
             <NextHead>
@@ -207,7 +207,7 @@ const LayoutAccountWithoutNav: FC<Props & IExtraProps> = ({ children, config, pa
               </div>
             </section>
           </>
-          <Footer navItems={navTree?.footer} />
+          <Footer navItems={navTree?.footer} featureToggle={featureToggle} />
           <ModalUI />
           <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />
           <div className="cookie-bannner">

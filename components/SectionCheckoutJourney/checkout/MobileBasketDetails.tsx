@@ -12,6 +12,7 @@ import ClipboardFill from '@heroicons/react/24/solid/ClipboardIcon'
 import classNames from 'classnames'
 import PromotionInput from '@components/SectionCheckoutJourney/cart/PromotionInput'
 import { useTranslation } from '@commerce/utils/use-translation'
+
 interface BasketItem {
   id: string
   name: string
@@ -276,9 +277,27 @@ const MobileBasketDetails = ({ data, deviceInfo }: any) => {
                         </dd>
                       </div>
                     )}
+                    {(cartItems?.isPartialPayment && cartItems?.partialPayments?.length > 0) && (
+                      <>
+                        {cartItems?.partialPayments?.map((payment: any, idx: number) => (
+                          <div key={idx} className="flex items-center justify-between pt-2 sm:pt-1">
+                            <dt className="flex items-center text-black font-18">
+                              <span>{translate('label.orderSummary.paidText')}{`(${payment?.method})`}</span>
+                            </dt>
+                            <dd className="font-semibold text-black text-md">{payment?.paidAmount?.formatted}</dd>
+                          </div>
+                        ))}
+                      </>
+                    )}
                     <div className={`flex items-center justify-between py-2 my-3 text-gray-900 border-t border-gray-300`} >
                       <dt className="font-bold text-black font-18">{translate('label.orderSummary.totalText')}</dt>
-                      <dd className="text-xl font-bold text-black"> {data?.grandTotal?.formatted?.withTax} </dd>
+                      <dd className="text-xl font-bold text-black">
+                        {data?.isPartialPayment ? (
+                          <>{data?.partialPayableAmount?.formatted}</>
+                        ) : (
+                          <>{data?.grandTotal?.formatted?.withTax}</>
+                        )}
+                      </dd>
                     </div>
                   </dl>
                 </div>

@@ -16,6 +16,7 @@ import ProductQtyTextbox from '@components/account/RequestForQuote/ProductQtyTex
 import Spinner from "@components/ui/Spinner";
 import Link from "next/link";
 import { AlertType } from "@framework/utils/enums";
+import { Guid } from "@commerce/types";
 interface ITargetPrices {
   [productId: string]: number;
 }
@@ -41,6 +42,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
   useEffect(() => { if (isClient && cartItems?.lineItems) setLines(restructureProductLines(cartItems?.lineItems, null)) }, [isIncludeVAT, isClient, cartItems]);
 
   const fetchB2BUsers = async () => {
+    if (!user?.companyId || (user?.companyId && user?.companyId === Guid.empty)) return [];
     let { data: b2bUsers } = await axios.post(NEXT_B2B_GET_USERS, {
       companyId: user?.companyId,
     });
@@ -101,7 +103,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
       // Optionally, you can display a general error message at the top
       setAlert({
         type: 'error',
-        msg: 'Please Enter PO Number/ETA before submit request.'
+        msg: 'Please Enter PO Number/ETA/Phone Number before submit request.'
       });
     }
   };
@@ -347,7 +349,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
         <div className="sm:col-span-4">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col w-full gap-3 p-3 border shadow bg-gray-50 rounded-xl border-slate-200">
-              {Object?.keys(formConfig?.fields)?.map((fieldKey) => {
+              {Object?.keys(formConfig?.fields)?.map((fieldKey:any) => {
                 const field: any = formConfig.fields[fieldKey];
                 const today = new Date().toISOString().split('T')[0]; // Get today's date in 'YYYY-MM-DD' format
 

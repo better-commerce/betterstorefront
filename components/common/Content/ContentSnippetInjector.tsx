@@ -23,21 +23,20 @@ const ContentSnippetInjector: React.FC<React.PropsWithChildren<any>> = (props: a
      */
     const injectSnippetsBody = useCallback((snippets: any, container: any, snippetAttrName?: string) => {
         snippets?./*filter((x: any)=> x.innerHTML)?.*/forEach((snippet: any, index: number) => {
-            const snippetName = `${snippet?.name}${index + 1}`
             const script = document.createElement('script')
             if (snippet?.innerHTML) {
                 script.innerHTML = snippet?.innerHTML
             } else if (snippet?.src) {
-                script.async = true
                 script.src = snippet?.src
             }
+            script.async = true
             if (snippetAttrName) {
-                script.setAttribute(snippetAttrName, snippetName)
+                script.setAttribute(snippetAttrName, snippet?.name)
             }
-            script.setAttribute("data-bc-name", snippetName)
+            script.setAttribute("data-bc-name", snippet?.name)
 
             // Prevent duplicate injections
-            const findElem: any = container?.querySelector(`[data-bc-name="${snippetName}"]`)
+            const findElem: any = container?.querySelector(`[data-bc-name="${snippet?.name}"]`)
             if (findElem) {
                 return
             }

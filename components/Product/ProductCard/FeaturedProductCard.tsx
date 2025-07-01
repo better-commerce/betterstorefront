@@ -8,7 +8,7 @@ import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useUI } from '@components/ui/context'
 import { CLOTH_SIZE_ATTRIB_NAME, NEXT_CREATE_WISHLIST, Messages, EmptyObject, NEXT_REMOVE_WISHLIST } from '@components/utils/constants'
-import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMAGE_CDN_URL, IMG_PLACEHOLDER, } from '@components/utils/textVariables'
+import { BTN_NOTIFY_ME, BTN_PRE_ORDER, GENERAL_ADD_TO_BASKET, IMG_PLACEHOLDER, } from '@components/utils/textVariables'
 import { generateUri } from '@commerce/utils/uri-util'
 import { IExtraProps } from '@components/common/Layout/Layout'
 import { vatIncluded, cartItemsValidateAddToCart, getCurrency, isIncludeVATInPriceDisplay, isFreeShippingOverXValue, getFreeShippingOverXValue } from '@framework/utils/app-util'
@@ -239,7 +239,7 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
         <img src={generateUri(item?.original, `h=${height}&fm=webp`) || IMG_PLACEHOLDER} alt={product?.name} height={height} width={height} />
         {overlayImages?.length > 0 &&
           <div className='absolute z-10 top-1 right-1'>
-            <img src={generateUri(overlayImage?.image, 'h=130&fm=webp') || `${IMAGE_CDN_URL}//banners/18v-redemption-jan-mar-2024-offer-icon-500x500px.png`} className='overlayImage mob-overlay-img-width' width="130" height="130" alt={product?.name} />
+            <img src={generateUri(overlayImage?.image, 'h=130&fm=webp') || IMG_PLACEHOLDER} className='overlayImage mob-overlay-img-width' width="130" height="130" alt={product?.name} />
           </div>
         }
       </div>
@@ -251,7 +251,7 @@ const FeatureProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ 
         <img src={generateUri(item?.thumbnail, `h=${thumbHeight}&fm=webp`) || IMG_PLACEHOLDER} alt={product?.name} height={thumbHeight} width={thumbHeight} />
         {overlayImages?.length > 0 && !matchStrings(item?.tag, "overlay", true) &&
           <div className='absolute z-10 top-1 right-1'>
-            <img src={generateUri(overlayImage?.image, 'h=30&fm=webp') || `${IMAGE_CDN_URL}/banners/18v-redemption-jan-mar-2024-offer-icon-500x500px.png`} className='overlayImage' width="20" height="20" alt={product?.name} />
+            <img src={generateUri(overlayImage?.image, 'h=30&fm=webp') || IMG_PLACEHOLDER} className='overlayImage' width="20" height="20" alt={product?.name} />
           </div>
         }
       </div>

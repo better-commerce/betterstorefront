@@ -45,7 +45,6 @@ export const cachedGetData = async (
       method: 'get',
       cookies: cookies,
       headers: headers,
-      logRequest: LOG_ENABLED || false,
     })
 
     cache.put(url, data, time)

@@ -84,6 +84,8 @@
             "addedText": "lagt til",
             "noBasketAvailableText": "Ingen kurv tilgjengelig, vennligst opprett en ny",
             "totalAmountText": "Total beløp",
+            "orderAmountText": "Bestillingsbeløp",
+            "pendingOrderAmountText": "Utestående beløp",
             "checkoutBtnText": "Sjekk ut",
             "multipleCodesApplyText": "Du kan bruke flere koder",
             "getItByText": "Få det innen",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV er påkrevd",
                 "cvvInvalidText": "CVV er ugyldig",
                 "chequeNoText": "Sjekknr.",
-                "chequeNumberLabelText": "Sjekknr."
+                "chequeNumberLabelText": "Sjekknr.",
+                "enterAmountToPayLabelText": "Skriv inn beløpet som skal betales fra {paymentMethodName}"
             }
         },
         "collection": {
@@ -463,6 +466,7 @@
                 "productRequired": "Minst eitt produkt er påkravd"
             },
             "myDetailsHeadingText": "Min profil",
+            "tradeInText":"Innbytte",
             "editYourDetailsText": "Følgjeleg til å redigere nokre av detaljane dine nedanfor for at kontoen din skal vere heilt oppdatert.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Oisann! Det oppstod ein feil ved henting av returar"
@@ -504,7 +508,38 @@
             "noLookbookAvaiableText": "Ingen Lookbook tilgjengeleg",
             "shopTheLookText": "Kjøp stilen",
             "confirmPasswordText": "Bekreft passord",
-            "addNewUserText": "Legg til ny brukar"
+            "addNewUserText": "Legg til ny brukar",
+            "myTradeInText": "Min Trade In",
+            "quoteText": "Tilbud",
+            "createdText": "Opprettet",
+            "tradeInSectionFeedbackMessage": "Vi håper du liker vår nye Trade In-seksjon på nettsiden vår. Vi jobber fortsatt med forbedringer, men hvis du oppdager noe som ikke fungerer som forventet, vennligst send oss en e-post med skjermbilder (hvis mulig) til",
+            "queryEmailInstruction": "Hvis du har en forespørsel, vennligst send en e-post til",
+            "myWalletText": "Min Lommebok",
+            "walletActivationMessage": "Vennligst vent mens vi aktiverer lommeboken din og genererer lommebokinformasjon.",
+            "transferToBankText": "Overfør til Bank",
+            "addBankDetailsText": "Legg til Bankdetaljer",
+            "enableWalletText": "Aktiver Lommebok",
+            "walletCurrentBalanceText": "Lommebokens nåværende saldo",
+            "walletTransactionHistoryText": "Lommeboktransaksjonshistorikk",
+            "dateText": "Dato",
+            "amountText": "Beløp",
+            "referenceText": "Referanse",
+            "noTransactionHistoryMessage": "Ingen transaksjonshistorikk tilgjengelig.",
+            "noBankTransferHistoryText": "Ingen bankoverføring tilgjengelig",
+            "bankTransferHistoryText": "Bankoverføringshistorikk",
+            "bankNameText": "Banknavn",
+            "AccountNoText": "Kontonr.",
+            "sortCodeText": "Sorteringskode",
+            "walletDisabledMessage": "Lommebok er deaktivert. Aktiver den for å se saldo og transaksjoner.",
+            "roleRequiredText": "Role is required",
+            "selectRoleText": "Vel ein rolle",
+            "zoneRequiredText": "Zon er påkravd",
+            "selectZoneText": "Vel ein zon",
+            "branchRequiredText": "Filial er påkravd",
+            "selectBranchText": "Vel ein filial",
+            "countryRequiredText": "Land er påkravd",
+            "selectCountryText": "Vel ein land",
+            "iAmIntrestedInText": "Eg er interessert i"
         },
         "navBar": {
             "currencyText": "Valuta",
@@ -598,6 +633,7 @@
             "freeText": "Gratis",
             "additionalChargesText": "Ekstra kostnader",
             "taxText": "Skatt",
+            "paidText": "Betald",
             "youPayText": "Du betaler",
             "placeOrderBtnText": "Plasser ordre",
             "loseDeliveryText": "Du mister gratis frakt!",
@@ -1319,6 +1355,7 @@
             "userAlreadyExistsErrorMsg": "Bruker finnes allerede",
             "tokenInvalidErrorMsg": "Oops! Token er ugyldig",
             "tokenExpiredErrorMsg": "Oops! Token er utløpt eller ugyldig",
+            "sessionExpiredErrorMsg": "Økten din har utløpt. Vennligst logg inn på nytt.",
             "companyNotFoundErrorMsg": "Firma ble ikke funnet.",
             "cartItemMaxAddedErrorMsg": "Handlekurvgrensene er nådd. Vennligst fjern noen varer og prøv igjen.",
             "addressAddedSuccessfullyMsg": "Ny adresse ble lagt til vellykket",
@@ -1374,7 +1411,12 @@
                 "upiNotSupportedErrorMsg": "UPI-betaling støttes ikke.",
                 "paymentAlreadyCompletedErrorMsg": "Betalingen for din handlekurv er allerede fullført.",
                 "notEnoughCreditErrorMsg": "Ikke nok kreditt tilgjengelig.",
-                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden støttes ikke."
+                "walletNotFoundErrorMsg": "Lommebok ikkje funnen.",
+                "notEnoughBalanceErrorMsg": "Ikkje nok saldo tilgjengeleg.",
+                "paymentMethodNotSupportedErrorMsg": "Betalingsmetoden støttes ikke.",
+                "paymentAmountRequiredErrorMsg": "Betalingsbeløp er påkrevd.",
+                "paymentAmountMinValueErrorMsg": "Minimumsbeløpet for betaling er {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Betalingsverdien kan ikke overstige {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Passordet må ha minimum 8 tegn og minst 1 stor bokstav.",

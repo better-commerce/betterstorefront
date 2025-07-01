@@ -84,6 +84,9 @@
             "addedText": "přidáno",
             "noBasketAvailableText": "Žádný košík není k dispozici, vytvořte nový",
             "totalAmountText": "Celková částka",
+            "orderAmountText": "Částka objednávky",
+            "pendingOrderAmountText": "Čekající částka",
+            "totalItemsText": "Celkové položky",    
             "checkoutBtnText": "Pokladna",
             "multipleCodesApplyText": "Můžete použít více kódů",
             "getItByText": "Získejte to do",
@@ -246,7 +249,8 @@
             "cvvRequiredText": "CVV je povinné",
             "cvvInvalidText": "CVV je neplatné",
             "chequeNoText": "Číslo šeku",
-            "chequeNumberLabelText": "Číslo šeku"
+            "chequeNumberLabelText": "Číslo šeku",
+            "enterAmountToPayLabelText": "Zadejte částku k úhradě z {paymentMethodName}"
             }
         },
         "collection": {
@@ -463,6 +467,7 @@
             "productRequired": "Je vyžadován alespoň jeden produkt"
             },
             "myDetailsHeadingText": "Můj profil",
+            "tradeInText":"Výměna",
             "editYourDetailsText": "Neváhejte upravit jakékoli své údaje níže, aby váš účet byl zcela aktuální.",
             "myOrders": {
             "fetchReturnsErrorMsg": "Ups! Chyba při získávání vratek"
@@ -504,7 +509,38 @@
             "noLookbookAvaiableText": "Žádný Lookbook k dispozici",
             "shopTheLookText": "Nakupujte vzhled",
             "confirmPasswordText": "Potvrďte heslo",
-            "addNewUserText": "Přidat nového uživatele"
+            "addNewUserText": "Přidat nového uživatele",
+            "myTradeInText": "Můj Trade In",
+            "quoteText": "Nabídka",
+            "createdText": "Vytvořeno",
+            "tradeInSectionFeedbackMessage": "Doufáme, že se vám líbí nová sekce Trade In na našem webu. Stále pracujeme na vylepšeních, ale pokud narazíte na něco, co nefunguje podle očekávání, pošlete nám prosím e-mail se screenshoty (pokud je to možné) na",
+            "queryEmailInstruction": "Pokud máte dotaz, zašlete e-mail na",
+            "myWalletText": "Moje Peněženka",
+            "walletActivationMessage": "Počkejte prosím, aktivujeme vaši peněženku a generujeme informace o peněžence.",
+            "transferToBankText": "Převod na Banku",
+            "addBankDetailsText": "Přidat Bankovní Údaje",
+            "enableWalletText": "Povolit Peněženku",
+            "walletCurrentBalanceText": "Aktuální Zůstatek Peněženky",
+            "walletTransactionHistoryText": "Historie Transakcí Peněženky",
+            "dateText": "Datum",
+            "amountText": "Částka",
+            "referenceText": "Odkaz",
+            "noTransactionHistoryMessage": "Historie transakcí není k dispozici.",
+            "noBankTransferHistoryText": "Bankovní převod není k dispozici",
+            "bankTransferHistoryText": "Historie Bankovních Převodů",
+            "bankNameText": "Název Banky",
+            "AccountNoText": "Č. Účtu",
+            "sortCodeText": "Kód Banky",
+            "walletDisabledMessage": "Peněženka je deaktivována. Pro zobrazení zůstatku a transakcí ji povolte.",
+            "roleRequiredText": "Role je povinná",
+            "selectRoleText": "Vyberte roli",
+            "zoneRequiredText": "Zóna je povinná",
+            "selectZoneText": "Vyberte zónu",
+            "branchRequiredText": "Pobočka je povinná",
+            "selectBranchText": "Vyberte pobočku",
+            "countryRequiredText": "Země je povinná",
+            "selectCountryText": "Vyberte zemi",
+            "iAmIntrestedInText": "Mám zájem o"
         },
         "navBar": {
             "currencyText": "Měna",
@@ -598,6 +634,7 @@
             "freeText": "Zdarma",
             "additionalChargesText": "Další poplatky",
             "taxText": "Daň",
+            "paidText": "Zaplaceno",
             "youPayText": "Platíte",
             "placeOrderBtnText": "Zadat objednávku",
             "loseDeliveryText": "Brzy přijdete o bezplatnou dopravu!",
@@ -1319,6 +1356,7 @@
             "userAlreadyExistsErrorMsg": "Uživatel již existuje",
             "tokenInvalidErrorMsg": "Ups! Token je neplatný",
             "tokenExpiredErrorMsg": "Ups! Token vypršel nebo je neplatný",
+            "sessionExpiredErrorMsg": "Vaše relace vypršela. Přihlaste se prosím znovu.",
             "companyNotFoundErrorMsg": "Společnost nebyla nalezena.",
             "cartItemMaxAddedErrorMsg": "Byl dosažen limit položek v košíku. Odstraňte některé položky a zkuste to znovu.",
             "addressAddedSuccessfullyMsg": "Nová adresa byla úspěšně přidána",
@@ -1374,7 +1412,11 @@
                 "upiNotSupportedErrorMsg": "Platba pomocí UPI není podporována.",
                 "paymentAlreadyCompletedErrorMsg": "Platba za váš košík byla již dokončena.",
                 "notEnoughCreditErrorMsg": "Není dostatek kreditů.",
-                "paymentMethodNotSupportedErrorMsg": "Tento způsob platby není podporován."
+                "notEnoughBalanceErrorMsg": "Nedostatečný dostupný zůstatek.",
+                "paymentMethodNotSupportedErrorMsg": "Tento způsob platby není podporován.",
+                "paymentAmountRequiredErrorMsg": "Částka platby je povinná.",
+                "paymentAmountMinValueErrorMsg": "Minimální částka platby je {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Hodnota platby nesmí přesáhnout {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Heslo by mělo mít alespoň 8 znaků a alespoň 1 velké písmeno.",

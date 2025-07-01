@@ -7,6 +7,7 @@ import Heading from "@components/Heading/Heading";
 import Glide from "@glidejs/glide/dist/glide.esm";
 import { CURRENT_THEME } from "./utils/constants";
 import GliderNextPrev from "./Heading/GliderNextPrev";
+import HomeProductCardMin from "./HomeProductCardMin";
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 export interface SectionSliderProductCardProps {
   readonly className?: string;
@@ -17,13 +18,14 @@ export interface SectionSliderProductCardProps {
   readonly featureToggle: any;
   readonly defaultDisplayMembership: any;
   readonly deviceInfo: any;
+  readonly onlyImage: boolean;
 }
 
-const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle, defaultDisplayMembership, deviceInfo }) => {
+const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className, itemClassName, heading, subHeading, data, featureToggle, defaultDisplayMembership, deviceInfo, onlyImage }) => {
   const sliderRef = useRef(null);
   const [isShow, setIsShow] = useState(false);
-  let dataPerRow = 4
-  let dataPerRowMed = 4
+  let dataPerRow = featureToggle?.features?.enableForPCSite ? 5 : 4
+  let dataPerRowMed = featureToggle?.features?.enableForPCSite ? 5 : 4
   let dataGap = 32
   if (CURRENT_THEME == "green") {
     dataPerRow = 6
@@ -32,7 +34,7 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
   }
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
-      perView: dataPerRow, gap: dataGap, bound: true, breakpoints: { 1280: { perView: dataPerRowMed - 1, }, 1024: { gap: 20, perView: dataPerRowMed - 1, }, 768: { gap: 20, perView: dataPerRowMed - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+      perView: dataPerRow, gap: dataGap, bound: true, breakpoints: { 1280: { perView: dataPerRowMed - 1, }, 1024: { gap: 20, perView: dataPerRowMed - 1, }, 768: { gap: 20, perView: dataPerRowMed - 2, }, 640: { gap: 20, perView: 1, }, 500: { gap: 20, perView: 1, }, },
     };
     if (!sliderRef.current) return;
     let slider = new Glide(sliderRef.current, OPTIONS);
@@ -43,28 +45,35 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
     };
   }, [sliderRef]);
 
+  // Check if we're on mobile
+  const { isMobile } = deviceInfo || { isMobile: false };
+
   return (
-    <div className={`nc-SectionSliderProductCard product-card-slider relative ${className}`}>
+    <div className={`nc-SectionSliderProductCard product-card-slider relative ${className} ${isMobile ? 'mob-navigation-hide' : ''}`}>
       <div ref={sliderRef} className={`flow-root ${isShow ? "" : "invisible"}`}>
         {CURRENT_THEME != 'green' ? (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
-            <Heading key={iIdx} className="mb-12 lg:mb-14 text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
-              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title}
+            <Heading key={iIdx} className={`text-neutral-900 dark:text-neutral-50 heading-px-4 ${featureToggle?.features?.enableForPCSite ? 'mb-4 sm:mb-6 lg:mb-6' : 'mb-4 sm:mb-12 lg:mb-14'}`} desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title}
             </Heading>
           ))}
         </>) : (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
-            <GliderNextPrev key={iIdx} className="text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle} hasNextPrev >
-              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title  || h?.offerproductheading_title || h?.newproductheading_title}
+            <GliderNextPrev key={iIdx} className="text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title}
             </GliderNextPrev>
           ))}
         </>)}
 
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {data?.length> 0 && data?.map((item: any, index: number) => (
+            {data?.length > 0 && data?.map((item: any, index: number) => (
               <li key={index} className={`glide__slide product-card-item home-product-card ${itemClassName}`}>
-                <ProductCard deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                {featureToggle?.features?.enableForPCSite ? (
+                  <HomeProductCardMin onlyImage={onlyImage} deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                ) : (
+                  <ProductCard deviceInfo={deviceInfo} data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                )}
               </li>
             ))}
           </ul>

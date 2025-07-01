@@ -60,6 +60,7 @@ export default function Search(props: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router.asPath])
   const css = { maxWidth: '100%', height: 'auto' }
+
   const CLASSES = "absolute top-3 start-3";
   const defaultSearch = (
     <div className="fixed top-0 left-0 w-full h-full bg-white z-9999 search-fixed">
@@ -95,6 +96,7 @@ export default function Search(props: any) {
               </div>
             ))}
           {products?.map((product: any, idx: number) => {
+            const cashbackAmount = product?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
             return (
               <div className={`nc-ProductCard relative flex flex-col group bg-transparent mb-6`} key={`search-${idx}`}>
                 <div className="relative flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-slate-300 rounded-3xl z-1 group">
@@ -120,7 +122,7 @@ export default function Search(props: any) {
                     <p className={`text-sm text-slate-500 dark:text-slate-400 mt-1`}>{product?.classification?.mainCategoryName}</p>
                   </div>
                   <div className="flex items-end justify-between ">
-                    <Prices price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <Prices cashbackAmount={cashbackAmount} price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                     <div className="flex items-center mb-0.5">
                       <StarIcon className="w-5 h-5 pb-[1px] text-amber-400" />
                       <span className="text-sm ms-1 text-slate-500 dark:text-slate-400">

@@ -7,7 +7,8 @@ import { eddDateFormat } from '@framework/utils/parse-util'
 import PaymentMethodSelection from './PaymentMethodSelection'
 import { CheckoutStep, UserRoleType } from '@framework/utils/enums'
 import { useTranslation } from '@commerce/utils/use-translation'
-import { DeliveryType } from '@components/utils/constants'
+import { DeliveryType, CURRENT_THEME } from '@components/utils/constants'
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useUI } from '@components/ui'
 
 interface ShippingMethod {
@@ -41,6 +42,7 @@ interface ReviewOrderProps {
   readonly generateBasketId: any
   goToStep: (step: string) => void
   deliveryTypeMethod: any
+  featureToggle: any
 }
 
 const ReviewOrder: React.FC<ReviewOrderProps> = ({
@@ -57,6 +59,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
   onEditAddressToggleView,
   goToStep,
   deliveryTypeMethod,
+  featureToggle,
 }: any) => {
   const translate = useTranslation()
   const isIncludeVAT = vatIncluded()
@@ -69,7 +72,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
 
   return (
     <>
-      <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50">
+      <div className="flex flex-col gap-2 my-4 bg-white rounded-md sm:p-4 sm:border sm:border-gray-200 sm:bg-gray-50 form-container-bg">
         <h5 className="px-0 font-semibold uppercase font-18 dark:text-black">
           {translate('label.checkout.reviewAndPaymentText')}
         </h5>
@@ -81,12 +84,12 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
               </h5>
               {(!isB2BUser(user) || (isB2BUser(user) && user?.companyUserRole === UserRoleType.ADMIN)) && !deliveryTypeMethod?.type?.includes(DeliveryType.COLLECT) && (
                 <button
-                  className="justify-end font-semibold text-black font-12 hover:text-orange-600"
+                  className="justify-end flex gap-x-2 font-semibold text-black font-12 hover:text-orange-600"
                   onClick={() =>
                     onEditAddressToggleView(selectedAddress?.shippingAddress)
                   }
                 >
-                  {translate('common.label.changeText')}
+                {CURRENT_THEME === 'camera' && ( <PencilSquareIcon className='w-4 h-4 text-black'/>)}  {translate('common.label.changeText')}
                 </button>
               )}
             </div>
@@ -120,7 +123,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
               </h5>
               {(!isB2BUser(user) || (isB2BUser(user) && user?.companyUserRole === UserRoleType.ADMIN)) && (
                 <button
-                  className="justify-end font-semibold text-black font-12 hover:text-orange-600"
+                  className="justify-end flex gap-x-2 font-semibold text-black font-12 hover:text-orange-600"
                   onClick={() =>
                     onEditAddressToggleView(
                       selectedAddress?.billingAddress,
@@ -128,7 +131,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
                     )
                   }
                 >
-                  {translate('common.label.changeText')}
+                       {CURRENT_THEME === 'camera' && ( <PencilSquareIcon className='w-4 h-4 text-black'/>)}{translate('common.label.changeText')}
                 </button>
               )}
             </div>
@@ -161,12 +164,12 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
                 {translate('label.checkout.shippingMethodText')}
               </h5>
               <button
-                className="justify-end font-semibold text-black font-12 hover:text-orange-600"
+                className="justify-end flex gap-x-2 font-semibold text-black font-12 hover:text-orange-600"
                 onClick={() =>
                   goToStep(CheckoutStep.DELIVERY)
                 }
               >
-                {translate('common.label.changeText')}
+                {CURRENT_THEME === 'camera' && ( <PencilSquareIcon className='w-4 h-4 text-black'/>)}{translate('common.label.changeText')}
               </button>
             </div>
             <div className="flex items-start justify-between pb-2 rounded cursor-pointer sm:pb-0">
@@ -200,6 +203,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
         hideOverlayLoaderState={hideOverlayLoaderState}
         generateBasketId={generateBasketId}
         onPaymentMethodSelect={onPaymentMethodSelect}
+        featureToggle={featureToggle}
       />
       {/*<button className='w-full mb-4 border border-black sm:mt-4 btn-primary-green' onClick={onPlaceOrder}>Place Order</button>*/}
     </>

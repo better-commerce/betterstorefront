@@ -3,9 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
 // Package Imports
 import axios from 'axios'
-import Link from 'next/link'
 import { maxBasketItemsCount } from '@framework/utils/app-util'
-import cartHandler from '@components/services/cart'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { decrypt } from '@framework/utils/cipher'
 import 'swiper/css'
@@ -26,31 +24,46 @@ import {
 } from '@components/utils/constants'
 const ProductCard = dynamic(() => import('@components/ProductCard'))
 import { useTranslation } from '@commerce/utils/use-translation'
-
-export default function RecentlyViewedProduct({ deviceInfo, config, featureToggle, defaultDisplayMembership, }: any) {
+import HomeProductCardMin from '@components/HomeProductCardMin'
+import Prev from '@components/shared/NextPrevIcon/Prev'
+import Next from '@components/shared/NextPrevIcon/Next'
+export default function RecentlyViewedProduct({ isHome = false, deviceInfo, config, featureToggle, defaultDisplayMembership, productPerRow }: any) {
   const translate = useTranslation()
-  const { addToCart } = cartHandler()
-  const [splitBasketProducts, setSplitBasketProducts] = useState<any>({})
-  const [recentlyViewedState, setRecentlyViewedState] = useState<any>([])
-  const swiperRefBasket: any = useRef(null)
-  const [isReferModalOpen, setIsReferModalOpen] = useState(false)
+  const [recentlyViewedProducts, setRecentlyViewedProducts] = useState<any>([])
   const [isLoading, setIsLoading] = useState(true)
-  const {
-    user,
-    cartItems,
-    isGuestUser,
-  } = useUI()
-  const [referralObj, setReferralObj] = useState({
-    id: '',
-    userId: '',
-    name: '',
-    slug: '',
-    invitesSent: 0,
-    clickOnInvites: 0,
-    successfulInvites: 0,
-  })
+  const { user, isGuestUser, } = useUI()
+  const [referralObj, setReferralObj] = useState({ id: '', userId: '', name: '', slug: '', invitesSent: 0, clickOnInvites: 0, successfulInvites: 0, })
   const [referralOffers, setReferralOffers] = useState<any>(null)
+  const [showNavigation, setShowNavigation] = useState(false)
   const [isReferralSlugLoading, setIsReferralSlugLoading] = useState(false)
+  const { isMobile } = deviceInfo || { isMobile: false };
+  useEffect(() => {
+    const updateNavigationVisibility = () => {
+      let slidesPerView = 1
+      const width = window?.innerWidth
+
+      if (width >= 1800) {
+        slidesPerView = productPerRow
+      } else if (width >= 1024) {
+        slidesPerView = 4
+      } else if (width >= 768) {
+        slidesPerView = 3
+      } else if (width >= 640) {
+        slidesPerView = 2.3
+      } else {
+        slidesPerView = 1.4
+      }
+
+      setShowNavigation(recentlyViewedProducts?.length > slidesPerView)
+    }
+
+    updateNavigationVisibility()
+    window.addEventListener('resize', updateNavigationVisibility)
+
+    return () => {
+      window.removeEventListener('resize', updateNavigationVisibility)
+    }
+  }, [recentlyViewedProducts.length, productPerRow])
 
   const recentlyViewedProds = () => {
     let prodStockCodes: any = []
@@ -60,20 +73,13 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
           localStorage.getItem(LocalStorage.Key.RECENTLY_VIEWED)!
         )
         prodStockCodes = tryParseJson(recentProductsJson) || []
+        
         async function fetchProductsByStockCodes() {
-          const data = {
-            sortBy: '',
-            sortOrder: '',
-            currentPage: 1,
-            pageSize: 10,
-            filters: [],
-            stockCodes: prodStockCodes,
-          }
+          const data = { sortBy: '', sortOrder: '', currentPage: 1, pageSize: 10, filters: [], stockCodes: prodStockCodes, }
           setIsLoading(true)
-          const res: any = await axios
-            .post(NEXT_GET_CATALOG_PRODUCTS, data)
+          const res: any = await axios.post(NEXT_GET_CATALOG_PRODUCTS, data)
             .then((results: any) => {
-              setRecentlyViewedState(results?.data?.products?.results)
+              setRecentlyViewedProducts(results?.data?.products?.results)
               setIsLoading(false)
             })
             .catch((err) => {
@@ -82,11 +88,10 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
         }
         fetchProductsByStockCodes()
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleReferralByEmail = async () => {
-    // setIsReferModalOpen(true)
     let referrerEmail = user?.email
     setIsReferralSlugLoading(true)
     let { data: data } = await axios.post(NEXT_REFERRAL_BY_EMAIL, {
@@ -105,91 +110,54 @@ export default function RecentlyViewedProduct({ deviceInfo, config, featureToggl
     if (data?.referralDetails?.referrerPromo && !isGuestUser) {
       //rm user?.email if guest user can refer
       setReferralOffers(data?.referralDetails)
-      setIsReferModalOpen(true)
       handleReferralByEmail()
     }
   }
 
-  const groupItemsByDeliveryDate = (items: any) => {
-    if (items?.length < 1) {
-      return []
-    }
-    const groupedItems: any = {}
-
-    if (items?.length) {
-      for (const item of items) {
-        const deliveryDate = dateFormat(item?.deliveryDateTarget, 'DD/MM/yyyy')
-        if (groupedItems.hasOwnProperty(deliveryDate)) {
-          groupedItems[deliveryDate].push(item)
-        } else {
-          groupedItems[deliveryDate] = [item]
-        }
-      }
-    }
-
-    return groupedItems
-  }
-
   useEffect(() => {
     recentlyViewedProds()
-    let splitProducts = groupItemsByDeliveryDate(cartItems?.lineItems)
-    setSplitBasketProducts(splitProducts)
-  }, [cartItems?.lineItems])
+  }, [])
 
   useEffect(() => {
     handleReferralInfo()
   }, [])
-
+  const swiperRecently = useRef<any>(null);
   return (
-    <>
-      <div>
-        {' '}
-        {recentlyViewedState?.length > 0 && (
-          <div className="flex flex-col pt-8 mt-8 border-gray-200 sm:pt-16 mx-5">
-            <div className="flex flex-col w-full container-ffx">
-              <div>
-                <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
-                  <h2 className="font-semibold text-gray-900 uppercase font-18 mb-5">
-                    {translate('common.label.recentlyViewedText')}
-                  </h2>
+    recentlyViewedProducts?.length > 0 && (
+      <div className={`flex flex-col w-full container-ffx py-6 sm:pt-10 slider-btn-css ${isHome ? '' : ' mx-0'}`}>
+        <div className="flex items-center justify-between gap-1 pr-0 mb-2 sm:pr-0 lg:gap-3 sm:mb-0">
+          {featureToggle?.features?.enableForPCSite ? (
+            <h2 className="mb-6 font-semibold text-black title-page">Customers who viewed items in your browsing history also viewed</h2>
+          ) : (
+            <h2 className="mb-5 font-semibold text-gray-900 uppercase font-18"> {translate('common.label.recentlyViewedText')} </h2>
+          )}
+        </div>
+        <div className="mt-4 default-sm mobile-slider-no-arrow relative m-hide-navigation sm:mb-0 vertical-prod-list-ipad slider-equal-height">
+          {isLoading ? (<LoadingDots />) : (
+            <>
+              {showNavigation && (
+                <div className="flex justify-between mb-2 slider-out-btn">
+                  <Prev onClickPrev={() => swiperRecently.current?.swiper?.slidePrev()} />
+                  <Next onClickNext={() => swiperRecently.current?.swiper?.slideNext()} />
                 </div>
-                <div className="mt-4 default-sm mobile-slider-no-arrow m-hide-navigation sm:mb-0 vertical-prod-list-ipad">
-                  {isLoading ? (
-                    <LoadingDots />
-                  ) : (
-                    <Swiper
-                      slidesPerView={1}
-                      spaceBetween={10}
-                      ref={swiperRefBasket}
-                      navigation={false}
-                      loop={true}
-                      breakpoints={{
-                        640: { slidesPerView: 1.3, spaceBetween: 4 },
-                        768: { slidesPerView: 1.3, spaceBetween: 10 },
-                        1024: { slidesPerView:1.3, spaceBetween: 10 },
-                      }}
-                      className="mySwiper"
-                    >
-                      {recentlyViewedState?.map((product: any, pid: number) => {
-                        return (
-                          <SwiperSlide key={pid} className="height-equal">
-                             <ProductCard
-                              data={product}
-                              deviceInfo={deviceInfo}
-                              maxBasketItemsCount={maxBasketItemsCount(config)}
-                              featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership}
-                            />
-                          </SwiperSlide>
-                        )
-                      })}
-                    </Swiper>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
+              <Swiper slidesPerView={1.4} spaceBetween={10} ref={swiperRecently} navigation={false} loop={true} breakpoints={{ 640: { slidesPerView: 2.3, spaceBetween: 4 }, 768: { slidesPerView: 3, spaceBetween: 16 }, 1024: { slidesPerView: 4, spaceBetween: 16 }, 1800: { slidesPerView: productPerRow, spaceBetween: 16 }, }} className={`${isMobile ? 'mob-navigation-hide' : ''} mySwiper`}>
+                {recentlyViewedProducts?.map((product: any, pid: number) => {
+                  return (
+                    <SwiperSlide key={pid} className="height-equal">
+                      {isHome ? (
+                        <HomeProductCardMin onlyImage={true} deviceInfo={deviceInfo} data={product} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      ) : (
+                        <ProductCard data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      )}
+                    </SwiperSlide>
+                  )
+                })}
+              </Swiper>
+            </>
+          )}
+        </div>
       </div>
-    </>
+    )
   )
 }

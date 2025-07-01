@@ -84,6 +84,8 @@
             "addedText": "lisätty",
             "noBasketAvailableText": "Ei koria saatavilla, luo uusi",
             "totalAmountText": "Kokonaissumma",
+            "orderAmountText": "Tilaussumma",
+            "pendingOrderAmountText": "Odotettava summa",
             "checkoutBtnText": "Kassalle",
             "multipleCodesApplyText": "Voit käyttää useita koodeja",
             "getItByText": "Saat sen",
@@ -246,7 +248,8 @@
                 "cvvRequiredText": "CVV vaaditaan",
                 "cvvInvalidText": "CVV ei kelpaa",
                 "chequeNoText": "Sekkinumero",
-                "chequeNumberLabelText": "Sekkinumero"
+                "chequeNumberLabelText": "Sekkinumero",
+                "enterAmountToPayLabelText": "Anna maksettava määrä kohteesta {paymentMethodName}"
             }
         },
         "collection": {
@@ -463,6 +466,7 @@
                 "productRequired": "Vähintään yksi tuote on pakollinen"
             },
             "myDetailsHeadingText": "Profiilini",
+            "tradeInText": "Kauppatilaisuus",
             "editYourDetailsText": "Päivitä tietosi, jotta tilisi on ajan tasalla.",
             "myOrders": {
                 "fetchReturnsErrorMsg": "Hups! Virhe palautusten noudossa."
@@ -504,7 +508,38 @@
             "noLookbookAvaiableText": "Ei Lookbookia saatavilla",
             "shopTheLookText": "Shoppaile tyyli",
             "confirmPasswordText": "Vahvista salasana",
-            "addNewUserText": "Lisää uusi käyttäjä"
+            "addNewUserText": "Lisää uusi käyttäjä",
+            "myTradeInText": "Oma Trade In",
+            "quoteText": "Tarjous",
+            "createdText": "Luotu",
+            "tradeInSectionFeedbackMessage": "Toivottavasti pidät uudesta Trade In -osiosta verkkosivustollamme. Teemme parhaillaan parannuksia, mutta jos huomaat jotain, mikä ei toimi odotetulla tavalla, lähetä meille sähköpostia kuvakaappauksilla (jos mahdollista) osoitteeseen",
+            "queryEmailInstruction": "Jos sinulla on kysyttävää, lähetä sähköpostia osoitteeseen",
+            "myWalletText": "Lompakkoni",
+            "walletActivationMessage": "Odota hetki, aktivoimme lompakkosi ja luomme lompakontiedot.",
+            "transferToBankText": "Siirrä Pankkiin",
+            "addBankDetailsText": "Lisää Pankkitiedot",
+            "enableWalletText": "Ota Lompakko Käyttöön",
+            "walletCurrentBalanceText": "Lompakon Nykyinen Saldo",
+            "walletTransactionHistoryText": "Lompakon Tapahtumahistoria",
+            "dateText": "Päivämäärä",
+            "amountText": "Määrä",
+            "referenceText": "Viite",
+            "noTransactionHistoryMessage": "Tapahtumahistoriaa ei ole saatavilla.",
+            "noBankTransferHistoryText": "Aucun virement bancaire disponible",
+            "bankTransferHistoryText": "Pankkisiirtohistoria",
+            "bankNameText": "Pankin Nimi",
+            "AccountNoText": "Tilinro.",
+            "sortCodeText": "Järjestelykoodi",
+            "walletDisabledMessage": "Lompakko on pois käytöstä. Ota se käyttöön nähdäksesi saldon ja tapahtumat.",
+            "roleRequiredText": "Rooli vaaditaan",
+            "selectRoleText": "Valitse rooli",
+            "zoneRequiredText": "Vyöhyke vaaditaan",
+            "selectZoneText": "Valitse vyöhyke",
+            "branchRequiredText": "Toimipiste vaaditaan",
+            "selectBranchText": "Valitse toimipiste",
+            "countryRequiredText": "Maa vaaditaan",
+            "selectCountryText": "Valitse maa",
+            "iAmIntrestedInText": "Olen kiinnostunut"
         },
         "navBar": {
             "currencyText": "Valuutta",
@@ -598,6 +633,7 @@
             "freeText": "Ilmainen",
             "additionalChargesText": "Lisämaksut",
             "taxText": "Vero",
+            "paidText": "Maksettu",
             "youPayText": "Maksettava",
             "placeOrderBtnText": "Tee tilaus",
             "loseDeliveryText": "Olet menettämässä ilmaisen toimituksen!",
@@ -1311,6 +1347,7 @@
             "userAlreadyExistsErrorMsg": "Käyttäjä on jo olemassa",
             "tokenInvalidErrorMsg": "Ups! Tunnus ei ole kelvollinen",
             "tokenExpiredErrorMsg": "Ups! Tunnus on vanhentunut tai ei kelvollinen",
+            "sessionExpiredErrorMsg": "Istuntosi on vanhentunut. Kirjaudu sisään uudelleen.",
             "companyNotFoundErrorMsg": "Yritystä ei löytynyt.",
             "cartItemMaxAddedErrorMsg": "Ostoskoriin on lisätty maksimi määrä tuotteita. Poista joitain tuotteita ja yritä uudelleen.",
             "addressAddedSuccessfullyMsg": "Uusi osoite lisätty onnistuneesti",
@@ -1366,7 +1403,12 @@
                 "upiNotSupportedErrorMsg": "UPI-maksua ei tueta.",
                 "paymentAlreadyCompletedErrorMsg": "Maksu ostoskorillesi on jo suoritettu.",
                 "notEnoughCreditErrorMsg": "Ei tarpeeksi luottoa käytettävissä.",
-                "paymentMethodNotSupportedErrorMsg": "Maksutapaa ei tueta."
+                "walletNotFoundErrorMsg": "Lompakkoa ei löytynyt.",
+                "notEnoughBalanceErrorMsg": "Riittämätön saldo käytettävissä.",
+                "paymentMethodNotSupportedErrorMsg": "Maksutapaa ei tueta.",
+                "paymentAmountRequiredErrorMsg": "Maksun määrä on pakollinen.",
+                "paymentAmountMinValueErrorMsg": "Minimimaksun määrä on {currencySymbol}{paymentAmount}.",
+                "paymentAmountCannotExceedErrorMsg": "Maksun arvo ei voi ylittää {currencySymbol}{paymentAmount}."
             },
             "password": {
                 "passwordValidationMsg": "Salasanassa tulee olla vähintään 8 merkkiä ja ainakin 1 iso kirjain.",

@@ -5,7 +5,9 @@ import qs from 'qs'
 import { SEARCH_MINIMAL_ENDPOINT } from '@components/utils/constants'
 
 export default function getAllRecentlyViewedProductsOperation({}: OperationContext<any>) {
-  async function getAllRecentlyViewedProducts<T extends getAllRecentlyViewedProductsOperation>({
+  async function getAllRecentlyViewedProducts<
+    T extends getAllRecentlyViewedProductsOperation
+  >({
     query = '',
     cookies = {},
   }: {
@@ -24,7 +26,8 @@ export default function getAllRecentlyViewedProductsOperation({}: OperationConte
       pageSize = 20,
       stockCodes = [],
       excludeOOSProduct = true,
-      IgnoreDisplayInSerach = true
+      IgnoreDisplayInSerach = true,
+      includeFreeProduct = true,
     } = query
     const data: any = {
       freeText,
@@ -39,7 +42,8 @@ export default function getAllRecentlyViewedProductsOperation({}: OperationConte
       brandId,
       stockCodes,
       excludeOOSProduct,
-      IgnoreDisplayInSerach
+      IgnoreDisplayInSerach,
+      includeFreeProduct,
     }
 
     if (filters?.length) {

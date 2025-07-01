@@ -12,9 +12,17 @@ export async function getServerSideProps(context: any) {
   if (query?.feed && (query?.feed[0]?.includes('xml') || query?.feed[0]?.includes('aspx'))) {
     const feed = await getFeed(query?.feed[0], context?.req?.cookies)
     if (feed?.downloadLink) {
-      const response = await axios.get(feed?.downloadLink)
-      res.setHeader("content-type", "application/xml")
-      res.end(response?.data)
+      try {
+        const response = await axios.get(feed?.downloadLink)
+        res.setHeader("content-type", "application/xml")
+        res.end(response?.data)
+      } catch (error: any) {
+        const statusCode = error.response?.status || 500;
+        const errorMessage = statusCode === 404
+          ? 'Feed not found'
+          : 'Failed to retrieve feed data';
+        res.end(errorMessage)
+      }
     }
   }
 

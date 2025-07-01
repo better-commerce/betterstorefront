@@ -1919,6 +1919,9 @@ body .ttnc-ButtonPrimary{
 .drop-acc-icon svg{
   color: #000 !important;
 }
+.icon-div-menu .drop-acc-icon img{
+    filter: invert(0) !important;
+}
 .checkout-header{
   background: #000 !important;
 }
@@ -2857,3 +2860,21 @@ body .round-md-btn, .btn-radius-sm{
     background: #fff !important;
   }
 }
+.close-white{
+  color: #FFFFFF !important;
+}
+@media screen and (max-width: 767px) {
+  .mobile-flex{
+   display: flex !important;
+   flex-direction: column-reverse;
+  }
+  .search-top {
+   top: 0 !important;
+ }
+ .mob-static{
+   position: static !important;
+ }
+ .text-black-clr-sec h2, .text-black-clr-sec p{
+   color:#000 !important
+ }
+ }

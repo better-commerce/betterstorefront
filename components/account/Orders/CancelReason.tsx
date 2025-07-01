@@ -87,7 +87,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
 
                     <Button
                       type="button"
-                      className={`!inline-block !w-auto !py-3 text-sm font-bold text-center text-white bg-red-700 border dark:!bg-black dark:!text-white cursor-pointer ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`!inline-block !w-auto !py-3 text-sm font-bold text-center !bg-black text-white  border dark:!bg-black dark:!text-white cursor-pointer ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={isDisabled}
                       onClick={openModal} 
                     >
@@ -148,11 +148,11 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                         <div className='w-full'>
                           <p className='text-sm text-black'>{translate('label.cancelReason.cancelConfirmationText')} {cancelTitle} {translate('common.label.questionMark')}</p>
                         </div>
-                        <div className='flex justify-between w-full mt-4'>
+                        <div className='flex justify-between w-full mt-4 button-section-cancel'>
                           <Button
                             variant='slim'
                             onClick={closeModal}
-                            className='!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200'
+                            className='!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200 button-cancel-bg-transparent'
                           >
                            {translate('common.label.donotCancelText')}
                           </Button>

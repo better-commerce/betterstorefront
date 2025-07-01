@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 import LikeButton from "@components/LikeButton";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import Prices from "@components/Prices";
+import Prices from "@components/PricesWithDiscount";
 import detail1JPG from "images/products/detail1.jpg";
 import detail2JPG from "images/products/detail2.jpg";
 import detail3JPG from "images/products/detail3.jpg";
@@ -31,6 +31,7 @@ import { AnalyticsEventType } from "./services/analytics";
 import Router from "next/router";
 import useAnalytics from "./services/analytics/useAnalytics";
 import { EVENTS_MAP } from "./services/analytics/constants";
+import { getItem } from "./utils/localStorage";
 const Engraving = dynamic(() => import('@components/Product/Engraving'))
 
 export interface ProductQuickViewProps {
@@ -175,6 +176,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
         if (typeof window !== 'undefined') {
           //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          const cartItems = getItem('cartItems')
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, });
 
           if (currentPage) {
@@ -252,6 +254,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
             if (typeof window !== 'undefined') {
               //debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+              const cartItems = getItem('cartItems')
               recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PLP Quick View", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, });
 
               if (currentPage) {
@@ -447,7 +450,7 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
       </div>
     )
   };
-
+  const cashbackAmount = selectedAttrData?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
   const renderSectionContent = () => {
     return (
       <div className="space-y-8">
@@ -524,87 +527,31 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className = "", product, 
   return (
     <div className={`nc-ProductQuickView ${className}`}>
       <div className="lg:flex">
-        {isMobile ? (
-          <div className="w-full lg:w-[55%]">
-            <Swiper
-              slidesPerView={1}
-              spaceBetween={30}
-              navigation
-              loop
-              className="mySwiper"
-            >
-              <SwiperSlide>
-                <div className="relative">
-                  <img
-                    src={
-                      generateUri(product?.image, 'h=1000&fm=webp') ||
-                      IMG_PLACEHOLDER
-                    }
-                    className="object-cover object-top w-full"
-                    alt={product?.name}
-                  />
-                  {renderStatus()}
-                </div>
-              </SwiperSlide>
-              {product?.images?.map((item: any, index: number) => {
-                return (
-                  item?.tag != 'specification' && (
-                    <SwiperSlide key={index}>
-                      <div className="relative">
-                        <img
-                          src={
-                            generateUri(item?.image, 'h=500&fm=webp') ||
-                            IMG_PLACEHOLDER
-                          }
-                          className="object-cover w-full"
-                          alt={product?.name}
-                        />
-                      </div>
-                    </SwiperSlide>
-                  )
-                )
-              })}
-            </Swiper>
-          </div>
-        ) : (
-          <div className="w-full lg:w-[50%] ">
-            <div className="relative">
-              <div className="aspect-w-16 aspect-h-16">
-                <img
-                  src={
-                    generateUri(selectedAttrData?.image, 'h=1000&fm=webp') ||
-                    IMG_PLACEHOLDER
-                  }
-                  className="object-cover object-top w-full rounded-xl"
-                  alt={selectedAttrData?.name}
-                />
+        <div className="w-full lg:w-[55%] sticky top-0">
+          <Swiper slidesPerView={1} spaceBetween={30} navigation loop className="mySwiper" >
+            <SwiperSlide>
+              <div className="relative">
+                <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full" alt={product?.name} />
+                {renderStatus()}
               </div>
-              {renderStatus()}
-            </div>
-            <div className="hidden grid-cols-2 gap-3 mt-3 lg:grid sm:gap-6 sm:mt-6 xl:gap-5 xl:mt-5">
-              {selectedAttrData?.images
-                ?.slice(0, 2)
-                .map((item: any, index: number) => {
-                  return (
-                    <div key={index} className="aspect-w-3 aspect-h-4">
-                      <img
-                        src={
-                          generateUri(item?.image, 'h=400&fm=webp') ||
-                          IMG_PLACEHOLDER
-                        }
-                        className="object-cover object-top w-full rounded-xl"
-                        alt={item?.name}
-                      />
+            </SwiperSlide>
+            {product?.images?.map((item: any, index: number) => {
+              return (
+                item?.tag != 'specification' && (
+                  <SwiperSlide key={index}>
+                    <div className="relative p-3 border border-gray-200">
+                      <img src={generateUri(item?.url, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-contain w-full h-auto rounded" alt={product?.alt} />
                     </div>
-                  )
-                })}
-            </div>
-          </div>
-        )}
+                  </SwiperSlide>
+                )
+              )
+            })}
+          </Swiper>
+        </div>
         {isEngravingAvailable && (
           <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={selectedAttrData} />
         )}
-        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0 pdp-right-section">
+        <div className="w-full lg:w-[50%] pt-6 lg:pt-0 lg:ps-7 xl:ps-8 pl-1 lg:pl-0 pdp-right-section plp-section-right">
           {renderSectionContent()}
         </div>
       </div>

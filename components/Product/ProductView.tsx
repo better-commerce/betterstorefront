@@ -1,59 +1,77 @@
-import { useState, useEffect, useMemo, Fragment } from 'react'
-import axios from 'axios'
+// React & Next.js
+import { useState, useEffect, useMemo, Fragment, useRef } from 'react'
 import dynamic from 'next/dynamic'
-import { decrypt, encrypt } from '@framework/utils/cipher'
-import { GiftIcon, HeartIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { StarIcon } from '@heroicons/react/24/solid'
-import { useUI } from '@components/ui/context'
-import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
-import ImageGallery from 'react-image-gallery'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.min.css';
-import cartHandler from '@components/services/cart'
-import LookbookGrid from '@components/Product/Lookbook/LookbookGrid'
-import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG } from '@components/utils/constants'
-import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
-import { IMG_PLACEHOLDER, ITEM_TYPE_ADDON, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
-import { ELEM_ATTR, PDP_ELEM_SELECTORS, } from '@framework/content/use-content-snippet'
-import { generateUri } from '@commerce/utils/uri-util'
-import _, { groupBy, round } from 'lodash'
-import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
-import { getCurrentPage, sanitizeRelativeUrl, validateAddToCart, vatIncluded, } from '@framework/utils/app-util'
-import { LocalStorage } from '@components/utils/payment-constants'
-import wishlistHandler from '@components/services/wishlist'
-import AccordionInfo from '@components/AccordionInfo'
-import Link from 'next/link'
-import { useTranslation } from '@commerce/utils/use-translation'
-import { PRODUCTS } from './data'
-import DeliveryInfo from './DeliveryInfo'
-import ProductDescription from './ProductDescription'
-import CacheProductImages from './CacheProductImages'
-import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
-import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import MyLocationIcon from '@components/shared/icons/MyLocationIcon'
-import StockCheckModal from '@components/StoreLocator/StockCheckModal/StockCheckModal'
-import ProductSocialProof from './ProductSocialProof'
-import { Dialog, Disclosure, Transition } from '@headlessui/react'
-import TechnicalSpecifications from './TechnicalSpecification'
-import ButtonClose from '@components/shared/ButtonClose/ButtonClose'
-import { AnalyticsEventType } from '@components/services/analytics'
 import Router from 'next/router'
+
+// Third-party packages
+import axios from 'axios'
+import _, { groupBy } from 'lodash'
+import { Dialog, Disclosure, Transition } from '@headlessui/react'
+import ImageGallery from 'react-image-gallery'
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+// Icons
+import { GiftIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { StarIcon } from '@heroicons/react/24/solid'
+import { DiscussionEmbed } from 'disqus-react';
+
+// Styles
+import 'swiper/swiper-bundle.min.css'
+
+// Utilities
+import { decrypt, encrypt } from '@framework/utils/cipher'
+import { generateUri } from '@commerce/utils/uri-util'
+import { matchStrings, stringFormat, roundToDecimalPlaces } from '@framework/utils/parse-util'
+import { getCurrentPage, validateAddToCart, vatIncluded } from '@framework/utils/app-util'
+
+// Constants
+import { NEXT_CREATE_WISHLIST, NEXT_BULK_ADD_TO_CART, NEXT_UPDATE_CART_INFO, NEXT_GET_PRODUCT, NEXT_GET_PRODUCT_PREVIEW, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_COMPARE_ATTRIBUTE, EmptyString, EngageEventTypes, SITE_ORIGIN_URL, NEXT_GET_LOOKBOOK, NEXT_GET_LOOKBOOK_BY_SLUG, NEXT_CUSTOMER_PRODUCT_INTEREST } from '@components/utils/constants'
+import { KEYS_MAP, EVENTS } from '@components/utils/dataLayer'
+import { CUSTOM_EVENTS, EVENTS_MAP } from '@components/services/analytics/constants'
+import { IMG_PLACEHOLDER, ITEM_TYPE_ADDONS, ITEM_TYPE_ADDON_10, ITEM_TYPE_ALTERNATIVE, SLUG_TYPE_MANUFACTURER } from '@components/utils/textVariables'
+import { ELEM_ATTR, PDP_ELEM_SELECTORS } from '@framework/content/use-content-snippet'
+import { LocalStorage } from '@components/utils/payment-constants'
+import { PRODUCTS } from './data'
+
+// Hooks & Context
+import { useUI } from '@components/ui/context'
+import { useTranslation } from '@commerce/utils/use-translation'
 import useAnalytics from '@components/services/analytics/useAnalytics'
+
+// Services
+import cartHandler from '@components/services/cart'
+import wishlistHandler from '@components/services/wishlist'
+
+// Types
+import { AnalyticsEventType } from '@components/services/analytics'
+import ReviewInput from './Reviews/ReviewInput'
+import { getItem } from '@components/utils/localStorage'
+import { content } from 'tailwind.config'
+
+// Dynamically imported components
+const ProductDescription = dynamic(() => import('./ProductDescription'))
+const CacheProductImages = dynamic(() => import('./CacheProductImages'))
+const EngageProductCard = dynamic(() => import('@components/SectionEngagePanels/ProductCard'))
+const ProductSocialProof = dynamic(() => import('./ProductSocialProof'))
+const TechnicalSpecifications = dynamic(() => import('./TechnicalSpecification'))
+const ButtonClose = dynamic(() => import('@components/shared/ButtonClose/ButtonClose'))
+const TabProductCompare = dynamic(() => import('./TabProductCompare'))
+const RichProductView = dynamic(() => import('./RichProductView'))
+const DefaultProductView = dynamic(() => import('./DefaultProductView'))
+const LookbookGrid = dynamic(() => import('@components/Product/Lookbook/LookbookGrid'))
 const PDPCompare = dynamic(() => import('@components/Product/PDPCompare'))
 const PDPDetails = dynamic(() => import('@components/Product/ProductDetails/productDetails'))
 const ProductSpecification = dynamic(() => import('@components/Product/ProductDetails/specification'))
 const ProductSpecifications = dynamic(() => import('@components/Product/Specifications'))
 const ProductTag = dynamic(() => import('@components/Product/ProductTag'))
+const ProductTabs = dynamic(() => import('@components/Product/ProductTabs'))
+const TabProductCard = dynamic(() => import('@components/Product/TabProductCard'))
 const ReviewItem = dynamic(() => import('@components/ReviewItem'))
-const Prices = dynamic(() => import('@components/Prices'))
 const AttributesHandler = dynamic(() => import('@components/Product/AttributesHandler'))
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
 const Bundles = dynamic(() => import('@components/Product/Bundles'))
 const Engraving = dynamic(() => import('@components/Product/Engraving'))
-const Button = dynamic(() => import('@components/ui/IndigoButton'))
 const RelatedProductWithGroup = dynamic(() => import('@components/Product/RelatedProducts/RelatedProductWithGroup'))
-const AvailableOffers = dynamic(() => import('@components/Product/AvailableOffers'))
-const QuantityBreak = dynamic(() => import('@components/Product/QuantiyBreak'))
 declare const window: any
 const PLACEMENTS_MAP: any = {
   Head: {
@@ -71,13 +89,14 @@ const PLACEMENTS_MAP: any = {
 }
 
 export default function ProductView({ data = { images: [] }, snippets = [], recordEvent, slug, isPreview = false, relatedProductsProp, promotions, pdpCachedImages: cachedImages, reviews, deviceInfo, config, maxBasketItemsCount, allProductsByCategory: allProductsByCategoryProp, campaignData, featureToggle, defaultDisplayMembership, selectedFilters = [] }: any) {
+  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
   const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
-  const { status } = PRODUCTS[0];
-  const { openNotifyUser, addToWishlist, openWishlist, basketId, cartItems, setAlert, setCartItems, user, openCart, openLoginSideBar, isGuestUser, setIsCompared, removeFromWishlist, currency, setProductInfo, closeSidebar } = useUI()
-  const { isMobile, isIPadorTablet } = deviceInfo
-  const { isInWishList, deleteWishlistItem } = wishlistHandler()
+  let currentPage = getCurrentPage()
   const isIncludeVAT = vatIncluded()
+  const { isMobile } = deviceInfo
+  const { status } = PRODUCTS[0];
+  const { isInWishList, deleteWishlistItem } = wishlistHandler()
   const [product, setUpdatedProduct] = useState<any>(data)
   const [isEngravingOpen, showEngravingModal] = useState(false)
   const [variantInfo, setVariantInfo] = useState<any>({ variantColour: '', variantSize: '', })
@@ -94,11 +113,29 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const [openStoreLocatorModal, setOpenStockCheckModal] = useState(false)
   const [showDetails, setShowGwpDetail] = useState(false)
   const [lookbookData, setLookbookData] = useState<any>(null)
-  const [newImages, setImages] = useState([]);
-  let currentPage = getCurrentPage()
-  const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
   const [analyticsData, setAnalyticsData] = useState(null)
+  const [selectedOption, setSelectedOption] = useState("new");
+  const [quantity, setQuantity] = useState(1);
+  const [isSubmitReview, setSubmitReview] = useState(false)
+  const baseUrl = "https://parkcameras.bettercommerce.tech/"
+  const alternativeProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.relatedType == ITEM_TYPE_ALTERNATIVE)
+  // CHECK TRENDING PRODUCTS FROM ENGAGE
+  let similarProduct = []
+  let recentProduct = []
+  if (typeof window !== 'undefined') {
+    similarProduct = window?.similar_products_sorted_product;
+    recentProduct = window?.recent_products_product;
+  }
+  let productDesc = product.description
+  if (product?.shortDescription == "") {
+    productDesc = product.description
+  }
 
+  const detailsConfig = [
+    { name: translate('common.label.descriptionText'), content: productDesc },
+    { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
+    { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
+  ]
   useEffect(() => {
     if (compareProductsAttributes?.length < 0) return
     let mappedAttribsArrStr: any = compareProductsAttributes?.map((o: any) => o?.customAttributes).flat()
@@ -119,6 +156,35 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       const { data: compareDataResult }: any = await axios.post(NEXT_COMPARE_ATTRIBUTE, { stockCodes: newArray || [], compareAtPDP: true })
       setCompareProductAttribute(compareDataResult)
     }
+  }
+  const createProductInterest = async () => {
+    const objUser = localStorage.getItem('user')
+    if (!objUser || isGuestUser) {
+      openLoginSideBar()
+      return
+    }
+    else {
+      try {
+        const response = await axios.post(NEXT_CUSTOMER_PRODUCT_INTEREST, {
+          id: user?.userId,
+          productId: product?.recordId,
+        })
+
+        if (response?.data) {
+          setAlert({
+            type: 'success',
+            msg: 'Product interest registered successfully'
+          })
+        }
+      } catch (error) {
+        console.log(error, 'error')
+        setAlert({
+          type: 'error',
+          msg: 'Failed to register product interest'
+        })
+      }
+    }
+
   }
   const [selectedAttrData, setSelectedAttrData] = useState({ productId: product?.recordId, stockCode: product?.stockCode, ...product, })
   useEffect(() => {
@@ -181,6 +247,11 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     recordAnalytics(AnalyticsEventType.PDP_VIEW, { ...product, ...{ ...extras }, color, itemIsBundleItem: false, entityType: Product, })
     if (response?.data?.product) {
       setUpdatedProduct(response.data.product)
+      setSelectedAttrData({
+        productId: response.data.product.recordId,
+        stockCode: response.data.product.stockCode,
+        ...response.data.product,
+      })
       if (typeof window !== "undefined" && window?.ch_session) {
         window?.ch_product_view_before(generateDataForEngage(response.data.product))
       }
@@ -304,31 +375,76 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const handleNotification = () => {
     openNotifyUser(product?.recordId)
   }
+  const filterAndGroupProducts = (
+    products: any[] | undefined,
+    filterKey: string,
+    groupKey: string
+  ) => {
+    return groupBy(
+      (products || []).filter((item: { groupNameList: { relatedTypeCode: string }[] }) =>
+        item?.groupNameList?.some((group: { relatedTypeCode: string }) =>
+          group?.relatedTypeCode.toLowerCase() === filterKey
+        )
+      ),
+      () => groupKey
+    );
+  };
+  const usedProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "used", "Used");
+  const buyingProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "buying options", "Buying Options");
+  const accessoriesProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "accessories", "Accessories");
+  const compareProducts = filterAndGroupProducts(relatedProducts?.relatedProducts, "compare", "Compare");
+  const overlayImages = product?.images?.filter((x: any) => matchStrings(x?.tag, "overlay", true));
+  const overlayImage = product?.images?.find((x: any) => matchStrings(x?.tag, "overlay", true));
+  interface MediaItem {
+    [key: string]: string; // Can be either image or url or any other property name
+  }
 
-  const productImages = product?.images || []
-  const productVideos = product?.videos || []
+  interface GetProductMediaOptions {
+    mediaProperty?: string; // Property name to use for the media URL (defaults to 'image')
+  }
 
-  let content = useMemo(() => {
-    let images = [...productImages]
+  const getProductMedia = (
+    productData: any,
+    selectedAttrImage?: string,
+    options: GetProductMediaOptions = { mediaProperty: 'image' }
+  ) => {
+    const productImages = productData?.images || [];
+    const productVideos = productData?.videos || [];
+    const { mediaProperty = 'image' } = options;
 
-    if (selectedAttrData?.image) {
-      images.push({ image: selectedAttrData?.image })
+    let images = [...productImages];
+
+    if (selectedAttrImage) {
+      images.push({ [mediaProperty]: selectedAttrImage });
     }
 
-    let data = [...images].filter(
-      (value: any, index: number, self: any) =>
-        index === self.findIndex((t: any) => t.image === value.image)
-    )
+    // Remove duplicates
+    let data = images.filter(
+      (value, index, self) =>
+        index === self.findIndex((t) => t[mediaProperty] === value[mediaProperty])
+    );
 
-    if (product?.videos && product?.videos?.length > 0) {
+    // Include videos if they exist
+    if (productVideos.length > 0) {
       data = [...productImages, ...productVideos].filter(
-        (value: any, index: number, self: any) =>
-          index === self.findIndex((t: any) => t.image === value.image)
-      )
+        (value, index, self) =>
+          index === self.findIndex((t) => t[mediaProperty] === value[mediaProperty])
+      );
     }
 
-    return data
-  }, [selectedAttrData?.image, product, productImages])
+    // Format for image gallery
+    return data.map((item) => ({
+      original: item[mediaProperty],
+      thumbnail: item[mediaProperty],
+    }));
+  };
+
+  // Usage examples:
+  const images = getProductMedia(product, selectedAttrData?.image);
+  // Uses 'image' as default property
+
+  const usedImages = getProductMedia(usedProducts?.Used?.at(0), selectedAttrData?.image, { mediaProperty: 'url' });
+  // Uses 'url' as the property name
 
   const handleTogglePersonalizationDialog = () => {
     if (!isPersonalizeLoading) showEngravingModal((v) => !v)
@@ -365,10 +481,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         const item = await cartHandler().addToCart(
           {
             basketId: basketId,
-            productId: selectedAttrData?.productId,
-            qty: 1,
+            productId: selectedAttrData?.productId || selectedAttrData?.recordId,
+            qty: quantity,
             manualUnitPrice: product?.price?.raw?.withTax,
-            stockCode: selectedAttrData?.stockCode,
+            stockCode: selectedAttrData?.stockCode || selectedAttrData?.productCode,
             userId: user?.userId,
             isAssociated: user?.isAssociated,
           },
@@ -379,6 +495,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
         if (typeof window !== 'undefined') {
           //debugger
           const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+          const cartItems = getItem('cartItems')
           recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
           if (currentPage) {
@@ -462,6 +579,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             if (typeof window !== 'undefined') {
               //debugger
               const extras = { originalLocation: SITE_ORIGIN_URL + Router.asPath }
+              const cartItems = getItem('cartItems')
               recordAnalytics(AnalyticsEventType.ADD_TO_BASKET, { ...product, ...{ ...extras }, cartItems, addToCartType: "Single - From PDP", itemIsBundleItem: false, entityType: EVENTS_MAP.ENTITY_TYPES.Product, })
 
               if (currentPage) {
@@ -483,7 +601,14 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     return buttonConfig
   }
 
-  const buttonConfig = buttonTitle()
+  const buttonConfig = useMemo(() => buttonTitle(), [
+    product,
+    selectedAttrData,
+    quantity,
+    cartItems,
+    user,
+    // add any other dependencies used in buttonTitle if needed
+  ]);
 
   const handleEngravingSubmit = (values: any) => {
     const updatedProduct = {
@@ -622,7 +747,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     setOpenStockCheckModal(true)
   }
 
-  const filteredRelatedProducts = relatedProducts?.relatedProducts?.filter((item: any) => item.stockCode !== ITEM_TYPE_ADDON)
   const handleProductBundleUpdate = (bundledProduct: any) => {
     if (bundledProduct && bundledProduct?.id) {
       let clonedProduct = Object.assign({}, product)
@@ -633,46 +757,25 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   }
 
   const breadcrumbs = product?.breadCrumbs?.filter((item: any) => item.slugType !== SLUG_TYPE_MANUFACTURER)
-  const saving = product?.listPrice?.raw?.withTax - product?.price?.raw?.withTax
-  const discount = round((saving / product?.listPrice?.raw?.withTax) * 100, 0)
-  const addonPrice = relatedProducts?.relatedProducts?.find((x: any) => x?.itemType == 10)?.price?.formatted?.withTax
-  const css = { maxWidth: '100%', height: 'auto' }
   const attrGroup = groupBy(product?.customAttributes, 'key')
+  const tabProducts = groupBy(relatedProducts?.relatedProducts || [], (item) => item?.groupNameList?.at(0)?.relatedTypeCode);
+
+  const productTabsRef = useRef<HTMLDivElement>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      if (!productTabsRef.current) return;
+      const rect = productTabsRef.current.getBoundingClientRect();
+      setShowStickyBar(rect.top <= 0);
+    }
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (!product) {
     return null
   }
-
-  const images = content.map((image: any) => {
-    return {
-      original: image.image,
-      thumbnail: image.image,
-    }
-  })
-
-
-  const fetchData = async () => {
-    const data = content.map((image: any) => {
-      return {
-        original: image.image,
-        thumbnail: image.image,
-      }
-    })
-
-    const truncateFirstEmptyArray = (arr: any) => {
-      if (arr.length > 0 && Object.keys(arr[0]).length === 0) {
-        return arr.slice(1);
-      }
-      return arr;
-    };
-
-    // Process data
-    let processedData = truncateFirstEmptyArray(data);
-    setImages(processedData);
-  };
-
-
-
 
   const bundleAddToCart = async () => {
     const item = await cartHandler().addToCart(
@@ -737,39 +840,29 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     }
   }, [product])
 
-  // CHECK TRENDING PRODUCTS FROM ENGAGE
-  let similarProduct = []
-  let recentProduct = []
-  if (typeof window !== 'undefined') {
-    similarProduct = window?.similar_products_sorted_product;
-    recentProduct = window?.recent_products_product;
-  }
-  let productDesc = product.description
-  if (product?.shortDescription == "") {
-    productDesc = product.description
-  }
-
   const showGwpDetails = () => {
     setShowGwpDetail(true)
   }
   const closeGwpDetails = () => {
     setShowGwpDetail(false)
   }
-  const renderCustomControls = () => {
-    if (fullscreen) {
-      return (
-        <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999 ' onClick={exitFullscreen}>
-          <XMarkIcon className="w-8 h-8 mt-3 text-white border-2 rounded-sm hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
-        </button>
-      );
-    }
-    return
-  };
 
   const exitFullscreen = () => {
     if (document) document?.exitFullscreen();
     return
   };
+  const weloveAttribute = product?.customAttributes?.find(
+    (attr: { key: string }) => attr?.key === "web.welove"
+  );
+
+  const cashbackAmount = product?.customAttributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
+  const cashbackDescription = product?.customAttributes?.find(((item: any) => item?.key == "cashback.description"))?.value
+  const renderCustomControls = () =>
+    fullscreen ? (
+      <button className='absolute items-center justify-center rounded flex-end icon-container right-5 z-999' onClick={exitFullscreen}>
+        <XMarkIcon className="w-8 h-8 mt-3 text-white border-2 rounded-sm hover:text-orange-500 hover:border-orange-500" aria-hidden="true" />
+      </button>
+    ) : null;
 
   const customRenderItem = (item: any) => {
     return (
@@ -778,9 +871,12 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </div>
     );
   };
+
   const customRenderThumbInner = (item: any) => {
     return (
-      <img src={generateUri(item?.thumbnail, "h=150&fm=webp") || IMG_PLACEHOLDER} alt={product?.name || 'product'} height={150} width={100} />
+      <span className='relative image-gallery-thumbnail-inner'>
+        <img className='image-gallery-thumbnail-image' src={generateUri(item?.thumbnail, "h=150&fm=webp") || IMG_PLACEHOLDER} alt={product?.name || 'product'} height={150} width={100} />
+      </span>
     );
   };
 
@@ -805,6 +901,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </div>
     );
   };
+
   const renderDetailSection = () => {
     return (
       <div className="flex flex-col">
@@ -818,9 +915,10 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </div>
     );
   };
+
   const renderProductSpecification = () => {
     return (
-      product.customAttributes.length > 0 &&
+      product?.customAttributes?.length > 0 &&
       !product.customAttributes.some((attr: { key: string }) => attr.key === 'clothing.size' || attr.key === 'global.colour') && (
         <div className="w-full rounded-2xl sm:space-y-2.5">
           <Disclosure>
@@ -845,11 +943,6 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
     );
 
   };
-  const detailsConfig = [
-    { name: translate('common.label.descriptionText'), content: productDesc },
-    { name: translate('label.orderSummary.shippingText'), content: 'We currently ship in the UK and worldwide. <br /> <br /> We accept payment via PayPal, ClearPay, and major card payment providers (including Visa, Mastercard, Maestro, and Switch) and more. ', },
-    { name: translate('common.label.returnsText'), content: 'Items may be returned for a full refund within 14 days from the date an order was received.', }
-  ]
 
   const renderReviews = () => {
     return (
@@ -875,194 +968,256 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       </>
     );
   };
+
+  const sellableTypeMap: Record<string, string> = {
+    Each: "Each",
+    Pallet: `Pallet of ${product?.itemPerCarton}`,
+    Both: "Both",
+    Carton: `Carton of ${product?.itemPerCarton}`,
+    CartonPacks: `Carton of ${product?.itemPerCarton}`,
+  };
+
+  const renderSellableType = () =>
+    product?.sellableType ? (
+      <div className='flex justify-start gap-2 divide-x divide-gray-200 p-none'>
+        <h4 className='text-lg font-normal text-black'>Sellable Type: {sellableTypeMap[product.sellableType]}</h4>
+      </div>
+    ) : null;
+
+
+  const GwpModal = ({ gwp, show, onClose }: any) => (
+    <Transition appear show={show} as={Fragment}>
+      <Dialog as="div" className="fixed inset-0 z-50" onClose={onClose}>
+        <div className="flex items-center justify-center h-full px-4 text-center">
+          <Transition.Child enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
+            <Dialog.Overlay className="fixed inset-0 bg-black/40" />
+          </Transition.Child>
+          <Transition.Child enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
+            <div className="relative w-full max-w-5xl p-8 overflow-hidden text-left transition-all transform bg-white shadow-xl rounded-2xl">
+              <span className="absolute top-3 right-3">
+                <ButtonClose onClick={onClose} />
+              </span>
+              <div className="flex flex-col items-center">
+                <img alt='' src={gwp?.image} className='h-80' />
+                <div className='mt-6 text-xl font-semibold'>{gwp?.brand}</div>
+                <div className='mt-1 text-2xl font-semibold'>{gwp?.name}</div>
+                <div dangerouslySetInnerHTML={{ __html: gwp?.description }} className="mt-2 text-sm text-gray-500" />
+              </div>
+            </div>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition>
+  );
+  const renderRelatedProducts = () => {
+    const gwpProduct = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)) || [];
+    if (!gwpProduct.length) return null;
+
+    return (
+      <div className='flex flex-col'>
+        {gwpProduct.map((gwp: any, pIdx: number) => (
+          <Fragment key={pIdx}>
+            <div className='flex items-center gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl hover:bg-slate-200' onClick={showGwpDetails}>
+              <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' /></div>
+              <div className='text-sm text-gray-800'>Comes with {gwp?.name}</div>
+              <InformationCircleIcon className='w-5 h-5 text-gray-400' />
+            </div>
+            <GwpModal gwp={gwp} show={showDetails} onClose={closeGwpDetails} />
+          </Fragment>
+        ))}
+      </div>
+    );
+  };
+
+
   const renderSectionContent = () => {
     return (
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-xl font-semibold sm:text-2xl product-name-h2 dark:text-black">
-            {product?.name}
-          </h1>
-          <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
-            <Prices contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-            {reviews?.review?.totalRecord > 0 &&
-              <>
-                <div className="flex w-64">
-                  <Link href={`#productReview`} className="flex text-sm font-medium" >
-                    <StarIcon className="w-5 h-5 pb-[1px] text-yellow-400" />
-                    <div className="ms-1.5 flex">
-                      <span className='dark:text-black'>{reviews?.review?.ratingAverage}</span>
-                      <span className="block mx-2 dark:text-black">·</span>
-                      <span className="underline text-slate-600 dark:text-slate-600">
-                        {reviews?.review?.totalRecord} {translate('common.label.reviews')}
-                      </span>
-                    </div>
-                  </Link>
-                </div>
-              </>
-            }
-          </div>
+      featureToggle?.features?.enableRichPDP ? (
+        <>
+        <RichProductView key={product?.recordId || product?.slug} product={product} cashbackAmount={cashbackAmount} cashbackDescription={cashbackDescription} selectedOption={selectedOption} buyingProducts={buyingProducts?.['Buying Options']} weloveAttribute={weloveAttribute} isGuestUser={isGuestUser} handleWishList={handleWishList} isInWishList={isInWishList} maxBasketItemsCount={maxBasketItemsCount} isEngravingAvailable={isEngravingAvailable} user={user} promotions={promotions} showMobileCaseButton={showMobileCaseButton} quantity={quantity} buttonConfig={buttonConfig} setQuantity={setQuantity} setSelectedOption={setSelectedOption} usedProduct={usedProducts?.Used} attrGroup={attrGroup} createProductInterest={createProductInterest} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} selectedAttrData={selectedAttrData} renderRelatedProducts={renderRelatedProducts} renderVariants={renderVariants} showEngravingModal={showEngravingModal} renderSellableType={renderSellableType} setOpenStockCheckModal={setOpenStockCheckModal} openStoreLocatorModal={openStoreLocatorModal} onStoreStockCheck={onStoreStockCheck} isMobile={isMobile} showStickyBar={showStickyBar} />
+        </>
+      ) : (
+        <DefaultProductView product={product} detailsConfig={detailsConfig} config={config} isEngravingAvailable={isEngravingAvailable} renderProductSpecification={renderProductSpecification} isInWishList={isInWishList} handleWishList={handleWishList} buttonConfig={buttonConfig} showMobileCaseButton={showMobileCaseButton} featureToggle={featureToggle} isMobile={isMobile} onStoreStockCheck={onStoreStockCheck} setOpenStockCheckModal={setOpenStockCheckModal} showEngravingModal={showEngravingModal} selectedAttrData={selectedAttrData} renderSellableType={renderSellableType} openStoreLocatorModal={openStoreLocatorModal} promotions={promotions} deviceInfo={deviceInfo} reviews={reviews} renderVariants={renderVariants} attrGroup={attrGroup} renderRelatedProducts={renderRelatedProducts} defaultDisplayMembership={defaultDisplayMembership} />
+      )
+    )
+  }
+
+  const productTabs = [
+    product?.description != null && {
+      id: 'overview',
+      label: 'Overview',
+      content: (
+        <div className="w-full space-y-4">
+          <div className="text-sm text-gray-800 description-html description-p-long" dangerouslySetInnerHTML={{ __html: product?.description }} />
         </div>
-        {attrGroup['product.relatedproducts']?.length > 0 &&
-          <div className='flex w-full'>
-            <Swiper slidesPerView={4.5} spaceBetween={6} className="mySwiper" >
-              {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
-                <SwiperSlide key={index}>
-                  <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                    <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+      )
+    },
+    product?.customAttributes?.some((attr: { key: any }) => attr?.key?.startsWith('Specs')) && {
+      id: 'specs',
+      label: 'Specs',
+      content: (
+        <>
+          <div className="p-4 !px-0 overflow-x-auto w-full">
+            {product && product?.customAttributes?.length > 0 ? <table className="w-full border border-gray-300">
+              <thead>
+                <tr className="text-left bg-gray-200">
+                  <th className="p-3 border border-gray-300">Specification</th>
+                  <th className="p-3 border border-gray-300">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product?.customAttributes?.filter((attr: { key: any }) => attr?.key?.startsWith('Specs'))?.map((attr: any, index: number) => (
+                  <tr key={index} className="border border-gray-300">
+                    <td className="p-3 border border-gray-300">{attr?.display}</td>
+                    <td
+                      className="p-3 border border-gray-300"
+                      dangerouslySetInnerHTML={{ __html: attr?.value }}
+                    />
+                  </tr>
+                ))}
+              </tbody>
+            </table> : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>No product specifications available.</div>}
           </div>
-        }
-
-        {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 && (
-          <div className='flex flex-col'>
-            {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true)).map((gwp: any, pIdx: number) => (
-              <>
-                <div className='flex items-center w-full gap-4 p-2 cursor-pointer bg-slate-100 rounded-xl justify-normal hover:bg-slate-200' onClick={() => showGwpDetails()}>
-                  <div className='p-1 bg-white border border-gray-400 rounded-lg'><img src={gwp?.image} className='object-cover w-10 h-10' alt={gwp?.name} /></div>
-                  <div className='text-sm font-normal text-gray-800'>Comes with {gwp?.name}</div>
-                  <div><InformationCircleIcon className='justify-end w-5 h-5 text-right text-gray-400 cursor-pointer' /></div>
+        </>
+      )
+    },
+    {
+      id: 'Reviews',
+      label: 'Reviews',
+      content: (
+        <div className="space-y-4 review-none-section container-tabs">
+          {reviews?.review?.productReviews?.length > 0 ? renderReviews() :
+            <div className='flex flex-col justify-start text-xl font-semibold text-left text-gray-400'>
+              This product hasn't been reviewed yet. Be the first to share your thoughts!
+              <div className='w-full mt-4'><ReviewInput data={product} productId={product?.productId ?? product?.recordId} setSubmitReview={setSubmitReview} deviceInfo={deviceInfo} /></div>
+            </div>}
+        </div>
+      )
+    },
+    product && product?.videos?.length > 0 && {
+      id: 'Videos',
+      label: 'Videos',
+      content: (
+        <div className="space-y-4 container-tabs">
+          {product && product?.videos?.length > 0 ? <div className="flex flex-col">
+            {product?.videos?.map((video: any, index: any) => {
+              let videoUrl = video?.url?.includes("youtu.be")
+                ? video?.url?.replace("youtu.be/", "www.youtube.com/embed/")
+                : video?.url?.startsWith("www.")
+                  ? `https://${video?.url}`
+                  : video?.url;
+              return (
+                <div key={index} className="mb-4 overflow-hidden border rounded-lg">
+                  <iframe src={videoUrl} width="100%" height="400" allowFullScreen className="w-full aspect-video" ></iframe>
                 </div>
-                <Transition appear show={showDetails} as={Fragment}>
-                  <Dialog
-                    as="div"
-                    className="fixed inset-0 z-50 cart-z-index-9999"
-                    onClose={closeGwpDetails}
-                  >
-                    <div className="flex items-stretch justify-center h-full text-center md:items-center md:px-4">
-                      <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0" >
-                        <Dialog.Overlay className="fixed inset-0 bg-black/40 dark:bg-black/70" />
-                      </Transition.Child>
-
-                      {/* This element is to trick the browser into centering the modal contents. */}
-                      <span className="inline-block align-middle" aria-hidden="true"> &#8203; </span>
-                      <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95" >
-                        <div className="relative inline-flex w-full max-w-5xl max-h-full xl:py-8 z-[99999]">
-                          <div className="flex flex-1 w-full max-h-full p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl dark:bg-white lg:rounded-2xl dark:border dark:border-slate-700 dark:text-slate-100" >
-                            <span className="absolute z-50 end-3 top-3">
-                              <ButtonClose onClick={closeGwpDetails} />
-                            </span>
-
-                            <div className="flex-1 overflow-y-auto rounded-xl hiddenScrollbar">
-                              <div className='flex flex-col justify-center text-center'>
-                                <div className='mx-auto'>
-                                  <img alt='' src={gwp?.image} className='w-auto h-80' />
-                                </div>
-                                <div className='mt-6 text-xl font-semibold text-gray-800'>{gwp?.brand}</div>
-                                <div className='mt-1 text-2xl font-semibold text-black'>{gwp?.name}</div>
-                                <div dangerouslySetInnerHTML={{ __html: gwp?.description, }} className="hidden mt-2 text-sm text-gray-500 sm:block product-detail-description" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Transition.Child>
-                    </div>
-                  </Dialog>
-                </Transition>
-              </>
-            ))}
-          </div>
-        )}
-        <div className="">{renderVariants()}</div>
-        {product?.quantityBreakRules?.length > 0 &&
-          <QuantityBreak product={product} rules={product?.quantityBreakRules} selectedAttrData={selectedAttrData} defaultDisplayMembership={defaultDisplayMembership} />
-        }
-        {promotions?.promotions?.availablePromotions?.length > 0 && (
-          <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} product={product} />
-        )}
-        {
-          openStoreLocatorModal && <StockCheckModal product={product} setOpenStockCheckModal={setOpenStockCheckModal} deviceInfo={deviceInfo} />
-        }
-        {featureToggle?.features?.enableStoreLocator &&
-          <div className='flex flex-row w-full /!my-4 items-center gap-x-1 /justify-end'>
-            <MyLocationIcon className='w-4 h-4' />
-            <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
-          </div>
-        }
-        <div id="add-to-cart-button">
-          {product?.preOrder?.isEnabled &&
-            <div className='flex flex-col'>
-              <h4 className='font-medium text-orange-500 tet-xl'>{product?.preOrder?.shortMessage}</h4>
-            </div>
+              );
+            })}
+          </div> : <div className='flex justify-center text-xl font-semibold text-center text-gray-400'>This product hasn't any video!</div>}
+        </div>
+      )
+    },
+    compareProducts?.Compare && {
+      id: 'Compare',
+      label: 'Compare',
+      content: (
+        <div className="space-y-4">
+          <TabProductCompare products={compareProducts?.Compare} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} />
+        </div>
+      )
+    },
+    tabProducts?.["KITS AND BUNDLES"] && {
+      id: 'Kits and bundles',
+      label: 'Kits and bundles',
+      content: (
+        <div className="space-y-4">
+          <TabProductCard products={tabProducts?.["KITS AND BUNDLES"]} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    accessoriesProducts?.Accessories && {
+      id: 'Accessories',
+      label: 'Accessories',
+      content: (
+        <div className="space-y-4">
+          <TabProductCard products={accessoriesProducts?.Accessories} productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} />
+        </div>
+      )
+    },
+    {
+      id: 'QnA',
+      label: 'Q&A',
+      content: (
+        <DiscussionEmbed
+          shortname='parkcameras'
+          config={
+            {
+              url: `${baseUrl}${product?.link}` || '',
+              identifier: product?.stockCode || '',
+              title: product?.name || 'Product Discussion',
+              language: 'en-GB'
+            }
           }
-          {isMobile ? (
+        />
+      )
+    }
+  ].filter(Boolean);
+
+  const alsoLikeProducts = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true)) || [];
+  const upgradeProducts = relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'UPGRADE', true)) || [];
+
+  const renderRelatedSection = (products: any[], type: 'ALSOLIKE' | 'UPGRADE') => {
+    if (!products.length) return null;
+
+    const isUpgrade = type === 'UPGRADE';
+
+    return (
+      <>
+        <hr className="border-slate-200 dark:border-slate-700" />
+        <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css">
+          {featureToggle.features?.enableForPCSite && isUpgrade ? (
             <>
-              {showMobileCaseButton && (
-                <div className="fixed bottom-0 left-0 z-10 w-full bg-white border-t border-gray-200">
-                  <div className="container p-4 mx-auto max-w-7xl">
-                    <div className="flex justify-end">
-                      <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                      <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                        {isInWishList(selectedAttrData?.productId) ? (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                        ) : (
-                          <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                        )}
-                        <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <h3 className="mb-1 font-semibold heading dark:text-black">Upgrade Your Kit & Save 20%</h3>
+              <p className="pb-6 text-sm text-black sm:pb-10">
+                Save 20% on selected OM System accessories when bought with this item. Add both to your basket to apply the offer.
+              </p>
             </>
           ) : (
-            <div className="flex rtl:space-x-reverse">
-              {!isEngravingAvailable && (
-                <div className="flex mt-6 sm:mt-4 !text-sm w-full add-green-btn">
-                  <Button title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                  <button type="button" onClick={handleWishList} className="flex items-center justify-center ml-4 border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink hover:border-pink btn dark:text-black">
-                    {isInWishList(selectedAttrData?.productId) ? (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-pink" />
-                    ) : (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6 dark:hover:text-pink" />
-                    )}
-                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                  </button>
-                </div>
-              )}
-
-              {isEngravingAvailable && (
-                <>
-                  <Button className="block py-3 sm:hidden" title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                  <Button className="hidden sm:block " title={buttonConfig.title} action={buttonConfig.action} buttonType={buttonConfig.type || 'cart'} />
-                  <button className="flex items-center justify-center flex-1 max-w-xs px-8 py-3 font-medium text-white bg-gray-700 border border-transparent rounded-full sm:ml-4 hover:bg-pink focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-500 sm:w-full" onClick={() => showEngravingModal(true)} >
-                    {translate('label.product.engravingText')}
-                  </button>
-                  <button type="button" onClick={handleWishList} className="flex items-center justify-center w-12 h-12 px-4 py-2 ml-4 text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-red-50 hover:text-pink sm:px-2 hover:border-pink" >
-                    {isInWishList(selectedAttrData?.productId) ? (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6 text-red-700" />
-                    ) : (
-                      <HeartIcon className="flex-shrink-0 w-6 h-6" />
-                    )}
-                    <span className="sr-only"> {translate('label.product.addToFavoriteText')} </span>
-                  </button>
-                </>
-              )}
-            </div>
+            <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black">
+              {translate('label.product.youMayAlsoLikeText')}
+            </h3>
           )}
+          <RelatedProductWithGroup
+            products={products}
+            productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+            featureToggle={featureToggle}
+          />
         </div>
-        <hr className=" border-slate-200 dark:border-slate-700"></hr>
-        {!featureToggle?.features?.enableCustomToolWidget ? (
-          <>
-            {product && <AccordionInfo product={product} data={detailsConfig} />}
-            {renderProductSpecification()}
-          </>
-        ) : (
-          <></>
-        )}
-        <div className="flex-1 order-6 w-full sm:order-5 accordion-section">
-          <DeliveryInfo product={product} grpData={attrGroup} config={config} />
+      </>
+    );
+  };
+  const renderUsedRelatedSection = () => {
+    return (
+      <>
+        <hr className="border-slate-200 dark:border-slate-700" />
+        <div className="container flex flex-col w-full !px-0 py-4 mx-auto page-container sm:!px-0 lg:!px-0 2xl:!px-0 md:!px-0 pdp-related-product-list slider-btn-css scroll-mt-32" id="usedSection">
+          <h3 className="mb-1 font-semibold heading dark:text-black">Used Products</h3>
+          <RelatedProductWithGroup
+            products={usedProducts?.Used?.slice(1)}
+            productPerColumn={featureToggle?.features?.enableRichPDPTabs ? 5 : 4}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+            featureToggle={featureToggle}
+          />
         </div>
-
-      </div>
+      </>
     );
   };
   return (
     <>
       <CacheProductImages data={cachedImages} setIsLoading={setIsLoading} />
-      {featureToggle?.features?.enableEngage &&
+      {featureToggle?.features?.enableRichPDP &&
         <ProductSocialProof data={analyticsData} featureToggle={featureToggle} />
       }
       <main className="mt-2 container-pdp sm:mt-5 lg:mt-11 dark:bg-white">
@@ -1071,77 +1226,124 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
             <BreadCrumbs items={breadcrumbs} currentProduct={product} />
           )}
         </div>
-        <div className="lg:flex product-detail-section">
+
+        <div className="overflow-visible lg:flex product-detail-section">
           {isMobile ? (
             <div className="w-full lg:w-[55%]">
               <Swiper slidesPerView={1} spaceBetween={30} navigation loop className="mySwiper" >
                 <SwiperSlide>
                   <div className="relative">
-                    <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full" alt={product?.name} />
+                    {selectedOption === "used" ? (
+                      <img src={generateUri(usedProducts?.Used?.at(0)?.images?.at(0)?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full" alt={product?.name} />
+                    ) : (
+                      <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full" alt={product?.name} />
+                    )}
                     {renderStatus()}
                   </div>
                 </SwiperSlide>
-                {product?.images?.map((item: any, index: number) => {
-                  return (
-                    item?.tag != "specification" &&
-                    <SwiperSlide key={index}>
-                      <div className="relative">
-                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
-                      </div>
-                    </SwiperSlide>
-                  )
-                })}
+                {selectedOption === "used" ? (
+                  usedProducts?.Used?.at(0)?.images?.map((item: any, index: number) => {
+                    if (item?.tag === "specification") return null;
+                    return (
+                      <SwiperSlide key={index}>
+                        <div className="relative">
+                          <img src={generateUri(item?.url, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })
+                ) : (
+                  product?.images?.map((item: any, index: number) => {
+                    if (item?.tag === "specification") return null;
+                    return (
+                      <SwiperSlide key={index}>
+                        <div className="relative">
+                          <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full" alt={product?.name} />
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })
+                )}
               </Swiper>
             </div>
           ) : (
-            <>
-              {featureToggle?.features?.isImageGallery ? (
-                <div className="w-full lg:w-[55%] sticky top-0 product-image-border">
-                  <ImageGallery
-                    thumbnailAlt={product?.name}
-                    thumbnailTitle={product?.name}
-                    originalAlt={product?.name}
-                    items={images ?? []}
-                    thumbnailPosition="left"
-                    showPlayButton={false}
-                    additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
-                    onScreenChange={toggleFullscreen}
-                    disableThumbnailScroll={false}
-                    renderCustomControls={renderCustomControls}
-                    renderItem={customRenderItem}
-                    renderThumbInner={customRenderThumbInner}
-                  />
-                </div>
-              ) : (
-                <div className="w-full lg:w-[55%] sticky top-0">
-                  <div className="relative">
-                    <div className="relative aspect-w-16 aspect-h-16">
-                      <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
-                    </div>
-                    {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
-                      <div className='absolute z-10 right-1 top-1'>
-                        <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-red-500 rounded-full' />
+            featureToggle?.features?.isImageGallery ? (
+              <div className={`w-full sticky top-0 z-10 product-image-border sticky-container ${featureToggle?.features?.enableRichPDP ? "lg:w-[50%]" : "lg:w-[55%]"}`} >
+                <ImageGallery
+                  thumbnailAlt={product?.name}
+                  thumbnailTitle={product?.name}
+                  originalAlt={product?.name}
+                  items={selectedOption === "used" ? usedImages ?? [] : images ?? []}
+                  thumbnailPosition="left"
+                  showPlayButton={false}
+                  additionalClass={`app-image-gallery w-full ${fullscreen ? 'fullscreen' : ''}`}
+                  onScreenChange={toggleFullscreen}
+                  disableThumbnailScroll={false}
+                  renderCustomControls={renderCustomControls}
+                  renderItem={customRenderItem}
+                  renderThumbInner={customRenderThumbInner}
+                />
+                {selectedOption === "new" ? (
+                  <>
+                    {overlayImages?.length > 0 &&
+                      <div className='absolute z-10 top-1 right-1 border border-[#ddd] shadow-md'>
+                        <img
+                          src={generateUri(overlayImage?.image, 'h=100&fm=webp') || IMG_PLACEHOLDER}
+                          className='overlayImage'
+                          width="100"
+                          height="100"
+                          title="Free Gift"
+                          alt={product?.name} />
                       </div>
                     }
-                    {renderStatus()}
+                  </>
+                ) : (
+                  <></>
+                )}
+                {featureToggle?.features?.enableRichPDP && (<p className='pt-4 text-sm text-gray-500'>Product Code: {product?.productCode}</p>)}
+              </div>
+            ) : (
+              <div className={`w-full lg:w-[55%] sticky top-0 z-10 sticky-container ${featureToggle?.features?.enableRichPDP ? "lg:w-[50%]" : "lg:w-[55%]"}`}>
+                <div className="relative">
+                  <div className="relative aspect-w-16 aspect-h-16">
+                    {selectedOption === "used" ? (
+                      usedProducts?.Used?.at(0)?.images?.slice(0, 1)?.map((image: any, index: number) => (
+                        <img key={index} src={generateUri(image?.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                      ))
+                    ) : (
+                      <img src={generateUri(product?.image, 'h=1000&fm=webp') || IMG_PLACEHOLDER} className="object-cover object-top w-full rounded-2xl" alt={product?.name} />
+                    )}
                   </div>
-                  <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
-                    {product?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification")
-                      .map((item: any, index: number) => (
-                        <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
-                          <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
-                        </div>
-                      ))}
-                  </div>
+                  {relatedProducts && relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'GWP', true))?.length > 0 &&
+                    <div className='absolute z-10 right-1 top-1'>
+                      <GiftIcon className='w-16 h-16 p-4 mr-0 text-white bg-red-500 rounded-full' />
+                    </div>
+                  }
+                  {renderStatus()}
                 </div>
-              )}
-            </>
+                <div className="grid grid-cols-2 gap-3 mt-3 sm:gap-6 sm:mt-6 xl:gap-8 xl:mt-8">
+                  {selectedOption === "used" ? (
+                    usedProducts?.Used?.at(0)?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification").map((item: any, index: number) => (
+                      <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                        <img src={generateUri(item?.url, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                      </div>
+                    ))
+                  ) : (
+                    product?.images?.slice(1, product?.images?.length)?.filter((image: any) => image.tag !== "specification").map((item: any, index: number) => (
+                      <div key={index} className="relative aspect-w-11 xl:aspect-w-10 2xl:aspect-w-11 aspect-h-16" >
+                        <img src={generateUri(item?.image, 'h=500&fm=webp') || IMG_PLACEHOLDER} className="object-cover w-full rounded-2xl" alt={product?.name} />
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )
           )}
-          <div className="px-4 sm:px-0 w-full lg:w-[45%] pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10 pdp-right-section">
+          <div className={`px-4 sm:px-0 w-full pt-10 lg:pt-0 lg:pl-7 xl:pl-9 2xl:pl-10 pdp-right-section ${featureToggle?.features?.enableRichPDP ? "lg:w-[50%]" : "lg:w-[45%]"}`}>
             {renderSectionContent()}
           </div>
         </div>
-        {featureToggle?.features?.enableCustomToolWidget ? (
+        {featureToggle?.features?.enableCustomToolWidget &&
           <>
             <div className="flex w-full bg-white product-tab-active">
               <div className="lg:mx-auto container-ffx">
@@ -1154,9 +1356,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
               </div>
             </div>
           </>
-        ) : (
-          <></>
-        )}
+        }
         {/* {LookBook} */}
         {lookbookData && (
           <LookbookGrid lookbookData={lookbookData} defaultDisplayMembership={defaultDisplayMembership} featureToggle={featureToggle} />
@@ -1169,7 +1369,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </>
         }
 
-        {product?.componentProducts && (
+        {product?.componentProducts && !featureToggle.features?.enableForPCSite && (
           <>
             <hr className="py-6 my-2 border-slate-200 dark:border-slate-700" />
             <Bundles price={isIncludeVAT ? product?.price?.formatted?.withTax : product?.price?.formatted?.withoutTax} product={product} products={product?.componentProducts} productBundleUpdate={handleProductBundleUpdate} deviceInfo={deviceInfo} onBundleAddToCart={bundleAddToCart} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
@@ -1193,15 +1393,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           </div>
         }
         <div className="w-full px-4 pt-6 mx-auto sm:px-0 lg:max-w-none sm:pt-8">
-          {relatedProducts?.relatedProducts?.filter((x: any) => matchStrings(x?.relatedType, 'ALSOLIKE', true))?.length > 0 && (
-            <>
-              <hr className="border-slate-200 dark:border-slate-700" />
-              <div className="container flex flex-col w-full px-4 py-4 mx-auto page-container sm:px-4 lg:px-4 2xl:px-0 md:px-4 pdp-related-product-list">
-                <h3 className="pb-6 text-2xl font-semibold md:text-3xl sm:pb-10 dark:text-black"> {translate('label.product.youMayAlsoLikeText')} </h3>
-                <RelatedProductWithGroup products={relatedProducts?.relatedProducts} productPerColumn={4} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} />
-              </div>
-            </>
-          )}
+          {renderRelatedSection(alsoLikeProducts, 'ALSOLIKE')}
+          {featureToggle.features?.enableForPCSite && renderRelatedSection(upgradeProducts, 'UPGRADE')}
           {featureToggle?.features?.enableEngage &&
             <>
               <EngageProductCard productLimit={12} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} deviceInfo={deviceInfo} type={EngageEventTypes.SIMILAR_PRODUCTS} campaignData={campaignData} product={product} isSlider={true} productPerRow={4} title="Similar Products" />
@@ -1218,15 +1411,19 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
           {isEngravingAvailable && (
             <Engraving show={isEngravingOpen} submitForm={handleEngravingSubmit} onClose={() => showEngravingModal(false)} handleToggleDialog={handleTogglePersonalizationDialog} product={product} isLoading={isLoading} />
           )}
-          {reviews?.review?.productReviews?.length > 0 &&
-            renderReviews()
-          }
+          {!featureToggle?.features?.enableRichPDPTabs && reviews?.review?.productReviews?.length > 0 && renderReviews()}
           <div className="flex flex-col w-full">
             <div className="px-4 mx-auto sm:container page-container sm:px-6 pdp-description-section">
               <ProductDescription seoInfo={attrGroup} />
             </div>
           </div>
         </div>
+        {featureToggle?.features?.enableRichPDPTabs && (
+          <div ref={productTabsRef}>
+            <ProductTabs tabs={productTabs} defaultActiveTab="overview" />
+          </div>
+        )}
+        {featureToggle.features?.enableForPCSite && usedProducts?.Used?.length > 0 && renderUsedRelatedSection()}
       </main>
     </>
   )

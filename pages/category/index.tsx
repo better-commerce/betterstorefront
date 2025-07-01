@@ -52,18 +52,18 @@ function CategoryPage(props: any) {
           <section aria-labelledby="products-heading ">
             <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl dark:text-black">{translate('label.category.shopByCategoryText')}</h1>
             {props?.data?.length > 0 && (
-              <div className="box-content relative grid grid-cols-2 my-8 gap-x-6 gap-y-6 md:grid-cols-5 lg:grid-cols-4 sm:my-10">
+              <div className="box-content relative grid grid-cols-2 my-8 gap-x-4 gap-y-4 md:grid-cols-5 lg:grid-cols-6 sm:my-10">
                 {props?.data?.sort((a: any, b: any) => a?.name?.localeCompare(b?.name))?.map((category: any, key: number) => (
                   category?.link != null &&
-                  <div key={key} className="relative border bg-slate-100 rounded-2xl border-slate-200 hover:border-slate-300 group">
+                  <div key={key} className="relative border bg-slate-100 rounded-xl border-slate-200 hover:border-slate-300 group">
                     <Link key={key} href={`/${category?.link}`}>
                       {category?.image ? (
-                        <div className="relative overflow-hidden aspect-w-1 aspect-h-1 min-h-[300px]">
-                          <img src={`${category?.image}?fm=webp&h=300&w=400` || IMG_PLACEHOLDER} alt={category?.name || 'category'} className="object-cover rounded-2xl object-center w-full h-auto sm:h-full aspect-[4/3]" height={900} />
+                        <div className="relative overflow-hidden aspect-w-1 aspect-h-1 min-h-[200px]">
+                          <img src={`${category?.image}?fm=webp&h=300&w=400` || IMG_PLACEHOLDER} alt={category?.name || 'category'} className="object-cover rounded-t-xl object-center w-full h-auto sm:h-full aspect-[4/3]" height={900} />
                         </div>
                       ) : (
                         <div className="relative overflow-hidden aspect-h-1">
-                          <img src={IMG_PLACEHOLDER} alt={category?.name || 'category'} className="object-cover object-center w-full h-auto sm:h-full rounded-2xl" width={200} height={300} />
+                          <img src={IMG_PLACEHOLDER} alt={category?.name || 'category'} className="object-cover object-center w-full h-auto sm:h-full rounded-t-xl" width={200} height={300} />
                         </div>
                       )}
                       <span aria-hidden="true" className="absolute inset-x-0 bottom-4 h-1/3 opacity-40" />
@@ -122,6 +122,7 @@ export async function getStaticProps({
           destination: errorUrl,
           permanent: false,
         },
+        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
       }
     }
   }

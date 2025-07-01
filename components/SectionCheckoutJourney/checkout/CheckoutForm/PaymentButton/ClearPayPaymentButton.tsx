@@ -1,7 +1,7 @@
 // Package Imports
 import Cookies from 'js-cookie'
 import { withTranslation } from 'react-i18next'
-import { ClearPayPaymentIntent, PaymentMethodType } from 'bc-payments-sdk'
+import { ClearPayPaymentIntent, PaymentMethodType, PaymentSelectionType } from 'bc-payments-sdk'
 
 // Component Imports
 import Script from 'next/script'
@@ -9,18 +9,11 @@ import { IPaymentButtonProps } from './BasePaymentButton'
 import BasePaymentButton, { IDispatchState } from './BasePaymentButton'
 
 // Other Imports
-import { roundToDecimalPlaces, stringToBoolean } from '@framework/utils/parse-util'
+import { roundToDecimalPlaces, stringFormat, stringToBoolean } from '@framework/utils/parse-util'
 import { Payments } from '@components/utils/payment-constants'
 import { initPayment, requestPayment } from '@framework/utils/payment-util'
 import { getOrderId, getOrderInfo } from '@framework/utils/app-util'
-import {
-  BETTERCOMMERCE_COUNTRY,
-  BETTERCOMMERCE_DEFAULT_COUNTRY,
-  BETTERCOMMERCE_DEFAULT_LANGUAGE,
-  BETTERCOMMERCE_LANGUAGE,
-  EmptyString,
-  Messages,
-} from '@components/utils/constants'
+import { BETTERCOMMERCE_COUNTRY, BETTERCOMMERCE_DEFAULT_COUNTRY, BETTERCOMMERCE_DEFAULT_LANGUAGE, BETTERCOMMERCE_LANGUAGE, EmptyString, Messages, } from '@components/utils/constants'
 import Router from 'next/router'
 import { Cookie } from '@framework/utils/constants'
 import { GTMUniqueEventID } from '@components/services/analytics/ga4'
@@ -34,11 +27,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
    */
   constructor(props: IPaymentButtonProps & IDispatchState) {
     super(props)
-    this.state = {
-      confirmed: false,
-      token: null,
-      paymentMethod: super.getPaymentMethod(props?.paymentMethod),
-    }
+    this.state = { confirmed: false, token: null, paymentMethod: super.getPaymentMethod(props?.paymentMethod), }
   }
 
   /**
@@ -48,27 +37,30 @@ class ClearPayPaymentButton extends BasePaymentButton {
    * @param uiContext {Object} Method for dispatching global ui state changes.
    * @param dispatchState {Function} Method for dispatching state changes.
    */
-  private async onPay(
-    paymentMethod: any,
-    basketOrderInfo: any,
-    uiContext: any,
-    dispatchState: Function
-  ) {
+  private async onPay( paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function ) {
     const { translate }: any = this.props
+
+    dispatchState({ type: 'SET_ERROR', payload: EmptyString })
+    const amountToBePaid = this.isFullPayment() ? basketOrderInfo?.basket?.grandTotal?.raw?.withTax : (this.props?.partialAmount || 0)
+    if (amountToBePaid <= 0) {
+      const errMsg = translate('common.message.checkout.paymentAmountRequiredErrorMsg')
+      dispatchState({ type: 'SET_ERROR', payload: errMsg, })
+      return
+    }
+
+    const validateAmount = this.isValidPaymentAmount(basketOrderInfo, this.props)
+    if (validateAmount) {
+      const errorMsg = stringFormat(translate(validateAmount?.msg), { currencySymbol: basketOrderInfo?.basket?.currencySymbol, paymentAmount: validateAmount?.amount })
+      dispatchState({ type: 'SET_ERROR', payload: errorMsg, })
+      return
+    }
     uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingOrderText'), })
 
-    const { state, result: orderResult } = await super.confirmOrder(
-      paymentMethod,
-      basketOrderInfo,
-      uiContext,
-      dispatchState
-    )
+    const { state, result: orderResult } = await super.confirmOrder(paymentMethod, basketOrderInfo, uiContext, dispatchState)
     if (orderResult?.success && orderResult?.result?.id) {
       //uiContext?.hideOverlayLoaderState();
       super.recordAddPaymentInfoEvent(uiContext, PaymentMethodType.CLEAR_PAY)
-      this.setState({
-        confirmed: true,
-      })
+      this.setState({ confirmed: true, })
     } else {
       uiContext?.hideOverlayLoaderState()
       if (state) {
@@ -81,23 +73,18 @@ class ClearPayPaymentButton extends BasePaymentButton {
 
   private onScriptReady(): void {
     const that = this
-    const { uiContext, dispatchState, translate } = this.props
+    const { uiContext, dispatchState, translate, } = this.props
     const redirectionUrl = `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`
     if (AfterPay) {
       const shippingMethodId = uiContext?.cartItems?.shippingMethodId
       const shippingCountry = uiContext?.cartItems?.shippingMethods?.find((x: any) => x?.id === shippingMethodId)?.countryCode || EmptyString
       uiContext?.setOverlayLoaderState({ visible: true, message: translate('common.label.initiatingPaymentText'), })
       const data = this.getOrderInputPayload()
-      initPayment(this.state?.paymentMethod?.systemName, data).then(
-        (clientResult: any) => {
-          AfterPay.initialize({
-            countryCode: shippingCountry || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
-          })
+      initPayment(this.state?.paymentMethod?.systemName, data).then((clientResult: any) => {
+          AfterPay.initialize({ countryCode: shippingCountry || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY, })
 
           if (clientResult?.token) {
-            that.setState({
-              token: clientResult?.token,
-            })
+            that.setState({ token: clientResult?.token, })
 
             // To avoid triggering browser anti-popup rules, the AfterPay.open()
             // function must be directly called inside the click event listener
@@ -113,13 +100,10 @@ class ClearPayPaymentButton extends BasePaymentButton {
 
                 // The consumer confirmed the payment schedule.
                 // The token is now ready to be captured from your server backend.
-                requestPayment(that.state?.paymentMethod?.systemName, {
-                  token: event?.data?.orderToken,
-                })
+                requestPayment(that.state?.paymentMethod?.systemName, { token: event?.data?.orderToken, })
                   .then((captureResult: any) => {
-                    uiContext?.hideOverlayLoaderState()
                     if (captureResult?.id) {
-                      Router.push(`${redirectionUrl}?orderId=${captureResult?.id}&token=${captureResult?.token}&status=${captureResult?.status}`)
+                      Router.push(`${redirectionUrl}?orderId=${captureResult?.id}&token=${captureResult?.token}&status=${captureResult?.status}`).then(() => uiContext?.hideOverlayLoaderState())
                     }
                   })
                   .catch((error: any) => {
@@ -129,19 +113,19 @@ class ClearPayPaymentButton extends BasePaymentButton {
               } else {
                 // The consumer cancelled the payment or close the popup window.
                 AfterPay.close()
+                uiContext?.hideOverlayLoaderState()
               }
             }
             AfterPay.transfer({ token: clientResult?.token })
           } else {
             AfterPay.close()
-            dispatchState({
-              type: 'SET_ERROR',
-              payload: translate('common.message.requestCouldNotProcessErrorMsg'),
-            })
+            dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
           }
+          //uiContext?.hideOverlayLoaderState()
+        }).catch((error: any) => {
           uiContext?.hideOverlayLoaderState()
-        }
-      )
+          dispatchState({ type: 'SET_ERROR', payload: translate('common.message.requestCouldNotProcessErrorMsg'), })
+        })
     }
   }
 
@@ -150,7 +134,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
    * @returns
    */
   private getOrderInputPayload() {
-    const { basketOrderInfo, uiContext } = this.props
+    const { basketOrderInfo, uiContext, paymentType, partialAmount = 0 } = this.props
 
     const shippingMethodId = uiContext?.cartItems?.shippingMethodId
     const shippingCountry = uiContext?.cartItems?.shippingMethods?.find((x: any) => x?.id === shippingMethodId)?.countryCode || EmptyString
@@ -159,22 +143,14 @@ class ClearPayPaymentButton extends BasePaymentButton {
     if (orderResult) {
       const { billingAddress, shippingAddress } = basketOrderInfo
       const orderId = orderResult?.id
+      const amountToBePaid = this.isFullPayment() ? (basketOrderInfo?.basket?.isPartialPayment ? basketOrderInfo?.basket?.partialPayableAmount?.raw : orderResult?.grandTotal?.raw?.withTax) : partialAmount
       const data: any = {
-        merchantReference: getOrderId(orderInfo?.order),
+        merchantReference: JSON.stringify({ orderId: getOrderId(orderInfo?.order), paymentType, partialAmount, }),
         purchaseCountry: shippingCountry || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY || EmptyString,
         description: `Order ${orderId} for basket ${orderResult?.basketId} OrderPaymentId ${getOrderId(orderInfo?.order)}`,
-        amount: {
-          amount: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
-          currency: orderResult?.currencyCode,
-        },
-        taxAmount: {
-          amount: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax),
-          currency: orderResult?.currencyCode,
-        },
-        shippingAmount: {
-          amount: 0,
-          currency: orderResult?.currencyCode,
-        },
+        amount: { amount: roundToDecimalPlaces(amountToBePaid), currency: orderResult?.currencyCode, },
+        taxAmount: { amount: (paymentType === PaymentSelectionType.FULL) ? roundToDecimalPlaces(orderResult?.grandTotal?.raw?.tax) : 0, currency: orderResult?.currencyCode, },
+        shippingAmount: { amount: 0, currency: orderResult?.currencyCode, },
         items: [
           {
             name: orderResult?.items
@@ -188,10 +164,7 @@ class ClearPayPaymentButton extends BasePaymentButton {
             quantity: orderResult?.items
               ?.map((x: any) => x?.qty)
               ?.reduce((sum: number, current: number) => sum + current, 0),
-            price: {
-              amount: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax),
-              currency: orderResult?.currencyCode,
-            },
+            price: { amount: roundToDecimalPlaces(orderResult?.grandTotal?.raw?.withTax), currency: orderResult?.currencyCode, },
             imageUrl: orderResult?.items?.length
               ? `${window.location.origin}/product/${orderResult?.items[0]?.slug}`
               : EmptyString,
@@ -200,20 +173,14 @@ class ClearPayPaymentButton extends BasePaymentButton {
               : EmptyString,
           },
         ],
-        consumer: {
-          givenNames: billingAddress?.firstName || EmptyString,
-          surname: billingAddress?.lastName ?? EmptyString,
-          email: uiContext?.user?.email,
-          phoneNumber: uiContext?.user?.mobile || billingAddress?.phoneNo,
-        },
+        consumer: { givenNames: billingAddress?.firstName || EmptyString, surname: billingAddress?.lastName ?? EmptyString, email: uiContext?.user?.email, phoneNumber: uiContext?.user?.mobile || billingAddress?.phoneNo, },
         billing: {
           area1: billingAddress?.city,
           area2: EmptyString,
           countryCode: billingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
           line1: billingAddress?.address1,
           line2: billingAddress?.address2,
-          name: `${billingAddress?.firstName || EmptyString} ${billingAddress?.lastName || EmptyString
-            }`.trim(),
+          name: `${billingAddress?.firstName || EmptyString} ${billingAddress?.lastName || EmptyString }`.trim(),
           phoneNumber: billingAddress?.phoneNo,
           postcode: billingAddress?.postCode,
           //region: billingAddress?.state,
@@ -221,25 +188,17 @@ class ClearPayPaymentButton extends BasePaymentButton {
         shipping: {
           area1: shippingAddress?.city,
           area2: EmptyString,
-          countryCode:
-            shippingAddress?.countryCode ||
-            Cookies.get(Cookie.Key.COUNTRY) ||
-            BETTERCOMMERCE_COUNTRY ||
-            BETTERCOMMERCE_DEFAULT_COUNTRY,
+          countryCode: shippingAddress?.countryCode || Cookies.get(Cookie.Key.COUNTRY) || BETTERCOMMERCE_COUNTRY || BETTERCOMMERCE_DEFAULT_COUNTRY,
           line1: shippingAddress?.address1,
           line2: shippingAddress?.address2,
-          name: `${shippingAddress?.firstName || EmptyString} ${shippingAddress?.lastName || EmptyString
-            }`.trim(),
+          name: `${shippingAddress?.firstName || EmptyString} ${shippingAddress?.lastName || EmptyString }`.trim(),
           phoneNumber: shippingAddress?.phoneNo,
           postcode: shippingAddress?.postCode,
           //region: shippingAddress?.state,
         },
         merchant: {
           redirectConfirmUrl: `${window.location.origin}${this.state?.paymentMethod?.notificationUrl}`,
-          redirectCancelUrl: `${window.location.origin}${this.state?.paymentMethod?.settings?.find(
-            (x: any) => x?.key === 'CancelUrl'
-          )?.value || EmptyString
-            }`,
+          redirectCancelUrl: `${window.location.origin}${this.state?.paymentMethod?.settings?.find((x: any) => x?.key === 'CancelUrl' )?.value || EmptyString}`,
           popupOriginUrl: window.location.href,
         },
       }
@@ -251,7 +210,9 @@ class ClearPayPaymentButton extends BasePaymentButton {
    * Called immediately after a component is mounted.
    */
   public componentDidMount(): void {
-    const { dispatchState }: any = this.props
+    const { dispatchState, setPaymentType, setPartialAmount }: any = this.props
+    setPaymentType(PaymentSelectionType.FULL)
+    setPartialAmount(0)
     dispatchState({ type: 'SET_ERROR', payload: EmptyString })
   }
 
@@ -261,49 +222,32 @@ class ClearPayPaymentButton extends BasePaymentButton {
    */
   public render() {
     let that = this
-    const useSandbox = this.state?.paymentMethod?.settings?.find(
-      (x: any) => x.key === 'UseSandbox'
-    )?.value || EmptyString
-    const testUrl = this.state?.paymentMethod?.settings?.find((x: any) => x.key === 'TestUrl')
-      ?.value || EmptyString
-    const productionUrl = this.state?.paymentMethod?.settings?.find(
-      (x: any) => x.key === 'ProductionUrl'
-    )?.value || EmptyString
+    const useSandbox = this.state?.paymentMethod?.settings?.find((x: any) => x.key === 'UseSandbox')?.value || EmptyString
+    const testUrl = this.state?.paymentMethod?.settings?.find((x: any) => x.key === 'TestUrl') ?.value || EmptyString
+    const productionUrl = this.state?.paymentMethod?.settings?.find( (x: any) => x.key === 'ProductionUrl' )?.value || EmptyString
     const isSandbox = useSandbox ? stringToBoolean(useSandbox) : false
-    const scriptSrcUrl = isSandbox
-      ? `${testUrl}/${Payments.CLEARPAY_SCRIPT_SRC}`
-      : `${productionUrl}/${Payments.CLEARPAY_SCRIPT_SRC}`
+    const scriptSrcUrl = isSandbox ? `${testUrl}/${Payments.CLEARPAY_SCRIPT_SRC}` : `${productionUrl}/${Payments.CLEARPAY_SCRIPT_SRC}`
 
     return (
       <>
         {
           <>
             {this.state.confirmed && (
-              <Script
-                src={scriptSrcUrl}
-                strategy="lazyOnload"
-                onReady={() => that.onScriptReady()}
-              />
+              <Script src={scriptSrcUrl} strategy="lazyOnload" onReady={() => that.onScriptReady()} />
             )}
           </>
         }
-        {this.baseRender({
-          ...this?.props,
-          ...{
-            onPay: (
-              paymentMethod: any,
-              basketOrderInfo: any,
-              uiContext: any,
-              dispatchState: Function
-            ) =>
-              that.onPay(
-                that.state.paymentMethod,
-                basketOrderInfo,
-                uiContext,
-                dispatchState
-              ),
-          },
-        })}
+
+        {!this.isAlreadyUsedForPartialPayment() && (
+          <>
+            {this.baseRender({
+              ...this?.props,
+              ...{
+                onPay: (paymentMethod: any, basketOrderInfo: any, uiContext: any, dispatchState: Function) => that.onPay(that.state.paymentMethod, basketOrderInfo, uiContext, dispatchState),
+              },
+            })}
+          </>
+        )}
       </>
     )
   }

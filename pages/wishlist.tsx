@@ -12,9 +12,10 @@ import { PagePropType, getPagePropType } from '@framework/page-props'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
 import useAnalytics from '@components/services/analytics/useAnalytics'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
-import { Cookie } from '@framework/utils/constants'
+import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
 
 
 export async function getStaticProps({
@@ -26,6 +27,7 @@ export async function getStaticProps({
   if (!process.env.COMMERCE_WISHLIST_ENABLED) {
     return {
       notFound: true,
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
     }
   }
 
@@ -38,6 +40,7 @@ export async function getStaticProps({
     props: {
       ...pageProps,
     },
+    revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }
 }
 

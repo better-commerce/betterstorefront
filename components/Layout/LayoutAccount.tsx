@@ -183,8 +183,8 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
       <CommerceProvider locale={locale}>
         {isLoading && <ProgressBar />}
         {isInteractiveDemo && <InteractiveDemoSideBar featureToggle={featureToggle} />}
-        <div className={`text-base sm:pt-20 pt-16 bg-white dark:bg-neutral-900 dark-acc-white text-neutral-900 dark:text-neutral-200`}>
-          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} />
+        <div className={`text-base sm:pt-20 bg-gradient-white-blue-left pt-16 account-top-margin bg-white dark:bg-neutral-900 dark-acc-white text-neutral-900 dark:text-neutral-200 ${featureToggle?.features?.enableForPCSite ? 'pading-top-cls' : ''}`}>
+          <MainNav2Logged onIncludeVATChanged={includeVATChanged} currencies={config?.currencies} config={sortedData} configSettings={config?.configSettings} languages={config?.languages} defaultLanguage={config?.defaultLanguage} defaultCountry={config?.defaultCountry} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} keywords={keywords} pluginConfig={pluginConfig} featureToggle={featureToggle} locale={locale} />
           {displayAlert && <AlertRibbon />}
           <>
             <NextHead>
@@ -198,17 +198,20 @@ const LayoutAccount: FC<Props & IExtraProps> = ({ children, config, pageProps: {
               <meta property="og:title" content={myAccountActiveTab} key="ogtitle" />
               <meta property="og:description" content={myAccountActiveTab} key="ogdesc" />
             </NextHead>
-            <MembershipBanner user={user} />
-            <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container sm:pb-32">
-              <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10'>
-                <div className='sticky z-10 top-7 sm:top-12 sm:col-span-3'>
-                  <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} />
+            {!featureToggle?.features?.enableForPCSite && <MembershipBanner user={user} />}
+            <section className="container w-full pt-0 mt-0 sm:my-0 theme-account-container sm:pb-0 pc-b-padding-none">
+              <div className='grid w-full grid-cols-1 gap-6 mx-auto sm:grid-cols-12 sm:gap-10 pc-min-height-container'>
+                <div className={`sticky z-10 top-7 sm:top-12 sm:col-span-3 ${featureToggle?.features?.enableForPCSite ? 'sidebar_bg' : ''}`}>
+                  <SideMenu deviceInfo={deviceInfo} featureToggle={featureToggle} config={config} />
                 </div>
-                <div className='pt-0 sm:col-span-9 sm:pt-5 z-1'> {children} </div>
+                <div className='pt-0 pl-0 bg-white sm:pl-10 sm:col-span-9 sm:pt-5 z-1 sm:pb-32'>
+                  {featureToggle?.features?.enableForPCSite && <MembershipBanner user={user} />}
+                  {children}
+                </div>
               </div>
             </section>
           </>
-          <Footer navItems={navTree?.footer} />
+          <Footer navItems={navTree?.footer} featureToggle={featureToggle} />
           <ModalUI />
           <SidebarUI deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} config={config} pluginConfig={pluginConfig} />
           <div className="cookie-bannner">

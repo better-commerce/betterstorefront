@@ -19,6 +19,7 @@ export default class MyDocument extends NextDocument {
           {CURRENT_THEME == 'green' &&
             <meta name="google-site-verification" content="i3Ml0CsxqOuXaxdHhzOQ5AG2jTHgKcjT1oM9oMPbxJo" />
           }
+          <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
         </Head>
         <body className={`custom_class promo-banner-inactive`}>
           <Main />

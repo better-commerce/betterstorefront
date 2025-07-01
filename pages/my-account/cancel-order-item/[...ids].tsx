@@ -20,7 +20,7 @@ import {
   NEXT_CANCEL_ORDER_LINE,
 } from '@components/utils/constants'
 import Spinner from '@components/ui/Spinner'
-import { vatIncluded } from '@framework/utils/app-util'
+import { isB2BUser, vatIncluded } from '@framework/utils/app-util'
 import { Guid } from '@commerce/types'
 import { useTranslation } from '@commerce/utils/use-translation'
 import LayoutAccount from '@components/Layout/LayoutAccount'
@@ -39,6 +39,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
   const { user, setAlert } = useUI()
   const [orderDetails, setOrderDetails] = useState<any>()
   const [itemDatas, setItemDatas] = useState<any>(undefined)
+  const isB2B = isB2BUser(user)
   const [itemData, setItemData] = useState<any>(undefined)
   const [showCancellationReasons, setShowCancellationReasons] = useState(false)
   const [cancellationReasons, setCancellationReasons] = useState<any>(undefined)
@@ -104,7 +105,11 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
         })
         setCancelLineItemLoading(false)
         setAlert({ type: 'success', msg: translate('common.message.itemCancelledSuccessfullyText') })
-        Router.push('/my-account/orders')
+        if (isB2B) {
+          Router.push('/my-account/my-company/orders')
+        } else {
+          Router.push('/my-account/orders')
+        }
         if (typeof window !== 'undefined') {
           //debugger
           recordAnalytics(AnalyticsEventType.CANCEL_CONFIRM, { transactionId: toNumber(payment?.id?.toString()), user, deviceCheck, })
@@ -154,7 +159,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
             style={{ display: showCancellationReasons ? 'none' : 'block' }}
           >
             <div className="px-6 py-4 mb-4 border-b mob-header sm:hidden">
-              <Link href="/my-account/orders">
+              <Link href={`${isB2B ? '/my-account/my-company/orders' : '/my-account/orders'}`}>
                 <h3 className="flex items-center max-w-4xl mx-auto text-xl font-semibold text-gray-900">
                   <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
@@ -162,7 +167,7 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
               </Link>
             </div>
             <div className="mx-auto cancel-continer">
-              <Link href="/my-account/orders" className="mobile-view">
+              <Link href={`${isB2B ? '/my-account/my-company/orders' : '/my-account/orders'}`} className="mobile-view">
                 <h4 className="flex items-center mr-2 text-xl font-semibold leading-none text-gray-900 uppercase">
                   <ArrowLeftIcon className='w-4 h-4 mr-2 text-gray-500' />{' '}
                   {translate('common.label.cancelText')}{' '}{translate('common.label.itemSingularText')}
