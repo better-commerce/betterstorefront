@@ -220,7 +220,8 @@ export const NEXT_LOG_PAYMENT = '/api/log/payment'
 export const NEXT_GET_SUBJECTS = '/api/subjects'
 
 // Loan Calculator
-export const NEXT_LOAN_CALCULATOR_GET_PRODUCT_RATES = '/api/loan-calculator/get-product-rates'
+export const NEXT_LOAN_CALCULATOR_GET_PRODUCT_RATES = '/api/loan-calculator/product-rates'
+export const NEXT_LOAN_CALCULATOR_GET_LOAN_DETAILS = '/api/loan-calculator/loan-details'
 
 // Request Quote
 export const NEXT_SAVE_RFQ = '/api/b2b/request-for-quote/save-rfq'

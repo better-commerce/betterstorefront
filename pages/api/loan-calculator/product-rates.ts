@@ -7,9 +7,12 @@ const getProductRatesApiMiddleware = async (req: any, res: any) => {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
+  const interestFree = req?.query?.interestFree || "false"
+
   try {
-    const response: any = await getProductRateList(req?.cookies);
-    res.status(200).json(response);
+    const [retailerRateCardProducts]: any = await getProductRateList(req?.cookies);
+    const containingText = (interestFree === "true") ? "interest free" : "interest bearing"
+    res.status(200).json(retailerRateCardProducts?.RetailerRateCardProducts?.filter((x: any) => x?.FullName?.toLowerCase()?.includes(containingText.toLowerCase())));
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error);
   }
