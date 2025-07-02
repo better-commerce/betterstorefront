@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import FormData from 'form-data'
 import { useUI } from '@components/ui/context'
 import Link from 'next/link'
 import NextHead from 'next/head'
@@ -31,6 +32,7 @@ import { Cookie, RAKUTEN_MID } from '@framework/utils/constants'
 import { RakutenCustomerStatusType } from '@components/services/analytics/events/rakuten'
 import commerce from '@lib/api/commerce'
 import Cookies from 'js-cookie'
+import { createHmac } from 'crypto'
 
 export default function OrderConfirmation({ config, featureToggle, customerStatusType }: any) {
   const { recordAnalytics } = useAnalytics()
@@ -256,6 +258,81 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
     handleReferralInfo()
   }, [])
 
+  const generateRakutenMOP = useCallback((order: any, rakutenAffiliateInfo: string) => {
+    const [encodedSiteID, nowGmtStr] = rakutenAffiliateInfo?.split('|')
+    const siteID = decodeURIComponent(encodedSiteID)
+    const dt = new Date(nowGmtStr)
+    // Build yyyy, mm, dd, hh and mm (UTC)
+    const pad = (n: number) => String(n).padStart(2, '0')
+    const yyyy = dt.getUTCFullYear()
+    const mm = pad(dt.getUTCMonth() + 1)
+    const dd = pad(dt.getUTCDate())
+    const hh = pad(dt.getUTCHours())
+    const min = pad(dt.getUTCMinutes())
+    const formattedGMT = `${yyyy}${mm}${dd}_${hh}${min}`
+    const skulist = encodeURIComponent((order?.items?.map((x: any) => x?.sku || x?.stockCode) || [])?.join('|'))
+    const qlist = encodeURIComponent((order?.items?.map((x: any) => x?.qty || 1) || [])?.join('|'))
+    const amtlist = encodeURIComponent((order?.items?.map((x: any) => x?.totalPrice?.raw?.withTax * x?.qty * 100) || [])?.join('|'))
+    const namelist = encodeURIComponent((order?.items?.map((x: any) => x?.name) || [])?.join('|'))
+    setRakutenMOP({ mid: RAKUTEN_MID, ord: order?.orderNo || '', tr: siteID, land: formattedGMT, skulist, qlist, amtlist, cur: order?.currencyCode, namelist })
+  }, [])
+
+  const actionRakutenCommission = useCallback((order: any, rakutenAffiliateInfo: string) => {
+
+    const uploadAsync = async () => {
+      try {
+        const resp = await axios.post(
+          'https://transfileupload.linksynergy.com/file',
+          form,
+          { headers: form.getHeaders() }
+        )
+        console.log('Rakuten response:', resp.data)
+      } catch (err: any) {
+        console.error('Upload error:', err.response?.data || err.message)
+      }
+    }
+
+    const computeMac = (secretKey: string, text: string): string => {
+      const h = createHmac('sha256', secretKey)
+        .update(text, 'utf8')
+        .digest('base64')
+
+      // make URL‑safe: + → - , / → _  (and you can strip padding = if you like)
+      return h.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    }
+
+    const makeFilename = (): string => {
+      const now = new Date()
+      const yyyy = now.getUTCFullYear()
+      const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
+      const dd = String(now.getUTCDate()).padStart(2, '0')
+      const hh = String(now.getUTCHours()).padStart(2, '0')
+      const mi = String(now.getUTCMinutes()).padStart(2, '0')
+      const ss = String(now.getUTCSeconds()).padStart(2, '0')
+      return `transactions_${yyyy}${mm}${dd}_${hh}${mi}${ss}.json`
+    }
+
+    const [encodedSiteID, nowGmtStr] = rakutenAffiliateInfo?.split('|')
+    const siteID = decodeURIComponent(encodedSiteID)
+    const commissionData = { sku_order: { orderid: order?.orderNo || EmptyString, siteid: siteID, time_entered: new Date(nowGmtStr).toISOString(), currency: order?.currencyCode, trans_date: new Date().toISOString(), optional_data: {}, items: order?.items?.map((x: any) => ({ sku: x?.sku || x?.stockCode, quantity: x?.qty || 1, amount: x?.totalPrice?.raw?.withTax * x?.qty * 100, product_name: x?.name, optional_data: {} })) || [] } }
+
+    const payloadText = [commissionData].map((r: any) => JSON.stringify(r)).join('\n')
+
+    // your Rakuten secret key:
+    const RAKUTEN_SECRET = process.env.RAKUTEN_SECRET || 'YOUR_SECRET_HERE'
+    const mac = computeMac(RAKUTEN_SECRET, payloadText)
+    const filename = makeFilename()
+
+    // === build the multipart/form-data body ===
+    const form = new FormData()
+    form.append('file', Buffer.from(payloadText, 'utf8'), {
+      filename,
+      contentType: 'application/json',
+    })
+    form.append('mac', mac)
+    uploadAsync()
+  }, [])
+
   useEffect(() => {
     const itemsFromArr = []
     if (order?.items) {
@@ -281,23 +358,11 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
     }
 
     if (featureToggle?.features?.enableRakutenAnalytics) {
-      const raw = Cookies.get('siteID') || ''
-      const [encodedSiteID, nowGmtStr] = raw?.split('|')
-      const siteID = decodeURIComponent(encodedSiteID)
-      const dt = new Date(nowGmtStr)
-      // Build yyyy, mm, dd, hh and mm (UTC)
-      const pad = (n: number) => String(n).padStart(2, '0')
-      const yyyy = dt.getUTCFullYear()
-      const mm = pad(dt.getUTCMonth() + 1)
-      const dd = pad(dt.getUTCDate())
-      const hh = pad(dt.getUTCHours())
-      const min = pad(dt.getUTCMinutes())
-      const formattedGMT = `${yyyy}${mm}${dd}_${hh}${min}`
-      const skulist = encodeURIComponent((order?.items?.map((x: any) => x?.sku || x?.stockCode) || [])?.join('|'))
-      const qlist = encodeURIComponent((order?.items?.map((x: any) => x?.qty || 1) || [])?.join('|'))
-      const amtlist = encodeURIComponent((order?.items?.map((x: any) => x?.totalPrice?.raw?.withTax * x?.qty * 100) || [])?.join('|'))
-      const namelist = encodeURIComponent((order?.items?.map((x: any) => x?.name) || [])?.join('|'))
-      setRakutenMOP({ mid: RAKUTEN_MID, ord: order?.orderNo || '', tr: siteID, land: formattedGMT, skulist, qlist, amtlist, cur: order?.currencyCode, namelist })
+      const rakutenAffiliateInfo = Cookies.get('siteID') || ''
+      if (rakutenAffiliateInfo && rakutenAffiliateInfo?.split('|').length > 0) {
+        generateRakutenMOP(order, rakutenAffiliateInfo)
+        actionRakutenCommission(order, rakutenAffiliateInfo)
+      }
     }
   }, [order?.orderNo])
 
@@ -775,7 +840,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
       )}
 
       {featureToggle?.features?.enableRakutenAnalytics && rakutenMOP && 
-        <img src={`http://track.linksynergy.com/eventnvppixel?mid=${rakutenMOP?.mid}&ord=${rakutenMOP?.ord}&tr=${rakutenMOP?.tr}&land=${rakutenMOP?.land}&skulist=${rakutenMOP?.skulist}&qlist=${rakutenMOP?.qlist}&amtlist=${rakutenMOP?.amtlist}&cur=${rakutenMOP?.cur}&namelist=${rakutenMOP?.namelist}`} width="1" height="1" border="0" />
+        <img src={`http://track.linksynergy.com/eventnvppixel?mid=${rakutenMOP?.mid}&ord=${rakutenMOP?.ord}&tr=${rakutenMOP?.tr}&land=${rakutenMOP?.land}&skulist=${rakutenMOP?.skulist}&qlist=${rakutenMOP?.qlist}&amtlist=${rakutenMOP?.amtlist}&cur=${rakutenMOP?.cur}&namelist=${rakutenMOP?.namelist}`} width="1" height="1" style={{ border: 0 }} />
       }
     </>
   )
