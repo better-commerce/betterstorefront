@@ -235,12 +235,12 @@ function NavigationRows({ navItems = [], featureToggle, subMenuPosition }: any) 
                                                           : `/collection${sanitizeRelativeUrl(`/${item?.itemLink}`)}`
                                                         : sanitizeRelativeUrl(`/${item?.itemLink}`)
                                                     }
-                                                    className="relative flex items-center justify-center text-center h-full font-normal text-gray-700 capitalize hover:underline hover:text-black"
+                                                    className="relative flex items-center justify-center h-full font-normal text-center text-gray-700 capitalize hover:underline hover:text-black"
                                                     title={item?.caption}
                                                     onClick={handleLinkClick}
                                                     prefetch={false}
                                                   >
-                                                    {item?.itemImageSrc && item?.itemImageSrc != "" && <img src={generateUri(item?.itemImageSrc, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={item?.caption?.toLowerCase()} className="w-20 h-20 mx-auto" />}
+                                                    {item?.itemImageSrc && item?.itemImageSrc != "" && <img src={generateUri(item?.itemImageSrc, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={item?.caption?.toLowerCase()} className="object-contain w-24 h-16 mx-auto" />}
                                                     <span className="w-full">{item?.caption?.toLowerCase()}</span>
                                                   </Link>
                                                 </li>
@@ -279,11 +279,11 @@ function NavigationRows({ navItems = [], featureToggle, subMenuPosition }: any) 
                                             <li key={`category-link-${idx}`}>
                                               <Link
                                                 href={navItem?.navBlockType === 9 ? item?.itemLink?.startsWith('/category') || item?.itemLink?.startsWith('category/') ? sanitizeRelativeUrl(`/${item?.itemLink}`) : `/collection${sanitizeRelativeUrl(`/${item?.itemLink}`)}` : sanitizeRelativeUrl(`/${item?.itemLink}`)}
-                                                className="text-sm font-semibold text-center justify-center flex flex-col w-full text-black capitalize hover:text-black hover:underline"
+                                                className="flex flex-col justify-center w-full text-sm font-semibold text-center text-black capitalize hover:text-black hover:underline"
                                                 onClick={handleLinkClick}
                                                 prefetch={false}
                                               >
-                                                {item?.itemImageSrc && item?.itemImageSrc != "" && <img src={generateUri(item?.itemImageSrc, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={item?.caption?.toLowerCase()} className="w-20 h-20 mx-auto" />}
+                                                {item?.itemImageSrc && item?.itemImageSrc != "" && <img src={generateUri(item?.itemImageSrc, 'h=200&fm=webp') || IMG_PLACEHOLDER} alt={item?.caption?.toLowerCase()} className="object-contain w-24 h-16 mx-auto" />}
                                                 <span className="w-full">{item?.caption?.toLowerCase()}</span>
                                               </Link>
                                             </li>
