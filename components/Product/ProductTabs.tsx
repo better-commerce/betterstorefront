@@ -8,11 +8,12 @@ type TabItem = {
 };
 
 interface TabComponentProps {
-  tabs: TabItem[];
-  defaultActiveTab?: string;
+  readonly tabs: TabItem[];
+  readonly defaultActiveTab?: string;
+  readonly setLoanCalculatorOpen?: (value: boolean) => void;
 }
 
-const TabComponent = ({ tabs, defaultActiveTab }: TabComponentProps) => {
+const TabComponent = ({ tabs, defaultActiveTab, setLoanCalculatorOpen }: TabComponentProps) => {
   const [activeTab, setActiveTab] = useState<string>(defaultActiveTab || (tabs?.length > 0 ? tabs[0]?.id : ''));
 
   const handleTabClick = (tabId: string) => {
