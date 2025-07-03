@@ -1146,8 +1146,8 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
       )
     },
     {
-      id: 'Used',
-      label: 'Used',
+      id: 'Finance',
+      label: 'Finance',
       content: (
         <div className="space-y-4">
           <FinanceCalculator product={product} loanCalculatorOpen={loanCalculatorOpen} />
