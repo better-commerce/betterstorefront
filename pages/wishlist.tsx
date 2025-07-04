@@ -74,7 +74,7 @@ function Wishlist() {
             </div>
           ) : isEmpty ? (
             <div className="flex flex-col items-center justify-center flex-1 px-12 py-24 ">
-              <span className="flex items-center justify-center w-16 h-16 p-12 border border-dashed rounded-lg border-secondary bg-primary text-primary">
+              <span className="flex items-center justify-center w-16 h-16 p-12 border border-dashed rounded-lg border-secondary button-secondary bg-primary button-primary text-primary button-primary">
                 <Heart className="absolute" />
               </span>
               <h2 className="pt-6 text-2xl font-bold tracking-wide text-center">

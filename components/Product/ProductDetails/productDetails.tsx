@@ -78,7 +78,7 @@ function ProductDetails({ product, description, handleScrollToSection }: any) {
           <div className="flex flex-col w-full gap-2 mb-5 md:flex-row md:justify-between">
             {/* <button className="btn-primary md:w-2/4" onClick={handleScrollToSection}>Compare Similar products</button> */}
             <Link href={brandLink} passHref legacyBehavior>
-              <a className="text-center btn-secondary md:w-full md:mt-0 py-2 btn-radius-sm default-btn-auto">Shop All</a>
+              <a className="text-center btn-secondary button-secondary md:w-full md:mt-0 py-2 btn-radius-sm default-btn-auto">Shop All</a>
             </Link>
           </div>
         </div>

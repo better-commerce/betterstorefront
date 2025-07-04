@@ -140,7 +140,7 @@ const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketMo
                                                     </div>
                                                 )
                                             }
-                                            <button onClick={() => { handleCloseModal() }} className="nc-Button !py-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 sm:py-3.5 sm:px-6 ttnc-ButtonPrimary disabled:bg-opacity-90 bg-white dark:bg-slate-100 hover:bg-white !text-black border border-gray-300 hover:!border-gray-600" >
+                                            <button onClick={() => { handleCloseModal() }} className="nc-Button !py-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 sm:py-3.5 sm:px-6 ttnc-ButtonPrimary button-primary" >
                                                 {translate('common.label.cancelText')}
                                             </button>
                                         </div>

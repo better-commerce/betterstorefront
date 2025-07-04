@@ -62,7 +62,7 @@ const B2BQuoteComments = ({ quoteId, fetchQuoteDetail}: any) => {
         className='text-sm font-medium text-black border border-gray-300 placeholder:text-gray-300 placeholder:font-normal'
       />
       <div className='justify-end flex-1 mt-4'>
-        <button onClick={handleSubmit} className='bg-black hover:bg-gray-900 focus:ring-black  ttnc-ButtonPrimary text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90 dark:bg-slate-100 text-slate-50 dark:text-slate-800 shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0' disabled={loading || !noteText}>
+        <button onClick={handleSubmit} className='bg-black hover:bg-gray-900 focus:ring-black  ttnc-ButtonPrimary button-primary text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90 dark:bg-slate-100 text-slate-50 dark:text-slate-800 shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0' disabled={loading || !noteText}>
           {loading ? 'Submitting...' : 'Submit Note'}
         </button>
       </div>

@@ -2878,3 +2878,88 @@ body .round-md-btn, .btn-radius-sm{
    color:#000 !important
  }
  }
+ .btn{
+    text-align: center !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    font-size: var(--font-14) !important;
+    min-height: 47px !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+ }
+ .button-primary svg, .button-secondary svg, .button-default svg {
+    margin-right: 5px !important;
+ }
+.button-primary, .add-green-btn button.ttnc-ButtonPrimary.button-primary, body .ttnc-ButtonPrimary {
+    text-align: center !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    background: var(--btn-bg-blue) !important;
+    border-radius: 4px !important;
+    color: var(--btn-text-color-blue) !important;
+    border: 1px solid var(--btn-border-blue) !important;
+    /* font-size: var(--font-14) !important; */
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.button-primary:hover {
+    background: var(--btn-bg-hover-blue) !important;
+    color: var(--btn-hover-text-color-blue) !important;
+    border: 1px solid var(--btn-border-hover-blue) !important;
+}
+
+.button-primary:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4) !important;
+}
+.button-secondary {
+    text-align: center !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    background: var(--btn-bg-secondary) !important;
+    border-radius: 4px !important;
+    color: var(--btn-text-color-secondary) !important;
+    border: 1px solid var(--btn-border-secondary) !important;
+    /* font-size: var(--font-14) !important; */
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.button-secondary:hover {
+    background: var(--btn-bg-hover-secondary) !important;
+    color: var(--btn-hover-text-color-secondary) !important;
+    border: 1px solid var(--btn-border-hover-secondary) !important;
+}
+
+.button-secondary:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(100, 100, 100, 0.3) !important; /* Adjust color as per theme */
+}
+.button-default, .add-green-btn button.ttnc-ButtonPrimary.button-primary.button-default, body .ttnc-ButtonPrimary.button-default {
+    text-align: center !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    background: #ffffff !important;
+    border-radius: 4px !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+    /* font-size: 14px !important; */
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.button-default:hover {
+    background: #f2f2f2 !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+}
+
+.button-default:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2) !important;
+}

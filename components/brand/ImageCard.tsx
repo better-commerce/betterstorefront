@@ -41,7 +41,7 @@ const ImageCard: React.FC<IImageCardProps> = ({ data }: IImageCardProps) => {
                   <div className="flex flex-col gap-y-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:w-11/12">
                     {feature?.imagecardinfo_redbuttonlink != '' ? (
                       <>
-                        <Link href={resolve("/", (feature?.imagecardinfo_redbuttonlink || EmptyString))} className="text-center uppercase btn-secondary font-14 sm-font-12">{feature?.imagecardinfo_redbuttontext}</Link>
+                        <Link href={resolve("/", (feature?.imagecardinfo_redbuttonlink || EmptyString))} className="text-center uppercase btn-secondary button-secondary font-14 sm-font-12">{feature?.imagecardinfo_redbuttontext}</Link>
                       </>
                     ) : (
                       <></>

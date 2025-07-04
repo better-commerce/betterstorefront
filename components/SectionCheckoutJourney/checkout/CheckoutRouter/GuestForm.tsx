@@ -111,7 +111,7 @@ export default function GuestForm({ onSubmit = () => {} }: any) {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-3 uppercase bg-black border border-transparent rounded-sm btn-primary sm:w-full"
+                className="flex items-center justify-center flex-1 w-full max-w-xs px-8 py-3 uppercase bg-black border border-transparent rounded-sm btn-primary button-primary sm:w-full"
               >
                 {translate('label.checkout.checkoutSecurelyText')}
               </button>

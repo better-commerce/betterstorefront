@@ -23,7 +23,7 @@ const ImageCollection: React.FC<IBrandCollectionProps> = ({ data, deviceInfo }: 
               </div>   
               {data?.brandlist_title && (<div className="bg-[#ACD4FF] text-black py-2 px-6 w-full text-center font-semibold tracking-wide text-base uppercase mb-4"> {data?.brandlist_title}</div> )}       
               {data?.brandlist_subtitle && (<p className="text-center text-gray-700 mb-6 min-h-[50px]">{data?.brandlist_subtitle}</p> )}             
-              {data?.brandlist_buttontext && (<button className="btn-c rounded-md btn-primary text-white py-2 px-6 transition-colors duration-200"> {data?.brandlist_buttontext} </button> )}
+              {data?.brandlist_buttontext && (<button className="btn-c rounded-md btn-primary button-primary text-white py-2 px-6 transition-colors duration-200"> {data?.brandlist_buttontext} </button> )}
             </Link>
           </div>
         ))}

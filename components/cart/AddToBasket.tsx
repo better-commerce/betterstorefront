@@ -81,12 +81,12 @@ function AddToBasket({ product, brandInfo, selectedCat }: any) {
     <div className={cn('w-full h-full', { 'animate-pulse opacity-90 pointer-events-none': basketLoading, })}>
       {!basketItem || basketItem?.qty === 0 ? (
         isOutOfStock(product) ? (
-          <ButtonNotifyMe product={product} className="w-full sm:block btn-secondary" />
+          <ButtonNotifyMe product={product} className="w-full sm:block btn-secondary button-secondary" />
         ) : (
           <button onClick={() => onUpdateKitBasket(product)} className="w-full sm:block btn btn-primary-green">{GENERAL_ADD_TO_KIT}</button>
         )
       ) : (
-        <div className="overflow-hidden flex gap-4 items-center w-full !p-0 btn btn-secondary h-full">
+        <div className="overflow-hidden flex gap-4 items-center w-full !p-0 btn btn-secondary button-secondary h-full">
           <span className="flex items-center h-full px-4 py-1 select-none"> Added </span>
           <div className="flex items-center justify-between flex-1 col-span-2 px-2 text-black rounded-md hover:text-blue">
             {basketItem?.qty === 1 ? (

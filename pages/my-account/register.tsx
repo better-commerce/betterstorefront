@@ -69,7 +69,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
         <div className="w-full px-10 mob-padding-none font-semibold sm:px-0">
           <label className="text-neutral-800 dark:text-neutral-800">{translate('label.addressBook.emailText')}</label>
           <input
-            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black"
+            className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black button-primary"
             value={value}
             type="email"
             onChange={onChange}
@@ -79,7 +79,7 @@ const EmailInput = ({ value, onChange, submit, apiError = '', socialLogins, plug
         {error ? <span className="text-red-500 capitalize">{error}</span> : null}
         <div className="flex items-center justify-center w-full my-5 mob-padding-none  px-10 sm:px-0">
           <Button
-            className="w-full border border-black btn btn-c btn-primary rounded-2xl"
+            className="w-full border border-black btn btn-c btn-primary button-primary rounded-2xl"
             buttonType="default"
             action={handleSubmit}
             title={translate('common.label.submitText')}
@@ -275,7 +275,7 @@ function RegisterPage({ recordEvent, setEntities, config, pluginConfig, featureT
       </NextHead>
            {featureToggle?.features?.enableBannerLogin ? (
             <>
-            <div className="min-h-screen flex flex-col md:flex-row btn-primary-clr form-input-label">
+            <div className="min-h-screen flex flex-col md:flex-row btn-primary-clr button-primary form-input-label">
             <div className="w-full md:w-1/2 h-full">
             <div className="px-10 pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
             <div className='w-full'>

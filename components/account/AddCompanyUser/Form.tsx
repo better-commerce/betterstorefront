@@ -86,7 +86,7 @@ export default function AddCompanyUserForm({ type = 'addCompanyUser', isLoginSid
               })}
               <div
                 className={`flex items-center justify-center !w-full my-5 ${ !isLoginSidebarOpen && `md:w-1/2`}`} >
-                <Button type="submit" className="w-full border border-black btn btn-c btn-primary rounded-2xl" loading={isSubmitting} disabled={isSubmitting} >
+                <Button type="submit" className="w-full border border-black btn btn-c btn-primary  button-primary rounded-2xl" loading={isSubmitting} disabled={isSubmitting} >
                   {!isSubmitting && btnText}
                 </Button>
               </div>

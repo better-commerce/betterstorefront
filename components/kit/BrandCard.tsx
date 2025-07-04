@@ -85,7 +85,7 @@ function BrandCard(props: any) {
         </div>
         <div className="flex flex-1 w-full">
           <button
-            className="w-full btn-primary !py-3 disabled:cursor-not-allowed disabled:opacity-30"
+            className="w-full btn-primary button-primary !py-3 disabled:cursor-not-allowed disabled:opacity-30"
             disabled={!selectPlatformOpt || !selectPlatformOpt?.id}
             onClick={handlePush}
           >

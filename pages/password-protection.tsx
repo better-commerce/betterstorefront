@@ -119,7 +119,7 @@ function PasswordProtectionPage({ config }: any) {
               {formik.errors.password && (
                 <span className="form-input-error !capitalize"> {formik.errors.password} </span>
               )}
-              <Button type="submit" className="!font-normal w-full border border-black btn-c btn-primary mt-4" loading={formik.isSubmitting} disabled={formik.isSubmitting} >
+              <Button type="submit" className="!font-normal w-full border border-black btn-c btn-primary button-primary mt-4" loading={formik.isSubmitting} disabled={formik.isSubmitting} >
                 {BTN_SUBMIT}
               </Button>
             </form>

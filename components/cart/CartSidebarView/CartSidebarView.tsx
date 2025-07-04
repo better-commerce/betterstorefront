@@ -768,7 +768,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                        <Link href="/cart" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
-                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary btn btn-radius-sm">
+                        }} className="flex items-center justify-between py-2 capitalize transition rounded-full btn-primary button-primary btn btn-radius-sm">
                           <span className='flex flex-col justify-start pl-5 text-left'>
                             {cartItems?.isPartialPayment ? (
                               <span>{cartItems?.partialPayableAmount?.formatted}</span>

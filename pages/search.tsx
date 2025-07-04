@@ -378,7 +378,7 @@ function Search({ query, setEntities, recordEvent, deviceInfo, config, featureTo
                     <>
                       <div className='grid mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-2 sm:my-2'>
                         <div className='flex flex-col w-full gap-2 sm:col-span-12'>
-                          <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue sm:text-3xl lg:text-3xl`}>
+                          <h1 className={`block text-2xl font-semibold dark:text-black primary-text-blue button-primary sm:text-3xl lg:text-3xl`}>
                             Results
                           </h1>
                           <p className='text-xs font-normal text-black'>Check each product page for other buying options.</p>

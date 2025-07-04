@@ -69,7 +69,7 @@ const CategoryList: React.FC<ICategoryListProps> = ({ data, heading }: ICategory
                     <div className="w-full text-center sm:absolute sm:top-2/4 sm:-translate-y-2/4 sm:left-2/4 sm:-translate-x-2/4">
                       {category?.categorylist_link != '' ? (
                         <>
-                            <p className="uppercase btn-primary-white font-14 desk-width-200">
+                            <p className="uppercase btn-primary-white button-primary font-14 desk-width-200">
                               {category?.categorylist_buttontext}
                             </p>
                         </>

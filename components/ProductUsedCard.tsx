@@ -201,7 +201,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         </div >
         {featureToggle?.features?.enableAddButtonBottom && (
           <div className='my-3 add-green-btn'>
-            <Button className="w-full bg-black hover:bg-gray-900 focus:ring-black  `ttnc-ButtonPrimary` text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90  dark:bg-slate-100  text-slate-50 dark:text-white shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
+            <Button className="w-full bg-black hover:bg-gray-900 focus:ring-black  ttnc-ButtonPrimary button-primary text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6 nc-Button sm:text-white gap-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors disabled:bg-opacity-90  dark:bg-slate-100  text-slate-50 dark:text-white shadow-xl flex-1 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0" title={buttonConfig?.title} action={buttonConfig?.action} buttonType={buttonConfig?.type || 'cart'} />
           </div>
         )}
         {!isGuestUser && user?.userId &&

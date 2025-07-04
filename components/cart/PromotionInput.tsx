@@ -322,7 +322,7 @@ const PromotionInput = (props: IPromotionInputProps) => {
                   }
                   type="submit"
                   title={translate('common.label.applyText')}
-                  className={`flex items-center justify-center btn btn-secondary w-full !font-medium`}
+                  className={`flex items-center justify-center btn btn-secondary button-secondary w-full btn-sm-cls !font-medium`}
                 >
                   {translate('common.label.applyText')}
                 </button>

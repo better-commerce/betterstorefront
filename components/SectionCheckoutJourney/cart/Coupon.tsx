@@ -288,7 +288,7 @@ const Coupon = (props: IPromotionInputProps) => {
                       </div>
                       {multiPromo?.length > 0 && (
                         <div className="sticky bottom-0 z-10 flex flex-col w-full px-6 py-4 bg-white">
-                          <button onClick={() => applyMultiPromo()} type="button" className="w-full btn btn-primary" >
+                          <button onClick={() => applyMultiPromo()} type="button" className="w-full btn btn-primary button-primary" >
                             {translate('label.basket.appliedText')}{' '}{multiPromo?.length} {
                               multiPromo?.length > 1 ? translate('label.basket.couponsText') : translate('label.basket.couponText')
                             }

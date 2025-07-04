@@ -790,7 +790,7 @@ const QuoteDetail: any = ({ quoteId, quoteData, config, location, }: any) => {
                         setLoadingAction(LoadingActionType.REMOVE_ITEM)
                         handleItem(itemClicked, 'delete')
                       }}
-                      className="btn-primary btn"
+                      className="btn-primary button-primary btn"
                     >
                       {loadingAction === LoadingActionType.REMOVE_ITEM ? (
                         <>{LoadingDots}</>

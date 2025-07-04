@@ -15,7 +15,7 @@ const VoucherDetails = ({ voucherUsed, currencySymbol, savedAmount, voucherLeft,
       <div className="w-full mb-4">
         <VoucherStatus voucherLeft={voucherLeft} voucherCount={voucherCount} />
       </div>
-      <button onClick={handleExpandVoucher} className="flex items-center justify-center btn btn-secondary w-full !font-medium">
+      <button onClick={handleExpandVoucher} className="flex items-center justify-center btn btn-secondary button-secondary w-full !font-medium">
         {translate('label.membership.downloadVouchersBtnText')}
       </button>
     </div>

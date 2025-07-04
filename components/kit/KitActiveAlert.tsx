@@ -98,7 +98,7 @@ export default function KitActiveAlertDialog() {
       </h2>
       <div className="flex flex-col gap-2 mt-6">
         <button
-          className="btn btn-secondary"
+          className="btn btn-secondary button-secondary"
           onClick={handleGoToActiveKit}
           disabled={loading}
         >

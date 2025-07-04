@@ -95,7 +95,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
           autoFocus={true}
           onChange={handlePostCode}
         />
-        <button className="px-1 py-3 mb-4 border border-black btn-primary lg:py-2 sm:px-4 disabled:cursor-not-allowed disabled:opacity-60 btn-c btn" disabled={!postCode || loading}>
+        <button className="px-1 py-3 mb-4 border border-black btn-primary button-primary lg:py-2 sm:px-4 disabled:cursor-not-allowed disabled:opacity-60 btn-c btn" disabled={!postCode || loading}>
           {loading ? <LoadingDots /> : translate('label.store.findStoresText')}
         </button>
       </form>
@@ -163,7 +163,7 @@ const FindStore: React.FC<FindStoreProps> = ({ basket, onStoreSelected }) => {
                   }
                 </div>
                 {/* {selectedStore?.id === store.id && (
-                      <button className='px-1 py-3 mb-2 ml-8 border border-black btn-primary lg:py-2 sm:px-4' onClick={handleCollectFromStore}>Collect from Store</button>
+                      <button className='px-1 py-3 mb-2 ml-8 border border-black btn-primary button-primary lg:py-2 sm:px-4' onClick={handleCollectFromStore}>Collect from Store</button>
                   )} */}
               </div>
             </>
