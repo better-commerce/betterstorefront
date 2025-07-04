@@ -38,6 +38,7 @@ export const EVENTS_MAP = {
     Product: 'Product',
     Search: 'Search',
     user: 'user',
+    used:'used'
   },
   PAGE_CATEGORIES: [
     'Account',
