@@ -35,18 +35,15 @@ import LandingCategory from '@components/category/LandingCategory'
 import CategoryList from '@components/category/CategoryList'
 
 const PAGE_TYPE = PAGE_TYPES.SubCategoryList
+const featToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 declare const window: any
 
 export async function getStaticProps(context: any) {
   const { locale, locales } = context
   const slugName = Object.keys(context.params)[0]
   const childSlugName = Object.keys(context.params)[1]
-  const slug =
-    slugName +
-    '/' +
-    context.params[slugName] +
-    '/' +
-    context.params[childSlugName].join('/')
+  const childSlug = context.params[slugName] + '/' + context.params[childSlugName].join('/')
+  const slug = featToggle?.features?.enableEntityNameInPageSlug ? slugName + '/' + childSlug : childSlug
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
   const cookies = serverSideMicrositeCookies(locale!)

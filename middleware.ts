@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { CURRENT_THEME } from "@components/utils/constants";
+
+const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 interface SlugApiResponse { slugType: EntitySlugTypes }
 
@@ -34,6 +37,12 @@ const REWRITE_HANDLER: Partial<Record<EntitySlugTypes, string>> = {
 // { type: 'store-detail', handler: '/store-locator' },
 
 export async function middleware(request: NextRequest) {
+
+    // Middleware logic should execute ONLY when [enableEntityNameInPageSlug] is FALSE.
+    if (featureToggle?.features?.enableEntityNameInPageSlug) {
+        return NextResponse.next();
+    }
+
     const { pathname } = request.nextUrl;
 
     // Skip processing for static assets and API routes
@@ -71,7 +80,6 @@ export async function middleware(request: NextRequest) {
                 const rewriteHandler = REWRITE_HANDLER[slugType];
                 if (rewriteHandler) {
                     const rewritePath = `${rewriteHandler}${pathname}`
-                    console.log("===========================================rewritePath", rewritePath)
                     return NextResponse.rewrite(new URL(rewritePath, request.url));
                 }
             }
@@ -94,8 +102,6 @@ function matchStaticPaths(pathname: string): boolean {
     }
 
     // any of the prefix-based “static” paths
-    console.log('==========================================pathname:', pathname);
-    console.log('==========================================PARTIAL_STATIC_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix):', PARTIAL_STATIC_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix)));
     return PARTIAL_STATIC_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix));
 }
 

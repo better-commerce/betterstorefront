@@ -45,6 +45,7 @@ const LandingCategory = dynamic(() => import('@components/category/LandingCatego
 const CategoryList = dynamic(() => import('@components/category/CategoryList'), { ssr: false })
 const RichLandingCategory = dynamic(() => import('@components/category/RichLandingCategory'), { ssr: false })
 const RichLandingCategoryV2 = dynamic(() => import('@components/category/RichLandingCategoryV2'), { ssr: false })
+const featToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
@@ -52,7 +53,7 @@ declare const window: any
 export async function getStaticProps(context: any) {
   const { locale, locales } = context
   const slugName = Object.keys(context.params)[0]
-  const slug = slugName + '/' + context.params[slugName]
+  const slug = featToggle?.features?.enableEntityNameInPageSlug ? slugName + '/' + context.params[slugName] : context.params[slugName]
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
   const cookies = serverSideMicrositeCookies(locale!)
