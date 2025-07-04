@@ -10,6 +10,8 @@ import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import useSwr from 'swr'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import { promises as fs } from "fs"
+import path from "path"
 
 // Framework and utility imports
 import commerce from '@lib/api/commerce'
@@ -18,7 +20,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { getDataByUID, parseDataValue, setData } from '@framework/utils/redis-util'
 import { Redis } from '@framework/utils/redis-constants'
-import { getSecondsInMinutes, stringToNumber } from '@framework/utils/parse-util'
+import { getSecondsInMinutes, stringToNumber, tryParseJson } from '@framework/utils/parse-util'
 import { getCategoryBySlug } from '@framework/category'
 import getAllCategoriesStaticPath from '@framework/category/get-all-categories-static-path'
 import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
@@ -45,15 +47,26 @@ const LandingCategory = dynamic(() => import('@components/category/LandingCatego
 const CategoryList = dynamic(() => import('@components/category/CategoryList'), { ssr: false })
 const RichLandingCategory = dynamic(() => import('@components/category/RichLandingCategory'), { ssr: false })
 const RichLandingCategoryV2 = dynamic(() => import('@components/category/RichLandingCategoryV2'), { ssr: false })
-const featToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 
 const PAGE_TYPE = PAGE_TYPES.CategoryList
 declare const window: any
 
+export async function getFeatureToggle() {
+  const filePath = path.join( process.cwd(), "public", "theme", CURRENT_THEME!, "features.config.json" )
+  let featureToggle: any = {}
+  try {
+    const raw = await fs.readFile(filePath, "utf8")
+    featureToggle = tryParseJson(raw)
+  } catch (err) {
+  }
+  return featureToggle
+}
+
 export async function getStaticProps(context: any) {
   const { locale, locales } = context
   const slugName = Object.keys(context.params)[0]
-  const slug = featToggle?.features?.enableEntityNameInPageSlug ? slugName + '/' + context.params[slugName] : context.params[slugName]
+  const featureToggle = await getFeatureToggle()
+  const slug = featureToggle?.features?.enableEntityNameInPageSlug ? slugName + '/' + context.params[slugName] : context.params[slugName]
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
   const cookies = serverSideMicrositeCookies(locale!)

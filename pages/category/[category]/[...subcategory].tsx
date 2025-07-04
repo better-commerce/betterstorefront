@@ -33,9 +33,9 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import RichLandingCategory from '@components/category/RichLandingCategory'
 import LandingCategory from '@components/category/LandingCategory'
 import CategoryList from '@components/category/CategoryList'
+import { getFeatureToggle } from '.'
 
 const PAGE_TYPE = PAGE_TYPES.SubCategoryList
-const featToggle = require(`/public/theme/${CURRENT_THEME}/features.config.json`)
 declare const window: any
 
 export async function getStaticProps(context: any) {
@@ -43,7 +43,8 @@ export async function getStaticProps(context: any) {
   const slugName = Object.keys(context.params)[0]
   const childSlugName = Object.keys(context.params)[1]
   const childSlug = context.params[slugName] + '/' + context.params[childSlugName].join('/')
-  const slug = featToggle?.features?.enableEntityNameInPageSlug ? slugName + '/' + childSlug : childSlug
+  const featureToggle = await getFeatureToggle()
+  const slug = featureToggle?.features?.enableEntityNameInPageSlug ? slugName + '/' + childSlug : childSlug
 
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.COMMON })
   const cookies = serverSideMicrositeCookies(locale!)
