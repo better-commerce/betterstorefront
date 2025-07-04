@@ -41,6 +41,12 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
+    // // Middleware logic should execute ONLY when [enableEntityNameInPageSlug] is FALSE.
+    // const featureToggle: any = await getFeatureToggle();
+    // if (featureToggle?.features?.enableEntityNameInPageSlug) {
+    //     return NextResponse.next();
+    // }
+
     // Address all static paths
     if (matchStaticPaths(pathname)) {
         return NextResponse.next();
