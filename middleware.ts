@@ -1,28 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const REWRITE_HANDLER = [
-    // Categories
-    { type: 'category', handler: '/category' },
+interface SlugApiResponse { slugType: EntitySlugTypes }
 
-    // Subcategories
-    { type: 'subcategory', handler: '/category' },
+export enum EntitySlugTypes {
+    NONE = 0,
+    PRODUCT = 1,
+    MANUFACTURER = 2,
+    SUB_BRAND = 3,
+    CATEGORY = 4,
+    ATTRIBUTE = 5,
+    ATTRIBUTE_SET = 6,
+    LIST_DATASET = 7,//Now this is Collection
+    SITE_VIEW = 8,//Static pages
+    BLOG = 9,
+    PRODUCT_CUSTOM_FIELD_MAPPING = 10,
+    LOOKBOOK = 11, //used for lookbook
+    BLOG_CATEGORY = 12
+}
 
-    // Brands
-    { type: 'brand', handler: '/brands' },
+const REWRITE_HANDLER: Partial<Record<EntitySlugTypes, string>> = {
+    [EntitySlugTypes.CATEGORY]: '/category',
+    [EntitySlugTypes.SUB_BRAND]: '/brands',
+    [EntitySlugTypes.PRODUCT]: '/products',
+    [EntitySlugTypes.BLOG]: '/blog',
+    [EntitySlugTypes.BLOG_CATEGORY]: '/blog',
+};
 
-    // Brands
-    { type: 'product', handler: '/products' },
+// TODO Handlers for other types
+// // CMS Pages
+// { type: 'cms', handler: '/company' },
 
-    // CMS Pages
-    { type: 'cms', handler: '/company' },
-
-    // Blog
-    { type: 'blog-category', handler: '/blog' },
-    { type: 'blog-article', handler: '/blog' },
-
-    // Stores
-    { type: 'store-detail', handler: '/store-locator' },
-]
+// // Stores
+// { type: 'store-detail', handler: '/store-locator' },
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -50,7 +59,7 @@ export async function middleware(request: NextRequest) {
         // Query slug resolver API
         try {
             const apiUrl = new URL('/api/slug-resolver', request.url);
-            apiUrl.searchParams.set('path', pathname?.trim());
+            apiUrl.searchParams.set('slug', pathname?.trim());
 
             const response = await fetch(apiUrl, {
                 headers: { 'Content-Type': 'application/json' },
@@ -58,10 +67,12 @@ export async function middleware(request: NextRequest) {
             });
 
             if (response.ok) {
-                const { rewriteType } = await response.json();
-                const rewriteHandler = REWRITE_HANDLER.find(handler => handler.type === rewriteType);
+                const { slugType } = (await response.json()) as SlugApiResponse;
+                const rewriteHandler = REWRITE_HANDLER[slugType];
                 if (rewriteHandler) {
-                    return NextResponse.rewrite(new URL(`${rewriteHandler.handler}${pathname}`, request.url));
+                    const rewritePath = `${rewriteHandler}${pathname}`
+                    console.log("===========================================rewritePath", rewritePath)
+                    return NextResponse.rewrite(new URL(rewritePath, request.url));
                 }
             }
         } catch (error) {
@@ -83,6 +94,8 @@ function matchStaticPaths(pathname: string): boolean {
     }
 
     // any of the prefix-based “static” paths
+    console.log('==========================================pathname:', pathname);
+    console.log('==========================================PARTIAL_STATIC_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix):', PARTIAL_STATIC_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix)));
     return PARTIAL_STATIC_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix));
 }
 
