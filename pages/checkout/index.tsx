@@ -655,52 +655,31 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
       }
     }
 
+    let enableOmniOms = 'False'
+    if (appConfigData && appConfigData?.configSettings?.length) {
+      const configSettings = appConfigData?.configSettings
+      const domainSettings = configSettings?.find((x: any) => matchStrings(x?.configType, 'DomainSettings', true) )?.configKeys || []
+      enableOmniOms = domainSettings?.find((x: any) => matchStrings(x?.key, 'DomainSettings.EnableOmniOms', true) )?.value || 'False'
+    }
     let deliveryPlans = basket?.deliveryPlans
     if (basket?.shippingMethodId != method?.id) {
       // Update shipping method
-      const { data: updateShippingMethodResult } = await axios.post(
-        NEXT_UPDATE_SHIPPING,
-        {
-          basketId,
-          countryCode:
-            selectedAddress?.shippingAddress?.countryCode ||
-            BETTERCOMMERCE_DEFAULT_COUNTRY,
-          shippingId: method?.id,
-        }
-      )
+      const { data: updateShippingMethodResult } = await axios.post( NEXT_UPDATE_SHIPPING, { basketId, countryCode: selectedAddress?.shippingAddress?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY, shippingId: method?.id, shippingAddress: selectedAddress?.shippingAddress, isOmniOmsEnabled: stringToBoolean(enableOmniOms)} )
       setBasket({ ...basket, ...updateShippingMethodResult })
       deliveryPlans = updateShippingMethodResult?.deliveryPlans
     }
 
-    if (appConfigData && appConfigData?.configSettings?.length) {
-      const configSettings = appConfigData?.configSettings
-      const domainSettings =
-        configSettings?.find((x: any) =>
-          matchStrings(x?.configType, 'DomainSettings', true)
-        )?.configKeys || []
-      const enableOmniOms =
-        domainSettings?.find((x: any) =>
-          matchStrings(x?.key, 'DomainSettings.EnableOmniOms', true)
-        )?.value || 'False'
-
-      // If 'EnableOmniOms' is enabled.
-      if (stringToBoolean(enableOmniOms) && deliveryPlans?.length) {
-        for (let i = 0; i < deliveryPlans.length; i++) {
-          delete deliveryPlans[i].deliveryPlanNo
-        }
-
-        // Insert `poolCode` in `deliveryPlans`
-        const updatedDeliveryPlans = deliveryPlans?.map((plan: any) => ({
-          ...plan,
-          poolCode: plan?.items?.[0]?.poolCode,
-        }))
-
-        // Update delivery method
-        const deliveryResponse = await axios.post(NEXT_UPDATE_DELIVERY_INFO, {
-          id: basketId,
-          data: updatedDeliveryPlans || [],
-        })
+    // If 'EnableOmniOms' is enabled.
+    if (stringToBoolean(enableOmniOms) && deliveryPlans?.length) {
+      for (let i = 0; i < deliveryPlans.length; i++) {
+        delete deliveryPlans[i].deliveryPlanNo
       }
+
+      // Insert `poolCode` in `deliveryPlans`
+      const updatedDeliveryPlans = deliveryPlans?.map((plan: any) => ({ ...plan, poolCode: plan?.items?.[0]?.poolCode, }))
+
+      // Update delivery method
+      const deliveryResponse = await axios.post(NEXT_UPDATE_DELIVERY_INFO, { id: basketId, data: updatedDeliveryPlans || [], })
     }
 
     setSelectedDeliveryMethod(method)
