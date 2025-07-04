@@ -635,7 +635,15 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
           </div>
           <div className={`grid ${view === 'list' ? ' grid-cols-1 gap-4 sm:grid-cols-1' : ' grid-cols-1 gap-4 sm:grid-cols-5'}`}>
             {filteredProducts?.map((product: any, pId: number) => (
-              <UsedProductCard view={view} data={product} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+              <UsedProductCard
+                key={product?.stockCode || pId}
+                view={view}
+                data={product}
+                deviceInfo={deviceInfo}
+                maxBasketItemsCount={maxBasketItemsCount}
+                featureToggle={featureToggle}
+                defaultDisplayMembership={defaultDisplayMembership}
+              />
             ))}
           </div>
         </div>
