@@ -2913,10 +2913,11 @@ body .ttnc-ButtonPrimary.btn-secondary:hover{
     color: #fff !important;
     border: 2px solid var(--btn-border-hover-secondary) !important;
 }
-.ttnc-ButtonPrimary.button-default{
+.ttnc-ButtonPrimary.button-default, .ttnc-ButtonPrimary.button-default:hover{
    background-color: transparent!important;
-    color: var(--btn-text-color-default) !important;
-    border: 2px solid var(--btn-border-default) !important;
+    color: #000  !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
 }
 @media screen and (min-width: 1025px) {
   .plp-btn-section-div{
