@@ -116,7 +116,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
                     </span>
                   </div>
 
-                  <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
+                  <ButtonPrimary className="text-white nc-SectionHero2Item__button btn-secondary dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
                     <span className="dark:text-white">{translate('label.home.exploreMoreBtnText')}</span>
                     <span>
                       <svg className="w-5 h-5 ms-2.5 dark:text-white" viewBox="0 0 24 24" fill="none">
