@@ -127,6 +127,9 @@ const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketMo
                                             </table>
                                         </div>
                                         <div className="flex items-center justify-between gap-2 px-4 pt-3 pb-3 mt-4 border-t border-gray-200">
+                                            <button onClick={() => { handleCloseModal() }} className="nc-Button !py-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 sm:py-3.5 sm:px-6 ttnc-ButtonPrimary button-default button-primary" >
+                                                {translate('common.label.cancelText')}
+                                            </button>
                                             {
                                                 !useExistingBasket && (
                                                     <div>
@@ -134,15 +137,12 @@ const CreateRFQModal = ({ isOpen, closeModal, openMiniBasket, openCreateBasketMo
                                                         <div onClick={() => {
                                                             closeModal();
                                                             openCreateBasketModal();
-                                                        }} className='flex justify-center gap-1 cursor-pointer text-sky-500'>
-                                                            <AddBasketIcon /> {translate('label.b2b.basket.createBasketLinkText')}
+                                                        }} className='flex justify-center gap-1 cursor-pointer btn btn-primary items-center text-sky-500 svg-btn-white'>
+                                                            <AddBasketIcon className="text-white" /> {translate('label.b2b.basket.createBasketLinkText')}
                                                         </div>
                                                     </div>
                                                 )
                                             }
-                                            <button onClick={() => { handleCloseModal() }} className="nc-Button !py-2 relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 sm:py-3.5 sm:px-6 ttnc-ButtonPrimary button-primary" >
-                                                {translate('common.label.cancelText')}
-                                            </button>
                                         </div>
                                     </>
                                     :

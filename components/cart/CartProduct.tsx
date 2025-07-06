@@ -372,7 +372,7 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
               </div>
               {isMobile ? null : (
                 <button type="button"
-                  className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 btn-primary button-primary btn-sm sm:btn-none uppercase font-semibold border-[1px] rounded border-brand-blue group-hover:border-gray-900 group-hover:bg-gray-900 flex items-center justify-center disabled:cursor-not-allowed"
+                  className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 btn-sm sm:btn-none uppercase font-semibold border-[1px] flex items-center justify-center disabled:cursor-not-allowed"
                   disabled={loadingWishlist}
                 >
                   {loadingWishlist ? (
@@ -395,7 +395,7 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
                   setItemClicked(product)
                   openModal()
                 }}
-                className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 btn-primary button-primary sm:btn-none btn-sm uppercase font-semibold border-[1px] rounded border-brand-blue group-hover:border-gray-900 group-hover:bg-gray-900 flex items-center justify-center ipad-btn-primary"
+                className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 sm:btn-none btn-sm uppercase font-semibold border-[1px] rounded border-brand-blueflex flex items-center justify-center ipad-btn-primary"
               >
                 {isMobile ? (
                   <>{translate('common.label.removeText')}</>
