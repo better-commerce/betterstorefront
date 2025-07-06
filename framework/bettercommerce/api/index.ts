@@ -55,7 +55,8 @@ import {
   downloadDataPack,
   downloadInvoice,
   getBlogList,
-  getBlogDetail
+  getBlogDetail,
+  getAllUsed
 } from './operations'
 
 export interface BetterCommerceConfig extends CommerceAPIConfig {}
@@ -122,7 +123,8 @@ const operations = {
   downloadDataPack,
   downloadInvoice,
   getBlogList,
-  getBlogDetail
+  getBlogDetail,
+  getAllUsed
 }
 
 export const provider = { config, operations }

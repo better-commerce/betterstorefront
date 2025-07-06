@@ -15,6 +15,7 @@ export const OMS_SHIPPING_PLANS = '/api/v1/oms/shipment/plans'
 export const OMS_CLICK_AND_COLLECT = '/api/v1/oms/store/clickandcollect'
 export const BLOG_LIST_ENDPOINT = `/api/${process.env.BETTERCMS_API_VERSION}/page/list`
 export const CATEGORY_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/category`
+export const USED_PARENT_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/product/used-parent`
 export const XML_FEED = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/feed`
 export const NAV_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/content/nav`
 export const COLLECTIONS_ENDPOINT = `/api/${process.env.NEXT_PUBLIC_API_VERSION}/catalog/collection`

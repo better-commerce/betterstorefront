@@ -25,8 +25,8 @@ export const PAGE_TYPES = {
   MyAccount: 'my-account',
   MyQuotes: 'my-quotes',
   MyOrders: 'my-orders',
-  MyInvoices:'my-invoice',
-  BuyingList:'buying-list',
+  MyInvoices: 'my-invoice',
+  BuyingList: 'buying-list',
   Login: 'login',
   SocialLogin: 'social-login',
   Register: 'register',
@@ -57,6 +57,7 @@ export const PAGE_TYPES = {
   OrderCancel: 'order-cancel-detail',
   OrderReturns: 'order-returns',
   OrderReturn: 'order-return-detail',
+  Used: 'used'
 }
 export default function withDataLayer(
   Component: any,

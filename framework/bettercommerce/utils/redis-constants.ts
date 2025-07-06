@@ -51,21 +51,35 @@ export module Redis {
       export const PageContentsMob = 'PageContentsMob'
     }
     export module Category {
-      export const Slug = "Slug"
-      export const AllCategory = "AllCategory"
-      export const Categories = "Categories"
-      export const CategoryProduct = "CategoryProduct"
+      export const Slug = 'Slug'
+      export const AllCategory = 'AllCategory'
+      export const Categories = 'Categories'
+      export const CategoryProduct = 'CategoryProduct'
+    }
+    export module Used {
+      export const Slug = 'Slug'
+      export const AllUsed = 'AllUsed'
+      export const Used = 'Used'
+      export const UsedProduct = 'UsedProduct'
     }
     export module Blog {
-      export const blogList = "blogList"
+      export const blogList = 'blogList'
     }
   }
   // Redis server configs
   export module Server {
-    export const REDIS_CACHE_DISABLED: boolean = stringToBoolean(process.env.REDIS_CACHE_DISABLED!)
+    export const REDIS_CACHE_DISABLED: boolean = stringToBoolean(
+      process.env.REDIS_CACHE_DISABLED!
+    )
     export const HOST: string = process.env.REDIS_HOST!
-    export const PORT: number = process.env.REDIS_PORT ? toNumber(process.env.REDIS_PORT) : 0
-    export const PWD: string = process.env.REDIS_PASSWORD ? decrypt(process.env.REDIS_PASSWORD!) : EmptyString
-    export const EXPIRES_IN: number = process.env.REDIS_CACHE_DURATION_SECS ? toNumber(process.env.REDIS_CACHE_DURATION_SECS) : 0
+    export const PORT: number = process.env.REDIS_PORT
+      ? toNumber(process.env.REDIS_PORT)
+      : 0
+    export const PWD: string = process.env.REDIS_PASSWORD
+      ? decrypt(process.env.REDIS_PASSWORD!)
+      : EmptyString
+    export const EXPIRES_IN: number = process.env.REDIS_CACHE_DURATION_SECS
+      ? toNumber(process.env.REDIS_CACHE_DURATION_SECS)
+      : 0
   }
 }

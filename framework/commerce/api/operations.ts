@@ -69,7 +69,8 @@ export const OPERATIONS = [
   'downloadDataPack',
   'downloadInvoice',
   'getBlogList',
-  'getBlogDetail'
+  'getBlogDetail',
+  'getAllUsed'
 ] as const
 
 export const defaultOperations = OPERATIONS.reduce((ops, k) => {
@@ -132,6 +133,7 @@ export type Operations<P extends APIProvider> = {
   downloadInvoice: {}
   getBlogList: {}
   getBlogDetail: {}
+  getAllUsed:{}
   getAllPages: {
     <T extends GetAllPagesOperation>(opts?: {
       config?: P['config']
