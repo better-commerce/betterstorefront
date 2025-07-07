@@ -1,3 +1,4 @@
+import { CURRENT_THEME } from "@components/utils/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 interface SlugApiResponse { slugType: EntitySlugTypes }
@@ -41,12 +42,25 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    // // Middleware logic should execute ONLY when [enableEntityNameInPageSlug] is FALSE.
-    // const featureToggle: any = await getFeatureToggle();
-    // if (featureToggle?.features?.enableEntityNameInPageSlug) {
-    //     return NextResponse.next();
-    // }
+    let enableEntityNameInPageSlug = true // DEFAULT is TRUE for all the themes.
+    try {
+        const featureToggleUrl = new URL(`/theme/${CURRENT_THEME!}/features.config.json`, request.url);
+        const response = await fetch(featureToggleUrl, { headers: { 'Content-Type': 'application/json' }, next: { revalidate: 60 } });
+        if (response.ok) {
+            const featureToggle = await response.json();
+            if (featureToggle?.features?.enableEntityNameInPageSlug !== undefined)
+                enableEntityNameInPageSlug = featureToggle?.features?.enableEntityNameInPageSlug
+            //console.log("==================================enableEntityNameInPageSlug", enableEntityNameInPageSlug);
+        }
+    } catch (error) {
+    }
 
+    // Middleware logic should execute ONLY when [enableEntityNameInPageSlug] is FALSE.
+    if (enableEntityNameInPageSlug) {
+        return NextResponse.next();
+    }
+
+    // =========== [enableEntityNameInPageSlug] configuration is FALSE. Now match the pathname and redirect to the relevant page handler. ===========
     // Address all static paths
     if (matchStaticPaths(pathname)) {
         return NextResponse.next();
