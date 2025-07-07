@@ -43,13 +43,25 @@ function CompanyUsers({ users }: any) {
         </>
       ) : (
         <div className="flex flex-col py-8 gap-y-6">
-          {reorderedUsers?.map((user: any, Idx: any) => (
-            <div key={Idx} className="flex flex-col px-6 py-4 border border-slate-200 rounded-2xl gap-y-3">
-              <div className="flex flex-row gap-x-6">
-                <h2 className="text-2xl font-semibold leading-6 font-Inter text-brand-blue">
-                  {`${user?.firstName} ${user?.lastName}`}
-                </h2>
-              </div>
+          {reorderedUsers?.map((user: any, Idx: any) => {
+            const isCurrentUser = user?.userId === currentUserId;
+            return (
+              <div
+                key={Idx}
+                className={`flex flex-col px-6 py-4 border border-slate-200 rounded-2xl gap-y-3 ${
+                  isCurrentUser ? 'bg-blue-50 border-blue-400' : ''
+                }`}
+              >
+                <div className="flex flex-row gap-x-6 items-center">
+                  <h2 className="text-2xl font-semibold leading-6 font-Inter text-brand-blue">
+                    {`${user?.firstName} ${user?.lastName}`}
+                  </h2>
+                  {isCurrentUser && (
+                    <span className="ml-2 px-2 py-0.5 rounded bg-blue-500 text-white text-xs font-bold">
+                      You
+                    </span>
+                  )}
+                </div>
               <div className="flex flex-row gap-x-6">
                 <span className="font-Inter uppercase font-light leading-4 text-lg tracking-[2%]">
                   {user?.companyUserRole}
@@ -67,7 +79,8 @@ function CompanyUsers({ users }: any) {
                 }
               </div>
             </div>
-          ))}
+          );
+          })}
 
           <div className=" hidden text-white sm:flex add-list-div">
             <button type="submit" onClick={(ev: any) => toggelAddNewUserModal()} className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
