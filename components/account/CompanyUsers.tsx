@@ -45,41 +45,68 @@ function CompanyUsers({ users }: any) {
         <div className="flex flex-col py-8 gap-y-6">
           {reorderedUsers?.map((user: any, Idx: any) => {
             const isCurrentUser = user?.userId === currentUserId;
+            const initials = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`;
             return (
               <div
                 key={Idx}
-                className={`flex flex-col px-6 py-4 border border-slate-200 rounded-2xl gap-y-3 ${
-                  isCurrentUser ? 'bg-blue-50 border-blue-400' : ''
+                className={`relative flex flex-col md:flex-row items-center md:items-stretch gap-4 p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow border ${
+                  isCurrentUser ? 'border-blue-400 ring-2 ring-blue-200' : 'border-slate-200'
                 }`}
               >
-                <div className="flex flex-row gap-x-6 items-center">
-                  <h2 className="text-2xl font-semibold leading-6 font-Inter text-brand-blue">
-                    {`${user?.firstName} ${user?.lastName}`}
-                  </h2>
+                {/* Avatar */}
+                <div className="flex-shrink-0 flex flex-col items-center justify-center">
+                  <div
+                    className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow ${
+                      isCurrentUser ? 'text-white ring-2 ring-blue-300' : 'bg-slate-200 text-slate-700'
+                    }`}
+                    style={isCurrentUser ? { background: 'linear-gradient(to right, #3b82f6, #60a5fa)' } : {}}
+                  >
+                    {initials}
+                  </div>
                   {isCurrentUser && (
-                    <span className="ml-2 px-2 py-0.5 rounded bg-blue-500 text-white text-xs font-bold">
+                    <span
+                      className="mt-2 px-3 py-1 rounded-full text-white text-xs font-bold shadow-md"
+                      style={{ background: 'linear-gradient(to right, #3b82f6, #60a5fa)' }}
+                    >
                       You
                     </span>
                   )}
                 </div>
-              <div className="flex flex-row gap-x-6">
-                <span className="font-Inter uppercase font-light leading-4 text-lg tracking-[2%]">
-                  {user?.companyUserRole}
-                </span>
+                {/* User Info */}
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className="flex flex-col md:flex-row md:items-center gap-2">
+                    <h2 className="text-2xl font-semibold font-Inter text-brand-blue flex items-center gap-2">{`${user?.firstName} ${user?.lastName}`}
+                      {user?.companyUserRole && (
+                        <span
+                          className="ml-0 md:ml-4 px-3 py-1 rounded-full text-xs font-bold shadow-md"
+                          style={{ background: 'linear-gradient(to right, #3b82f6, #60a5fa)', color: '#fff', letterSpacing: '0.05em' }}
+                        >
+                          {user?.companyUserRole}
+                        </span>
+                      )}
+                    </h2>
+                  </div>
+                  <div className="mt-3 border-t border-slate-100 pt-3 grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6">
+                    {user?.username && (
+                      <span className="flex items-center gap-2 text-slate-600">
+                        <span className="inline-block text-lg">👤</span>
+                        <span className="font-medium">{user?.username}</span>
+                      </span>
+                    )}
+                    <span className="flex items-center gap-2 text-slate-600">
+                      <span className="inline-block text-lg">✉️</span>
+                      <span className="font-medium">{user?.email}</span>
+                    </span>
+                    {user?.phoneNo && (
+                      <span className="flex items-center gap-2 text-slate-600">
+                        <span className="inline-block text-lg">📞</span>
+                        <span className="font-medium">{user?.phoneNo}</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-row gap-x-6">
-                {user?.username && <span> {translate('label.companyUsers.usernameText')} {user?.username}</span>}
-                <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                {translate('label.companyUsers.emailText')} {user?.email}
-                </span>
-                {user?.phoneNo &&
-                <span className="font-Inter font-light leading-4 text-sm tracking-[2%]">
-                {translate('label.companyUsers.phoneNoText')} {user?.phoneNo}
-                </span>
-                }
-              </div>
-            </div>
-          );
+            );
           })}
 
           <div className=" hidden text-white sm:flex add-list-div">
