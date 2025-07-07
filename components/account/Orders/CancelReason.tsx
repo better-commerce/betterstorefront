@@ -87,7 +87,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
 
                     <Button
                       type="button"
-                      className={`!inline-block !w-auto !py-3 text-sm font-bold text-center !bg-black text-white  border dark:!bg-black dark:!text-white cursor-pointer ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                      className={`!inline-block !w-auto !py-3 ttnc-ButtonPrimary button-primary text-sm font-bold text-center !bg-black text-white  border dark:!bg-black dark:!text-white cursor-pointer ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={isDisabled}
                       onClick={openModal} 
                     >
@@ -152,14 +152,14 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                           <Button
                             variant='slim'
                             onClick={closeModal}
-                            className='!py-2 !font-bold !text-gray-900 !bg-transparent !border !border-gray-200 button-cancel-bg-transparent'
+                            className='!py-2 !font-bold !text-gray-900 !bg-transparent ttnc-ButtonPrimary button-primary button-default  !border !border-gray-200 button-cancel-bg-transparent'
                           >
                            {translate('common.label.donotCancelText')}
                           </Button>
                           <Button
                             variant='slim'
                             onClick={async () => await onItemCancellation(reason)}
-                            className={cn('!font-bold dark:!text-white dark:!bg-black', {
+                            className={cn('!font-bold dark:!text-white ttnc-ButtonPrimary button-primary dark:!bg-black', {
                               '!py-2': !cancelLoadingState,
                               '!py-3': cancelLoadingState,
                             })}

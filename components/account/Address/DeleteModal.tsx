@@ -52,18 +52,18 @@ export default function DeleteModal({isOpen, setIsOpen, deleteItem = () => {}}:a
                     
                   </Dialog.Title>
                   <div className="flex flex-col md:flex-row gap-2 mt-4">
-                    <button
-                      type="button"
-                      className="btn-default inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={deleteItem}
-                    >
-                      {translate('label.addressBook.deleteAddressBtnText')} </button>
-                    <button
+                      <button
                       type="button"
                       className="btn-default inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
                       {translate('common.label.cancelText')} </button>
+                    <button
+                      type="button"
+                      className="btn-default inline-flex justify-center rounded-md border ttnc-ButtonPrimary button-primary border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={deleteItem}
+                    >
+                      {translate('label.addressBook.deleteAddressBtnText')} </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

@@ -124,7 +124,7 @@ const ExchangeReason = ({ ExchangesReasons, onItemExchange, item, onGetProduct, 
                         <div className='py-4'>
                             <button
                                 type="button"
-                                className={`py-4 px-8 border text-white bg-black block text-center font-bold link-btn cursor-pointer ${!(!isDisabled && reason) ? "opacity-50 cursor-not-allowed" : ""}`}
+                                className={`py-4 px-8 border text-white bg-black ttnc-ButtonPrimary button-primary block text-center font-bold link-btn cursor-pointer ${!(!isDisabled && reason) ? "opacity-50 cursor-not-allowed" : ""}`}
                                 disabled={!(!isDisabled && reason)}
                                 onClick={async () => {
                                     // await onItemExchange(reason)
