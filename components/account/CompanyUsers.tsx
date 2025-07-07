@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
-
+import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import Spinner from '@components/ui/Spinner'
 import { useTranslation } from '@commerce/utils/use-translation'
 import AddNewUserModal from '@components/account/AddCompanyUser'
@@ -49,17 +49,21 @@ function CompanyUsers({ users }: any) {
             return (
               <div
                 key={Idx}
-                className={`relative flex flex-col md:flex-row items-center md:items-stretch gap-4 p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow border ${
-                  isCurrentUser ? 'border-blue-400 ring-2 ring-blue-200' : 'border-slate-200'
+                className={`relative flex flex-col md:flex-row items-center md:items-stretch gap-4 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow border ${
+                  isCurrentUser
+                    ? 'bg-slate-50 border-slate-300 ring-2 ring-slate-200'
+                    : 'bg-white border-slate-200'
                 }`}
+                style={{}}
               >
                 {/* Avatar */}
                 <div className="flex-shrink-0 flex flex-col items-center justify-center">
                   <div
                     className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold shadow ${
-                      isCurrentUser ? 'text-white ring-2 ring-blue-300' : 'bg-slate-200 text-slate-700'
+                      isCurrentUser
+                        ? 'bg-slate-200 text-slate-700 ring-2 ring-slate-300'
+                        : 'bg-slate-100 text-slate-500'
                     }`}
-                    style={isCurrentUser ? { background: 'linear-gradient(to right, #3b82f6, #60a5fa)' } : {}}
                   >
                     {initials}
                   </div>
@@ -78,8 +82,8 @@ function CompanyUsers({ users }: any) {
                     <h2 className="text-2xl font-semibold font-Inter text-brand-blue flex items-center gap-2">{`${user?.firstName} ${user?.lastName}`}
                       {user?.companyUserRole && (
                         <span
-                          className="ml-0 md:ml-4 px-3 py-1 rounded-full text-xs font-bold shadow-md"
-                          style={{ background: 'linear-gradient(to right, #3b82f6, #60a5fa)', color: '#fff', letterSpacing: '0.05em' }}
+                          className="ml-0 md:ml-4 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider shadow border border-slate-200 bg-slate-100 text-slate-700 flex items-center"
+                          style={{ letterSpacing: '0.13em' }}
                         >
                           {user?.companyUserRole}
                         </span>
@@ -94,12 +98,12 @@ function CompanyUsers({ users }: any) {
                       </span>
                     )}
                     <span className="flex items-center gap-2 text-slate-600">
-                      <span className="inline-block text-lg">✉️</span>
+                      <span className="inline-block text-lg"><EnvelopeIcon className="w-5 h-5"/></span>
                       <span className="font-medium">{user?.email}</span>
                     </span>
                     {user?.phoneNo && (
                       <span className="flex items-center gap-2 text-slate-600">
-                        <span className="inline-block text-lg">📞</span>
+                        <span className="inline-block text-lg"><PhoneIcon className="w-5 h-5"/></span>
                         <span className="font-medium">{user?.phoneNo}</span>
                       </span>
                     )}
