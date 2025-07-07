@@ -420,7 +420,7 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
               <div className="flex justify-between mt-4 space-x-4">
                 <button
                   type="button"
-                  className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
+                  className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary button-primary button-default disabled:bg-opacity-90 bg-transparent dark:bg-slate-900 hover:transparent !text-black border border-gray-800 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0"
                   onClick={() => router.back()}
                 >
                   {translate('label.myAccount.rfq.backToList')}
@@ -451,13 +451,13 @@ export const SaveRFQForm = ({ handleFormSubmit, cartItems, basketId }: any) => {
                   <input type="text" value={newTargetPrice} onChange={(e) => setNewTargetPrice(e.target.value)} className="w-full p-3 border border-gray-300 rounded-md shadow-sm text-[12px] focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div className="flex justify-end mt-6 space-x-4">
-                  <button type="button" className="btn btn-default !px-4 !py-2 !rounded-full !capitalize" onClick={handleSetSameAsPrice} >
-                    {translate('label.myAccount.rfq.setToListedPrice')}
-                  </button>
-                  <button type="button" className="btn btn-default !px-4 !py-2 !rounded-full !capitalize" onClick={closeModal} >
+                  <button type="button" className="btn btn-default !px-4 !py-2 ttnc-ButtonPrimary button-primary button-default !rounded-full !capitalize" onClick={closeModal} >
                     {translate('label.myAccount.rfq.cancel')}
                   </button>
-                  <button type="button" className="btn btn-primary !px-4 !py-2 !rounded-full !capitalize" onClick={handleSaveTargetPrice} >
+                  <button type="button" className="btn btn-default  !px-4 !py-2 ttnc-ButtonPrimary button-primary button-default !rounded-full !capitalize" onClick={handleSetSameAsPrice} >
+                    {translate('label.myAccount.rfq.setToListedPrice')}
+                  </button>
+                  <button type="button" className="btn btn-primary !px-4 ttnc-ButtonPrimary button-primary !py-2 !rounded-full !capitalize" onClick={handleSaveTargetPrice} >
                     {translate('label.myAccount.rfq.save')}
                   </button>
                 </div>

@@ -2930,6 +2930,9 @@ body .ttnc-ButtonPrimary.btn-secondary:hover{
 .svg-btn-white svg{
   filter: invert(1) !important;
 }
+.footer-logo .logo-container{
+justify-content: flex-start;
+}
 @media screen and (min-width: 1025px) {
   .plp-btn-section-div{
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;

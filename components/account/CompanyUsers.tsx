@@ -26,6 +26,15 @@ function CompanyUsers({ users }: any) {
     setIsAddNewUserModalOpen(!isAddNewUserModalOpen)
   }
 
+  // Reorder users so current user is at the top, without duplication
+  const currentUserId = user?.userId;
+  const reorderedUsers = React.useMemo(() => {
+    if (!users || !currentUserId) return users;
+    const currentUser = users?.find((u: any) => u?.userId === currentUserId);
+    const otherUsers = users?.filter((u: any) => u?.userId !== currentUserId);
+    return currentUser ? [currentUser, ...otherUsers] : users;
+  }, [users, currentUserId]);
+
   return (
     <section className="w-full">
       {!users ? (
@@ -34,7 +43,7 @@ function CompanyUsers({ users }: any) {
         </>
       ) : (
         <div className="flex flex-col py-8 gap-y-6">
-          {users?.map((user: any, Idx: any) => (
+          {reorderedUsers?.map((user: any, Idx: any) => (
             <div key={Idx} className="flex flex-col px-6 py-4 border border-slate-200 rounded-2xl gap-y-3">
               <div className="flex flex-row gap-x-6">
                 <h2 className="text-2xl font-semibold leading-6 font-Inter text-brand-blue">
