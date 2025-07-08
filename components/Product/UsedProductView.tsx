@@ -43,6 +43,7 @@ import CompareSelectionBar from './ProductCompare/compareSelectionBar'
 import { Switch } from '@headlessui/react'
 import { ListBulletIcon } from '@heroicons/react/20/solid'
 import UsedProductCard from '@components/UsedProductCard'
+import { isMobile } from 'react-device-detect'
 
 // Dynamically imported components
 const BreadCrumbs = dynamic(() => import('@components/ui/BreadCrumbs'))
@@ -596,7 +597,7 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
           <div className='flex justify-between w-full gap-4 mb-3 sm:mb-4'>
             <span className='text-sm font-semibold text-black'>Showing {filteredProducts?.length} of {usedProducts?.Used?.length}</span>
             <div className='flex items-center justify-end gap-4'>
-              <div className="flex gap-2">
+              {!isMobile && <div className="flex gap-2">
                 <button
                   onClick={() => setView('grid')}
                   className={`p-0 rounded  ${view === 'grid'
@@ -629,7 +630,7 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
                 >
                   <ListBulletIcon className="w-5 h-5" />
                 </button>
-              </div>
+              </div>}
               {featureToggle?.features?.enableCompare &&
                 <div>
                   <div className="flex items-center justify-end w-full px-0 pt-0 mx-auto sm:pt-1 sm:px-4">
@@ -697,7 +698,7 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
           </ol>
         </div>
         <div className='grid grid-cols-12 gap-4 mb-4'>
-          <div className='grid items-start grid-cols-12 col-span-8 gap-4'>
+          <div className='grid items-start grid-cols-12 col-span-12 gap-4 sm:col-span-8'>
             <div className='col-span-3'>
               <img src={product?.image} className='object-contain w-[90%] h-auto' alt={product?.name} />
             </div>
@@ -709,7 +710,7 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
               <div dangerouslySetInnerHTML={{ __html: product.shortDescription, }} className="hidden my-2 text-sm font-medium text-gray-900 sm:block product-detail-description" />
             </div>
           </div>
-          <div className='flex flex-col col-span-4 gap-2'>
+          <div className='flex flex-col col-span-12 gap-2 sm:col-span-4'>
             {conditions?.map((item, idx) => {
               const isAvailable = item.available > 0;
               const isActive = conditionFilter === item.label;
@@ -778,7 +779,7 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
           </div>
         </div>
         <div className="flex flex-col w-full mb-4">
-          <div className='flex items-center justify-start gap-2 mb-2'>
+          <div className='flex flex-col items-start justify-start gap-2 mb-2 sm:items-center sm:flex-row'>
             <label htmlFor="price-filter" className="block text-sm font-semibold">Filters: </label>
             {priceFilter && (
               <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded-md">

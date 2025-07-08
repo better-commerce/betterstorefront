@@ -281,7 +281,7 @@ const accessories = data?.attributes?.find(((item: any) => item?.key == "used.ac
   return (
     <>
       <div key={key} className={cn(`${featureToggle?.features?.enableForPCSite ? 'border border-[#D9D9D9] p-2 rounded relative z-9' : 'border-prod-card'} nc-ProductCard product-card  hover-nc-product-card relative ${view === 'list' ? 'grid grid-cols-12 gap-6' : 'flex flex-col'} sm:group bg-transparent mb-2 ${product?.compared ? featureToggle?.features?.enableForPCSite ? '!border-2 !border-[#2D4D9C]' : '!border !border-orange-600' : ''} ${className}`, { 'height-full': isComparedEnabled, 'height-full border-amber-400 rounded-t-3xl rounded-b-2xl border-2': product?.compared, })}>
-        <div className={`${featureToggle?.features?.enableForPCSite ? '' : 'bg-slate-50 dark:bg-slate-300 rounded-3xl'} ${view === 'list' && 'min-w-[250px] col-span-2'} relative flex-shrink-0 overflow-hidden z-1 group rounded-green product-card__image-container`}>
+        <div className={`${featureToggle?.features?.enableForPCSite ? '' : 'bg-slate-50 dark:bg-slate-300 rounded-3xl'} ${view === 'list' && 'min-w-[100px] sm:min-w-[250px] col-span-2'} relative flex-shrink-0 overflow-hidden z-1 group rounded-green product-card__image-container`}>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data.name} onClick={handleSetCompareProduct}>
             <div className="relative flex w-full h-0 aspect-w-11 aspect-h-12 product-card__image">
               <img src={generateUri(data?.image, 'h=400&fm=webp') || IMG_PLACEHOLDER} className={`${featureToggle?.features?.enableForPCSite ? view === 'list' ? 'object-cover rounded-md object-top w-full h-full' : 'object-contain rounded-md object-top w-full h-full' : 'object-cover object-top w-full h-full drop-shadow-xl'}`} alt={data?.name} />
@@ -302,7 +302,7 @@ const accessories = data?.attributes?.find(((item: any) => item?.key == "used.ac
           {!isComparedEnabled && renderGroupButtons()}
         </div>
 
-        <div className={`${view === "list" ? 'flex flex-col col-span-4 pl-6' : ''}`}>
+        <div className={`${view === "list" ? 'flex flex-col sm:col-span-4 col-span-10 pl-6' : ''}`}>
           <ButtonLink isComparedEnabled={isComparedEnabled} href={sanitizeRelativeUrl(`/${data?.slug || data?.link}`)} itemPrice={itemPrice} productName={data?.name} onClick={handleSetCompareProduct}>
             <div className={`${featureToggle?.features?.enableForPCSite ? view === 'list' ? 'px-0 pt-0' : 'px-0 pt-3 ' : 'px-2.5 pt-5 pb-2.5 '} product-card__information`}>
               <div className={`${view === 'list' ? 'mt-0' : 'mt-4'}`}>
@@ -387,7 +387,7 @@ const accessories = data?.attributes?.find(((item: any) => item?.key == "used.ac
           )}
         </div>
         {view === 'list' &&
-          <div className='grid flex-col grid-cols-12 col-span-6 pl-6 space-x-6'>
+          <div className='grid flex-col grid-cols-12 col-span-12 pl-6 space-x-6 sm:col-span-6'>
             <div className='col-span-6'>
               <div dangerouslySetInnerHTML={{ __html: product?.shortDescription, }} className="hidden my-2 text-sm font-medium text-gray-900 sm:block product-detail-description" />
             </div>
