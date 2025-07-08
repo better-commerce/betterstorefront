@@ -1,17 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
-import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import Spinner from '@components/ui/Spinner'
 import { useTranslation } from '@commerce/utils/use-translation'
 import AddNewUserModal from '@components/account/AddCompanyUser'
 import { NEXT_B2B_GET_COMPANY_DETAILS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
 
+const USERS_PER_PAGE = 10
+
 function CompanyUsers({ users }: any) {
   const translate = useTranslation()
   const [isAddNewUserModalOpen, setIsAddNewUserModalOpen] = useState(false)
   const [companyDetails, setCompanyDetails] = useState<any>(null)
   const { user } = useUI()
+  const [currentPage, setCurrentPage] = useState(1)
 
   const getCompanyDetails = useCallback(async () => {
     const response: any = await axios.post(NEXT_B2B_GET_COMPANY_DETAILS, { userId: user?.userId })
@@ -26,87 +28,164 @@ function CompanyUsers({ users }: any) {
     setIsAddNewUserModalOpen(!isAddNewUserModalOpen)
   }
 
-  // Reorder users so current user is at the top, without duplication
-  const currentUserId = user?.userId;
-  const reorderedUsers = React.useMemo(() => {
-    if (!users || !currentUserId) return users;
-    const currentUser = users?.find((u: any) => u?.userId === currentUserId);
-    const otherUsers = users?.filter((u: any) => u?.userId !== currentUserId);
-    return currentUser ? [currentUser, ...otherUsers] : users;
-  }, [users, currentUserId]);
+  const currentUserId = user?.userId
 
+  // Reorder current user first
+  const reorderedUsers = useMemo(() => {
+    if (!users || !currentUserId) return users
+    const currentUser = users.find((u: any) => u?.userId === currentUserId)
+    const others = users.filter((u: any) => u?.userId !== currentUserId)
+    return currentUser ? [currentUser, ...others] : users
+  }, [users, currentUserId])
+
+  // Pagination slice
+  const paginatedUsers = useMemo(() => {
+    const start = (currentPage - 1) * USERS_PER_PAGE
+    return reorderedUsers?.slice(start, start + USERS_PER_PAGE) || []
+  }, [reorderedUsers, currentPage])
+
+  const totalPages = Math.ceil(reorderedUsers?.length / USERS_PER_PAGE)
+
+  // Page number array
+  const pageNumbers = useMemo(() => {
+    return Array.from({ length: totalPages }, (_, i) => i + 1)
+  }, [totalPages])
+  const PERMISSIONS_MAP: Record<string, { label: string; bg: string; text: string }> = {
+    approveOrder: { label: 'Can Approve Order', bg: 'bg-blue-100', text: 'text-blue-700' },
+    placeOrder: { label: 'Can Order', bg: 'bg-emerald-100', text: 'text-emerald-700' },
+    viewCredit: { label: 'View Credit Limit', bg: 'bg-yellow-100', text: 'text-yellow-700' },
+    viewInvoice: { label: 'View Invoice', bg: 'bg-purple-100', text: 'text-purple-700' },
+  }
   return (
     <section className="w-full">
       {!users ? (
-        <>
-          <Spinner />
-        </>
+        <Spinner />
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-2 mt-4 sm:gap-4 sm:grid-cols-3">
-            {reorderedUsers?.map((user: any, Idx: any) => {
-              const isCurrentUser = user?.userId === currentUserId;
-              const initials = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`;
-              return (
-                <div
-                  key={Idx}
-                  className={`relative flex flex-col md:flex-row items-center md:items-stretch gap-4 px-3 py-4 rounded-2xl shadow transition-shadow border ${isCurrentUser
-                    ? 'bg-blue-50 border-2 border-sky-500'
-                    : 'bg-white border-slate-200 hover:shadow-lg'
-                    }`}
-                  style={{}}
-                >
-
-                  {/* User Info */}
-                  <div className="flex flex-col justify-center flex-1">
-                    <div className="flex flex-col gap-1">
-                      <h2 className="flex items-center gap-2 font-semibold text-md font-Inter text-brand-blue">
-                        <span className={`flex items-center justify-center w-8 h-8 text-sm rounded-full ${user?.companyUserRole === 'Admin' ? 'bg-sky-200 text-sky-600' : user?.companyUserRole === 'SalesUser' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-black'}`}>{initials}</span>
-                        {`${user?.firstName} ${user?.lastName}`}</h2>
-                      {user?.companyUserRole && (
-                        <span className={`ml-0 px-2 py-1 rounded-full text-xs font-medium tracking-wider flex items-center ${user?.companyUserRole === 'Admin' ? 'bg-sky-200 text-sky-600' : user?.companyUserRole === 'SalesUser' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-black'}`}>
-                          {user?.companyUserRole == 'SalesUser' ? 'Sales User' : user?.companyUserRole}
-                        </span>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-1 pt-3 mt-3 border-t border-slate-100 md:grid-cols-1 gap-y-2 gap-x-6">
-                      <span className="flex items-center gap-2 text-slate-600">
-                        <span className="inline-block text-xs font-semibold">Email:</span>
-                        <span className="text-xs font-medium">{user?.email}</span>
-                      </span>
-                      {user?.phoneNo && (
-                        <span className="flex items-center gap-2 text-slate-600">
-                          <span className="inline-block text-xs font-semibold">Phone:</span>
-                          <span className="text-xs font-medium">{user?.phoneNo}</span>
-                        </span>
-                      )}
-                      {/* <span className="flex items-center gap-2 text-emerald-500">
-                        <span className="inline-block text-xs font-semibold">Credit Limit:</span>
-                        <span className="text-xs font-medium">{user?.phoneNo}</span>
-                      </span>
-                      <span className="flex items-center gap-2 text-slate-600">
-                        <span className="inline-block text-xs font-semibold">Order Placed:</span>
-                        <span className="text-xs font-medium">3</span>
-                      </span> */}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="flex justify-end text-white sm:flex add-list-div">
-            <button type="submit" onClick={(ev: any) => toggelAddNewUserModal()} className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-2 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
+          <div className="flex items-center justify-between mt-3">
+            <h3 className='text-xl font-semibold text-black'>Users</h3>
+            <button
+              onClick={toggelAddNewUserModal}
+              className="inline-flex items-center px-6 py-2 text-sm font-medium text-white rounded-full shadow-lg nc-Button bg-slate-900 hover:bg-slate-800"
+            >
               {translate('label.myAccount.addNewUserText')}
-              <span className="inline-block ml-2 leading-none align-middle">
-                <i className="sprite-icon icon-location-orange"></i>
-              </span>
             </button>
           </div>
+          <div className="mt-3 overflow-x-auto border rounded-lg border-slate-200">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="py-3 pl-3 pr-3 text-[13px] font-semibold text-left text-gray-900 sm:pl-4">User</th>
+                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Phone</th>
+                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Manager</th>
+                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Team</th>
+                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Location</th>
+                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Spend Limit</th>
+                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Permissions</th>
+                </tr>
+              </thead>
+              <tbody className='bg-white divide-y divide-gray-200'>
+                {paginatedUsers.map((user: any, idx: number) => {
+                  const isCurrentUser = user?.userId === currentUserId
+                  return (
+                    <tr key={idx} className={`border-t border-b shadow-none group border-slate-200 hover:shadow ${isCurrentUser ? 'bg-sky-100 font-semibold hover:bg-blue-100' : 'bg-white hover:bg-gray-100'}`} >
+                      <td className={`flex flex-col px-3 py-3 text-sm whitespace-nowrap  ${isCurrentUser ? 'text-sky-500' : 'text-black'}`}>
+                        <span className='font-semibold'>{`${user?.firstName} ${user?.lastName}`}</span>
+                        <span className='text-xs text-gray-600'>{user?.email}</span>
+                      </td>
+                      <td className="px-3 py-3 text-xs">{user?.phoneNo || '-'}</td>
+                      <td className="px-3 py-3 text-xs">{user?.reportingManager?.email || '-'}</td>
+                      <td className="px-3 py-3 text-xs">{user?.team || '-'}</td>
+                      <td className="px-3 py-3 text-xs">{user?.location || '-'}</td>
+                      <td className="px-3 py-3 text-xs text-emerald-600">{user?.spendLimit?.formatted?.withTax || 'Unlimited'}</td>
+                      <td className="px-3 py-3 text-xs">
+                        <div className="flex flex-wrap gap-1">
+                          {user?.canApproveOrder && (
+                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[11px] font-medium">
+                              Can Approve Order
+                            </span>
+                          )}
+                          {user?.canPlaceOrder && (
+                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-[11px] font-medium">
+                              Can Order
+                            </span>
+                          )}
+                          {user?.canSeeCreditLimit && (
+                            <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-[11px] font-medium">
+                              View Credit Limit
+                            </span>
+                          )}
+                          {user?.canSeeInvoices && (
+                            <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-[11px] font-medium">
+                              View Invoice
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex flex-wrap items-center justify-between gap-4 mt-4 text-sm text-slate-600">
+              {/* Page info */}
+              <div>
+                Showing {Math.min((currentPage - 1) * USERS_PER_PAGE + 1, reorderedUsers.length)}–
+                {Math.min(currentPage * USERS_PER_PAGE, reorderedUsers.length)} of {reorderedUsers.length}
+              </div>
+
+              {/* Pagination buttons */}
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 rounded bg-slate-100 hover:bg-slate-200 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                {pageNumbers.map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded ${page === currentPage ? 'bg-slate-800 text-white' : 'bg-slate-100 hover:bg-slate-200'
+                      }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 rounded bg-slate-100 hover:bg-slate-200 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Add New User Button */}
+
         </>
       )}
-      {isAddNewUserModalOpen &&
-        <AddNewUserModal isOpen={isAddNewUserModalOpen} closeModal={toggelAddNewUserModal} companyDetails={companyDetails} btnTitle={translate('label.myAccount.addNewUserText')} />
-      }
+
+      {/* Modal */}
+      {isAddNewUserModalOpen && (
+        <AddNewUserModal
+          isOpen={isAddNewUserModalOpen}
+          closeModal={toggelAddNewUserModal}
+          companyDetails={companyDetails}
+          btnTitle={translate('label.myAccount.addNewUserText')}
+        />
+      )}
     </section>
   )
 }

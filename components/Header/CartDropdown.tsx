@@ -231,7 +231,7 @@ export default function CartDropdown({ featureToggle, deviceInfo }: any) {
             <>
               {b2bUser ? (
                 <>
-                  <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-slate-100'}rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
+                  <Popover.Button className={`${featureToggle?.features?.enablePCTopHeader ? 'hover:underline' : 'w-8 h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-slate-100'} rounded-full group text-slate-700 dark:text-slate-700 focus:outline-none flex items-center justify-center`}>
                     {featureToggle?.features?.enablePCTopHeader ?
                       <span className="flex items-center text-xs font-light text-white hover:underline">{!isMobile && 'Basket'} <ShoppingCartIcon className={`${isMobile ? 'w-7 h-7' : 'w-4 h-4'}`} /></span> :
                       <img alt="" src="/images/cartIcon.svg" className="w-6 h-6" />
