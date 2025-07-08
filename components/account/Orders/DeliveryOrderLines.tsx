@@ -79,7 +79,7 @@ const DeliveryOrderLines = ({ order, item, idx, trackPackage, groups }: any) => 
             </div>
             {item?.trackingLink && (order?.allowedToTrack &&
                <div className='w-full mt-2 acc-btn-sec'>
-                  <a onClick={() => trackPackage(order)} href={item?.trackingLink} target="_blank" rel="noopener noreferrer" className='inline-block px-8 py-1 text-sm font-semibold text-center rounded-2xl btn btn-primary'>Track Package {idx + 1}</a>
+                  <a onClick={() => trackPackage(order)} href={item?.trackingLink} target="_blank" rel="noopener noreferrer" className='inline-block px-8 py-1 text-sm font-semibold text-center text-white bg-black border rounded-2xl link-btn'>Track Package {idx + 1}</a>
                </div>
             )}
          </div>

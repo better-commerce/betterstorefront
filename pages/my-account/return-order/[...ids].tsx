@@ -292,14 +292,14 @@ function ReturnOrder({
                                 onReturnReason()
                                 hideReturnReasons()
                               }}
-                              className="w-full text-14 btn btn-primary"
+                              className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
                               {translate('label.myAccount.proceedToReturnText')}
                             </button>
                           ) : (
                             <button
                               type="button"
-                              className="w-full text-14 btn btn-primary"
+                              className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
                               {translate('label.myAccount.proceedToReturnText')}
                             </button>

@@ -248,14 +248,14 @@ function OrderCancel({ orderId = Guid.empty, itemId = Guid.empty, deviceInfo }: 
                                 onCancelReason()
                                 hideCancellationReasons()
                               }}
-                              className="w-full text-14 btn btn-primary"
+                              className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
                               {translate('common.message.proceedToCancelText')}
                             </button>
                           ) : (
                             <button
                               type="button"
-                              className="w-full text-14 btn btn-primary"
+                              className="block w-full px-12 py-3 font-semibold text-center text-white bg-black border hover:bg-gray-800 text-14 link-btn"
                             >
                               {translate('common.message.proceedToCancelText')}
                             </button>
