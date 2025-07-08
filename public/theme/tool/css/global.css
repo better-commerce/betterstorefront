@@ -1415,9 +1415,7 @@ p {
   border-radius: 0px;
 }
 
-.border-footer-btn {
-  border: 1px solid #fff;
-}
+
 
 @media screen and (max-width:1620px) {
   .btn {
@@ -2878,3 +2876,75 @@ body .round-md-btn, .btn-radius-sm{
    color:#000 !important
  }
  }
+ .btn{
+    border-radius: 6px !important;
+    text-transform: uppercase !important;
+ }
+ .button-primary svg, .button-secondary svg, .button-default svg {
+    margin-right: 4px !important;
+    text-transform: uppercase !important;
+ }
+.button-primary, .add-green-btn button.ttnc-ButtonPrimary.button-primary, body .ttnc-ButtonPrimary {
+    border-radius: 6px !important;
+    text-transform: uppercase !important;
+}
+
+.button-secondary {
+    border-radius: 6px !important;
+        text-transform: uppercase !important;
+}
+
+.button-default, .add-green-btn button.ttnc-ButtonPrimary.button-primary.button-default, body .ttnc-ButtonPrimary.button-default {
+    border-radius: 6px !important;
+}
+.add-green-btn button.ttnc-ButtonPrimary , body .ttnc-ButtonPrimary, .plp-btn-section-div .cart-btn-plp{
+    background: var(--btn-bg-blue) !important;
+     color: var( --btn-text-color-blue) !important;
+    border: 2px solid var(--btn-border-blue) !important;
+        text-transform: uppercase !important;
+}
+.add-green-btn button.ttnc-ButtonPrimary:hover , body .ttnc-ButtonPrimary:hover, .plp-btn-section-div .cart-btn-plp:hover {
+    background: var(--btn-bg-hover-blue) !important;
+    color: var(--btn-hover-text-color-blue) !important;
+    border: 2px solid var(--btn-border-hover-blue) !important;
+        text-transform: uppercase !important;
+}
+body .ttnc-ButtonPrimary.btn-secondary{
+    background: var(--btn-bg-secondary) !important;
+    color: #fff !important;
+    border: 2px solid var(--btn-border-secondary) !important;
+        text-transform: uppercase !important;
+}
+body .ttnc-ButtonPrimary.btn-secondary:hover{
+    background: var(--btn-bg-hover-secondary) !important;
+    color: #fff !important;
+    border: 2px solid var(--btn-border-hover-secondary) !important;
+}
+.ttnc-ButtonPrimary.button-default, .ttnc-ButtonPrimary.button-default:hover , .ttnc-ButtonPrimary.button-default, .ttnc-ButtonPrimary.button-default:hover {
+   background-color: transparent!important;
+    color: #000  !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+        text-transform: uppercase !important;
+}
+.svg-btn-white svg{
+  filter: invert(1) !important;
+}
+.footer-logo .logo-container{
+justify-content: flex-start;
+}
+.d--none-amm{
+  display: none !important;
+}
+@media screen and (min-width: 1025px) {
+  .plp-btn-section-div{
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+  }
+  .plp-btn-section-div .button-secondary{
+    margin-left:0  !important
+  }
+  .plp-btn-section-div button{
+    min-height: 32px  !important;
+  }
+}

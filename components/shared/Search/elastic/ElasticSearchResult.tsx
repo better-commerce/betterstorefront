@@ -109,7 +109,6 @@ const CustomResultView = (
   const { isMobile } = deviceInfo
   const [quantity, setQuantity] = useState(1)
   const [quickViewData, setQuickViewData] = useState(null)
-  const EtaDate = new Date()
   EtaDate.setDate(EtaDate.getDate() + 3)
   const handleQuickViewData = (data: any) => {
     setQuickViewData(data)
@@ -238,7 +237,7 @@ const CustomResultView = (
                 >
                   <SimpleButton
                     variant="slim"
-                    className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14 uppercase"
+                    className="!p-1 flex-1 !bg-transparent btn-c btn-secondary button-secondary font-14 uppercase"
                     onClick={() => handleQuickViewData(result)}
                   >
                     <span className="uppercase">{translate('label.product.quickViewText')}</span>

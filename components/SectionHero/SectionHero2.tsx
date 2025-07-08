@@ -104,7 +104,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
             <div>
               <div className="w-full mob-hero inner-container">
                 <div className={`relative z-[99] w-full max-w-3xl space-y-4 sm:space-y-14 nc-SectionHero2Item__left mobile-left-center-info`} >
-                  <div className="space-y-5 sm:space-y-6 text-info-inner">
+                  <div className="space-y-5 sm:space-y-6 text-info-inner w-full sm:w-[70%]">
                     <span className="block text-base font-medium nc-SectionHero2Item__subheading md:text-xl text-slate-700 text-dark-white">
                       {item?.subTitle}
                     </span>
@@ -116,7 +116,7 @@ const SectionHero2: FC<SectionHero2Props> = ({ className = "", data }) => {
                     </span>
                   </div>
 
-                  <ButtonPrimary className="text-white nc-SectionHero2Item__button dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
+                  <ButtonPrimary className="text-white nc-SectionHero2Item__button btn-secondary dark:bg-slate-900" sizeClass="py-3 px-6 sm:py-5 sm:px-9" href={sanitizeRelativeUrl(item?.link)}>
                     <span className="dark:text-white">{translate('label.home.exploreMoreBtnText')}</span>
                     <span>
                       <svg className="w-5 h-5 ms-2.5 dark:text-white" viewBox="0 0 24 24" fill="none">

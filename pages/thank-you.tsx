@@ -466,7 +466,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
           </div>
           <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
             <Link href={`/`} passHref>
-              <span className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-55 btn-c btn"> {translate('common.label.backToHomeText')} </span>
+              <span className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary button-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-55 btn-c btn"> {translate('common.label.backToHomeText')} </span>
             </Link>
           </div>
         </main>
@@ -640,7 +640,7 @@ export default function OrderConfirmation({ config, featureToggle, customerStatu
             ) : null}
             <div className="max-w-3xl p-4 mx-auto bg-white rounded-md">
               <Link href={`/`} passHref>
-                <span className="px-1 py-3 border border-black btn-full-width park-bg-secondary btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn lg:py-2 sm:px-4"> {translate('common.label.backToHomeText')} </span>
+                <span className="px-1 py-3 border border-black btn-full-width park-bg-secondary btn-primary button-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn lg:py-2 sm:px-4"> {translate('common.label.backToHomeText')} </span>
               </Link>
             </div>
           </div>

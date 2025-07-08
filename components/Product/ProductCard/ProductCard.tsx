@@ -451,7 +451,7 @@ const ProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({ product
             {isComparedEnabled && product?.compared && (
               <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
                 {product?.compared && (
-                  <button className="w-full font-semibold uppercase border border-transparent btn-primary-white font-14">
+                  <button className="w-full font-semibold uppercase border border-transparent btn-primary-white font-14 button-primary">
                     Remove
                   </button>
                 )}

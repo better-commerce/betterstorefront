@@ -109,7 +109,7 @@ export default function AddBankDetailsModal({ open, handleClose, walletId, walle
                           ))}
                           <div className="mt-6 flex gap-4 justify-end">
                             <button type="button" onClick={handleClose} className="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" > Cancel </button>
-                            <button type="submit" className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white ttnc-ButtonPrimary border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" > Save </button>
+                            <button type="submit" className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white ttnc-ButtonPrimary button-primary button-oprimary border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" > Save </button>
                           </div>
                         </Form>
                       )

@@ -18,7 +18,7 @@ const BrandList: React.FC<IBrandListProps> = ({ data = [], info }: IBrandListPro
             </h2>
             <Link href={brandInfo?.brandheading_buttonlink || '/'} passHref legacyBehavior>
               <div className="block">
-                <a className="hidden uppercase cursor-pointer btn-primary-blue font-14 sm:inline-block"> {brandInfo?.brandheading_buttontext} </a>
+                <a className="hidden uppercase cursor-pointer btn-primary-blue button-primary font-14 sm:inline-block"> {brandInfo?.brandheading_buttontext} </a>
               </div>
             </Link>
           </div>
@@ -43,7 +43,7 @@ const BrandList: React.FC<IBrandListProps> = ({ data = [], info }: IBrandListPro
         {info?.map((brandInfo: any, infoIdx: number) => (
           <div className="block b-heading-sec" key={`info-${infoIdx}`}>
             <Link href={brandInfo?.brandheading_buttonlink || '/'} passHref legacyBehavior>
-              <a className="inline-block uppercase btn-primary-blue font-14 desk-hidden">
+              <a className="inline-block uppercase btn-primary-blue button-primary font-14 desk-hidden">
                 {brandInfo?.brandheading_buttontext}
               </a>
             </Link>

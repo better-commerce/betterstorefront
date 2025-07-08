@@ -83,7 +83,7 @@ export default function CartAddonsSidebar({
                       </p>
                       <button
                         type="button"
-                        className="w-7/12 px-10 mx-auto text-center btn-primary"
+                        className="w-7/12 px-10 mx-auto text-center btn-primary button-primary"
                         onClick={() => closeModal()}
                       >
                         {translate('common.label.continueShoppingText')}

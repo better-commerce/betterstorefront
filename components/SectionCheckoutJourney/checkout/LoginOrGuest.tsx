@@ -119,7 +119,7 @@ const LoginOrGuest: React.FC<any> = ({
           {isLogin ? (
             <>
               <button
-                className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
+                className="px-3 py-3 border border-black rounded btn-primary button-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
                 onClick={onContinueToSelectDeliveryType}
               >
                 {translate('label.checkout.saveAndContinueToCollectBtnText')}
@@ -131,7 +131,7 @@ const LoginOrGuest: React.FC<any> = ({
                 <button
                   type="submit"
                   disabled={guestCheckoutFormik.isSubmitting}
-                  className="px-3 py-3 border border-black rounded btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
+                  className="px-3 py-3 border border-black rounded btn-primary button-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c lg:py-2 sm:px-4"
                 >
                   {translate('label.checkout.saveAndContinueToCollectBtnText')}
                 </button>
@@ -214,7 +214,7 @@ const LoginOrGuest: React.FC<any> = ({
               <div className='w-full'>
               <button
               type="submit"
-              className="w-full px-1 py-3 btn-c btn-width-auto btn-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 lg:py-2 sm:px-4"
+              className="w-full px-1 py-3 btn-c btn-width-auto btn-primary button-primary park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 lg:py-2 sm:px-4"
               disabled={loginCheckoutFormik.isSubmitting}
             >
               {loginCheckoutFormik.isSubmitting ? <LoadingDots /> : translate('label.login.loginBtnText')}
@@ -269,7 +269,7 @@ const LoginOrGuest: React.FC<any> = ({
             {featureToggle?.features?.enableCollectDeliveryOption && (
               <div className="flex justify-end w-full btn-start-sec">
               <button
-                className="self-end px-1 py-3 border border-black park-bg-secondary btn-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn lg:py-2 sm:px-4"
+                className="self-end px-1 py-3 border border-black park-bg-secondary btn-primary button-primary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn lg:py-2 sm:px-4"
                 type="submit"
                 disabled={guestCheckoutFormik.isSubmitting}
               >

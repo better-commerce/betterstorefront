@@ -351,7 +351,7 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
             {addonProducts?.length > 0 && <button
               type="button"
               onClick={() => setModalClose(true)}
-              className="relative btn-primary btn-sml btn-addon"
+              className="relative btn-primary button-primary btn-sml btn-addon"
             >
               <span className="relative pl-6">
                 <span className="absolute left-0 top-2/4 -translate-y-2/4 line-height-0">
@@ -372,7 +372,7 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
               </div>
               {isMobile ? null : (
                 <button type="button"
-                  className="sm:h-10 sm:w-10 w-full col-span-2 text-slate-800 hover:text-red-600 font-semibold border-[1px] rounded border-brand-blue flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-70"
+                  className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 btn-sm sm:btn-none uppercase font-semibold border-[1px] flex items-center justify-center disabled:cursor-not-allowed"
                   disabled={loadingWishlist}
                 >
                   {loadingWishlist ? (
@@ -395,7 +395,7 @@ export default function CartProduct({ product, css, isIncludeVAT, isMobile, hand
                   setItemClicked(product)
                   openModal()
                 }}
-                className="sm:h-10 sm:w-10 w-full col-span-2 text-slate-800 hover:text-red-600 font-semibold border-[1px] rounded border-brand-blue flex items-center justify-center disabled:cursor-not-allowed disabled:opacity-70"
+                className="sm:h-10 sm:w-10 min-w-40 w-full col-span-2 sm:btn-none btn-sm uppercase font-semibold border-[1px] rounded border-brand-blueflex flex items-center justify-center ipad-btn-primary"
               >
                 {isMobile ? (
                   <>{translate('common.label.removeText')}</>

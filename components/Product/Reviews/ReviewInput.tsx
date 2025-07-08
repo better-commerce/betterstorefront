@@ -146,7 +146,7 @@ const ReviewInput = ({ productId }: ReviewInputProps) => {
           <div className="pt-4 flex justify-end">
           <button
             type="submit"
-            className="flex items-center justify-center flex-1 float-right max-w-xs btn btn-primary sm:w-full disabled:!bg-gray-100 !text-gray-300 disabled:cursor-not-allowed disabled:select-none"
+            className="flex items-center justify-center flex-1 float-right max-w-xs btn btn-primary button-primary sm:w-full disabled:!bg-gray-100 !text-gray-300 disabled:cursor-not-allowed disabled:select-none"
             disabled={formik.isSubmitting}
           >
             {translate('common.label.submitText')}

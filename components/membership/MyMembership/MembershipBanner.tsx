@@ -90,7 +90,7 @@ const MembershipBanner = ({ user }: any) => {
 
   if (!user?.hasMembership) {
     return <>
-      <div className='container w-full mx-auto mt-0 sm:mt-0 sm:mb-0 theme-account-container header-space pc-padding-bottom !px-0'>
+      <div className='container w-full mx-auto mt-0 sm:mt-0 sm:mb-0 theme-account-container header-space pc-padding-bottom'>
         <div className='flex flex-col items-baseline justify-between gap-4 sm:flex-row'>
           <h2 className="text-3xl font-semibold xl:text-4xl dark:text-black font-32">{translate('common.label.accountText')}</h2>
           <span className="block mt-1 text-base text-neutral-500 dark:text-neutral-400 sm:text-sm">

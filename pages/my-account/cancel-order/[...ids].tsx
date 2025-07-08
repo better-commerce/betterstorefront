@@ -229,7 +229,7 @@ function OrderCancel({ orderId = Guid.empty, deviceInfo }: any) {
                     <div className="w-full py-4">
                       <Button
                         variant="slim"
-                        className='dark:!bg-black dark:!text-white'
+                        className='dark:!bg-black dark:!text-white ttnc-ButtonPrimary button-primary'
                         onClick={() => {
                           onCancelReason()
                           hideCancellationReasons()

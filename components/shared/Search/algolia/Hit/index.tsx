@@ -249,7 +249,7 @@ const Hit = ({ hit, maxBasketItemsCount, handleClearSearch }: HitProps) => {
           >
             <SimpleButton
               variant="slim"
-              className="!p-1 flex-1 !bg-transparent btn-c btn-secondary font-14 uppercase"
+              className="!p-1 flex-1 !bg-transparent btn-c btn-secondary button-secondary font-14 uppercase"
               onClick={async () => await handleQuickViewData(hit)}
             >
               <span className="uppercase">{translate('label.product.quickViewText')}</span>

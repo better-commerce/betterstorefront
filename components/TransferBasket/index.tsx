@@ -173,11 +173,11 @@ const TransferBasket = ({
                     onClick={() => {
                       closeModal()
                     }}
-                     className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-white dark:bg-slate-100 hover:bg-white !text-black border border-gray-300 hover:!border-gray-600 w-full"
+                     className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary button-default disabled:bg-opacity-90 bg-white dark:bg-slate-100 hover:bg-white !text-black border border-gray-300 hover:!border-gray-600 w-full"
                   >
                     {translate('common.label.cancelText')}
                   </button>
-                  <button className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100  !text-slate-50 dark:text-slate-800 shadow-xl w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 mr-2 disabled:cursor-not-allowed"
+                  <button className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100  !text-slate-50 dark:text-slate-800 shadow-xl w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 mr-2 disabled:cursor-not-allowed"
                     onClick={handleTransfer}
                     disabled={!selectedUserCart || !selectedUser}
                   >

@@ -101,7 +101,7 @@ const InstantSearchBar = (props: any) => {
                                     <div className='block sm:hidden'>
                                         <button type="button"
                                             onClick={openPanel}
-                                            className='w-full my-2 btn-primary-blue'>{translate('label.search.showFiltersText')}</button>
+                                            className='w-full my-2 btn-primary-blue button-primary'>{translate('label.search.showFiltersText')}</button>
                                     </div>
                                 </div>
 

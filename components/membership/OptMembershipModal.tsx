@@ -81,7 +81,7 @@ const OptMembershipModal = ({ open, basket, setOpenOMM, allMembershipPlans, defa
           firstMembershipSelectedAsDefault={FIRST_MEMBERSHIP_SELECTED_AS_DEFAULT}
         />
         <div className="flex justify-between mt-8">
-        <Button className={'flex items-center justify-center btn btn-secondary w-full !font-medium'} title={buttonConfig.title} action={() => buttonConfig.action(selectedPlan)} buttonType={buttonConfig.type || 'cart'} />
+        <Button className={'flex items-center justify-center btn btn-secondary button-secondary w-full !font-medium'} title={buttonConfig.title} action={() => buttonConfig.action(selectedPlan)} buttonType={buttonConfig.type || 'cart'} />
         </div>
       </div>
     </div>

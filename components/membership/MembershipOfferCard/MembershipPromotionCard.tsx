@@ -26,7 +26,7 @@ const MembershipPromotionCard = ({ moneySaved, defaultDisplayMembership, lowestM
         </p>
       </div>
       <div className="flex justify-center mt-6">
-        <button onClick={handleOptMembershipModal} className="flex items-center justify-center btn btn-secondary w-full !font-medium">
+        <button onClick={handleOptMembershipModal} className="flex items-center justify-center btn btn-secondary button-secondary w-full !font-medium">
           {translate('label.membership.membershipPromotionJoinNowText')}
         </button>
       </div>

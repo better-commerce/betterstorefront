@@ -21,7 +21,7 @@ const CategoryList: React.FC<ICategoryListProps> = ({ data, deviceInfo }: ICateg
               <div className="absolute top-0 left-0 right-0 w-full h-full bg-transparent hover-bg"></div>
               <img src={generateUri(category?.category_image, 'fm=webp&h=200') || IMG_PLACEHOLDER} className="object-cover object-center w-full max-height-211" alt={category?.category_buttontext} width={240} height={160} loading="lazy" />
               <div className="w-full sm:absolute sm:top-2/4 sm:-translate-y-2/4 sm:left-2/4 sm:-translate-x-2/4">
-                <p className="uppercase btn-primary-white slider-btn font-14 desk-width-200">{category?.category_buttontext}</p>
+                <p className="uppercase btn-primary-white button-primary slider-btn font-14 desk-width-200">{category?.category_buttontext}</p>
               </div>
             </div>
            </Link>

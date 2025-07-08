@@ -393,7 +393,7 @@ const AddressBook: React.FC<AddressBookProps> = ({
           {useSameForBilling && (
             <div className="grid flex-col w-full sm:justify-end sm:flex-row sm:flex sm:w-auto">
               <button
-                className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn"
+                className="px-1 py-3 mb-4 border border-black btn-full-width btn-primary button-primary lg:py-2 sm:px-4 park-bg-secondary disabled:cursor-not-allowed disabled:opacity-60 btn-c btn"
                 onClick={handleContinue}
               >
                 {translate('label.checkout.continueToDeliveryText')}

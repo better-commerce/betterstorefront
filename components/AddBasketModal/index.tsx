@@ -73,7 +73,7 @@ const AddBasketModal = ({ isOpen, closeModal, loadingAction, handleCreateBasket,
                                         onClick={() => {
                                             closeModal()
                                         }}
-                                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-90 bg-white dark:bg-slate-100 hover:bg-white !text-black border border-gray-300 hover:!border-gray-600 w-full"
+                                        className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-default disabled:bg-opacity-90 bg-white dark:bg-slate-100 hover:bg-white !text-black border border-gray-300 hover:!border-gray-600 w-full"
                                     >
                                         {translate('common.label.cancelText')}
                                     </button>

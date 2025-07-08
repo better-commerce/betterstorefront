@@ -10,7 +10,7 @@ const ButtonSecondary: React.FC<ButtonSecondaryProps> = ({
 }) => {
   return (
     <Button
-      className={`ttnc-ButtonSecondary bg-white text-slate-700 dark:bg-white dark:text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-100 ${className}`}
+      className={`ttnc-ButtonSecondary button-secondary bg-white text-slate-700 dark:bg-white dark:text-slate-700 hover:bg-gray-100 dark:hover:bg-gray-100 ${className}`}
       {...args}
     />
   );

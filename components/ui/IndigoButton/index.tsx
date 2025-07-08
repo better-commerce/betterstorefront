@@ -86,12 +86,12 @@ const DefaultButton: FC<React.PropsWithChildren<Props>> = ({
       ? 'btn-black'
       : title === translate('label.product.notifyMeText')
         ? 'btn-blue'
-        : 'btn-primary'
+        : 'btn-primary button-primary'
     : title === translate('label.product.preOrderText')
       ? 'ttnc-ButtonBlack'
       : title === translate('label.product.notifyMeText')
         ? 'ttnc-ButtonBlue'
-        : 'ttnc-ButtonPrimary';
+        : 'ttnc-ButtonPrimary button-primary';
 
   const sizeClass =
     !formId && size === 'small'

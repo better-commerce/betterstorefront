@@ -339,7 +339,7 @@ export default function AddressForm({
                     onClick={(...args) =>
                       handleFormSubmit(handleSubmit, ...args)
                     }
-                    className="flex items-center justify-center flex-1 w-full max-w-xs border border-transparent sm:w-full btn btn-primary"
+                    className="flex items-center justify-center flex-1 w-full max-w-xs border border-transparent sm:w-full btn btn-primary button-primary"
                   >
                     {btnTitle}
                   </button>

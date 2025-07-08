@@ -657,7 +657,7 @@ const CompareProductCard: FC<React.PropsWithChildren<Props & IExtraProps>> = ({
                 <button
                   type="button"
                   onClick={() => handleQuickViewData(product)}
-                  className="w-full text-primary btn-secondary text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
+                  className="w-full text-primary btn-secondary button-secondary text-white uppercase rounded dark:text-primary font-semibold text-[14px] sm:text-sm p-1.5 outline-none"
                 >
                   {translate('label.product.quickViewText')}
                 </button>

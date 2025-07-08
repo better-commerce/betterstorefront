@@ -107,7 +107,7 @@ function ForgotPasswordPage({featureToggle}:any) {
       </NextHead>
                  {featureToggle?.features?.enableBannerLogin ? (
                   <>
-                  <div className="min-h-screen flex flex-col md:flex-row btn-primary-clr form-input-label">
+                  <div className="min-h-screen flex flex-col md:flex-row btn-primary-clr button-primary form-input-label">
                   <div className="w-full md:w-1/2 h-full">
                   <div className="px-10 pt-10 pb-10 lg:max-w-7xl lg:mx-auto sm:pt-4 sm:pb-20">
                   <div className='w-full'>
@@ -124,14 +124,14 @@ function ForgotPasswordPage({featureToggle}:any) {
                         return (
                           <div key={Idx} className="w-full mb-4">
                             <label className="text-neutral-800 dark:text-neutral-800">{field.label}</label>
-                            <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
+                            <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black button-primary" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
                             {emailStatus !== '' && emailStatus !== Messages.Validations.ResetPassword.VALID_EMAIL && (
                               <div className="w-full text-red-600">{emailStatus}</div>
                             )}
                           </div>
                         )
                       })}
-                      <Button type="submit" className="w-full btn btn-primary park-bg-secondary" loading={isLoading} disabled={isLoading} >
+                      <Button type="submit" className="w-full btn btn-primary button-primary park-bg-secondary" loading={isLoading} disabled={isLoading} >
                         {!isLoading && translate('common.label.submitText')}
                       </Button>
                     </form>
@@ -159,14 +159,14 @@ function ForgotPasswordPage({featureToggle}:any) {
                                   return (
                                     <div key={Idx} className="w-full mb-4">
                                       <label className="text-neutral-800 dark:text-neutral-800">{field.label}</label>
-                                      <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
+                                      <input className="block w-full px-4 py-3 mt-1 text-sm font-normal bg-white border-neutral-200 focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:border-neutral-700 dark:focus:ring-primary-6000 dark:focus:ring-opacity-25 dark:bg-white disabled:bg-neutral-200 dark:disabled:bg-neutral-800 rounded-2xl h-11 dark:text-black button-primary" name={field.name} value={email} type={field.type} placeholder={field.placeholder} onChange={handleChange} onBlur={handleBlur} />
                                       {emailStatus !== '' && emailStatus !== Messages.Validations.ResetPassword.VALID_EMAIL && (
                                         <div className="w-full text-red-600">{emailStatus}</div>
                                       )}
                                     </div>
                                   )
                                 })}
-                                <Button type="submit" className="w-full btn btn-primary" loading={isLoading} disabled={isLoading} >
+                                <Button type="submit" className="w-full btn btn-primary button-primary" loading={isLoading} disabled={isLoading} >
                                   {!isLoading && translate('common.label.submitText')}
                                 </Button>
                               </form>

@@ -24,7 +24,7 @@ const ImageBanner: React.FC<IImageBannerProps> = ({ data, deviceInfo }: IImageBa
       case (1):
         return {
           sectionCls: 'bg-tan-color',
-          btnCls: 'btn-primary-blue',
+          btnCls: 'btn-primary-blue button-primary',
           textCls: 'order-2 order-sm-2 sm:order-2 gray-dot-border',
           imageCls: 'order-1 order-sm-1 sm:order-1',
           textcolor: 'text-brand-blue',

@@ -27,7 +27,7 @@ const MembershipDetails = ({ membership, ButtonText, onButtonClick}: any) => {
         <span className="text-sm">{formatDate(membership?.startDate)}</span>
       </div> */}
       <div className="mt-6 mb-4 lg:w-3/ md:w-1/2">
-        <button className="w-full text-white btn-secondary py-2 px-4 rounded" onClick={handleButtonClick} style={{ maxWidth: "300px" }}>
+        <button className="w-full text-white btn-secondary button-secondary py-2 px-4 rounded" onClick={handleButtonClick} style={{ maxWidth: "300px" }}>
          {ButtonText}
         </button>
       </div>

@@ -302,7 +302,7 @@ function KitCartSidebar({ brandInfo, config, deviceInfo }: any) {
               </h6>
             </div>
             <button
-              className="w-full btn-secondary btn bottom-1 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full btn-secondary button-secondary btn bottom-1 disabled:cursor-not-allowed disabled:opacity-70"
               onClick={onBulkUpdateKitBasket}
               disabled={kitCartLoaded || isEmptyKitBasket}
             >

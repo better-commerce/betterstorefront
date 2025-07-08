@@ -337,7 +337,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <p className='font-normal text-black text-x-small'>Find out how much your equipment is worth.</p>
               <div className='flex-1 mx-auto mt-4'>
                 <Link href="/sell-or-part-exchange" passHref legacyBehavior>
-                  <a className='px-10 py-2 rounded-full btn-c btn-primary'>Check out here now</a>
+                  <a className='px-10 py-2 rounded-full btn-c btn-primary button-primary'>Check out here now</a>
                 </Link>
               </div>
             </div>
@@ -544,7 +544,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <h3 className='font-semibold text-black heading'>See personalised recommendation</h3>
               <div className='flex-1 mx-auto btn-primary-clr'>
                 <Link href="/my-account/register" passHref legacyBehavior>
-                  <a className='px-10 py-2 rounded-full btn-c btn-primary'>Sign in</a>
+                  <a className='px-10 py-2 rounded-full btn-c btn-primary button-primary'>Sign in</a>
                 </Link>
               </div>
               <p className='text-x-small'>Haven't got an account?
@@ -563,7 +563,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         <h2 className='text-3xl font-semibold uppercase textcapitalize'>{fo?.fixingoffers_title}</h2>
                         <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
                         <Link href={fo?.fixingoffers_buttonlink || '#'} legacyBehavior passHref>
-                          <a href={fo?.fixingoffers_buttonlink} className='btn btn-primary'>{fo?.fixingoffers_buttontitle}</a>
+                          <a href={fo?.fixingoffers_buttonlink} className='btn btn-primary button-primary'>{fo?.fixingoffers_buttontitle}</a>
                         </Link>
                       </div>
                       <div className='col-span-5'>
