@@ -2933,6 +2933,9 @@ body .ttnc-ButtonPrimary.btn-secondary:hover{
 .footer-logo .logo-container{
 justify-content: flex-start;
 }
+.d--none-amm{
+  display: none !important;
+}
 @media screen and (min-width: 1025px) {
   .plp-btn-section-div{
     grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
