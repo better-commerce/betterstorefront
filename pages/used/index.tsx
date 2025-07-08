@@ -422,8 +422,17 @@ export async function getStaticProps({
     const cachedData = await getDataByUID([usedUID])
     usedUIDData = parseDataValue(cachedData, usedUID)
     if (!containsArrayData(usedUIDData)) {
-      usedUIDData = await getAllUsed({ [Cookie.Key.LANGUAGE]: locale })
-      await setData([{ key: usedUID, value: usedUIDData }])
+      try {
+        usedUIDData = await getAllUsed({ [Cookie.Key.LANGUAGE]: locale })
+        if (containsArrayData(usedUIDData)) {
+          await setData([{ key: usedUID, value: usedUIDData }])
+        } else {
+          return { notFound: true } // fallback for missing data
+        }
+      } catch (err) {
+        logError(err)
+        return { notFound: true }
+      }
     }
   } catch (error: any) {
     logError(error)

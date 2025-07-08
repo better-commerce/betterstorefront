@@ -20,13 +20,10 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
   const pageProps = await props.getPageProps({ slug, cookies })
 
   if (pageProps?.notFound) {
-    if (process.env.npm_lifecycle_event === 'build') {
-      return {
-        notFound: true,
-        revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
-      }
+    return {
+      notFound: true,
+      revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
     }
-    return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), };
   }
 
   if (pageProps?.isRedirect) {
