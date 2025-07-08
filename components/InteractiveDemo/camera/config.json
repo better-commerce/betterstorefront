@@ -33,8 +33,16 @@
           "group": "PLP",
           "urlCode": "plp-used",
           "name": "Used Products",
-          "url": "https://parkcameras.bettercommerce.tech/collection/used-cameras",
+          "url": "https://parkcameras.bettercommerce.tech/used",
           "displayOrder": 9,
+          "active": 1
+        },
+        {
+          "group": "PLP",
+          "urlCode": "plp-used-products",
+          "name": "Used Product PLP",
+          "url": "https://parkcameras.bettercommerce.tech/used/sony-sony-vg-c2em-battery-grip-a7-ii-a7r-s-ii-7152042e",
+          "displayOrder": 10,
           "active": 1
         },
         {
@@ -42,7 +50,7 @@
           "urlCode": "plp-register-interest",
           "name": "Register Interest",
           "url": "https://parkcameras.bettercommerce.tech/collection/prelaunch",
-          "displayOrder": 10,
+          "displayOrder": 11,
           "active": 1
         },
         {
@@ -50,7 +58,7 @@
           "urlCode": "pdp-type-cashback-promotion-used-product",
           "name": "Promotion, Cashback, Used Related Type",
           "url": "https://parkcameras.bettercommerce.tech/products/canon-canon-rf-100-500mm-f-4-5-7-1-l-is-usm-lens-1242595",
-          "displayOrder": 11,
+          "displayOrder": 12,
           "active": 1
         },
         {
@@ -58,7 +66,7 @@
           "urlCode": "pdp-pre-launch-interested-in",
           "name": "Pre Launch Interested In",
           "url": "https://parkcameras.bettercommerce.tech/products/modifli-modifli-mavic-air-skin-white-combo-9702660m",
-          "displayOrder": 12,
+          "displayOrder": 14,
           "active": 1
         },
         {
