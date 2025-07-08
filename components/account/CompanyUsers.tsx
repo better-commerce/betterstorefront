@@ -12,11 +12,11 @@ function CompanyUsers({ users }: any) {
   const [isAddNewUserModalOpen, setIsAddNewUserModalOpen] = useState(false)
   const [companyDetails, setCompanyDetails] = useState<any>(null)
   const { user } = useUI()
-  
+
   const getCompanyDetails = useCallback(async () => {
     const response: any = await axios.post(NEXT_B2B_GET_COMPANY_DETAILS, { userId: user?.userId })
     setCompanyDetails(response?.data || {})
-  }, [user?.userId]) 
+  }, [user?.userId])
 
   useEffect(() => {
     getCompanyDetails()
@@ -42,88 +42,71 @@ function CompanyUsers({ users }: any) {
           <Spinner />
         </>
       ) : (
-        <div className="flex flex-col py-8 gap-y-6">
-          {reorderedUsers?.map((user: any, Idx: any) => {
-            const isCurrentUser = user?.userId === currentUserId;
-            const initials = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`;
-            return (
-              <div
-                key={Idx}
-                className={`relative flex flex-col md:flex-row items-center md:items-stretch gap-4 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow border ${
-                  isCurrentUser
-                    ? 'bg-slate-50 border-slate-300 ring-2 ring-slate-200'
-                    : 'bg-white border-slate-200'
-                }`}
-                style={{}}
-              >
-                {/* Avatar */}
-                <div className="flex-shrink-0 flex flex-col items-center justify-center">
-                  <div
-                    className={`w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold shadow ${
-                      isCurrentUser
-                        ? 'bg-slate-200 text-slate-700 ring-2 ring-slate-300'
-                        : 'bg-slate-100 text-slate-500'
+        <>
+          <div className="grid grid-cols-1 gap-2 mt-4 sm:gap-4 sm:grid-cols-3">
+            {reorderedUsers?.map((user: any, Idx: any) => {
+              const isCurrentUser = user?.userId === currentUserId;
+              const initials = `${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`;
+              return (
+                <div
+                  key={Idx}
+                  className={`relative flex flex-col md:flex-row items-center md:items-stretch gap-4 px-3 py-4 rounded-2xl shadow transition-shadow border ${isCurrentUser
+                    ? 'bg-blue-50 border-2 border-sky-500'
+                    : 'bg-white border-slate-200 hover:shadow-lg'
                     }`}
-                  >
-                    {initials}
-                  </div>
-                  {isCurrentUser && (
-                    <span
-                      className="mt-2 px-3 py-1 rounded-full text-white text-xs font-bold shadow-md"
-                      style={{ background: 'linear-gradient(to right, #3b82f6, #60a5fa)' }}
-                    >
-                      You
-                    </span>
-                  )}
-                </div>
-                {/* User Info */}
-                <div className="flex-1 flex flex-col justify-center">
-                  <div className="flex flex-col md:flex-row md:items-center gap-2">
-                    <h2 className="text-xl font-semibold font-Inter text-brand-blue flex items-center gap-2">{`${user?.firstName} ${user?.lastName}`}
+                  style={{}}
+                >
+
+                  {/* User Info */}
+                  <div className="flex flex-col justify-center flex-1">
+                    <div className="flex flex-col gap-1">
+                      <h2 className="flex items-center gap-2 font-semibold text-md font-Inter text-brand-blue">
+                        <span className={`flex items-center justify-center w-8 h-8 text-sm rounded-full ${user?.companyUserRole === 'Admin' ? 'bg-sky-200 text-sky-600' : user?.companyUserRole === 'SalesUser' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-black'}`}>{initials}</span>
+                        {`${user?.firstName} ${user?.lastName}`}</h2>
                       {user?.companyUserRole && (
-                        <span
-                          className="ml-0 md:ml-4 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider shadow border border-slate-200 bg-slate-100 text-slate-700 flex items-center"
-                          style={{ letterSpacing: '0.13em' }}
-                        >
-                          {user?.companyUserRole}
+                        <span className={`ml-0 px-2 py-1 rounded-full text-xs font-medium tracking-wider flex items-center ${user?.companyUserRole === 'Admin' ? 'bg-sky-200 text-sky-600' : user?.companyUserRole === 'SalesUser' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-black'}`}>
+                          {user?.companyUserRole == 'SalesUser' ? 'Sales User' : user?.companyUserRole}
                         </span>
                       )}
-                    </h2>
-                  </div>
-                  <div className="mt-3 border-t border-slate-100 pt-3 grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-6">
-                    {user?.username && (
+                    </div>
+                    <div className="grid grid-cols-1 pt-3 mt-3 border-t border-slate-100 md:grid-cols-1 gap-y-2 gap-x-6">
                       <span className="flex items-center gap-2 text-slate-600">
-                        <span className="inline-block text-base">👤</span>
-                        <span className="font-medium">{user?.username}</span>
+                        <span className="inline-block text-xs font-semibold">Email:</span>
+                        <span className="text-xs font-medium">{user?.email}</span>
                       </span>
-                    )}
-                    <span className="flex items-center gap-2 text-slate-600">
-                      <span className="inline-block text-base"><EnvelopeIcon className="w-5 h-5"/></span>
-                      <span className="font-medium">{user?.email}</span>
-                    </span>
-                    {user?.phoneNo && (
+                      {user?.phoneNo && (
+                        <span className="flex items-center gap-2 text-slate-600">
+                          <span className="inline-block text-xs font-semibold">Phone:</span>
+                          <span className="text-xs font-medium">{user?.phoneNo}</span>
+                        </span>
+                      )}
+                      {/* <span className="flex items-center gap-2 text-emerald-500">
+                        <span className="inline-block text-xs font-semibold">Credit Limit:</span>
+                        <span className="text-xs font-medium">{user?.phoneNo}</span>
+                      </span>
                       <span className="flex items-center gap-2 text-slate-600">
-                        <span className="inline-block text-base"><PhoneIcon className="w-5 h-5"/></span>
-                        <span className="font-medium">{user?.phoneNo}</span>
-                      </span>
-                    )}
+                        <span className="inline-block text-xs font-semibold">Order Placed:</span>
+                        <span className="text-xs font-medium">3</span>
+                      </span> */}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
 
-          <div className=" hidden text-white sm:flex add-list-div">
-            <button type="submit" onClick={(ev: any) => toggelAddNewUserModal()} className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
+
+          </div>
+          <div className="flex justify-end hidden text-white sm:flex add-list-div">
+            <button type="submit" onClick={(ev: any) => toggelAddNewUserModal()} className="mt-4 nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium py-2 px-4 sm:py-2.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 !text-slate-50 dark:text-slate-800 shadow-xl  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0">
               {translate('label.myAccount.addNewUserText')}
               <span className="inline-block ml-2 leading-none align-middle">
                 <i className="sprite-icon icon-location-orange"></i>
               </span>
             </button>
           </div>
-        </div>
+        </>
       )}
-      {isAddNewUserModalOpen && 
+      {isAddNewUserModalOpen &&
         <AddNewUserModal isOpen={isAddNewUserModalOpen} closeModal={toggelAddNewUserModal} companyDetails={companyDetails} btnTitle={translate('label.myAccount.addNewUserText')} />
       }
     </section>
