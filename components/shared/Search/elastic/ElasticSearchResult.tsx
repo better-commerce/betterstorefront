@@ -109,6 +109,7 @@ const CustomResultView = (
   const { isMobile } = deviceInfo
   const [quantity, setQuantity] = useState(1)
   const [quickViewData, setQuickViewData] = useState(null)
+  const EtaDate = new Date()
   EtaDate.setDate(EtaDate.getDate() + 3)
   const handleQuickViewData = (data: any) => {
     setQuickViewData(data)
