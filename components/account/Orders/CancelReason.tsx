@@ -4,7 +4,7 @@ import cn from 'classnames';
 
 // Package Imports
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, InformationCircleIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/24/solid'
 import { Button, LoadingDots } from '@components/ui';
 import Spinner from '@components/ui/Spinner';
@@ -33,8 +33,8 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
               e.preventDefault()
               hideCancellationReasons()
             }}>
-              <h4 className="max-w-4xl mx-auto text-xl font-semibold text-gray-900 dark:text-black">
-                <i className="mr-2 sprite-icon sprite-left-arrow"></i> {translate('label.cancelReason.cancelReasonHeadingText')}
+              <h4 className="max-w-4xl mx-auto text-xl flex items-center font-semibold text-gray-900 dark:text-black">
+                <ArrowLeftIcon className='mr-2 w-3 h-3'/> {translate('label.cancelReason.cancelReasonHeadingText')}
               </h4>
           </a>
           <div className='w-full py-4'>
@@ -79,7 +79,7 @@ export default function CancelReason({ cancellationReasons, onItemCancellation, 
                   <div className='py-0'>
                     <p
                       className='relative py-4 text-gray-600 info-text'>
-                      <InformationCircleIcon className='inline-block w-4 h-4 mb-1' />
+                      <InformationCircleIcon className='inline-block w-4 h-4 mb-1 mr-2' />
                       <span className='text-sm font-normal dark:text-black'>
                         {translate('label.orderDetails.orderRefundInfo')}
                       </span>
