@@ -72,6 +72,7 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
   const [isProductCompare, setProductCompare] = useState(false)
   const [enabled, setEnabled] = useState(false)
   const [view, setView] = useState<'grid' | 'list'>('grid')
+  const [packagingFilter, setPackagingFilter] = useState<'true' | 'false' | 'all'>('all');
   const [conditionFilter, setConditionFilter] = useState<string>("");
   const [relatedProducts, setRelatedProducts] = useState<any>(relatedProductsProp)
   const [quantity, setQuantity] = useState(1);
@@ -475,14 +476,22 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
 
     return usedProducts.Used.filter((product) => {
       const price = product?.price?.raw?.withTax;
+
       const conditionAttr = product?.attributes?.find(
         (attr: any) => attr?.key === 'used.condition'
       );
+      const packagingAttr = product?.attributes?.find(
+        (attr: any) => attr?.key === 'used.originalmanufacturerpackaging'
+      );
+
       const condition = conditionAttr?.value;
+      const packaging = packagingAttr?.value;
 
       let priceMatch = true;
       let conditionMatch = true;
+      let packagingMatch = true;
 
+      // Price filter logic
       if (priceFilter) {
         if (priceFilter === "more") {
           priceMatch = price > 500;
@@ -492,13 +501,20 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
         }
       }
 
+      // Condition filter logic
       if (conditionFilter) {
         conditionMatch = condition?.toLowerCase() === conditionFilter.toLowerCase();
       }
 
-      return priceMatch && conditionMatch;
+      // Packaging filter logic
+      if (packagingFilter && packagingFilter !== 'all') {
+        packagingMatch = packaging === packagingFilter;
+      }
+
+      return priceMatch && conditionMatch && packagingMatch;
     });
-  }, [priceFilter, conditionFilter, usedProducts]);
+  }, [priceFilter, conditionFilter, packagingFilter, usedProducts]);
+
 
   const handleChange = (val: boolean) => {
     setEnabled(val)
@@ -729,11 +745,36 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
             <div className='flex flex-col gap-4 mt-3'>
               <h5 className='text-sm font-semibold text-gray-900'>Original manufacturer packaging</h5>
               <div className='flex justify-start gap-1'>
-                <button className='px-2 py-1 text-xs font-semibold text-gray-900 bg-gray-200 border border-gray-500 rounded-md'>Included</button>
-                <button className='px-2 py-1 text-xs font-semibold text-gray-900 bg-gray-200 border border-gray-500 rounded-md'>Not included</button>
-                <button className='px-2 py-1 text-xs font-semibold text-white border rounded-md bg-sky-700 border-sky-700'>Show all</button>
+                <button
+                  onClick={() => setPackagingFilter('true')}
+                  className={`px-2 py-1 text-xs font-semibold border rounded-md ${packagingFilter === 'true'
+                    ? 'text-white bg-sky-700 border-sky-700'
+                    : 'text-gray-900 bg-gray-200 border-gray-500'
+                    }`}
+                >
+                  Included
+                </button>
+                <button
+                  onClick={() => setPackagingFilter('false')}
+                  className={`px-2 py-1 text-xs font-semibold border rounded-md ${packagingFilter === 'false'
+                    ? 'text-white bg-sky-700 border-sky-700'
+                    : 'text-gray-900 bg-gray-200 border-gray-500'
+                    }`}
+                >
+                  Not included
+                </button>
+                <button
+                  onClick={() => setPackagingFilter('all')}
+                  className={`px-2 py-1 text-xs font-semibold border rounded-md ${packagingFilter === 'all'
+                    ? 'text-white bg-sky-700 border-sky-700'
+                    : 'text-gray-900 bg-gray-200 border-gray-500'
+                    }`}
+                >
+                  Show all
+                </button>
               </div>
             </div>
+
           </div>
         </div>
         <div className="flex flex-col w-full mb-4">
@@ -751,6 +792,14 @@ export default function UsedProductView({ data = { images: [] }, snippets = [], 
               <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded-md">
                 Condition: {conditionFilter}
                 <button type="button" onClick={() => setConditionFilter("")} className="ml-2 text-gray-500 hover:text-red-600 focus:outline-none">
+                  <XMarkIcon className='w-3 h-3' />
+                </button>
+              </span>
+            )}
+            {packagingFilter && (
+              <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded-md">
+                Original Packaging: {packagingFilter}
+                <button type="button" onClick={() => setPackagingFilter("all")} className="ml-2 text-gray-500 hover:text-red-600 focus:outline-none">
                   <XMarkIcon className='w-3 h-3' />
                 </button>
               </span>
