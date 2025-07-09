@@ -6,7 +6,13 @@ const getCompanyUsersApiMiddleware = async (req: any, res: any) => {
   const { companyId }: any = req?.body
   try {
     const response = await useB2BCompanyUsers()(companyId, req?.cookies)
-    res.status(200).json(response?.result?.length ? response?.result?.map(getUserDetailTransform) : [])
+    res
+      .status(200)
+      .json(
+        response?.result?.length
+          ? response?.result?.map(getUserDetailTransform)
+          : []
+      )
   } catch (error) {
     apiMiddlewareErrorHandler(req, res, error)
   }
@@ -31,9 +37,19 @@ export const getUserDetailTransform = (user: any) => ({
   email: user?.email,
   companyName: user?.companyName,
   companyId: user?.companyId,
+  companyUserRole: user?.companyUserRole,
   defaultPaymentMethod: user?.defaultPaymentMethod,
   address: user?.address,
-  companyUserRole: user?.companyUserRole,
+  location: user?.location,
+  businessUnit: user?.businessUnit,
+  authorizedSpendLimit: user?.authorizedSpendLimit,
+  canApproveOrder: user?.canApproveOrder,
+  reportingManager: user?.reportingManager,
+  canPlaceOrder: user?.canPlaceOrder,
+  canSeeInvoices: user?.canSeeInvoices,
+  canSeeCreditLimit: user?.canSeeCreditLimit,
+  team: user?.team,
+  spendLimit: user?.spendLimit,
   notifyByEmail: user?.notifyByEmail,
   notifyBySMS: user?.notifyBySMS,
   notifyByPost: user?.notifyByPost,
@@ -44,5 +60,5 @@ export const getUserDetailTransform = (user: any) => ({
   newsLetterSubscribed: user?.newsLetterSubscribed,
   id: user?.id,
   recordId: user?.recordId,
-  externalStatus: user?.externalStatus
+  externalStatus: user?.externalStatus,
 })

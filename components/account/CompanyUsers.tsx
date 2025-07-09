@@ -100,37 +100,37 @@ function CompanyUsers({ users }: any) {
                       <td className="px-3 py-3 text-xs">{user?.reportingManager?.email || '-'}</td>
                       <td className="px-3 py-3 text-xs">{user?.team || '-'}</td>
                       <td className="px-3 py-3 text-xs">{user?.location || '-'}</td>
-                      <td className="px-3 py-3 text-xs text-emerald-600">{user?.spendLimit?.formatted?.withTax || 'Unlimited'}</td>
+                      <td className="px-3 py-3 text-xs text-emerald-600">{user?.spendLimit?.raw?.withTax > 0 ? user?.spendLimit?.formatted?.withTax : 'Unlimited'}</td>
                       <td className="px-3 py-3 text-xs">
-                        <div className="flex flex-wrap gap-2">
+                        <div className='flex flex-col gap-1'>
                           {user?.canApproveOrder && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-[11px] font-medium shadow-sm hover:bg-blue-100 transition">
+                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-blue-100 transition">
                               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" />
                               </svg>
-                              Approve Order
+                              Can Approve Order
                             </span>
                           )}
                           {user?.canPlaceOrder && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-medium shadow-sm hover:bg-emerald-100 transition">
-                              <ShoppingCartIcon className='inline w-3 h-3'/>
-                              Place Order
+                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-emerald-100 transition">
+                              <ShoppingCartIcon className='inline w-3 h-3' />
+                              Can Place Order
                             </span>
                           )}
                           {user?.canSeeCreditLimit && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-full text-[11px] font-medium shadow-sm hover:bg-yellow-100 transition">
+                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-yellow-100 transition">
                               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M4 4h12v2H4V4zm0 4h12v8H4V8z" />
                               </svg>
-                              Credit Limit
+                              Can See Credit Limit
                             </span>
                           )}
                           {user?.canSeeInvoices && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-50 text-purple-700 border border-purple-200 rounded-full text-[11px] font-medium shadow-sm hover:bg-purple-100 transition">
+                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-purple-50 text-purple-700 border border-purple-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-purple-100 transition">
                               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M5 4a2 2 0 00-2 2v10a1 1 0 001.447.894L8 15.118l3.553 1.776A1 1 0 0013 16V6a2 2 0 00-2-2H5zm0 2h6v7.382L8.447 12.106a1 1 0 00-.894 0L5 13.382V6z" />
                               </svg>
-                              View Invoice
+                              Can See Invoices
                             </span>
                           )}
                         </div>
@@ -183,9 +183,6 @@ function CompanyUsers({ users }: any) {
               </div>
             </div>
           )}
-
-          {/* Add New User Button */}
-
         </>
       )}
 
