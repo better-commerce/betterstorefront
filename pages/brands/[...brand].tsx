@@ -612,7 +612,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                   <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
                     {resPc1?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
-                        <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -633,7 +633,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                   <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
                     {resPc2?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
-                        <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -654,7 +654,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                   <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
                     {resPc3?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
-                        <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                        <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
                       </SwiperSlide>
                     ))}
                   </Swiper>
