@@ -258,6 +258,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
+  const swiperRefPc1: any = useRef(null)
+  const swiperRefPc2: any = useRef(null)
+  const swiperRefPc3: any = useRef(null)
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
@@ -606,10 +609,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
                 <div className='relative'>
                   <div className="flex justify-between mb-2 slider-out-btn">
-                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
-                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                    <Prev onClickPrev={() => swiperRefPc1.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRefPc1.current?.swiper?.slideNext()} />
                   </div>
-                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc1} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
                     {resPc1?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                         <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
@@ -627,10 +630,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
                 <div className='relative'>
                   <div className="flex justify-between mb-2 slider-out-btn">
-                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
-                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                    <Prev onClickPrev={() => swiperRefPc2.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRefPc2.current?.swiper?.slideNext()} />
                   </div>
-                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc2} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
                     {resPc2?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                         <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
@@ -648,10 +651,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
                 <div className='relative'>
                   <div className="flex justify-between mb-2 slider-out-btn">
-                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
-                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                    <Prev onClickPrev={() => swiperRefPc3.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRefPc3.current?.swiper?.slideNext()} />
                   </div>
-                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc3} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
                     {resPc3?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                         <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
@@ -664,7 +667,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             <div className='flex flex-col w-full gap-4 px-4 py-4 my-4 sm:my-10 bg-slate-100 rounded-xl sm:px-6 sm:py-8'>
               <h3 className="font-semibold text-black title-page">{pHeading}</h3>
               <p className='text-sm font-medium text-gray-700'>{pText}</p>
-            </div> 
+            </div>
 
             {featureToggle?.features?.enableForPCSite &&
               <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 pb-0 mx-auto mt-0 bg-transparent sm:mt-0' : ' pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2'} fixing-main-section`}>
