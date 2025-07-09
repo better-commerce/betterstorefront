@@ -247,6 +247,19 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
       }
     )
   }
+  const getStockMessageColor = (message = '') => {
+    const lowerMessage = message.toLowerCase();
+
+    if (lowerMessage.includes('pre-order')) return 'text-sky-600'; // blue
+    if (lowerMessage.includes('in stock')) return 'text-emerald-500'; // green
+    if (lowerMessage.includes('hurry') || lowerMessage.includes('last one')) return 'text-emerald-500'; // green
+    if (lowerMessage.includes('out of stock')) return 'text-red-600'; // red
+    if (lowerMessage.includes('awaiting stock') || lowerMessage.includes('expected')) return 'text-yellow-500'; // yellow
+    if (lowerMessage.includes('short supply')) return 'text-yellow-500'; // yellow
+
+    return 'text-gray-600'; // default
+  };
+
   const cashbackAmount = data?.attributes?.find(((item: any) => item?.key == "cashback.amount"))?.value
   const renderGroupButtons = () => {
     return (
@@ -337,8 +350,14 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
           </p>
         }
         {featureToggle?.features?.enableForPCSite &&
-          <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
-            {data?.stockAvailabilityMessage && <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>{data?.stockAvailabilityMessage}</span>}
+          <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold'>
+            {data?.stockAvailabilityMessage && (
+              <span
+                className={`${getStockMessageColor(data.stockAvailabilityMessage)}`}
+              >
+                {data.stockAvailabilityMessage}
+              </span>
+            )}
           </div>
         }
 

@@ -111,7 +111,18 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
     setCartItems(item);
     openCart();
   };
+  const getStockMessageColor = (message = '') => {
+    const lowerMessage = message.toLowerCase();
 
+    if (lowerMessage.includes('pre-order')) return 'text-sky-600'; // blue
+    if (lowerMessage.includes('in stock')) return 'text-emerald-500'; // green
+    if (lowerMessage.includes('hurry') || lowerMessage.includes('last one')) return 'text-emerald-500'; // green
+    if (lowerMessage.includes('out of stock')) return 'text-red-500'; // red
+    if (lowerMessage.includes('awaiting stock') || lowerMessage.includes('expected')) return 'text-yellow-500'; // yellow
+    if (lowerMessage.includes('short supply')) return 'text-yellow-500'; // yellow
+
+    return 'text-gray-600'; // default
+  };
   return (
     <>
       <div className='flex gap-6 flex-mob-col'>
@@ -131,7 +142,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
               <div className="flex justify-start mt-5 space-x-4 rtl:justify-end sm:space-x-5 rtl:space-x-reverse">
                 {selectedOption === "new" && product?.condition != 'pre-launch' && (
                   <>
-                    <PricesWithDiscount contentClass="py-1 px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                    <PricesWithDiscount contentClass="py-1  px-2 md:py-1.5 md:px-3 text-lg font-semibold price-info" price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                   </>
                 )}
                 {selectedOption === "used" && product?.condition != 'pre-launch' && (
@@ -200,7 +211,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           </h2>
                           <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t w-full">
                             {product?.stockAvailabilityMessage && (
-                              <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
+                              <p className={`text-xs block ${getStockMessageColor(product.stockAvailabilityMessage)}`}>{product?.stockAvailabilityMessage}</p>
                             )}
                             <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </p>
@@ -216,7 +227,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                             </h2>
                             <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t border-[#D9D9D9] w-full">
                               {item?.stockAvailabilityMessage && (
-                                <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
+                                <p className={`text-xs block ${getStockMessageColor(product.stockAvailabilityMessage)}`}>{product?.stockAvailabilityMessage}</p>
                               )}
                               <KitPrice price={item?.price} listPrice={item?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                             </p>
@@ -297,7 +308,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         </div>
                       }
                       {product?.stockAvailabilityMessage && (
-                        <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
+                        <p className={`text-xs block ${getStockMessageColor(product.stockAvailabilityMessage)}`}>{product?.stockAvailabilityMessage}</p>
                       )}
 
                       {/* <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
@@ -402,7 +413,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           </div>
                         }
                         {product?.stockAvailabilityMessage && (
-                          <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
+                          <p className={`text-xs block ${getStockMessageColor(product.stockAvailabilityMessage)}`}>{product?.stockAvailabilityMessage}</p>
                         )}
                         <UsedProductCard products={selectedUsedProduct} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                       </>
@@ -419,7 +430,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   {selectedOption === "new" && (
                     <div className="mt-2 space-y-2">
                       {product?.stockAvailabilityMessage && (
-                        <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
+                        <p className={`text-xs block ${getStockMessageColor(product.stockAvailabilityMessage)}`}>{product?.stockAvailabilityMessage}</p>
                       )}
                     </div>
                   )}
