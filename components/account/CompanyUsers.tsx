@@ -5,7 +5,7 @@ import { useTranslation } from '@commerce/utils/use-translation'
 import AddNewUserModal from '@components/account/AddCompanyUser'
 import { NEXT_B2B_GET_COMPANY_DETAILS } from '@components/utils/constants'
 import { useUI } from '@components/ui'
-import { ShoppingCartIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, EnvelopeIcon, PhoneIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 
 const USERS_PER_PAGE = 10
 
@@ -76,63 +76,54 @@ function CompanyUsers({ users }: any) {
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="py-3 pl-3 pr-3 text-[13px] font-semibold text-left text-gray-900 sm:pl-4">User</th>
-                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Phone</th>
-                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Manager</th>
-                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Team</th>
-                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Location</th>
-                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Spend Limit</th>
-                  <th className="px-3 py-3 text-[13px] font-semibold text-left text-gray-900">Permissions</th>
+                  <th className="py-3 pl-3 pr-3 text-[12px] font-semibold text-left text-gray-900 sm:pl-4">User</th>
+                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Manager</th>
+                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Team</th>
+                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Location</th>
+                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900 w-28">Spend Limit</th>
+                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900 sm:w-[300px]">Permissions</th>
                 </tr>
               </thead>
               <tbody className='bg-white divide-y divide-gray-200'>
                 {paginatedUsers.map((user: any, idx: number) => {
                   const isCurrentUser = user?.userId === currentUserId
                   return (
-                    <tr key={idx} className={`border-t border-b shadow-none group border-slate-200 hover:shadow ${isCurrentUser ? 'bg-sky-100 font-semibold hover:bg-blue-100' : 'bg-white hover:bg-gray-100'}`} >
+                    <tr key={idx} className={`border-t border-b shadow-none group border-slate-200 hover:shadow ${isCurrentUser ? 'bg-yellow-50 font-semibold hover:bg-blue-100' : 'bg-white hover:bg-gray-100'}`} >
                       <td className={`px-3 py-3 text-sm whitespace-nowrap  ${isCurrentUser ? 'text-sky-500' : 'text-black'}`}>
                         <div className='flex flex-col '>
                           <span className='font-semibold'>{`${user?.firstName} ${user?.lastName}`}</span>
                           <span className='text-xs text-gray-600'>{user?.email}</span>
+                          <span className='text-xs text-gray-600'>{user?.phoneNo}</span>
                         </div>
                       </td>
-                      <td className="px-3 py-3 text-xs">{user?.phoneNo || '-'}</td>
                       <td className="px-3 py-3 text-xs">{user?.reportingManager?.email || '-'}</td>
                       <td className="px-3 py-3 text-xs">{user?.team || '-'}</td>
-                      <td className="px-3 py-3 text-xs">{user?.location || '-'}</td>
-                      <td className="px-3 py-3 text-xs text-emerald-600">{user?.spendLimit?.raw?.withTax > 0 ? user?.spendLimit?.formatted?.withTax : 'Unlimited'}</td>
+                      <td className="px-3 py-3 text-xs capitalize">{user?.location || '-'}</td>
+                      <td className="px-3 py-3 text-xs font-semibold text-emerald-500">{user?.spendLimit?.raw?.withTax > 0 ? user?.spendLimit?.formatted?.withTax : 'Unlimited'}</td>
                       <td className="px-3 py-3 text-xs">
                         <div className='flex flex-col gap-1'>
-                          {user?.canApproveOrder && (
-                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-blue-100 transition">
-                              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" />
-                              </svg>
-                              Can Approve Order
-                            </span>
-                          )}
-                          {user?.canPlaceOrder && (
-                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-emerald-100 transition">
+                          <div className='flex flex-wrap justify-start gap-1'>
+                            {user?.canApproveOrder && <span className={`${user?.canApproveOrder ? 'bg-sky-100 text-sky-600 border border-sky-400' : 'bg-red-100 text-red-600 border border-red-400'} inline-flex items-center gap-1  py-0.5 rounded text-[9px] font-medium shadow-sm transition sm:w-[92px]`}>
+                             <CheckIcon className='inline w-3 h-3' />
+                              Approve Order
+                            </span>}
+                            {user?.canPlaceOrder && <span className={`${user?.canPlaceOrder ? 'bg-sky-100 text-sky-600 border border-sky-400' : 'bg-red-100 text-red-600 border border-red-400'} inline-flex items-center gap-1  py-0.5 rounded text-[9px] font-medium shadow-sm transition sm:w-[92px]`}>
                               <ShoppingCartIcon className='inline w-3 h-3' />
-                              Can Place Order
-                            </span>
-                          )}
-                          {user?.canSeeCreditLimit && (
-                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-yellow-100 transition">
+                              Place Order
+                            </span>}
+                            {user?.canSeeCreditLimit && <span className={`${user?.canSeeCreditLimit ? 'bg-sky-100 text-sky-600 border border-sky-400' : 'bg-red-100 text-red-600 border border-red-400'} inline-flex items-center gap-1 py-0.5 rounded text-[9px] font-medium shadow-sm transition sm:w-[92px]`}>
                               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M4 4h12v2H4V4zm0 4h12v8H4V8z" />
                               </svg>
-                              Can See Credit Limit
-                            </span>
-                          )}
-                          {user?.canSeeInvoices && (
-                            <span className="inline-flex items-center gap-1 px-1 py-0.5 bg-purple-50 text-purple-700 border border-purple-200 rounded-full text-[10px] font-medium shadow-sm hover:bg-purple-100 transition">
+                              View Credit
+                            </span>}
+                            {user?.canSeeInvoices && <span className={`${user?.canSeeInvoices ? 'bg-sky-100 text-sky-600 border border-sky-400' : 'bg-red-100 text-red-600 border border-red-400'} inline-flex items-center gap-1  py-0.5 rounded text-[9px] font-medium shadow-sm transition sm:w-[92px]`}>
                               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M5 4a2 2 0 00-2 2v10a1 1 0 001.447.894L8 15.118l3.553 1.776A1 1 0 0013 16V6a2 2 0 00-2-2H5zm0 2h6v7.382L8.447 12.106a1 1 0 00-.894 0L5 13.382V6z" />
                               </svg>
-                              Can See Invoices
-                            </span>
-                          )}
+                              View Invoices
+                            </span>}
+                          </div>
                         </div>
                       </td>
                     </tr>
