@@ -62,7 +62,12 @@ function MyInvoices({ deviceInfo }: any) {
         console.error(error)
       }
     }
-    fetchInvoice()
+
+    if (user?.canSeeInvoices) {
+      fetchInvoice()
+    } else {
+      router.push('/my-account/my-company')
+    }
   }, [user?.companyId])
 
   async function downloadOrderInvoice(order: any) {

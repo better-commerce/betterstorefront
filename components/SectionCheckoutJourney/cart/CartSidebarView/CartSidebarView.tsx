@@ -799,7 +799,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    {cartItems?.lineItems?.length > 0 &&
+                    {user?.canPlaceOrder && cartItems?.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                         <>
                           <Link href={featureToggle?.features?.defaultCheckoutRoute || '/checkout'} onClick={() => {
