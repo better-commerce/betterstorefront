@@ -67,7 +67,7 @@ function CompanyUsers({ users }: any) {
             <h3 className='text-xl font-semibold text-black'>Users</h3>
             <button
               onClick={toggelAddNewUserModal}
-              className="inline-flex items-center px-6 py-2 text-sm font-medium text-white rounded-full shadow-lg nc-Button bg-slate-900 hover:bg-slate-800"
+              className="inline-flex items-center px-6 py-2 text-sm font-medium text-white rounded shadow-lg nc-Button bg-slate-900 hover:bg-slate-800"
             >
               {translate('label.myAccount.addNewUserText')}
             </button>
@@ -77,11 +77,11 @@ function CompanyUsers({ users }: any) {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="py-3 pl-3 pr-3 text-[12px] font-semibold text-left text-gray-900 sm:pl-4">User</th>
-                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Manager</th>
+                  <th className="px-2 py-3 text-[12px] font-semibold text-left text-gray-900">Manager</th>
                   <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Team</th>
                   <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Location</th>
                   <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900 w-28">Spend Limit</th>
-                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900 sm:w-[300px]">Permissions</th>
+                  <th className="px-1 py-3 text-[12px] font-semibold text-left text-gray-900 sm:w-[420px]">Permissions</th>
                 </tr>
               </thead>
               <tbody className='bg-white divide-y divide-gray-200'>
@@ -89,7 +89,7 @@ function CompanyUsers({ users }: any) {
                   const isCurrentUser = user?.userId === currentUserId
                   return (
                     <tr key={idx} className={`border-t border-b shadow-none group border-slate-200 hover:shadow ${isCurrentUser ? 'bg-yellow-50 font-semibold hover:bg-blue-100' : 'bg-white hover:bg-gray-100'}`} >
-                      <td className={`px-3 py-3 text-sm whitespace-nowrap  ${isCurrentUser ? 'text-sky-500' : 'text-black'}`}>
+                      <td className={`px-2 py-3 text-sm whitespace-nowrap  ${isCurrentUser ? 'text-sky-500' : 'text-black'}`}>
                         <div className='flex flex-col '>
                           <span className='font-semibold'>{`${user?.firstName} ${user?.lastName}`}</span>
                           <span className='text-xs text-gray-600'>{user?.email}</span>
@@ -100,7 +100,7 @@ function CompanyUsers({ users }: any) {
                       <td className="px-3 py-3 text-xs">{user?.team || '-'}</td>
                       <td className="px-3 py-3 text-xs capitalize">{user?.location || '-'}</td>
                       <td className="px-3 py-3 text-xs font-semibold text-emerald-500">{user?.spendLimit?.raw?.withTax > 0 ? user?.spendLimit?.formatted?.withTax : 'Unlimited'}</td>
-                      <td className="px-3 py-3 text-xs">
+                      <td className="px-1 py-3 text-xs">
                         <div className='flex flex-col gap-1'>
                           <div className='flex flex-wrap justify-start gap-1'>
                             {user?.canApproveOrder && <span className={`${user?.canApproveOrder ? 'bg-sky-100 text-sky-600 border border-sky-400' : 'bg-red-100 text-red-600 border border-red-400'} inline-flex items-center gap-1  py-0.5 rounded text-[9px] font-medium shadow-sm transition sm:w-[92px]`}>
