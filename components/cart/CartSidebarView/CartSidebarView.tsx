@@ -764,7 +764,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
+                    {user?.canPlaceOrder && <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                        <Link href="/cart" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)
@@ -781,7 +781,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                             <span>{translate('label.basket.checkoutBtnText')}</span> <ArrowRight className="w-4 h-4 text-white" />
                           </span>
                         </Link>
-                    </div>
+                    </div>}
                   </div>
                 </div>
               </Transition.Child>

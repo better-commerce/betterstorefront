@@ -11,7 +11,7 @@ function CompanyDetails({ user }: any) {
   const [isLoading, setIsLoading] = useState(true)
   const fetchCompanyDetails = async () => {
     let { data: company } = await axios.post(NEXT_B2B_GET_COMPANY_DETAILS, {
-      userId: user,
+      userId: user?.userId,
     })
     setIsLoading(false)
     setDetails(company)
@@ -58,7 +58,7 @@ function CompanyDetails({ user }: any) {
           </section>
 
           {/* Credit Info */}
-          <section className="w-full p-4 sm:p-6 my-4 border border-yellow-200 bg-yellow-50 rounded-2xl shadow-sm">
+          {user?.canSeeCreditLimit && <section className="w-full p-4 sm:p-6 my-4 border border-yellow-200 bg-yellow-50 rounded-2xl shadow-sm">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex flex-col items-start sm:items-center">
                 <span className="text-xs font-semibold text-gray-700 mb-1">Credit Limit</span>
@@ -73,7 +73,7 @@ function CompanyDetails({ user }: any) {
                 <span className="text-base font-bold text-white text-center bg-[#6c757d] px-3 py-2 rounded w-full min-w-[100px]">{details?.usedCredit?.formatted?.withTax}</span>
               </div>
             </div>
-          </section>
+          </section>}
         </>
       )}
     </section>

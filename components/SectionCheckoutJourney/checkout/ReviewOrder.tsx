@@ -193,7 +193,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
           </div>
         </div>
       </div>
-      <PaymentMethodSelection
+      {user?.canPlaceOrder && <PaymentMethodSelection
         basket={basket}
         isApplePayScriptLoaded={isApplePayScriptLoaded}
         uiContext={uiContext}
@@ -204,7 +204,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
         generateBasketId={generateBasketId}
         onPaymentMethodSelect={onPaymentMethodSelect}
         featureToggle={featureToggle}
-      />
+      />}
       {/*<button className='w-full mb-4 border border-black sm:mt-4 btn-primary-green' onClick={onPlaceOrder}>Place Order</button>*/}
     </>
   )

@@ -146,7 +146,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           href: '/my-account/my-company/quotes',
           displayOrder: 3
         },
-        {
+        user?.canSeeInvoices ? {
           type: 'tab',
           text: translate('label.myAccount.myCompanyMenus.invoice'),
           mtext: translate('label.myAccount.myCompanyMenus.invoice'),
@@ -154,7 +154,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
           head: <QueueListIcon className="text-gray-500 w-7 h-7 dark:text-gray-800" />,
           href: '/my-account/my-company/invoices',
           displayOrder: 5
-        },
+        } : undefined,
         {
           type: 'tab',
           text: translate('label.myAccount.myCompanyMenus.BuyingList'),
@@ -274,7 +274,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         <>
           <hr className="mt-6 mb-2 border-slate-200 dark:border-slate-200"></hr>
           <div className="flex w-full gap-0 bg-white">
-            {newConfig.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
+            {newConfig?.filter((x: any) => x !== undefined)?.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
               <>
                 {item.text == myAccountActiveTab ? (
                   <>
@@ -333,7 +333,7 @@ function SideMenu({ deviceInfo, featureToggle, config }: any) {
         </>
       ) : (
         <div className={`flex flex-col gap-0 mt-4 divide-y divide-gray-200 shadow rounded-xl bg-gray-50 ${featureToggle?.features?.enableForPCSite ? 'sidebar_inner_section' : ''}`}>
-          {newConfig.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
+          {newConfig?.filter((x: any) => x !== undefined)?.sort((a: any, b: any) => a.displayOrder - b.displayOrder).map((item: any, idx: number) => (
             <>
               {item.text == myAccountActiveTab ? (
                 <>

@@ -903,13 +903,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                   }
                 </dl>
 
-                <div className="mt-1 mb-6 sm:mb-0">
+                {user?.canPlaceOrder && <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 text-slate-50 dark:text-slate-50 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.basket.checkoutBtnText')}
                     </button>
                   </Link>
-                </div>
+                </div>}
               </section>
             </div>
             <div>
@@ -1059,13 +1059,13 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                   </div>
                 </dl>
 
-                <div className="mt-1 mb-6 sm:mb-0">
+                {user?.canPlaceOrder && <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-white shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.basket.checkoutBtnText')}
                     </button>
                   </Link>
-                </div>
+                </div>}
               </section>
             </div>
             <div>
