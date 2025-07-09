@@ -181,7 +181,7 @@ function MyCompany({ deviceInfo }: any) {
               </Tab.List>
               <Tab.Panels>
                 <Tab.Panel>
-                  <CompanyDetails user={user?.userId} />
+                  <CompanyDetails user={user} />
                 </Tab.Panel>
                 {user?.companyUserRole === UserRoleType.ADMIN && (
                   <Tab.Panel>
