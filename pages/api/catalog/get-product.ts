@@ -114,7 +114,7 @@ export const getProductTransform = (product: any) => ({
   sellableType: product?.sellableType,
   shortDescription: product?.shortDescription,
   //soldIndependently: product?.soldIndependently,
-  //stockAvailabilityMessage: product?.stockAvailabilityMessage,
+  stockAvailabilityMessage: product?.stockAvailabilityMessage,
   stockCode: product?.stockCode,
   //subBrand: product?.subBrand,
   //subBrandId: product?.subBrandId,

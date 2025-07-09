@@ -8,7 +8,7 @@ export default function ProductCompare({
   products,
   deviceInfo,
   maxBasketItemsCount,
-  featureToggle, 
+  featureToggle,
   defaultDisplayMembership,
 }: any) {
   const [attributeNames, setAttributeNames] = useState([])
@@ -20,23 +20,21 @@ export default function ProductCompare({
   }, [products])
 
   return (
-    <>
-  <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 r-display-none">
-    {products?.map((product: any, productIdx: number) => (
-      <div key={`compare-product-${productIdx}`} className="flex flex-col w-full">
-        <Products
-          product={product}
-          hideWishlistCTA={true}
-          deviceInfo={deviceInfo}
-          maxBasketItemsCount={maxBasketItemsCount}
-          attributesCount={attributeNames?.length || 0}
-          featureToggle={featureToggle} 
-           defaultDisplayMembership={defaultDisplayMembership}
-           />
-      </div>
-    ))}
-  </div>
-    </>
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-5 r-display-none">
+      {products?.map((product: any, productIdx: number) => (
+        <div key={`compare-product-${productIdx}`} className="flex flex-col w-full p-3 border border-gray-300 rounded">
+          <Products
+            product={product}
+            hideWishlistCTA={true}
+            deviceInfo={deviceInfo}
+            maxBasketItemsCount={maxBasketItemsCount}
+            attributesCount={attributeNames?.length || 0}
+            featureToggle={featureToggle}
+            defaultDisplayMembership={defaultDisplayMembership}
+          />
+        </div>
+      ))}
+    </div>
   )
 }
 ProductCompare.Layout = Layout

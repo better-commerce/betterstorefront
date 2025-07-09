@@ -97,6 +97,7 @@ export const getProductListTransform = (results: any) =>
     reviewCount: product?.reviewCount,
     sellableType: product?.sellableType || EmptyString,
     shortDescription: product?.shortDescription,
+    stockAvailabilityMessage: product?.stockAvailabilityMessage,
     sku: product?.sku,
     slug: product?.slug,
     stockCode: product?.stockCode,

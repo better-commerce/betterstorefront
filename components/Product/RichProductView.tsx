@@ -182,7 +182,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   <AvailableOffers currency={product?.price} offers={promotions?.promotions} key={product?.id} />
                 </div>
               )}
-                            {selectedOption === "new" && product?.condition != 'pre-launch' && (
+              {selectedOption === "new" && product?.condition != 'pre-launch' && (
                 <>
                   <div className="flex items-center w-full my-3 gap-x-2">
                     <img src="/theme/camera/image/pc-point-icon.svg" alt="icon" />
@@ -193,17 +193,15 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                       <h1 className="mb-2 text-sm text-gray-700">
                         Configuration: <span className="font-semibold text-black">{product?.name}</span>
                       </h1>
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 mb-2">
+                      <div className="grid grid-cols-1 gap-4 mb-2 md:grid-cols-3">
                         <div className="pt-2 relative rounded-md border-2 text-center bg-[#F5F5F5] justify-center transition-all hover:border-blue-500/50 flex flex-col active-clr">
                           <h2 className="text-sm font-medium text-black leading-tight mb-1 px-3 flex justify-center items-center sm:min-h-[135px]">
                             {product?.name}
                           </h2>
                           <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t w-full">
-                                {product?.currentStock > 1 ? (
-                                  <p className="font-normal block text-xs mb-1 text-green-600">In stock</p>
-                                 ) : (
-                                   <><p className="text-xs block font-normal mb-1 text-red-600">Out of stock</p></>
-                               )}
+                            {product?.stockAvailabilityMessage && (
+                              <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
+                            )}
                             <KitPrice price={product?.price} listPrice={product?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                           </p>
                         </div>
@@ -217,11 +215,9 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                               {item?.name}
                             </h2>
                             <p className="text-xs py-2 bottom-0 relative text-[#757575] font-semibold border-t border-[#D9D9D9] w-full">
-                                {item?.currentStock > 1 ? (
-                                  <p className="font-normal block text-xs mb-1 text-green-600">In stock</p>
-                                 ) : (
-                                   <><p className="text-xs block font-normal mb-1 text-red-600">Out of stock</p></>
-                               )}
+                              {item?.stockAvailabilityMessage && (
+                                <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
+                              )}
                               <KitPrice price={item?.price} listPrice={item?.listPrice} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
                             </p>
                           </Link>
@@ -300,14 +296,10 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                           </span>
                         </div>
                       }
-                      {product?.currentStock > 1 ? (
-                        <p className="font-semibold text-green-600">In stock</p>
-                      ) : (
-                        <></>
+                      {product?.stockAvailabilityMessage && (
+                        <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
                       )}
-                      {product?.currentStock > 0 && product?.currentStock === 1 && (
-                        <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
-                      )}
+
                       {/* <div className="mb-3 flex  pl-2 items-center border border-[#D9D9D9] bg-[#F5F5F5] rounded-md">
                         <span className='pr-1'>Quantity:</span>
                         <select id="quantity" className="w-full p-2 bg-transparent border-none focus:border-0 focus-none" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
@@ -351,10 +343,10 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                         {!isGuestUser && user?.userId && product?.condition != 'pre-launch' &&
                           <>
                             <div className="flex mt-6 sm:mt-4 !text-sm w-full buy-btn">
-                              <BuyNowButton 
-                                title="Buy Now" 
-                                action={buttonConfig.action} 
-                                buttonType={buttonConfig.type || 'cart'} 
+                              <BuyNowButton
+                                title="Buy Now"
+                                action={buttonConfig.action}
+                                buttonType={buttonConfig.type || 'cart'}
                                 disabled={selectedAttrData?.currentStock <= 0 && !product?.preOrder?.isEnabled && !product?.flags?.sellWithoutInventory}
                               />
                             </div>
@@ -409,13 +401,8 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                             <span className='cursor-pointer hover:underline dark:text-black' onClick={onStoreStockCheck}>{translate('label.store.checkStoreStockText')}</span>
                           </div>
                         }
-                        {product?.currentStock > 1 ? (
-                          <p className="font-semibold text-green-600">In stock</p>
-                        ) : (
-                          <></>
-                        )}
-                        {product?.currentStock > 0 && product?.currentStock === 1 && (
-                          <p className="text-sm font-normal text-red-600"> Hurry! Last {product.currentStock} in stock.</p>
+                        {product?.stockAvailabilityMessage && (
+                          <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
                         )}
                         <UsedProductCard products={selectedUsedProduct} maxBasketItemsCount={maxBasketItemsCount} deviceInfo={deviceInfo} featureToggle={featureToggle} />
                       </>
@@ -431,10 +418,8 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   </label>
                   {selectedOption === "new" && (
                     <div className="mt-2 space-y-2">
-                      {product?.currentStock > 0 ? (
-                        <p className="font-semibold text-green-600">In stock</p>
-                      ) : (
-                        <p className="text-sm font-semibold text-red-600">Not for sale now</p>
+                      {product?.stockAvailabilityMessage && (
+                        <p className="block mb-1 text-xs font-normal text-green-600">{product?.stockAvailabilityMessage}</p>
                       )}
                     </div>
                   )}

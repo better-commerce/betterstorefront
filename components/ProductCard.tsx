@@ -338,12 +338,10 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
         }
         {featureToggle?.features?.enableForPCSite &&
           <div className='flex items-center justify-start gap-1 mt-2 text-xs font-semibold text-gray-600'>
-            {data?.currentStock > 0 ? <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>In stock</span> :
-              <span className='px-1 py-0.5 rounded text-xs text-[#E5A000]'>Awaiting stock</span>
-            }
+            {data?.stockAvailabilityMessage && <span className='px-1 py-0.5 rounded text-xs text-[#009951]'>{data?.stockAvailabilityMessage}</span>}
           </div>
         }
-        
+
         {/* Button section aligned to bottom */}
         <div className={`mt-auto ${featureToggle?.features?.enableForPCSite ? 'pt-4 pb-4' : 'pt-2 pb-3'}`}>
           {!isComparedEnabled && featureToggle?.features?.enableAddButtonBottom && data?.condition != "pre-launch" && (
@@ -360,7 +358,7 @@ const ProductCard: FC<ProductCardProps> = ({ className = "", data, isLiked, devi
             </div>
           }
         </div>
-        
+
         {isComparedEnabled && product?.compared && (
           <div className="absolute bottom-0 left-0 flex flex-col w-full gap-1 py-0 pr-0 mx-auto duration-300 bg-transparent rounded-md button-position-absolute compared-btn">
             {product?.compared && (
