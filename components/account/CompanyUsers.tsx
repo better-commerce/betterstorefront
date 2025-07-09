@@ -76,11 +76,11 @@ function CompanyUsers({ users }: any) {
             <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="py-3 pl-3 pr-3 text-[12px] font-semibold text-left text-gray-900 sm:pl-4">User</th>
+                  <th className="py-3 pl-2 pr-2 text-[12px] font-semibold text-left text-gray-900 sm:pl-2">User</th>
                   <th className="px-2 py-3 text-[12px] font-semibold text-left text-gray-900">Manager</th>
-                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Team</th>
-                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900">Location</th>
-                  <th className="px-3 py-3 text-[12px] font-semibold text-left text-gray-900 w-28">Spend Limit</th>
+                  <th className="px-2 py-3 text-[12px] font-semibold text-left text-gray-900">Team</th>
+                  <th className="px-2 py-3 text-[12px] font-semibold text-left text-gray-900">Location</th>
+                  <th className="px-2 py-3 text-[12px] font-semibold text-left text-gray-900">Spend Limit</th>
                   <th className="px-1 py-3 text-[12px] font-semibold text-left text-gray-900 sm:w-[420px]">Permissions</th>
                 </tr>
               </thead>
@@ -96,10 +96,10 @@ function CompanyUsers({ users }: any) {
                           <span className='text-xs text-gray-600'>{user?.phoneNo}</span>
                         </div>
                       </td>
-                      <td className="px-3 py-3 text-xs">{user?.reportingManager?.email || '-'}</td>
-                      <td className="px-3 py-3 text-xs">{user?.team || '-'}</td>
-                      <td className="px-3 py-3 text-xs capitalize">{user?.location || '-'}</td>
-                      <td className="px-3 py-3 text-xs font-semibold text-emerald-500">{user?.spendLimit?.raw?.withTax > 0 ? user?.spendLimit?.formatted?.withTax : 'Unlimited'}</td>
+                      <td className="px-2 py-3 text-xs">{user?.reportingManager?.email}</td>
+                      <td className="px-2 py-3 text-xs">{user?.team}</td>
+                      <td className="px-2 py-3 text-xs capitalize">{user?.location}</td>
+                      <td className="px-2 py-3 text-xs font-semibold text-emerald-500">{user?.spendLimit?.raw?.withTax > 0 ? user?.spendLimit?.formatted?.withTax : 'Unlimited'}</td>
                       <td className="px-1 py-3 text-xs">
                         <div className='flex flex-col gap-1'>
                           <div className='flex flex-wrap justify-start gap-1'>

@@ -115,8 +115,6 @@ export async function getStaticProps(context: any) {
       await setData([{ key: cachedDataUID.blogListUID, value: blogListUIDData }])
     }
 
-
-
   } catch (error: any) {
     logError(error)
 

@@ -320,7 +320,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                         <img
                           src={generateUri(usd?.usedproduct_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                           alt={usd?.usedproduct_title}
-                          className='sm:object-cover sm:w-full w-auto h-40 sm:h-56'
+                          className='w-auto h-40 sm:object-cover sm:w-full sm:h-56'
                           width={500}
                           height={224}
                           loading="lazy"
@@ -362,45 +362,45 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               )}
             </div>
             {/* brand Image collection list start */}
-            {pageContents?.brandlist?.length > 0 && (<><ImageCollection data={pageContents?.brandlist} deviceInfo={deviceInfo}/></>)}
+            {pageContents?.brandlist?.length > 0 && (<><ImageCollection data={pageContents?.brandlist} deviceInfo={deviceInfo} /></>)}
             {/* brand Image collection list End */}
-            <div className='container px-0  mx-auto'>
-            <RecentlyViewedProduct isHome={false} deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
+            <div className='container px-0 mx-auto'>
+              <RecentlyViewedProduct isHome={false} deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
             </div>
             {Array.isArray(productTabs) && productTabs.length > 0 && (
               <div className='container py-6 pb-0 tab-padding-none slider-btn-css'>
                 {pageContents?.featureproductsheading?.length > 0 && pageContents?.featureproductsheading?.map((heading: any, hIdx: number) => (
-                    <h3 className="pb-3 font-semibold text-black title-page sm:pb-4 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureproductsheading_title}</h3>
+                  <h3 className="pb-3 font-semibold text-black title-page sm:pb-4 dark:text-black" key={`feature-${hIdx}`}>{heading?.featureproductsheading_title}</h3>
                 ))}
-               <ProductTabs tabs={productTabs} defaultActiveTab="Cameras" />
+                <ProductTabs tabs={productTabs} defaultActiveTab="Cameras" />
               </div>
             )}
-            
+
             {/* Brands section */}
             {pageContents?.brands?.length > 0 && (
-                <div className='flex flex-col w-full pt-4 mt-2 sm:mt-4'>
-                  <div className='container flex flex-col gap-4 mx-auto'>
-                    {pageContents?.brandheading?.map((h: any, iIdx: number) => (
-                      <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
-                        <h2 className='font-semibold text-black title-page'>{h?.brandheading_title}</h2>
-                      </div>
-                    ))}
-                    <div className='grid items-center justify-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
-                      {pageContents?.brands?.map((item: any, itemIdx: number) => (
-                        <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
-                          <img
-                            src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
-                            alt={item?.brands_name}
-                            className='w-full h-auto p-0 sm:p-2'
-                            width={300}
-                            height={150}
-                            loading="lazy"
-                          />
-                        </Link>
-                      ))}
+              <div className='flex flex-col w-full pt-4 mt-2 sm:mt-4'>
+                <div className='container flex flex-col gap-4 mx-auto'>
+                  {pageContents?.brandheading?.map((h: any, iIdx: number) => (
+                    <div className='relative flex flex-col justify-between mb-4 nc-Section-Heading sm:flex-row sm:items-end lg:mb-6 text-neutral-900 dark:text-neutral-50' key={`heading-brand-${iIdx}`}>
+                      <h2 className='font-semibold text-black title-page'>{h?.brandheading_title}</h2>
                     </div>
+                  ))}
+                  <div className='grid items-center justify-center grid-cols-4 gap-2 text-left sm:grid-cols-6'>
+                    {pageContents?.brands?.map((item: any, itemIdx: number) => (
+                      <Link href={item?.brands_link} passHref key={`brands-${itemIdx}`} className='flex flex-col items-start justify-start w-full text-left'>
+                        <img
+                          src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
+                          alt={item?.brands_name}
+                          className='w-full h-auto p-0 sm:p-2'
+                          width={300}
+                          height={150}
+                          loading="lazy"
+                        />
+                      </Link>
+                    ))}
                   </div>
                 </div>
+              </div>
             )}
             {pageContents?.tradeinbanner?.length > 0 && pageContents?.tradeinbanner?.map((trade: any, tradeIdx: number) => (
               <div className='relative sm:min-h-[480px] flex flex-col items-center justify-center w-full gap-2 py-4 overflow-hidden' key={`trade-in-${tradeIdx}`}>
@@ -434,24 +434,24 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     </div>
                   ))}
                   <div className='relative'>
-                  <div className="flex justify-between mb-2 slider-out-btn">
-                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
-                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                    <div className="flex justify-between mb-2 slider-out-btn">
+                      <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
+                      <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                    </div>
+                    <Swiper slidesPerView={1.3} spaceBetween={30} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                      {pageContents?.tocategoryinspired?.map((item: any, pId: number) => (
+                        <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+                          <div key={pId} className={`product-card-item home-product-card`}>
+                            <Link href={sanitizeRelativeUrl(`/${item?.tocategoryinspired_link}`)}>
+                              <div className='relative flex flex-col rounded-lg'>
+                                <img alt={item?.tocategoryinspired_title} src={generateUri(item?.tocategoryinspired_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
+                              </div>
+                            </Link>
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
                   </div>
-                   <Swiper slidesPerView={1.3} spaceBetween={30}  ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
-                    {pageContents?.tocategoryinspired?.map((item: any, pId: number) => (
-                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
-                        <div key={pId} className={`product-card-item home-product-card`}>
-                          <Link href={sanitizeRelativeUrl(`/${item?.tocategoryinspired_link}`)}>
-                            <div className='relative flex flex-col rounded-lg'>
-                              <img alt={item?.tocategoryinspired_title} src={generateUri(item?.tocategoryinspired_image, 'h=450&fm=webp') || IMG_PLACEHOLDER} className='object-contain object-top w-full h-auto' />
-                            </div>
-                          </Link>
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                   </div> 
                 </div>
               }
               {pageContents?.competitioncard?.length > 0 &&
@@ -463,38 +463,38 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     </div>
                   ))}
                   <div className='relative'>
-                  <div className="flex justify-between mb-2 slider-out-btn">
-                    <Prev onClickPrev={() => swiperRefCard.current?.swiper?.slidePrev()} />
-                    <Next onClickNext={() => swiperRefCard.current?.swiper?.slideNext()} />
-                  </div>
-                 <Swiper slidesPerView={1.3}  ref={swiperRefCard} spaceBetween={30} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
-                    {pageContents?.competitioncard?.map((item: any, pId: number) => (
-                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
-                        <div key={pId} className={`product-card-item home-product-card`}>
-                          <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
-                            <div className='relative flex flex-col rounded-lg'>
-                              <img
-                                alt={item?.competitioncard_title}
-                                src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER}
-                                className='object-contain object-top w-full h-auto'
-                                width={450}
-                                height={450}
-                                loading="lazy"
-                              />
-                              <span className='flex flex-col w-full py-2 text-black'>
-                                {item?.competitioncard_description != "" && <div className='w-full !text-xs pt-2 font-medium text-left text-gray-800 uppercase' dangerouslySetInnerHTML={{ __html: item?.competitioncard_description }} ></div>}
-                              </span>
-                            </div>
-                          </Link>
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
+                    <div className="flex justify-between mb-2 slider-out-btn">
+                      <Prev onClickPrev={() => swiperRefCard.current?.swiper?.slidePrev()} />
+                      <Next onClickNext={() => swiperRefCard.current?.swiper?.slideNext()} />
+                    </div>
+                    <Swiper slidesPerView={1.3} ref={swiperRefCard} spaceBetween={30} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 3 } }}>
+                      {pageContents?.competitioncard?.map((item: any, pId: number) => (
+                        <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+                          <div key={pId} className={`product-card-item home-product-card`}>
+                            <Link href={sanitizeRelativeUrl(`/${item?.competitioncard_link}`)}>
+                              <div className='relative flex flex-col rounded-lg'>
+                                <img
+                                  alt={item?.competitioncard_title}
+                                  src={generateUri(item?.competitioncard_image, 'h=450&fm=webp') || IMG_PLACEHOLDER}
+                                  className='object-contain object-top w-full h-auto'
+                                  width={450}
+                                  height={450}
+                                  loading="lazy"
+                                />
+                                <span className='flex flex-col w-full py-2 text-black'>
+                                  {item?.competitioncard_description != "" && <div className='w-full !text-xs pt-2 font-medium text-left text-gray-800 uppercase' dangerouslySetInnerHTML={{ __html: item?.competitioncard_description }} ></div>}
+                                </span>
+                              </div>
+                            </Link>
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
                   </div>
                 </div>
               }
               {pageContents?.about?.length > 0 && pageContents?.about?.map((ab: any, aIdx: number) => (
-                <div className='grid items-center gap-4 sm:gap-12 sm:grid-cols-12 pt-6 mt-0 sm:pt-10' key={`about-${aIdx}`}>
+                <div className='grid items-center gap-4 pt-6 mt-0 sm:gap-12 sm:grid-cols-12 sm:pt-10' key={`about-${aIdx}`}>
                   <div className='order-2 col-span-12 sm:col-span-4 sm:order-1'>
                     <div className='col-span-12'>
                       <img
@@ -558,7 +558,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <div className='container relative flex flex-col pt-10 mt-0 mb-7 sm:mb-8 lg:mb-12'>
                 <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
                   {pageContents?.fixingoffers?.length > 0 && pageContents?.fixingoffers?.map((fo: any, fIdx: number) => (
-                    <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx === 0 || fIdx === 3 || fIdx === 5 || fIdx === 7  ? 'bg-gray-200 text-black' : 'bg-orange-500 bg-green-light bg-light-skyblue text-white'}`} key={`data-${fIdx}`}>
+                    <div className={`grid items-center justify-center grid-cols-12 gap-10 p-4 rounded shadow mobile-flex  ${fIdx === 0 || fIdx === 3 || fIdx === 5 || fIdx === 7 ? 'bg-gray-200 text-black' : 'bg-orange-500 bg-green-light bg-light-skyblue text-white'}`} key={`data-${fIdx}`}>
                       <div className='flex flex-col col-span-7 gap-5'>
                         <h2 className='text-3xl font-semibold uppercase textcapitalize'>{fo?.fixingoffers_title}</h2>
                         <p className='text-sm font-normal'>{fo?.fixingoffers_shortdescription}</p>
@@ -568,43 +568,43 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       </div>
                       <div className='col-span-5'>
                         <img
-                        src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
-                        alt={fo?.fixingoffers_title}
-                        className='object-cover object-pos-right w-full h-56'
-                        width={500}
-                        height={224}
-                        loading="lazy"
-                      />
+                          src={generateUri(fo?.fixingoffers_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
+                          alt={fo?.fixingoffers_title}
+                          className='object-cover w-full h-56 object-pos-right'
+                          width={500}
+                          height={224}
+                          loading="lazy"
+                        />
                       </div>
                     </div>
                   ))}
                 </div>
-                {Array.isArray(pageContents?.fixingheading) && pageContents?.fixingheading?.some( (item: any) => item?.fixingheading_title?.trim() || item?.fixingheading_description?.trim()    
-                 ) && (
+                {Array.isArray(pageContents?.fixingheading) && pageContents?.fixingheading?.some((item: any) => item?.fixingheading_title?.trim() || item?.fixingheading_description?.trim()
+                ) && (
                     <div className="flex flex-col justify-center mb-6 text-center sm:mb-10">
-                      {pageContents.fixingheading.map( (heading: any, hIdx: number) => {
-                          const hasTitle = heading?.fixingheading_title?.trim();
-                          const hasDescription = heading?.fixingheading_description?.trim();
-                          if (!hasTitle && !hasDescription) return null;
-                          return (
-                            <div  key={`heading-${hIdx}`} className="flex flex-col justify-center gap-4 mt-6 sm:mt-10" >
-                              {hasTitle && (  <h2 className="text-3xl font-semibold text-black uppercase">  {heading.fixingheading_title} </h2>)}
-                              {hasDescription && (
-                                <div className="mx-auto text-sm font-normal !leading-relaxed text-gray-600 cms-para sm:w-10/12" dangerouslySetInnerHTML={{   __html: heading.fixingheading_description, }} />
-                              )}
-                            </div>
-                          );
-                        }
+                      {pageContents.fixingheading.map((heading: any, hIdx: number) => {
+                        const hasTitle = heading?.fixingheading_title?.trim();
+                        const hasDescription = heading?.fixingheading_description?.trim();
+                        if (!hasTitle && !hasDescription) return null;
+                        return (
+                          <div key={`heading-${hIdx}`} className="flex flex-col justify-center gap-4 mt-6 sm:mt-10" >
+                            {hasTitle && (<h2 className="text-3xl font-semibold text-black uppercase">  {heading.fixingheading_title} </h2>)}
+                            {hasDescription && (
+                              <div className="mx-auto text-sm font-normal !leading-relaxed text-gray-600 cms-para sm:w-10/12" dangerouslySetInnerHTML={{ __html: heading.fixingheading_description, }} />
+                            )}
+                          </div>
+                        );
+                      }
                       )}
                     </div>
                   )}
                 {/* Tabs */}
                 {(pageContents?.specialofferproducts?.length > 0 || pageContents?.newproducts?.length > 0) && (
-                <div className="flex justify-center gap-6 mb-4 sm:mb-10">
-                  <button className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 bg-active-clr border-blue-500 text-white" : "text-gray-600 bg-gray-100" }`}  onClick={handleSpecialOffersClick}> Special Offers </button>
-                  <button className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 bg-active-clr border-blue-500 text-white" : "text-gray-600 bg-gray-100" }`} onClick={handleNewProductsClick} > New Products </button>
-                </div>
-               )}
+                  <div className="flex justify-center gap-6 mb-4 sm:mb-10">
+                    <button className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "specialOffers" ? "bg-orange-500 bg-active-clr border-blue-500 text-white" : "text-gray-600 bg-gray-100"}`} onClick={handleSpecialOffersClick}> Special Offers </button>
+                    <button className={`px-4 py-2 text-md uppercase rounded font-semibold ${activeTab === "newProducts" ? "bg-orange-500 bg-active-clr border-blue-500 text-white" : "text-gray-600 bg-gray-100"}`} onClick={handleNewProductsClick} > New Products </button>
+                  </div>
+                )}
                 {/* Tab content */}
                 {activeTab === "specialOffers" && pageContents?.specialofferproducts?.length > 0 && (
                   <SectionSliderProductCard
@@ -632,11 +632,11 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                       <div className='relative z-10 flex flex-col col-span-7 gap-5 pt-4 sm:pt-6 text-black-clr-sec'>
                         <h2 className='text-3xl font-semibold uppercase'>{fo?.fixingdelivery_title}</h2>
                         <p className='text-sm font-normal'>{fo?.fixingdelivery_shortdescription}</p>
-                        <Link href={fo?.fixingdelivery_buttonlink || '#' }  legacyBehavior passHref>
-                          <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-link-white-clr text-orange-400 underline'>{fo?.fixingdelivery_buttontitle}</a>
+                        <Link href={fo?.fixingdelivery_buttonlink || '#'} legacyBehavior passHref>
+                          <a href={fo?.fixingdelivery_buttonlink} className='text-sm font-semibold text-left text-orange-400 underline text-link-white-clr'>{fo?.fixingdelivery_buttontitle}</a>
                         </Link>
                       </div>
-                      <div className='absolute top-0 right-0 left-0 z-0 col-span-12 mob-static'>
+                      <div className='absolute top-0 left-0 right-0 z-0 col-span-12 mob-static'>
                         <img
                           src={generateUri(fo?.fixingdelivery_image, 'h=500&fm=webp') || IMG_PLACEHOLDER}
                           alt={fo?.fixingdelivery_title}
@@ -687,7 +687,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                     <h3 className='text-5xl font-semibold text-orange-600'>{data?.about_title}</h3>
                     <div className='text-2xl font-normal text-black cms-para' dangerouslySetInnerHTML={{ __html: data?.about_description }}></div>
                     <div>
-                      <Link href={redirectHref || '#' } className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
+                      <Link href={redirectHref || '#'} className='px-10 py-3 text-sm font-semibold text-white bg-orange-600 rounded-full hover:bg-orange-500'>Request for Quote!</Link>
                     </div>
                   </div>
                   <div className='flex flex-col sm:p-20'>
@@ -718,7 +718,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                           loading="lazy"
                         />
                       </div>
-                      <Link href={data?.allcategories_link || '#' } className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
+                      <Link href={data?.allcategories_link || '#'} className='flex items-center justify-center w-full font-semibold text-orange-600 h-14 text-md'>{data?.allcategories_name}</Link>
                     </div>
                   ))}
                 </div>
@@ -844,7 +844,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   ))}
                   <div className='grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-6'>
                     {pageContents?.category?.map((item: any, itemIdx: number) => (
-                      <Link href={item?.category_link || '#' } passHref
+                      <Link href={item?.category_link || '#'} passHref
                         className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section'
                         key={`category-${itemIdx}`}
                       >
@@ -894,7 +894,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
               <div className='flex flex-col justify-center gap-4 py-6 text-center bg-gray-50 sm:py-10'>
                 <div className='container grid grid-cols-2 gap-2 mx-auto sm:grid-cols-4 sm:gap-6'>
                   {pageContents?.brandcategory?.map((item: any, itemIdx: number) => (
-                    <Link href={item?.brandcategory_link ||'#' } passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
+                    <Link href={item?.brandcategory_link || '#'} passHref className='flex flex-col gap-5 p-2 bg-white border border-gray-200 rounded shadow sm:p-6 group hover:border-gray-400 zoom-section' key={`brand-category-${itemIdx}`}>
                       <div className='flex flex-col w-full'>
                         <img
                           src={generateUri(item?.brandcategory_image, 'h=400&fm=webp') || IMG_PLACEHOLDER}
@@ -940,7 +940,7 @@ function Home({ pageContentsWeb, pageContentsMobileWeb, config, hostName, device
                   ))}
                   <div className='grid items-center grid-cols-4 gap-4 text-center'>
                     {pageContents?.brands?.map((item: any, itemIdx: number) => (
-                      <Link href={item?.brands_link ||'#' } passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
+                      <Link href={item?.brands_link || '#'} passHref key={`brands-${itemIdx}`} className='flex flex-col items-center justify-center text-center w-ful'>
                         <img
                           src={generateUri(item?.brands_image, 'h=300&fm=webp') || IMG_PLACEHOLDER}
                           alt={item?.brands_name}

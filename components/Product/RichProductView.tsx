@@ -113,14 +113,12 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
   };
   const getStockMessageColor = (message = '') => {
     const lowerMessage = message.toLowerCase();
-
-    if (lowerMessage.includes('pre-order')) return 'text-sky-600'; // blue
-    if (lowerMessage.includes('in stock')) return 'text-emerald-500'; // green
-    if (lowerMessage.includes('hurry') || lowerMessage.includes('last one')) return 'text-emerald-500'; // green
-    if (lowerMessage.includes('out of stock')) return 'text-red-500'; // red
-    if (lowerMessage.includes('awaiting stock') || lowerMessage.includes('expected')) return 'text-yellow-500'; // yellow
-    if (lowerMessage.includes('short supply')) return 'text-yellow-500'; // yellow
-
+    if (lowerMessage.includes('pre-order')) return 'text-[#2D4D9C]'; // blue
+    if (lowerMessage.includes('in stock')) return 'text-[#009951]'; // green
+    if (lowerMessage.includes('hurry') || lowerMessage.includes('last one')) return 'text-[#009951]'; // green
+    if (lowerMessage.includes('out of stock')) return 'text-[#C00F0C]'; // red
+    if (lowerMessage.includes('awaiting stock') || lowerMessage.includes('expected')) return 'text-[#E5A000]'; // yellow
+    if (lowerMessage.includes('short supply')) return 'text-[#E5A000]'; // yellow
     return 'text-gray-600'; // default
   };
   return (

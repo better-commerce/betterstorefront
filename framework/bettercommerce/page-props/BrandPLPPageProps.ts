@@ -60,7 +60,11 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
         imageCategoryCollection: !isEmpty(collectionUIDData?.imageCategoryCollection) ? collectionUIDData?.imageCategoryCollection || []: [],
         imgFeatureCollection: !isEmpty(collectionUIDData?.imgFeatureCollection) ? mapObject(collectionUIDData?.imgFeatureCollection, getCollectionHeroBannerTransform)?.data || null : null,
         offerBannerCollection: !isEmpty(collectionUIDData?.offerBannerCollection) ? mapObject(collectionUIDData?.offerBannerCollection, getCollectionOfferBannerCollectionTransform)?.data || []: [],
-        productCollection: mapObject(collectionUIDData?.productCollection, getProductCollectionTransformMap)?.data || [],
+        productCollection: mapObject(collectionUIDData?.resPc1, getProductCollectionTransformMap)?.data || [],
+        resPcHero: !isEmpty(collectionUIDData?.resPcHero) ? mapObject(collectionUIDData?.resPcHero, getCollectionHeroBannerTransform)?.data || null : null,
+        resPc1: mapObject(collectionUIDData?.resPc1, getProductCollectionTransformMap)?.data || [],
+        resPc2: mapObject(collectionUIDData?.resPc2, getProductCollectionTransformMap)?.data || [], 
+        resPc3: mapObject(collectionUIDData?.resPc3, getProductCollectionTransformMap)?.data || [], 
       }
     
       try {
@@ -69,7 +73,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
         if (widgets?.length) {
           widgets?.forEach(async (widget: any) => {
             if (
-              widget.manufacturerSettingType == 'ImageCollection' &&
+              widget.manufacturerSettingType == 'Image Collection' &&
               widget.code == 'HeroBanner'
             ) {
               promises.push(
@@ -82,7 +86,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
                 })
               )
             } else if (
-              widget.manufacturerSettingType == 'ImageCollection' &&
+              widget.manufacturerSettingType == 'Image Collection' &&
               widget.code == 'MultipleImageBanner'
             ) {
               promises.push(
@@ -94,49 +98,63 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
                   resolve()
                 })
               )
-            } else if (
-              widget.manufacturerSettingType == 'ImageCollection' &&
-              widget.code == 'HeroBanner'
+            }  else if (
+              widget.manufacturerSettingType == 'Image Collection' &&
+              widget.code == 'PCHero'
             ) {
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
-                    const imgFeatureCollection = await getCollectionById(widget.recordId, cookies)
-                    collections.imgFeatureCollection = !isEmpty(imgFeatureCollection) ? mapObject(imgFeatureCollection, getCollectionHeroBannerTransform)?.data || null : null
+                    const resPcHero = await getCollectionById(widget.recordId, cookies)
+                    collections.resPcHero = !isEmpty(resPcHero) ? mapObject(resPcHero, getCollectionHeroBannerTransform)?.data || null : null
                   } catch (error: any) { }
                   resolve()
                 })
               )
-            } else if (
-              widget.manufacturerSettingType == 'ImageCollection' &&
-              widget.code == 'HeroBanner'
-            ) {
-              promises.push(
-                new Promise(async (resolve: any, reject: any) => {
-                  try {
-                    const res = await getCollectionById(widget.recordId, cookies)
-                    const offerBannerCollection = res?.images
-                    collections.offerBannerCollection = !isEmpty(offerBannerCollection) ? mapObject(offerBannerCollection, getCollectionOfferBannerCollectionTransform)?.data || []: []
-                  } catch (error: any) { }
-                  resolve()
-                })
-              )
-            } else if (
-              widget.manufacturerSettingType == 'ProductCollection' &&
-              widget.code == 'RecommendedProductCollection'
+            }  else if (
+              widget.manufacturerSettingType == 'Product Collection' &&
+              widget.code == 'PC1'
             ) {
               promises.push(
                 new Promise(async (resolve: any, reject: any) => {
                   try {
                     const res = await getCollectionById(widget.recordId, cookies)
-                    const productCollection = res?.products?.results
-                    collections.productCollection = mapObject(productCollection, getProductCollectionTransformMap)?.data || []
+                    const resPc1 = res?.products?.results
+                    collections.resPc1 = mapObject(resPc1, getProductCollectionTransformMap)?.data || []
                   } catch (error: any) { }
                   resolve()
                 })
               )
             } else if (
-              widget.manufacturerSettingType == 'ProductCollection' &&
+              widget.manufacturerSettingType == 'Product Collection' &&
+              widget.code == 'PC2'
+            ) {
+              promises.push(
+                new Promise(async (resolve: any, reject: any) => {
+                  try {
+                    const res = await getCollectionById(widget.recordId, cookies)
+                    const resPc2 = res?.products?.results
+                    collections.resPc2 = mapObject(resPc2, getProductCollectionTransformMap)?.data || []
+                  } catch (error: any) { }
+                  resolve()
+                })
+              )
+            }  else if (
+              widget.manufacturerSettingType == 'Product Collection' &&
+              widget.code == 'PC3'
+            ) {
+              promises.push(
+                new Promise(async (resolve: any, reject: any) => {
+                  try {
+                    const res = await getCollectionById(widget.recordId, cookies)
+                    const resPc3 = res?.products?.results
+                    collections.resPc3 = mapObject(resPc3, getProductCollectionTransformMap)?.data || []
+                  } catch (error: any) { }
+                  resolve()
+                })
+              )
+            } else if (
+              widget.manufacturerSettingType == 'Product Collection' &&
               widget.code == 'SaleProductCollection'
             ) {
               promises.push(

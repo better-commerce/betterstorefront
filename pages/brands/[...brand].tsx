@@ -4,9 +4,11 @@ import Link from 'next/link'
 import useSwr from 'swr'
 import SwiperCore, { Navigation } from 'swiper'
 import Glide from '@glidejs/glide'
-import 'swiper/swiper.min.css'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
-
+import 'swiper/css/navigation'
+import Prev from '@components/shared/NextPrevIcon/Prev'
+import Next from '@components/shared/NextPrevIcon/Next'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
@@ -44,7 +46,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import Loader from '@components/Loader'
-import { removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
+import { generateUri, removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 import MultiBrandVideo from '@components/SectionBrands/MultiBrandVideo'
@@ -115,9 +117,16 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   let offerBannerResult: any = collections.offerBannerResult
   let productCollectionRes: any = collections.productCollection
   let saleProductCollectionRes: any = collections.saleProductCollection
-  const sliderRef = useRef(null);
-  const sliderRefNew = useRef(null);
+
+  let resPcHero: any = collections.resPcHero
+  let resPc1: any = collections.resPc1
+  let resPc2: any = collections.resPc2
+  let resPc3: any = collections.resPc3
+
   const [isShow, setIsShow] = useState(false);
+  const sliderRef = useRef(null);
+  const sliderRef3 = useRef(null);
+  const sliderRefNew = useRef(null);
   useEffect(() => {
     const OPTIONS: Partial<Glide.Options> = {
       perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
@@ -143,6 +152,19 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       slider.destroy();
     };
   }, [sliderRefNew]);
+
+  useEffect(() => {
+    const OPTIONS: Partial<Glide.Options> = {
+      perView: 4, gap: 32, bound: true, breakpoints: { 1280: { perView: 4 - 1, }, 1024: { gap: 20, perView: 4 - 1, }, 768: { gap: 20, perView: 4 - 2, }, 640: { gap: 20, perView: 1.5, }, 500: { gap: 20, perView: 1.3, }, },
+    };
+    if (!sliderRef3.current) return;
+    let slider = new Glide(sliderRef3.current, OPTIONS);
+    slider.mount();
+    setIsShow(true);
+    return () => {
+      slider.destroy();
+    };
+  }, [sliderRef3]);
 
   useAnalytics(AnalyticsEventType.BRAND_VIEWED, { brandDetails, entityName: PAGE_TYPE, })
 
@@ -178,10 +200,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
       sortBy: null,
     },
   })
-  const [manufacturerStateVideoName, setManufacturerStateVideoName] =
-    useState('')
-  const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] =
-    useState('')
+  const [manufacturerStateVideoName, setManufacturerStateVideoName] = useState('')
+  const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] = useState('')
   const [manufacturerStateTextName, setManufacturerStateTextName] = useState('')
   const [midBannerHeading, setMidBannerHeading] = useState('')
   const [multipleBrandVideoName, setMultipleBrandVideoName] = useState('')
@@ -189,8 +209,9 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   const [midBanners, setMidBanners] = useState('')
   const [midBannerLink, setMidBannerLink] = useState('')
   const [brandColor, setBrandColor] = useState('')
-  const [manufacturerStateTextHeading, setManufacturerStateTextHeading] =
-    useState('')
+  const [manufacturerStateTextHeading, setManufacturerStateTextHeading] = useState('')
+  const [pHeading, setPHeading] = useState('')
+  const [pText, setPText] = useState('')
   const [textNames, setTextNames] = useState([])
   const [recommendedProducts, setRecommendedProducts] = useState([])
   const [showLandingPage, setShowLandingPage] = useState(true)
@@ -411,6 +432,16 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           const TextNames = val.name.split('  ')
           setTextNames(TextNames)
         }
+      } else if (
+        val.manufacturerSettingType == 'Plain Text' &&
+        val.code == 'PlainText'
+      ) {
+        setPHeading(val.heading)
+        setPText(val.name)
+        if (val.name) {
+          const TextNames = val.name.split('  ')
+          setTextNames(TextNames)
+        }
       }
       return
     })
@@ -528,56 +559,304 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           <h1 className={`block text-2xl sr-only capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
             {brandDetails?.name}
           </h1>
-          <div className="container w-full pb-0 mx-auto bg-white md:pb-4">
-            <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-12">
-              <div className="flex md:col-span-9 flex-col items-center px-4 sm:px-10 py-4 sm:py-10 rounded-xl brand-rounded-xl bg-teal-500 min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
-                <img alt="Brand Logo" src={brandDetails.logoImageName || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto rounded-2xl" />
-                {brandDetails?.shortDescription != emptyHtmlString &&
-                  <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
-                }
-                <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
+          {featureToggle?.features?.enableForPCSite ? (
+            resPcHero?.images?.length > 0 && (
+              <div className='flex flex-col w-full mt-2'>
+                <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
+                  {resPcHero?.images?.map((img: any, idx: number) => (
+                    <SwiperSlide key={`horizontal-slider-${idx}`}>
+                      <Link href={img.link || '#'}>
+                        <img
+                          width={1920}
+                          height={500}
+                          src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
+                          alt={img?.name || 'Collection Banner'}
+                          className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer"
+                          loading={idx < 2 ? "eager" : "lazy"}
+                        />
+                      </Link>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
-              <ImageCollection range={1} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
-            </div>
-            <div className="mt-10 border-t border-gray-200">
-              <div className={`nc-SectionSliderProductCard`}>
-                <div ref={sliderRef} className={`flow-root ${isShow ? '' : 'invisible'}`}>
-                  <div className='flex justify-between my-4'>
-                    <HeadingWithButton className="mt-2 mb-2 lg:mb-2 text-neutral-900 dark:text-neutral-50 " desc="" rightDescText="New Arrivals" hasNextPrev onButtonClick={onToggleBrandListPage} buttonText="See All" >
-                      {translate('label.product.recommendedProductText')}
-                    </HeadingWithButton>
+            )
+          ) : (
+            <></>
+          )}
+          <div className="container w-full pb-0 mx-auto bg-white md:pb-4">
+            {featureToggle?.features?.enableForPCSite ? (
+              <></>
+            ) : (
+              <div className="grid grid-cols-1 gap-5 mt-10 md:grid-cols-12">
+                <div className="flex md:col-span-9 flex-col items-center px-4 sm:px-10 py-4 sm:py-10 rounded-xl brand-rounded-xl bg-teal-500 min-h-[350px] md:min-h-[85vh] lg:min-h-[55vh] justify-evenly pt-2">
+                  <img alt="Brand Logo" src={brandDetails.logoImageName || IMG_PLACEHOLDER} width={212} height={200} loading="eager" className="w-[120px] md:w-[212px] h-auto rounded-2xl" />
+                  {brandDetails?.shortDescription != emptyHtmlString &&
+                    <div dangerouslySetInnerHTML={{ __html: brandDetails?.shortDescription }} className="w-3/4 py-5 text-2xl font-medium leading-10 text-center text-white uppercase" />
+                  }
+                  <button className="px-6 py-3 font-medium text-black uppercase bg-white rounded-md hover:opacity-80" onClick={handleClick} > {translate('common.label.shopNowText')} </button>
+                </div>
+                <ImageCollection range={1} AttrArray={imageCategoryCollectionResponse || []} showTitle={true} />
+              </div>
+            )}
+
+            {resPc1?.length > 0 &&
+              <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
+                <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
+                  <h3 className="font-semibold text-black title-page">Top Categories</h3>
+                </div>
+                <div className='relative'>
+                  <div className="flex justify-between mb-2 slider-out-btn">
+                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
                   </div>
-                  <div className="glide__track" data-glide-el="track">
-                    <ul className="glide__slides">
-                      {productCollectionRes?.map((item: any, index: number) => (
-                        <li key={index} className={`glide__slide`}>
-                          <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                    {resPc1?.map((item: any, pId: number) => (
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+                        <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 </div>
               </div>
-            </div>
-            <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
-            <div className="mt-0 md:mt-2">
-              <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
-            </div>
+            }
 
-            <div className="w-full mt-10 md:mt-20">
-              {/* NOTE : manufacturerSettingType for this widget is 'ImageBanner' & code is 'MidBanner' */}
-              <ImageBanner midBanners={midBanners} heading={midBannerHeading} link={midBannerLink} bgColor={bgColor} textColor={textColor} />
+            {resPc2?.length > 0 &&
+              <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
+                <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
+                  <h3 className="font-semibold text-black title-page">Top Cameras</h3>
+                </div>
+                <div className='relative'>
+                  <div className="flex justify-between mb-2 slider-out-btn">
+                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                  </div>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                    {resPc2?.map((item: any, pId: number) => (
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+                        <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              </div>
+            }
 
-              {/* NOTE : manufacturerSettingType for this widget is 'Video' & code is 'MultipleBrandVideos' */}
-              {multipleBrandVideoName ?
-                <div className="mt-10 lg:mt-20">
-                  <MultiBrandVideo videos={multipleBrandVideos || ''} name={multipleBrandVideoName || ''} />
-                </div> : null
-              }
-            </div>
+            {resPc3?.length > 0 &&
+              <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
+                <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
+                  <h3 className="font-semibold text-black title-page">Top Lenses</h3>
+                </div>
+                <div className='relative'>
+                  <div className="flex justify-between mb-2 slider-out-btn">
+                    <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                  </div>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                    {resPc3?.map((item: any, pId: number) => (
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+                        <ProductCard data={item} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              </div>
+            }
+            <div className='flex flex-col w-full gap-4 px-4 py-4 my-4 sm:my-10 bg-slate-100 rounded-xl sm:px-6 sm:py-8'>
+              <h3 className="font-semibold text-black title-page">{pHeading}</h3>
+              <p className='text-sm font-medium text-gray-700'>{pText}</p>
+            </div> 
+
+            {featureToggle?.features?.enableForPCSite &&
+              <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 pb-0 mx-auto mt-0 bg-transparent sm:mt-0' : ' pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2'} fixing-main-section`}>
+                {!featureToggle.features?.enableForPCSite &&
+                  <>
+                    <div className="max-w-screen-sm">
+                      <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+                        <li className='flex items-center text-10-mob sm:text-sm'>
+                          <Link href="/brands" passHref>
+                            <span className="flex items-end upper case font-12 dark:text-black">{translate('common.label.brandsText')}</span>
+                          </Link>
+                        </li>
+                        <li className='flex items-center text-10-mob sm:text-sm'>
+                          <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                            <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                          </span>
+                        </li>
+                        <li className='flex items-center text-10-mob sm:text-sm'>
+                          <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
+                        </li>
+                      </ol>
+                    </div>
+                    <div className={`max-w-screen-sm max-t-full ${CURRENT_THEME == 'green' ? 'mx-auto text-center sm:py-0 py-3 -mt-4' : ''}`}>
+                      <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
+                        {brandDetails?.name}
+                      </h1>
+                      {sanitizedDescription &&
+                        <div className='w-full'>
+                          <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
+                            <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+                          </span>
+                        </div>
+                      }
+                    </div>
+                    <div className='flex justify-between w-full pb-1 mt-1 mb-2 align-center'>
+                      <span className="inline-block text-xs font-medium text-slate-500 sm:px-0 dark:text-slate-500 result-count-text brand-text-12"> {translate('label.search.resultCountText1')} {productDataToPass?.total} {translate('common.label.resultsText')} </span>
+                      <div className="flex justify-end align-bottom">
+                        <OutOfStockFilter excludeOOSProduct={excludeOOSProduct} onEnableOutOfStockItems={onEnableOutOfStockItems} />
+                      </div>
+                    </div>
+                    <hr className='border-slate-200 dark:border-slate-200' />
+                  </>
+                }
+                {
+                  <div className={`grid grid-cols-1 gap-1 mt-2 overflow-hidden lg:grid-cols-12 sm:mt-0 pc-overflow-visible ${CURRENT_THEME == 'green' ? 'md:grid-cols-2 sm:grid-cols-2' : 'md:grid-cols-3 sm:grid-cols-3'}`}>
+                    {isValidating ? (
+                      <Loader />
+                    ) : (
+                      <>
+                        {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
+                          <>
+                            {!featureToggle.features?.enableForPCSite && <>
+                              {isMobile ? (
+                                <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                              ) : (
+                                <>
+                                  {!featureToggle?.features?.enableHorizontalFilter ? (
+                                    <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                  ) : (
+                                    <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
+                                  )}
+                                </>
+                              )}
+                            </>}
+                            <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
+                              {featureToggle.features?.enableForPCSite &&
+                                <>
+                                  <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0' : ' w-full'} col-span-12`}>
+                                    {isMobile ? (
+                                      <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                                    ) : (
+                                      <>
+                                        {!featureToggle?.features?.enableHorizontalFilter ? (
+                                          <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                                        ) : (
+                                          <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
+                                        )}
+                                      </>
+                                    )}
+                                  </div>
+                                  <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                                    <div className='flex items-center justify-between w-full gap-0'>
+                                      <div className='flex justify-start gap-3'>
+                                        <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${brandDetails?.name}`}</span>
+                                      </div>
+                                      <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                                    </div>
+                                  </div>
+                                </>
+                              }
+                              {isMobile ? null : (
+                                !featureToggle.features?.enableForPCSite && <ProductFiltersTopBar products={data?.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} isBrandPLP={true} featureToggle={featureToggle} />
+                              )}
+                              <ProductGridWithFacet isPagination={true} products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                            </div>
+                            {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
+                            </div>}
+                            {/* <div className={`p-[1px] ${CURRENT_THEME == 'green' ? 'sm:col-span-10 product-grid-9' : 'sm:col-span-9'}`}>
+                        {isMobile ? null : (
+                          <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} isBrandPLP={true} />
+                        )}
+                        {productDataToPass?.results.length > 0 && <ProductGridWithFacet isPagination={true} products={productDataToPass} currentPage={state?.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />}
+                      </div> */}
+                          </>
+                        ) : (
+                          <div className="sm:col-span-12 p-[1px] sm:mt-0 mt-2">
+                            {featureToggle.features?.enableForPCSite &&
+                              <>
+                                <div className='grid items-center px-2 mt-2 lg:col-span-12 md:col-span-12 sm:col-span-12 sm:grid-cols-12 sm:gap-4 sm:mb-4'>
+                                  <div className='flex flex-col w-full gap-4 sm:col-span-12'>
+                                    <div className="bg-transparent fixing-main-section dark:bg-white">
+                                      <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-4 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+                                        <li className='flex items-center text-10-mob sm:text-sm'>
+                                          <Link href="/brands" passHref>
+                                            <span className="flex items-end upper case font-12 dark:text-black">{translate('common.label.brandsText')}</span>
+                                          </Link>
+                                        </li>
+                                        <li className='flex items-center text-10-mob sm:text-sm'>
+                                          <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                                            <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                          </span>
+                                        </li>
+                                        <li className='flex items-center text-10-mob sm:text-sm'>
+                                          <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
+                                        </li>
+                                      </ol>
+                                    </div>
+                                    <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription} />
+                                  </div>
+                                  <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
+                                    <div className='flex items-center justify-between w-full gap-0'>
+                                      <div className='flex justify-start gap-3'>
+                                        <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${brandDetails?.name}`}</span>
+                                      </div>
+                                      <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
+                                    </div>
+                                  </div>
+                                </div>
+                              </>
+                            }
+                            {!featureToggle.features?.enableForPCSite && <div className="flex justify-end w-full py-4">
+                              <ProductSort routerSortOption={state.sortBy} products={data.products} action={handleSortBy} featureToggle={featureToggle} />
+                            </div>}
+                            <ProductGrid products={productDataToPass} currentPage={state.currentPage} handlePageChange={handlePageChange} handleInfiniteScroll={handleInfiniteScroll} deviceInfo={deviceInfo} maxBasketItemsCount={maxBasketItemsCount(config)} isCompared={isCompared} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                            {featureToggle.features?.enableForPCSite && <div className='col-span-12'>
+                              <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={5} featureToggle={featureToggle} />
+                            </div>}
+                          </div>
+                        ))}
+                      </>
+                    )}
+                    <CompareSelectionBar name={brandDetails?.name} showCompareProducts={showCompareProducts} products={productDataToPass} isCompare={isProductCompare} maxBasketItemsCount={maxBasketItemsCount(config)} closeCompareProducts={closeCompareProducts} deviceInfo={deviceInfo} featureToggle={featureToggle} defaultDisplayMembership={defaultDisplayMembership} />
+                  </div>
+                }
+                {/* <div className="cart-recently-viewed">
+            <RecentlyViewedProduct deviceInfo={deviceInfo} config={config} productPerRow={4} />
+          </div> */}
+                <div className='flex flex-col w-full col-span-12'>
+                  <EngageProductCard type={EngageEventTypes.TRENDING_FIRST_ORDER} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.INTEREST_USER_ITEMS} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.TRENDING_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.COUPON_COLLECTION} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.SEARCH} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                  <EngageProductCard type={EngageEventTypes.RECENTLY_VIEWED} campaignData={campaignData} isSlider={true} productPerRow={4} productLimit={12} />
+                </div>
+              </div>
+            }
+
+            {!featureToggle?.features?.enableForPCSite &&
+              <>
+                <PlainText textNames={textNames || []} heading={manufacturerStateTextHeading} />
+                <div className="mt-0 md:mt-2">
+                  <Video heading={manufacturerStateVideoHeading} name={manufacturerStateVideoName} />
+                </div>
+
+                <div className="w-full mt-10 md:mt-20">
+                  {/* NOTE : manufacturerSettingType for this widget is 'ImageBanner' & code is 'MidBanner' */}
+                  <ImageBanner midBanners={midBanners} heading={midBannerHeading} link={midBannerLink} bgColor={bgColor} textColor={textColor} />
+
+                  {/* NOTE : manufacturerSettingType for this widget is 'Video' & code is 'MultipleBrandVideos' */}
+                  {multipleBrandVideoName ?
+                    <div className="mt-10 lg:mt-20">
+                      <MultiBrandVideo videos={multipleBrandVideos || ''} name={multipleBrandVideoName || ''} />
+                    </div> : null
+                  }
+                </div>
+              </>
+            }
           </div>
 
-          <div className="container w-full mx-auto">
+          {!featureToggle?.features?.enableForPCSite && <div className="container w-full mx-auto">
             {isOnlyMobile ? (
               <div className="mb-2 max-h-[30vh]">
                 <Slider images={imgFeatureCollection?.images || []} isBanner={false} />
@@ -628,7 +907,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 )
               })}
             </div>
-          </div>
+          </div>}
         </>
       ) : (
         <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 pb-0 mx-auto mt-0 bg-transparent sm:mt-0' : ' pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2'} container fixing-main-section`}>
@@ -680,63 +959,63 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <>
                   {!!productDataToPass && (productDataToPass?.filters?.length > 0 ? (
                     <>
-                        {!featureToggle.features?.enableForPCSite &&  <>
-                          {isMobile ? (
-                        <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                      ) : (
-                        <>
-                          {!featureToggle?.features?.enableHorizontalFilter ? (
-                            <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                          ) : (
-                            <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
-                          )}
-                        </>
-                      )}
-                        </>}
+                      {!featureToggle.features?.enableForPCSite && <>
+                        {isMobile ? (
+                          <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                        ) : (
+                          <>
+                            {!featureToggle?.features?.enableHorizontalFilter ? (
+                              <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
+                            ) : (
+                              <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
+                            )}
+                          </>
+                        )}
+                      </>}
                       <div className={`${CURRENT_THEME == 'green' ? 'sm:col-span-10 lg:col-span-10 md:col-span-10 product-grid-9' : featureToggle?.features?.enableHorizontalFilter ? 'sm:col-span-12 lg:col-span-12 md:col-span-12 col-span-12' : 'sm:col-span-9 lg:col-span-9 md:col-span-9 border-l border-gray-300 pl-6'}`}>
                         {featureToggle.features?.enableForPCSite &&
                           <>
-                              <div className='flex flex-col w-full gap-4 sm:col-span-12'>
-                                <div className="bg-transparent fixing-main-section dark:bg-white">
-                                  <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
-                                    <li className='flex items-center text-10-mob sm:text-sm'>
-                                      <Link href="/brands" passHref>
-                                        <span className="flex items-end upper case font-12 dark:text-black">{translate('common.label.brandsText')}</span>
-                                      </Link>
-                                    </li>
-                                    <li className='flex items-center text-10-mob sm:text-sm'>
-                                      <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
-                                        <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
-                                      </span>
-                                    </li>
-                                    <li className='flex items-center text-10-mob sm:text-sm'>
-                                      <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
-                                    </li>
-                                  </ol>
-                                </div>
-                                <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription}/>
+                            <div className='flex flex-col w-full gap-4 sm:col-span-12'>
+                              <div className="bg-transparent fixing-main-section dark:bg-white">
+                                <ol role="list" className="flex items-center space-x-0 truncate sm:space-x-0 sm:mb-0 sm:px-0 md:px-0 lg:px-0 2xl:px-0" >
+                                  <li className='flex items-center text-10-mob sm:text-sm'>
+                                    <Link href="/brands" passHref>
+                                      <span className="flex items-end upper case font-12 dark:text-black">{translate('common.label.brandsText')}</span>
+                                    </Link>
+                                  </li>
+                                  <li className='flex items-center text-10-mob sm:text-sm'>
+                                    <span className="inline-block mx-1 font-normal hover:text-gray-900 dark:text-black" >
+                                      <ChevronRightIcon className='w-3 h-3'></ChevronRightIcon>
+                                    </span>
+                                  </li>
+                                  <li className='flex items-center text-10-mob sm:text-sm'>
+                                    <span className="font-semibold hover:text-gray-900 dark:text-black text-slate-900" > {brandDetails?.name}</span>
+                                  </li>
+                                </ol>
                               </div>
-                              <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0' : ' w-full'} col-span-12`}>
+                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription} />
+                            </div>
+                            <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0' : ' w-full'} col-span-12`}>
                               {isMobile ? (
-                                    <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                                <ProductMobileFilters isBrandPLP={true} handleFilters={handleFilters} products={data.products} routerFilters={state.filters} handleSortBy={handleSortBy} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
+                              ) : (
+                                <>
+                                  {!featureToggle?.features?.enableHorizontalFilter ? (
+                                    <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
                                   ) : (
-                                    <>
-                                      {!featureToggle?.features?.enableHorizontalFilter ? (
-                                        <ProductFilterRight featureToggle={featureToggle} handleFilters={handleFilters} products={productDataToPass} routerFilters={state.filters} />
-                                      ) : (
-                                        <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
-                                      )}
-                                    </>
+                                    <FilterHorizontal handleFilters={handleFilters} products={data.products} routerFilters={state.filters} pageType="brand" />
                                   )}
+                                </>
+                              )}
+                            </div>
+                            <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
+                              <div className='flex items-center justify-between w-full gap-0'>
+                                <div className='flex justify-start gap-3'>
+                                  <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${brandDetails?.name}`}</span>
                                 </div>
-                              <div className='flex justify-start w-full gap-3 p-2 my-4 border border-[#D9D9D9] rounded sm:col-span-12'>
-                                <div className='flex items-center justify-between w-full gap-0'>
-                                  <div className='flex justify-start gap-3'>
-                                    <span className="inline-block text-xs font-medium text-slate-900 sm:px-0 dark:text-slate-900 result-count-text"> {`${productDataToPass?.total ?? 0} items in ${brandDetails?.name}`}</span>
-                                  </div>
-                                  <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
-                                </div>
+                                <ProductFiltersTopBar products={data.products} handleSortBy={handleSortBy} routerFilters={state.filters} clearAll={clearAll} routerSortOption={state.sortBy} removeFilter={removeFilter} featureToggle={featureToggle} />
                               </div>
+                            </div>
                           </>
                         }
                         {isMobile ? null : (
@@ -777,7 +1056,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   </li>
                                 </ol>
                               </div>
-                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription}/>
+                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription} />
                             </div>
                             <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>

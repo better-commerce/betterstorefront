@@ -58,12 +58,12 @@ const HeadingWithButton: React.FC<HeadingProps> = ({
       <div className="flex gap-5">
         <button
           onClick={onButtonClick}
-          className="text-lg font-medium text-black hover:underline hidden sm:block truncate"
+          className="hidden text-lg font-medium text-black truncate hover:underline sm:block"
         >
           {buttonText}
         </button>
         {hasNextPrev && !isCenter && (
-          <div className="flex justify-end flex-shrink-0 mt-4 sm:ms-2 sm:mt-0 hidden sm:block">
+          <div className="flex justify-end flex-shrink-0 hidden mt-4 sm:ms-2 sm:mt-0 sm:block">
             <NextPrev onClickNext={() => {}} onClickPrev={() => {}} />
           </div>
         )}
