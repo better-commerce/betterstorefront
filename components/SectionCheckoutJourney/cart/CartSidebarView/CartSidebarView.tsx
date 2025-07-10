@@ -34,7 +34,7 @@ const featureToggle = require(`/public/theme/${CURRENT_THEME}/features.config.js
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
-  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, setBasketId, openLoginSideBar, user, isGuestUser, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, cartItemsCount, basketId, setBasketId, openLoginSideBar, user, isGuestUser = true, displaySidebar, resetKitCart, setOverlayLoaderState } = useUI()
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
   const [selectedEngravingProduct, setSelectedEngravingProduct] = useState(null)
   const { getCart, addToCart } = useCart()
@@ -799,7 +799,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    {user?.canPlaceOrder && cartItems?.lineItems?.length > 0 &&
+                    {(!user?.userId || (user?.userId && user?.canPlaceOrder) || isGuestUser) && cartItems?.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                         <>
                           <Link href={featureToggle?.features?.defaultCheckoutRoute || '/checkout'} onClick={() => {

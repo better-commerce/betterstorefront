@@ -32,7 +32,7 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
 
 const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo, maxBasketItemsCount, config, }: any) => {
   const { recordAnalytics } = useAnalytics()
-  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser, displaySidebar, } = useUI()
+  const { addToWishlist, openWishlist, setAlert, setSidebarView, closeSidebar, setCartItems, cartItems, basketId, openLoginSideBar, user, isGuestUser = true, displaySidebar, } = useUI()
   const { isInWishList } = wishlistHandler()
   const { isMobile, isOnlyMobile, isIPadorTablet } = deviceInfo
   const [isEngravingOpen, setIsEngravingOpen] = useState(false)
@@ -764,7 +764,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    {user?.canPlaceOrder && <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
+                    {(!user?.userId || (user?.userId && user?.canPlaceOrder) || isGuestUser) && <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                        <Link href="/cart" onClick={() => {
                           handleClose()
                           beginCheckout(cartItems)

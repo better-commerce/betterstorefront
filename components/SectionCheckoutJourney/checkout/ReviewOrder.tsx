@@ -68,7 +68,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
   )
   const { shippingAddress, billingAddress } = basket || {}
   const selectedAddress = { shippingAddress, billingAddress }
-  const { user } = useUI()
+  const { user, isGuestUser = true } = useUI()
 
   return (
     <>
@@ -193,7 +193,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
           </div>
         </div>
       </div>
-      {user?.canPlaceOrder && <PaymentMethodSelection
+      {(!user?.userId || (user?.userId && user?.canPlaceOrder) || isGuestUser) && <PaymentMethodSelection
         basket={basket}
         isApplePayScriptLoaded={isApplePayScriptLoaded}
         uiContext={uiContext}
