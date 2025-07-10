@@ -52,6 +52,7 @@ import { AnalyticsEventType } from '@components/services/analytics'
 import MultiBrandVideo from '@components/SectionBrands/MultiBrandVideo'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
 import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { getFeatureToggle } from 'pages/category/[category]'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -1113,7 +1114,8 @@ export async function getStaticProps({
   if (brandSlug?.length) {
     brandSlug = brandSlug.join('/');
   }
-  const slug = `brands/${brandSlug}`
+  const featureToggle = await getFeatureToggle()
+  const slug = featureToggle?.features?.enableEntityNameInPageSlug ? `brands/${brandSlug}` : brandSlug
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
   const cookies = serverSideMicrositeCookies(locale!)
   const pageProps = await props.getPageProps({ slug, cookies })
