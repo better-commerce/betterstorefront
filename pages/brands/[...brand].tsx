@@ -960,7 +960,7 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
             </div>
           </div>}
           {brandGuidePages?.length > 0 &&
-            <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
+            <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css mb-6">
               <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
                 <h3 className="font-semibold text-black title-page">Buying Guides</h3>
               </div>
