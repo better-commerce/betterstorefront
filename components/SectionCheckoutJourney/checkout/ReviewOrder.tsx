@@ -193,7 +193,7 @@ const ReviewOrder: React.FC<ReviewOrderProps> = ({
           </div>
         </div>
       </div>
-      {(!user?.userId || (user?.userId && user?.canPlaceOrder) || isGuestUser) && <PaymentMethodSelection
+      {(!user?.userId || (user?.userId && (!isB2BUser(user) || (isB2BUser(user) && user?.canPlaceOrder))) || isGuestUser) && <PaymentMethodSelection
         basket={basket}
         isApplePayScriptLoaded={isApplePayScriptLoaded}
         uiContext={uiContext}

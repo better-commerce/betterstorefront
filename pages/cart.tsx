@@ -23,7 +23,7 @@ import { LoadingDots } from '@components/ui'
 import { generateUri } from '@commerce/utils/uri-util'
 import { matchStrings, parseItemId, tryParseJson } from '@framework/utils/parse-util'
 import SizeChangeModal from '@components/SectionCheckoutJourney/cart/SizeChange'
-import { getCartValidateMessages, getCurrentPage, vatIncluded, } from '@framework/utils/app-util'
+import { getCartValidateMessages, getCurrentPage, isB2BUser, vatIncluded, } from '@framework/utils/app-util'
 import { EmptyString, EmptyGuid, LoadingActionType, NEXT_BASKET_VALIDATE, NEXT_GET_ALT_RELATED_PRODUCTS, NEXT_GET_BASKET_PROMOS, NEXT_GET_ORDER_RELATED_PRODUCTS, NEXT_SHIPPING_PLANS, SITE_NAME, SITE_ORIGIN_URL, collectionSlug, NEXT_MEMBERSHIP_BENEFITS, CURRENT_THEME, NEXT_CREATE_WISHLIST, BASKET_PROMO_TYPES } from '@components/utils/constants'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import { Guid } from '@commerce/types'
@@ -903,7 +903,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                   }
                 </dl>
 
-                {(!user?.userId || (user?.userId && user?.canPlaceOrder) || isGuestUser) && <div className="mt-1 mb-6 sm:mb-0">
+                {(!user?.userId || (user?.userId && (!isB2BUser(user) || (isB2BUser(user) && user?.canPlaceOrder))) || isGuestUser) && <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-900 hover:bg-slate-800 text-slate-50 dark:text-slate-50 shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.basket.checkoutBtnText')}
@@ -1059,7 +1059,7 @@ function Cart({ cart, deviceInfo, maxBasketItemsCount, config, allMembershipPlan
                   </div>
                 </dl>
 
-                {(!user?.userId || (user?.userId && user?.canPlaceOrder) || isGuestUser) && <div className="mt-1 mb-6 sm:mb-0">
+                {(!user?.userId || (user?.userId && (!isB2BUser(user) || (isB2BUser(user) && user?.canPlaceOrder))) || isGuestUser) && <div className="mt-1 mb-6 sm:mb-0">
                   <Link href="/checkout">
                     <button type="submit" className={`nc-Button relative h-auto inline-flex items-center justify-center transition-colors text-sm sm:text-white font-medium py-3 px-4 sm:py-3.5 sm:px-6  ttnc-ButtonPrimary button-primary disabled:bg-opacity-90 bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 text-slate-50 dark:text-white shadow-xl mt-8 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-6000 dark:focus:ring-offset-0 ${CURRENT_THEME != 'green' ? 'rounded-full' : 'rounded-lg'}`} >
                       {translate('label.basket.checkoutBtnText')}

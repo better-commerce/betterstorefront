@@ -10,7 +10,7 @@ import { XMarkIcon, CheckCircleIcon, ArrowRightIcon } from '@heroicons/react/24/
 import PromotionInput from '../PromotionInput'
 import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { NEXT_CREATE_WISHLIST, NEXT_GET_ORDER_RELATED_PRODUCTS, PRODUCTS_SLUG_PREFIX, NEXT_GET_PRODUCT, NEXT_GET_BASKET_PROMOS, NEXT_BASKET_VALIDATE, LoadingActionType, EmptyString, DeleteModalType, CartProductType, SITE_ORIGIN_URL, BASKET_PROMO_TYPES, } from '@components/utils/constants'
-import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, resetBasket, } from '@framework/utils/app-util'
+import { getCurrentPage, vatIncluded, getCartValidateMessages, sanitizeRelativeUrl, resetBasket, isB2BUser, } from '@framework/utils/app-util'
 import RelatedProductWithGroup from '@components/Product/RelatedProducts/RelatedProductWithGroup'
 import SizeChangeModal from '../SizeChange'
 import { IExtraProps } from '@components/Layout/Layout'
@@ -799,7 +799,7 @@ const CartSidebarView: FC<React.PropsWithChildren<IExtraProps>> = ({ deviceInfo,
                     {selectedEngravingProduct && (
                       <Engraving show={isEngravingOpen} showEngravingModal={setIsEngravingOpen} product={selectedEngravingProduct} handleToggleDialog={handleToggleEngravingModal} readOnly={true} />
                     )}
-                    {(!user?.userId || (user?.userId && user?.canPlaceOrder) || isGuestUser) && cartItems?.lineItems?.length > 0 &&
+                    {(!user?.userId || (user?.userId && (!isB2BUser(user) || (isB2BUser(user) && user?.canPlaceOrder))) || isGuestUser) && cartItems?.lineItems?.length > 0 &&
                       <div className="sticky bottom-0 z-10 w-full p-4 bg-white border-t shadow">
                         <>
                           <Link href={featureToggle?.features?.defaultCheckoutRoute || '/checkout'} onClick={() => {
