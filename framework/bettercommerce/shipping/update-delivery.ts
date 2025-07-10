@@ -13,15 +13,7 @@ export default function getShippingPlans() {
   return async function handler({ data, id, cookies }: Props) {
     const url = `${BASKET_ENDPOINT}/${id}/delivery/plan`
     try {
-      const response: any = await fetcher({
-        url: url,
-        method: 'put',
-        data: data , //data not to be stringified qs.stringify({...data})
-        headers: {
-          DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID,
-        },
-        cookies,
-      })
+      const response: any = await fetcher({ url: url, method: 'put', data: data , headers: { DomainId: process.env.NEXT_PUBLIC_DOMAIN_ID, }, cookies, })
       return response
     } catch (error: any) {
       logError(error)
