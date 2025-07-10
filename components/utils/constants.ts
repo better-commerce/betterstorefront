@@ -4,7 +4,7 @@ import { toNumber } from 'lodash'
 //BETTERCOMMERCE ENDPOINTS
 export const HOMEPAGE_SLUG = `/`
 export const BLOG_PAGE_ID = 'e05bbda5-32fd-418e-87df-adda1bb3ce1d'
-export const BLOG_COLS = 'hero.hero_title,hero.hero_description,hero.hero_image'
+export const BLOG_COLS = 'hero.hero_title,hero.hero_description,hero.hero_image,brand'
 export const KIT_BRAND_PLATFORM = '/api/v1/kit-builder/brand-platform'
 export const KIT_BRAND_CATEGORY = '/api/v1/kit-builder/category'
 export const KIT_BRAND_PRODUCTS =
