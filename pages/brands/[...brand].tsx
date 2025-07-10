@@ -16,7 +16,7 @@ import { maxBasketItemsCount, notFoundRedirect, sanitizeRelativeUrl, setPageScro
 import { useTranslation } from '@commerce/utils/use-translation'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
 import { postData } from '@components/utils/clientFetcher'
-import { CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { BLOG_COLS, BLOG_PAGE_ID, CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
@@ -53,6 +53,7 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { getFeatureToggle } from 'pages/category/[category]'
 import { isEqual } from 'lodash'
+import commerce from '@lib/api/commerce'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -102,7 +103,7 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
   }
 }
 
-function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
+function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
   const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
@@ -219,6 +220,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   const [showLandingPage, setShowLandingPage] = useState(true)
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
+  const [blogData, setBlogData] = useState(null)
   //router.push({ pathname: router.pathname, query }, undefined, { shallow: true })
 
   const {
@@ -262,6 +264,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
 
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
+  const swiperRefIc1: any = useRef(null)
   const swiperRefPc1: any = useRef(null)
   const swiperRefPc2: any = useRef(null)
   const swiperRefPc3: any = useRef(null)
@@ -559,7 +562,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   const pc3Title = widgets?.find((item: any) => item?.code == 'PC3')?.heading
   const ic1Title = widgets?.find((item: any) => item?.code == 'IC1')?.heading
 
-
+  const brandGuidePages = pageContents?.pages?.filter((page: any) => page.fields?.brand === brandDetails?.name.toLowerCase());
   return (
     <>
       <NextHead>
@@ -583,17 +586,17 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
           </h1>
           {featureToggle?.features?.enableForPCSite ? (
             resPcHero?.images?.length > 0 && (
-              <div className='flex flex-col w-full mt-2'>
+              <div className='flex flex-col w-full mt-1'>
                 <Swiper navigation={true} loop={true} className="flex items-center justify-center w-full mx-auto mt-0 mySwiper sm:px-0 sm:mt-0">
                   {resPcHero?.images?.map((img: any, idx: number) => (
                     <SwiperSlide key={`horizontal-slider-${idx}`}>
                       <Link href={img.link || '#'}>
                         <img
                           width={1920}
-                          height={500}
+                          height={350}
                           src={generateUri(img.url, 'h=1000&fm=webp') || IMG_PLACEHOLDER}
                           alt={img?.name || 'Collection Banner'}
-                          className="object-cover object-top w-full h-[500px] max-h-[500px] cursor-pointer"
+                          className="object-cover object-center w-full !h-[350px] !max-h-[350px] cursor-pointer"
                           loading={idx < 2 ? "eager" : "lazy"}
                         />
                       </Link>
@@ -628,10 +631,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
                 <div className='relative'>
                   <div className="flex justify-between mb-2 slider-out-btn">
-                    <Prev onClickPrev={() => swiperRefPc1.current?.swiper?.slidePrev()} />
-                    <Next onClickNext={() => swiperRefPc1.current?.swiper?.slideNext()} />
+                    <Prev onClickPrev={() => swiperRefIc1.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRefIc1.current?.swiper?.slideNext()} />
                   </div>
-                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc1} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefIc1} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
                     {resIc1?.images?.map((item: any, pId: number) => (
                       <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                         <Link href={sanitizeRelativeUrl(`/${item?.link}`)} className='flex flex-col items-center justify-center w-full gap-2'>
@@ -956,6 +959,31 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               })}
             </div>
           </div>}
+          {brandGuidePages?.length > 0 &&
+            <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css mb-6">
+              <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
+                <h3 className="font-semibold text-black title-page">Buying Guides</h3>
+              </div>
+              <div className='relative'>
+                <div className="flex justify-between mb-2 slider-out-btn">
+                  <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
+                  <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+                </div>
+                <Swiper slidesPerView={1.3} spaceBetween={30} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 } }}>
+                  {brandGuidePages?.map((item: any, pId: number) => (
+                    <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+                      <Link href={sanitizeRelativeUrl(`/${item?.slug}`)} className='flex flex-col items-center justify-center w-full gap-2'>
+                        <div className='flex flex-col !items-center !justify-center w-full !h-[250px]'>
+                          <img src={item?.fields?.hero[0]?.hero_image} alt={item?.name} className='object-contain !w-auto !h-[220px] mx-auto' />
+                        </div>
+                        <h3 className='pb-4 text-sm font-medium text-center text-sky-700'>{item?.name}</h3>
+                      </Link>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+            </div>
+          }
         </>
       ) : (
         <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 pb-0 mx-auto mt-0 bg-transparent sm:mt-0' : ' pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2'} container fixing-main-section`}>
@@ -1163,7 +1191,15 @@ export async function getStaticProps({
   const props: IPagePropsProvider = getPagePropType({ type: PagePropType.BRAND_PLP })
   const cookies = serverSideMicrositeCookies(locale!)
   const pageProps = await props.getPageProps({ slug, cookies })
-
+  const BlogContentsPromise = commerce.getBlogList({
+    pagetypeId: BLOG_PAGE_ID, //Constant pageId,
+    skip: 0, //skip,
+    pagesize: 100, //pagesize,s
+    sortby: 3, //sortby,
+    sortorder: 1, //sortorder,
+    cols: BLOG_COLS, //"blogheader.blogheader_mainimage",
+  })
+  const blogContents = await BlogContentsPromise
   if (pageProps?.notFound) {
     return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), }
   }
@@ -1173,6 +1209,7 @@ export async function getStaticProps({
       ...pageProps,
       query: EmptyObject, //context.query,
       params: params,
+      pageContents: blogContents ?? {},
     }, // will be passed to the page component as props
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }

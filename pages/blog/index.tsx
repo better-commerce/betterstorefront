@@ -54,9 +54,9 @@ function BlogList({ slugs, pageContents }: any) {
   })
 
   const router = useRouter()
-    const formatDate = (dateString: string) => {
-      return moment(dateString).format(DATE_FORMAT)
-    }
+  const formatDate = (dateString: string) => {
+    return moment(dateString).format(DATE_FORMAT)
+  }
   return !pageContents ? (
     <>
       <div className="flex w-full text-center flex-con">
@@ -65,7 +65,7 @@ function BlogList({ slugs, pageContents }: any) {
     </>
   ) : (
     <>
-         <NextHead>
+      <NextHead>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
@@ -87,54 +87,54 @@ function BlogList({ slugs, pageContents }: any) {
           key="ogdesc"
         />
       </NextHead>
-    <div className='container py-8 mx-auto px-4'>
-      <div className='mb-8'>
-      <h1 className="block  text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-0 basket-h1 dark:text-black">
-        Blogs
-      </h1>
-      </div>
-    <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-8">
-      {pageContents?.pages?.map((post:any, idx:number) => (
-        <div
-          key={idx}
-          className="bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] flex flex-col h-full"
-        >
-          <div className="relative h-64 w-full">
-            <img
-              src={post?.fields?.hero?.[0]?.hero_image || IMG_PLACEHOLDER}
-              alt={post?.title}
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          </div>
-
-          <div className="p-6 flex flex-col flex-grow">
-            <div className="flex items-center text-sm text-gray-500 mb-2">
-              <span className="bg-gray-100 px-2 py-1 rounded-full">{formatDate(post?.lastUpdated)}</span>
-            </div>
-
-            <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">{post?.fields?.hero?.[0]?.hero_title}</h2>
-
-            <div
-              className="text-gray-600 mb-4 line-clamp-3"
-              dangerouslySetInnerHTML={{
-                __html: post?.fields?.hero?.[0]?.hero_description,
-              }}
-            />
-
-            <div className="mt-auto">
-              <Link
-                href={`/${post?.slug}`}
-                className="inline-flex items-center link-clr font-medium hover:text-teal-800 transition-colors"
-              >
-                Read more <ArrowLongRightIcon className='w-6 h-6 ml-2'/>
-              </Link>
-            </div>
-          </div>
+      <div className='container px-4 py-8 mx-auto'>
+        <div className='mb-8'>
+          <h1 className="block text-2xl font-semibold sm:text-3xl lg:text-4xl sm:mb-0 basket-h1 dark:text-black">
+            Blogs
+          </h1>
         </div>
-      ))}
-    </div>
-    </div>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-4 lg:grid-cols-4">
+          {pageContents?.pages?.map((post: any, idx: number) => (
+            <div
+              key={idx}
+              className="bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-5px] flex flex-col h-full"
+            >
+              <div className="relative w-full h-64">
+                <img
+                  src={post?.fields?.hero?.[0]?.hero_image || IMG_PLACEHOLDER}
+                  alt={post?.title}
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
+
+              <div className="flex flex-col flex-grow p-6">
+                <div className="flex items-center mb-2 text-sm text-gray-500">
+                  <span className="px-2 py-1 bg-gray-100 rounded-full">{formatDate(post?.lastUpdated)}</span>
+                </div>
+
+                <h2 className="mb-3 text-xl font-bold text-gray-900 line-clamp-2">{post?.fields?.hero?.[0]?.hero_title}</h2>
+
+                <div
+                  className="mb-4 text-gray-600 line-clamp-3"
+                  dangerouslySetInnerHTML={{
+                    __html: post?.fields?.hero?.[0]?.hero_description,
+                  }}
+                />
+
+                <div className="mt-auto">
+                  <Link
+                    href={`/${post?.slug}`}
+                    className="inline-flex items-center font-medium transition-colors link-clr hover:text-teal-800"
+                  >
+                    Read more <ArrowLongRightIcon className='w-6 h-6 ml-2' />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   )
 }
