@@ -97,14 +97,14 @@ export abstract class BasePagePropsProvider {
     if (!reviewSummaryUIDData) {
 
         try {
-            const res: any = await fetcher({
-                baseUrl: REVIEW_BASE_URL,
-                url: `${REVIEW_SERVICE_BASE_API}/summary`,
-                method: 'post',
-                cookies,
-            })
-            reviewSummaryUIDData = res?.Result
-            await setData([{ key, value: reviewSummaryUIDData }])
+            // const res: any = await fetcher({
+            //     baseUrl: REVIEW_BASE_URL,
+            //     url: `${REVIEW_SERVICE_BASE_API}/summary`,
+            //     method: 'post',
+            //     cookies,
+            // })
+            // reviewSummaryUIDData = res?.Result
+            // await setData([{ key, value: reviewSummaryUIDData }])
         } catch (error: any) {
             logError(error)
             return EmptyObject

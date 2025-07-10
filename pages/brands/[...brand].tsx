@@ -2,30 +2,34 @@ import dynamic from 'next/dynamic'
 import NextHead from 'next/head'
 import Link from 'next/link'
 import useSwr from 'swr'
-import SwiperCore, { Navigation } from 'swiper'
 import Glide from '@glidejs/glide'
+import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
+import SwiperCore, { Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import Prev from '@components/shared/NextPrevIcon/Prev'
-import Next from '@components/shared/NextPrevIcon/Next'
 import { useReducer, useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { SCROLLABLE_LOCATIONS } from 'pages/_app'
-import { GetStaticPathsContext, GetStaticPropsContext } from 'next'
-import { parsePLPFilters, routeToPLPWithSelectedFilters, sanitizeHtmlContent, setPLPFilterSelection } from 'framework/utils/app-util'
-import { maxBasketItemsCount, notFoundRedirect, setPageScroll } from '@framework/utils/app-util'
+import { parsePLPFilters, routeToPLPWithSelectedFilters, setPLPFilterSelection } from 'framework/utils/app-util'
+import { maxBasketItemsCount, notFoundRedirect, sanitizeRelativeUrl, setPageScroll } from '@framework/utils/app-util'
 import { useTranslation } from '@commerce/utils/use-translation'
 import getAllBrandsStaticPath from '@framework/brand/get-all-brands-static-path'
-import { EVENTS_MAP } from '@components/services/analytics/constants'
 import { postData } from '@components/utils/clientFetcher'
 import { CURRENT_THEME, EmptyObject, EngageEventTypes, SITE_NAME, SITE_ORIGIN_URL } from '@components/utils/constants'
+import { AnalyticsEventType } from '@components/services/analytics'
 import { IMG_PLACEHOLDER } from '@components/utils/textVariables'
 import { EVENTS, KEYS_MAP } from '@components/utils/dataLayer'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import { generateUri, removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
+import { STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
 import { useUI } from '@components/ui'
-import { ImageBanner, ImageCollection, PlainText, Video } from '@components/SectionBrands'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
+import Prev from '@components/shared/NextPrevIcon/Prev'
+import Next from '@components/shared/NextPrevIcon/Next'
 import BrandBanner from '@components/brand/BrandBanner'
+import { ImageBanner, ImageCollection, PlainText, Video } from '@components/SectionBrands'
 const HeadingWithButton = dynamic(() => import('@components/Heading/HeadingWithButton'))
 const OutOfStockFilter = dynamic(() => import('@components/Product/Filters/OutOfStockFilter'))
 const CompareSelectionBar = dynamic(() => import('@components/Product/ProductCompare/compareSelectionBar'))
@@ -41,18 +45,14 @@ import useAnalytics from '@components/services/analytics/useAnalytics'
 import Slider from '@components/SectionBrands/Slider'
 import BrandDisclosure from '@components/SectionBrands/Disclosure'
 import RecentlyViewedProduct from '@components/Product/RelatedProducts/RecentlyViewedProducts'
-import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
-import { getPagePropType, PagePropType } from '@framework/page-props'
-import Loader from '@components/Loader'
-import { generateUri, removeQueryString, serverSideMicrositeCookies } from '@commerce/utils/uri-util'
-import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
-import { AnalyticsEventType } from '@components/services/analytics'
 import MultiBrandVideo from '@components/SectionBrands/MultiBrandVideo'
 import FilterHorizontal from '@components/Product/Filters/filterHorizontal'
-import { getSecondsInMinutes } from '@framework/utils/parse-util'
+import EngageProductCard from '@components/SectionEngagePanels/ProductCard'
+import Loader from '@components/Loader'
+import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsProvider'
+import { getPagePropType, PagePropType } from '@framework/page-props'
 import { getFeatureToggle } from 'pages/category/[category]'
+import { isEqual } from 'lodash'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
 
@@ -123,6 +123,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   let resPc1: any = collections.resPc1
   let resPc2: any = collections.resPc2
   let resPc3: any = collections.resPc3
+  let resIc1: any = collections.resIc1
 
   const [isShow, setIsShow] = useState(false);
   const sliderRef = useRef(null);
@@ -218,6 +219,8 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   const [showLandingPage, setShowLandingPage] = useState(true)
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
+  //router.push({ pathname: router.pathname, query }, undefined, { shallow: true })
+
   const {
     data = {
       products: {
@@ -240,22 +243,22 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   )
 
   // reset state on slug change
-  useEffect(() => {
-    const handleRouteChange = (url: any) => {
-      const currentSlug = url?.split('?')[0];
-      if (currentSlug !== previousSlug) {
-        dispatch({ type: RESET_STATE })
-        setPreviousSlug(currentSlug);
-      }
-    };
+  // useEffect(() => {
+  //   const handleRouteChange = (url: any) => {
+  //     const currentSlug = url?.split('?')[0];
+  //     if (currentSlug !== previousSlug) {
+  //       dispatch({ type: RESET_STATE })
+  //       setPreviousSlug(currentSlug);
+  //     }
+  //   };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+  //   router.events.on('routeChangeComplete', handleRouteChange);
 
-    // Cleanup the event listener on unmount
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [previousSlug, router]);
+  //   // Cleanup the event listener on unmount
+  //   return () => {
+  //     router.events.off('routeChangeComplete', handleRouteChange);
+  //   };
+  // }, [previousSlug, router]);
 
   SwiperCore.use([Navigation])
   const swiperRef: any = useRef(null)
@@ -293,11 +296,19 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
-    if (state?.filters?.length) {
-      routeToPLPWithSelectedFilters(router, state?.filters)
+    const urlFilters = parsePLPFilters(router.asPath)
+    const stateFilters = state?.filters || []
+
+    // Prevent infinite loop by only updating URL when filters have actually changed
+    const filtersAreSame = isEqual(urlFilters, stateFilters)
+
+    if (!filtersAreSame && stateFilters.length) {
+      routeToPLPWithSelectedFilters(router, stateFilters)
     }
-    setPLPFilterSelection(state?.filters)
+
+    setPLPFilterSelection(stateFilters)
   }, [state?.filters])
+
 
   const handleClick = () => {
     router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
@@ -488,7 +499,6 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
     absPath = window?.location?.href
   }
 
-  const sanitizedDescription = sanitizeHtmlContent(brandDetails?.description)
   const onToggleBrandListPage = () => {
     router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
   }
@@ -542,6 +552,14 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
   }, [bgColor]);
   const emptyHtmlString = "<html>\n<head>\n\t<title></title>\n</head>\n<body></body>\n</html>\n"
   const cleanPath = removeQueryString(router.asPath)
+  const widgets = JSON.parse(brandDetails?.widgetsConfig)
+
+  const pc1Title = widgets?.find((item: any) => item?.code == 'PC1')?.heading
+  const pc2Title = widgets?.find((item: any) => item?.code == 'PC2')?.heading
+  const pc3Title = widgets?.find((item: any) => item?.code == 'PC3')?.heading
+  const ic1Title = widgets?.find((item: any) => item?.code == 'IC1')?.heading
+
+
   return (
     <>
       <NextHead>
@@ -603,10 +621,36 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
               </div>
             )}
 
+            {resIc1?.images?.length > 0 &&
+              <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
+                <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
+                  <h3 className="font-semibold text-black title-page">{ic1Title}</h3>
+                </div>
+                <div className='relative'>
+                  <div className="flex justify-between mb-2 slider-out-btn">
+                    <Prev onClickPrev={() => swiperRefPc1.current?.swiper?.slidePrev()} />
+                    <Next onClickNext={() => swiperRefPc1.current?.swiper?.slideNext()} />
+                  </div>
+                  <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc1} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 5 } }}>
+                    {resIc1?.images?.map((item: any, pId: number) => (
+                      <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
+                        <Link href={sanitizeRelativeUrl(`/${item?.link}`)} className='flex flex-col items-center justify-center w-full gap-2'>
+                          <div className='flex flex-col !items-center !justify-center w-full !h-[250px]'>
+                            <img src={item?.url} alt={item?.name} className='object-contain !w-auto !h-[220px] mx-auto' />
+                          </div>
+                          <h3 className='pb-4 text-sm font-medium text-center text-sky-700'>{item?.name}</h3>
+                        </Link>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+              </div>
+            }
+
             {resPc1?.length > 0 &&
               <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
                 <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
-                  <h3 className="font-semibold text-black title-page">Top Categories</h3>
+                  <h3 className="font-semibold text-black title-page">{pc1Title}</h3>
                 </div>
                 <div className='relative'>
                   <div className="flex justify-between mb-2 slider-out-btn">
@@ -627,7 +671,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             {resPc2?.length > 0 &&
               <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
                 <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
-                  <h3 className="font-semibold text-black title-page">Top Cameras</h3>
+                  <h3 className="font-semibold text-black title-page">{pc2Title}</h3>
                 </div>
                 <div className='relative'>
                   <div className="flex justify-between mb-2 slider-out-btn">
@@ -648,7 +692,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
             {resPc3?.length > 0 &&
               <div className="container flex flex-col !px-0 mx-auto bg-white sm:pt-10 pt-6 slider-btn-css">
                 <div className='flex items-center justify-between gap-6 pb-4 sm:justify-start sm:pb-8'>
-                  <h3 className="font-semibold text-black title-page">Top Lenses</h3>
+                  <h3 className="font-semibold text-black title-page">{pc3Title}</h3>
                 </div>
                 <div className='relative'>
                   <div className="flex justify-between mb-2 slider-out-btn">
@@ -665,13 +709,13 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 </div>
               </div>
             }
-            <div className='flex flex-col w-full gap-4 px-4 py-4 my-4 sm:my-10 bg-slate-100 rounded-xl sm:px-6 sm:py-8'>
+            {pHeading && <div className='flex flex-col w-full gap-4 px-4 py-4 my-4 sm:my-10 bg-slate-100 rounded-xl sm:px-6 sm:py-8'>
               <h3 className="font-semibold text-black title-page">{pHeading}</h3>
               <p className='text-sm font-medium text-gray-700'>{pText}</p>
-            </div>
+            </div>}
 
             {featureToggle?.features?.enableForPCSite &&
-              <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 pb-0 mx-auto mt-0 bg-transparent sm:mt-0' : ' pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2'} fixing-main-section`}>
+              <div className={`${featureToggle.features?.enableForPCSite ? ' pt-0 pb-0 mx-auto mt-4 bg-transparent sm:mt-6' : ' pt-2 pb-0 mx-auto mt-2 bg-transparent sm:mt-2'} fixing-main-section`}>
                 {!featureToggle.features?.enableForPCSite &&
                   <>
                     <div className="max-w-screen-sm">
@@ -695,10 +739,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                       <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
                         {brandDetails?.name}
                       </h1>
-                      {sanitizedDescription &&
+                      {brandDetails?.description &&
                         <div className='w-full'>
                           <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
-                            <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+                            <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: brandDetails?.description }} ></span>
                           </span>
                         </div>
                       }
@@ -797,7 +841,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                         </li>
                                       </ol>
                                     </div>
-                                    <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription} />
+                                    <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={brandDetails?.description} />
                                   </div>
                                   <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
                                     <div className='flex items-center justify-between w-full gap-0'>
@@ -938,10 +982,10 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                 <h1 className={`block text-2xl capitalize dark:text-black ${CURRENT_THEME == 'green' ? 'sm:text-4xl lg:text-5xl font-bold' : 'sm:text-3xl lg:text-4xl font-semibold'}`}>
                   {brandDetails?.name}
                 </h1>
-                {sanitizedDescription &&
+                {brandDetails?.description &&
                   <div className='w-full'>
                     <span className={`block text-neutral-500 dark:text-neutral-500 ${CURRENT_THEME == 'green' ? 'text-xs mt-2' : 'text-sm mt-4'}`}>
-                      <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: sanitizedDescription }} ></span>
+                      <span className="block mt-2 text-sm text-neutral-500 dark:text-neutral-500 sm:text-base" dangerouslySetInnerHTML={{ __html: brandDetails?.description }} ></span>
                     </span>
                   </div>
                 }
@@ -997,7 +1041,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   </li>
                                 </ol>
                               </div>
-                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription} />
+                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={brandDetails?.description} />
                             </div>
                             <div className={`${featureToggle.features?.enableForPCSite ? ' container !px-0' : ' w-full'} col-span-12`}>
                               {isMobile ? (
@@ -1060,7 +1104,7 @@ function BrandDetailPage({ query, setEntities, recordEvent, brandDetails, slug, 
                                   </li>
                                 </ol>
                               </div>
-                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={sanitizedDescription} />
+                              <BrandBanner props={brandDetails} deviceInfo={deviceInfo} description={brandDetails?.description} />
                             </div>
                             <div className='flex justify-start w-full gap-3 p-2 mt-1 border border-[#D9D9D9] rounded sm:col-span-12'>
                               <div className='flex items-center justify-between w-full gap-0'>
