@@ -62,6 +62,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
         offerBannerCollection: !isEmpty(collectionUIDData?.offerBannerCollection) ? mapObject(collectionUIDData?.offerBannerCollection, getCollectionOfferBannerCollectionTransform)?.data || []: [],
         productCollection: mapObject(collectionUIDData?.resPc1, getProductCollectionTransformMap)?.data || [],
         resPcHero: !isEmpty(collectionUIDData?.resPcHero) ? mapObject(collectionUIDData?.resPcHero, getCollectionHeroBannerTransform)?.data || null : null,
+        resIc1: !isEmpty(collectionUIDData?.resIc1) ? mapObject(collectionUIDData?.resIc1, getCollectionHeroBannerTransform)?.data || null : null,
         resPc1: mapObject(collectionUIDData?.resPc1, getProductCollectionTransformMap)?.data || [],
         resPc2: mapObject(collectionUIDData?.resPc2, getProductCollectionTransformMap)?.data || [], 
         resPc3: mapObject(collectionUIDData?.resPc3, getProductCollectionTransformMap)?.data || [], 
@@ -107,6 +108,19 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
                   try {
                     const resPcHero = await getCollectionById(widget.recordId, cookies)
                     collections.resPcHero = !isEmpty(resPcHero) ? mapObject(resPcHero, getCollectionHeroBannerTransform)?.data || null : null
+                  } catch (error: any) { }
+                  resolve()
+                })
+              )
+            } else if (
+              widget.manufacturerSettingType == 'Image Collection' &&
+              widget.code == 'IC1'
+            ) {
+              promises.push(
+                new Promise(async (resolve: any, reject: any) => {
+                  try {
+                    const resIc1 = await getCollectionById(widget.recordId, cookies)
+                    collections.resIc1 = !isEmpty(resIc1) ? mapObject(resIc1, getCollectionHeroBannerTransform)?.data || null : null
                   } catch (error: any) { }
                   resolve()
                 })
@@ -182,7 +196,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
     const allMembershipsUIDData: any = await this.getMembershipPlans({ cookies })
     const defaultDisplayMembership = await this.getDefaultMembershipPlan(allMembershipsUIDData?.result, cookies)
     const pluginConfig = await this.getPluginConfig({ cookies })
-    const reviewData = await this.getReviewSummary({ cookies })
+    //const reviewData = await this.getReviewSummary({ cookies })
     const appConfig = await this.getAppConfig(infraUIDData, cookies)
     const navTreeUIDData = await this.getNavTree({ cookies })
     const keywordsUIDData = await this.getKeywords({ cookies })
@@ -192,7 +206,7 @@ export class BrandPLPPageProps extends BasePagePropsProvider implements IPagePro
       // --- Common STARTS
       navTree: navTreeUIDData,
       pluginConfig,
-      reviewData,
+     // reviewData,
       appConfig,
       globalSnippets: infraUIDData?.snippets ?? [],
       snippets: brandBySlugUIDData?.snippets ?? [],
