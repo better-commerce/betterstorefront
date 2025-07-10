@@ -4,6 +4,7 @@ import { createDeliveryPlans, getShippingPlans } from '@framework/shipping'
 import { Guid } from '@commerce/types'
 import { DeliveryType, EmptyObject, EmptyString } from '@components/utils/constants'
 import { updateDelivery } from '@framework/shipping'
+import { useCart } from '@framework/cart'
 
 interface Props {
   postCode: any
@@ -18,35 +19,34 @@ interface Props {
 }
 
 export default function updateShippingMethod() {
-  return async function handler({
-    basket,
-    postCode,
-    basketId,
-    model,
-    cdp,
-    isOmniOmsEnabled = false,
-    primaryInventoryPoolCode,
-    isCNC = false,
-    cookies,
-  }: Props) {
+  return async function handler({ basket, postCode, basketId, model, cdp, isOmniOmsEnabled = false, primaryInventoryPoolCode, isCNC = false, cookies, }: Props) {
     try {
-      const response = await updateAddress()({
-        basketId,
-        model,
-        isCNC,
-        cookies,
-      })
+      let storeId = basket?.storeId
+      const response = await updateAddress()({ basketId, model, isCNC, cookies, })
+
+      if (isCNC) {
+        const basketResponse: any = await useCart()({ basketId, cookies: cookies, })
+        storeId = basketResponse?.storeId
+      }
+
       if (cdp) {
         const addr = model?.shippingAddress || model?.billingAddress
 
         if (isOmniOmsEnabled) {
-          const shippingMethod: any = basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId)
+          let shippingMethod: any;
+          
+          if (isCNC)
+            shippingMethod = basket?.shippingMethods?.find((x: any) => x?.type === DeliveryType.COLLECT)
+          else
+            shippingMethod = basket?.shippingMethods?.find((x: any) => x?.id === basket?.shippingMethodId)
+
+          const shippingMethodId = shippingMethod?.id
           const deliveryPlanModel = {
             basketId,
             orderId: Guid.empty,
             postCode: addr?.postCode || postCode,
             shippingMethodType: shippingMethod?.type || DeliveryType.STANDARD_DELIVERY,
-            shippingMethodId: basket?.shippingMethodId,
+            shippingMethodId, // basket?.shippingMethodId,
             shippingMethodName: shippingMethod?.displayName,
             shippingMethodCode: shippingMethod?.shippingCode,
             orgId: process.env.NEXT_PUBLIC_ORG_ID,
@@ -60,7 +60,7 @@ export default function updateShippingMethod() {
               //poolCode: "string"
             })) : [],
             //pickupStoreId: Guid.empty,
-            //refStoreId: "string",
+            refStoreId: storeId,
             primaryInventoryPool: primaryInventoryPoolCode,
             secondaryInventoryPool: EmptyString,
           }
@@ -75,11 +75,7 @@ export default function updateShippingMethod() {
             pickupStoreId: plan?.PickupStoreId,
             refStoreId: plan?.RefStoreId,
             pickupStoreCode: plan?.PickupStoreCode,
-            deliveryCenter: {
-              recordId: plan?.DeliveryCenter?.RecordId,
-              code: plan?.DeliveryCenter?.Code,
-              name: plan?.DeliveryCenter?.Name,
-            },
+            deliveryCenter: { recordId: plan?.DeliveryCenter?.RecordId, code: plan?.DeliveryCenter?.Code, name: plan?.DeliveryCenter?.Name, },
             leadTime: plan?.LeadTime,
             leadTimeUom: plan?.LeadTimeUom,
             poolCode: plan?.PoolCode,
