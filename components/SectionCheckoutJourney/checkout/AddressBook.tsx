@@ -131,12 +131,13 @@ const AddressBook: React.FC<AddressBookProps> = ({
       if (typeof address?.isBilling === 'boolean' && typeof address?.isDefaultBilling === 'boolean') {
         return address?.isBilling || address?.isDefaultBilling
       } else if (typeof address?.isDefaultBilling === 'boolean') {
-        if (address?.isDefaultBilling && address?.isDefaultDelivery) return !address?.isDefaultBilling
+        if (address?.isDefaultBilling && address?.isDefaultDelivery) 
+            return !isCNCMethodSelected ? !address?.isDefaultBilling : address?.isDefaultBilling
         return address?.isDefaultBilling
       }
       return address?.isBilling || false
     }
-  }, [])
+  }, [deliveryTypeMethod])
 
   return (
     <>
