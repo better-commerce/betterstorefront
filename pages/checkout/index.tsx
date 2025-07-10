@@ -653,21 +653,18 @@ const CheckoutPage: React.FC = ({ appConfig, deviceInfo, basketId, featureToggle
         setAlert({ type: AlertType.ERROR, msg: clickCollectStoreResult?.message })
         return
       }
+
+      // Change By & Date: [GS, 10-Jul-2025]
+      // Issue: Shipping address not getting updated in basket for CNC and delivery plans not getting generated.
+      // Description: Added API invocation to update shipping address in basket for CNC to generate delivery plan. 
+      const shippingAddress = { userId: user?.userId || EmptyGuid, address1: store?.Address1 || EmptyString, address2: store?.Address2 || EmptyString, address3: EmptyString, city: store?.City || EmptyString, state: store?.County || EmptyString, countryCode: BETTERCOMMERCE_DEFAULT_COUNTRY, country: store?.Country || EmptyString, firstName: store?.Name || EmptyString, lastName: EmptyString, postCode: store?.PostCode || EmptyString, phoneNo: EmptyString, label: EmptyString, title: EmptyString, isDefault: false, isDefaultBilling: false, isDefaultDelivery: true, isConsentSelected: false, companyName: EmptyString, }
+      await updateCheckoutAddress({ shippingAddress }, true)
     }
 
     let deliveryPlans = basket?.deliveryPlans
     if (basket?.shippingMethodId != method?.id) {
       // Update shipping method
-      const { data: updateShippingMethodResult } = await axios.post(
-        NEXT_UPDATE_SHIPPING,
-        {
-          basketId,
-          countryCode:
-            selectedAddress?.shippingAddress?.countryCode ||
-            BETTERCOMMERCE_DEFAULT_COUNTRY,
-          shippingId: method?.id,
-        }
-      )
+      const { data: updateShippingMethodResult } = await axios.post( NEXT_UPDATE_SHIPPING, { basketId, countryCode: selectedAddress?.shippingAddress?.countryCode || BETTERCOMMERCE_DEFAULT_COUNTRY, shippingId: method?.id, } )
       setBasket({ ...basket, ...updateShippingMethodResult })
       deliveryPlans = updateShippingMethodResult?.deliveryPlans
     }
