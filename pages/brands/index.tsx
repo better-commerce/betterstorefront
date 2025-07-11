@@ -1,13 +1,11 @@
+import { useState } from 'react'
 import type { GetStaticPropsContext } from 'next'
 import NextHead from 'next/head'
-import { useState } from 'react'
+import Link from 'next/link'
 import withDataLayer, { PAGE_TYPES } from '@components/withDataLayer'
-import Layout from '@components/Layout/Layout'
 import getBrands from '@framework/api/endpoints/catalog/brands'
 import { useTranslation } from '@commerce/utils/use-translation'
-import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import useAnalytics from '@components/services/analytics/useAnalytics'
 import { SITE_ORIGIN_URL } from '@components/utils/constants'
 import { useRouter } from 'next/router'
 import { Cookie, STATIC_PAGE_CACHE_INVALIDATION_IN_MINS } from '@framework/utils/constants'
@@ -18,6 +16,8 @@ import { IPagePropsProvider } from '@framework/contracts/page-props/IPagePropsPr
 import { getPagePropType, PagePropType } from '@framework/page-props'
 import { AnalyticsEventType } from '@components/services/analytics'
 import { serverSideMicrositeCookies } from '@commerce/utils/uri-util'
+import useAnalytics from '@components/services/analytics/useAnalytics'
+import Layout from '@components/Layout/Layout'
 const ALPHABET = '#abcdefghijklmnopqrstuvwxyz'
 const dataNormalize = (data: any = []) => {
   return data.reduce((acc: any, item: any) => {
@@ -72,7 +72,6 @@ function BrandsPage({ brands }: any) {
     letter?.preventDefault()
     const targetId = letter?.target?.text?.toUpperCase()
     const element = document.getElementById(targetId)
-
     if (element) {
       const elementPosition = element.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - 150 // 100px from top
@@ -83,8 +82,6 @@ function BrandsPage({ brands }: any) {
       })
     }
   }
-
-  const totalResults = normalizedBrands.map((i: any) => i?.results)?.flat()?.length
   let absPath = ''
   if (typeof window !== 'undefined') {
     absPath = window?.location?.href
@@ -103,7 +100,6 @@ function BrandsPage({ brands }: any) {
         <meta property="og:description" content={translate('common.label.brandsText')} key="ogdesc" />
       </NextHead>
       <div className="bg-white">
-        {/* Mobile menu */}
         <main className="container pb-24 mx-auto overflow-hidden theme-account-container">
           <div className="py-6 text-center sm:py-16">
             <h1 className={`text-2xl font-semibold text-gray-900 sm:text-5xl`}>
@@ -160,8 +156,8 @@ function BrandsPage({ brands }: any) {
               </div>
             ))}
           </div>
-        </main >
-      </div >
+        </main>
+      </div>
     </>
   )
 }
@@ -193,7 +189,5 @@ export async function getStaticProps({ params, locale, locales, preview, }: GetS
   }
 }
 BrandsPage.Layout = Layout
-
 const PAGE_TYPE = PAGE_TYPES['Brand']
-
 export default withDataLayer(BrandsPage, PAGE_TYPE)
