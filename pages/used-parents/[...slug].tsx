@@ -47,7 +47,7 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const { products } = await commerce.getAllProductPaths() 
   let paths = products?.map((product: any) => {
-    if (!product?.slug?.includes('shop/')) {
+    if (!product?.slug?.includes('products/')) {
       return `/used-parents/${product?.slug}`
     } else return `/used-parents/${product?.slug}`
   })

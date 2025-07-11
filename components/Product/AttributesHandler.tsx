@@ -68,7 +68,7 @@ export default function AttributesHandler({
 
   const router = useRouter()
 
-  const slug = useMemo(() => productSlug || product?.link || variant?.slug || variant?.link || `shop/${router.query?.slug}`, [productSlug, product?.link, variant?.slug, variant?.link, router.query?.slug])
+  const slug = useMemo(() => productSlug || product?.link || variant?.slug || variant?.link || `products/${router.query?.slug}`, [productSlug, product?.link, variant?.slug, variant?.link, router.query?.slug])
   const originalAttributes = useMemo(() => getAttributesFromSlug(slug, variantProducts) || {}, [slug, variantProducts])
   const [attrCombination, setAttrCombination] = useState<any>({})
 
@@ -144,7 +144,7 @@ export default function AttributesHandler({
       sellWithoutInventory: false,
       stockCode: '',
     }
-    const slug = variantSlug || `shop/${router.query.slug}`
+    const slug = variantSlug || `products/${router.query.slug}`
     variantProducts?.find((product: any) => {
       product?.attributes?.forEach((attr: any) => {
         if (matchStrings(key, attr?.fieldCode, true) && matchStrings(attr?.fieldValue, variant) && matchStrings(product?.slug, slug)) {

@@ -67,7 +67,7 @@ export default function AttributesHandler({
   }, [componentAttributeKey])
 
   const router = useRouter()
-  const slug = productSlug || variant?.slug || variant?.link || `shop/${router.query.slug}`
+  const slug = productSlug || variant?.slug || variant?.link || `products/${router.query.slug}`
   const originalAttributes = getAttributesFromSlug(slug, variantProducts) || {}
   const generatedAttrCombination = Object?.fromEntries(Object?.entries(originalAttributes))
   const [attrCombination, setAttrCombination] = useState(generatedAttrCombination)

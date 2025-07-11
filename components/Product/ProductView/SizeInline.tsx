@@ -80,7 +80,7 @@ export default function SizeInline({ componentIdx, items = [], onChange = () => 
          const matchingAttributes = variant?.attributes.filter((attr: any) => attr?.fieldCode === 'clothing.size' && attr?.fieldValue === value);
          return matchingAttributes?.length > 0;
       });
-      slug = selectedVariant ? selectedVariant?.slug : `shop/${router?.query?.slug}`;
+      slug = selectedVariant ? selectedVariant?.slug : `products/${router?.query?.slug}`;
       const stockPerAttrValue = getProductFromAttributes(fieldCode, value, variant, product.variantProducts, slug)
       setSelected({ ...value, ...stockPerAttrValue })
       setAttrCombination(fieldCode, value)

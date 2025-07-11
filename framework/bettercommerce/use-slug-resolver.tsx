@@ -2,7 +2,6 @@ import { SITEVIEW_ENDPOINT } from '@components/utils/constants'
 import { logError } from '@framework/utils/app-util'
 import fetcher from './fetcher'
 import { HttpStatusCode } from 'axios'
-import { EntitySlugTypes } from 'middleware'
 
 interface Props {
   slug: string
@@ -20,7 +19,6 @@ export default function useSlugResolver() {
       if (response.statusCode === HttpStatusCode.Ok) {
         return response?.slugType
       }
-      return EntitySlugTypes.NONE
     } catch (error: any) {
       logError(error)
       throw new Error(error.message)

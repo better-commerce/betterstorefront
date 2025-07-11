@@ -214,7 +214,7 @@ export default function ProductView({ data = { images: [] }, snippets = [], reco
   const fetchProduct = async () => {
     const filteredProduct = getFilteredProduct()
     const url = !isPreview ? NEXT_GET_PRODUCT : NEXT_GET_PRODUCT_PREVIEW
-    const currentSlug = filteredProduct?.slug ? filteredProduct?.slug?.replaceAll('shop/', '') : slug
+    const currentSlug = filteredProduct?.slug ? filteredProduct?.slug?.replaceAll('products/', '') : slug
     const response: any = await axios.post(url, { slug: currentSlug })
     if (response?.data?.product) {
       fetchRelatedProducts(response?.data?.product?.recordId)

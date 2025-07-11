@@ -24,7 +24,7 @@ export default function Dropdown({
   const translate = useTranslation()
   const { openNotifyUser, closeNotifyUser } = useUI()
   const router = useRouter()
-  const slug = `shop/${router.query.slug}`
+  const slug = `products/${router.query.slug}`
   const [productData, setProductData] = useState(getStockPerAttribute(fieldCode, currentAttribute))
   const [selected, setSelected] = useState({
     currentAttribute,

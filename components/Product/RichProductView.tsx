@@ -243,7 +243,7 @@ export default function RichProductView({ product, selectedOption, isGuestUser, 
                   {attrGroup['product.relatedproducts'].map((item: any, index: number) => (
                     <SwiperSlide key={index}>
                       <div className='w-full p-2 py-3 text-xs border border-gray-300 rounded-xl hover:border-gray-400'>
-                        <Link href={`/shop${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
+                        <Link href={`/products${sanitizeRelativeUrl(item?.value)}`}> <span>{item?.fieldText}</span> </Link>
                       </div>
                     </SwiperSlide>
                   ))}
