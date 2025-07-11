@@ -20,7 +20,7 @@ import { sanitizeRelativeUrl } from "@framework/utils/app-util"
 import { useEffect, useState } from "react"
 
 
-export default function StandardBrandLanding({ resPcHero, brandGuidePages, resPc1, resPc2, resPc3, resIc1, swiperRefIc1, ic1Title, pc3Title, pc2Title, pc1Title, faq, swiperRefPc1, onToggleBrandListPage, sliderRefNew, swiperRefPc2, pHeading, pText, swiperRefPc3, saleProductCollectionRes, swiperRef, manufacturerStateVideoHeading, manufacturerStateVideoName, midBanners, midBannerHeading, midBannerLink, bgColor, textColor, multipleBrandVideoName, multipleBrandVideos, imgFeatureCollection, textNames, manufacturerStateTextHeading, handleClick, featureToggle, emptyHtmlString, imageCategoryCollectionResponse, brandDetails, sanitizedDescription, excludeOOSProduct, onEnableOutOfStockItems, isProductCompare, showCompareProducts, isValidating, clearAll, config, productDataToPass, handlePageChange, handleInfiniteScroll, deviceInfo, maxBasketItemsCount, handleFilters, data, state, handleSortBy, isCompared, campaignData, removeFilter, defaultDisplayMembership, closeCompareProducts, hideListHeader }: any) {
+export default function StandardBrandLanding({ resPcHero, brandGuidePages, resPc1, resPc2, resPc3, resIc1, ic1Title, pc3Title, pc2Title, pc1Title, faq, swiperRefs, onToggleBrandListPage, sliderRefNew, pHeading, pText, saleProductCollectionRes, swiperRef, manufacturerStateVideoHeading, manufacturerStateVideoName, midBanners, midBannerHeading, midBannerLink, bgColor, textColor, multipleBrandVideoName, multipleBrandVideos, imgFeatureCollection, textNames, manufacturerStateTextHeading, handleClick, featureToggle, emptyHtmlString, imageCategoryCollectionResponse, brandDetails, sanitizedDescription, excludeOOSProduct, onEnableOutOfStockItems, isProductCompare, showCompareProducts, isValidating, clearAll, config, productDataToPass, handlePageChange, handleInfiniteScroll, deviceInfo, maxBasketItemsCount, handleFilters, data, state, handleSortBy, isCompared, campaignData, removeFilter, defaultDisplayMembership, closeCompareProducts, hideListHeader }: any) {
   const translate = useTranslation()
   const { isMobile, isOnlyMobile } = deviceInfo
   const [navigationVisibility, setNavigationVisibility] = useState({ nav0: false, nav1: false, nav2: false, nav3: false, nav4: false, })
@@ -104,10 +104,10 @@ export default function StandardBrandLanding({ resPcHero, brandGuidePages, resPc
             </div>
             <div className='relative'>
               {navigationVisibility.nav0 && <div className="flex justify-between mb-2 slider-out-btn">
-                <Prev onClickPrev={() => swiperRefIc1.current?.swiper?.slidePrev()} />
-                <Next onClickNext={() => swiperRefIc1.current?.swiper?.slideNext()} />
+                <Prev onClickPrev={() => swiperRefs.current.ic1?.swiper?.slidePrev()} />
+                <Next onClickNext={() => swiperRefs.current.ic1?.swiper?.slideNext()} />
               </div>}
-              <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefIc1} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
+              <Swiper slidesPerView={1.3} spaceBetween={16} ref={(node) => (swiperRefs.current.ic1 = node)} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
                 {resIc1?.images?.map((item: any, pId: number) => (
                   <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                     <Link href={sanitizeRelativeUrl(`/${item?.link}`)} className='flex flex-col items-center justify-center w-full gap-2'>
@@ -130,10 +130,10 @@ export default function StandardBrandLanding({ resPcHero, brandGuidePages, resPc
             </div>
             <div className='relative'>
               {navigationVisibility.nav1 && <div className="flex justify-between mb-2 slider-out-btn">
-                <Prev onClickPrev={() => swiperRefPc1.current?.swiper?.slidePrev()} />
-                <Next onClickNext={() => swiperRefPc1.current?.swiper?.slideNext()} />
+                <Prev onClickPrev={() => swiperRefs.current.pc1?.swiper?.slidePrev()} />
+                <Next onClickNext={() => swiperRefs.current.pc1?.swiper?.slideNext()} />
               </div>}
-              <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc1} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
+              <Swiper slidesPerView={1.3} spaceBetween={16} ref={(node) => (swiperRefs.current.pc1 = node)} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
                 {resPc1?.map((item: any, pId: number) => (
                   <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                     <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
@@ -151,10 +151,10 @@ export default function StandardBrandLanding({ resPcHero, brandGuidePages, resPc
             </div>
             <div className='relative'>
               {navigationVisibility.nav2 && <div className="flex justify-between mb-2 slider-out-btn">
-                <Prev onClickPrev={() => swiperRefPc2.current?.swiper?.slidePrev()} />
-                <Next onClickNext={() => swiperRefPc2.current?.swiper?.slideNext()} />
+                <Prev onClickPrev={() => swiperRefs.current.pc2?.swiper?.slidePrev()} />
+                <Next onClickNext={() => swiperRefs.current.pc2?.swiper?.slideNext()} />
               </div>}
-              <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc2} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
+              <Swiper slidesPerView={1.3} spaceBetween={16} ref={(node) => (swiperRefs.current.pc2 = node)} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
                 {resPc2?.map((item: any, pId: number) => (
                   <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                     <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
@@ -172,10 +172,10 @@ export default function StandardBrandLanding({ resPcHero, brandGuidePages, resPc
             </div>
             <div className='relative'>
               {navigationVisibility.nav3 && <div className="flex justify-between mb-2 slider-out-btn">
-                <Prev onClickPrev={() => swiperRefPc3.current?.swiper?.slidePrev()} />
-                <Next onClickNext={() => swiperRefPc3.current?.swiper?.slideNext()} />
+                <Prev onClickPrev={() => swiperRefs.current.pc3?.swiper?.slidePrev()} />
+                <Next onClickNext={() => swiperRefs.current.pc3?.swiper?.slideNext()} />
               </div>}
-              <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRefPc3} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
+              <Swiper slidesPerView={1.3} spaceBetween={16} ref={(node) => (swiperRefs.current.pc3 = node)} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : ''} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 5 } }}>
                 {resPc3?.map((item: any, pId: number) => (
                   <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                     <ProductCard data={item} featureToggle={featureToggle} deviceInfo={deviceInfo} defaultDisplayMembership={defaultDisplayMembership} />
@@ -301,10 +301,10 @@ export default function StandardBrandLanding({ resPcHero, brandGuidePages, resPc
           </div>
           <div className='relative'>
             {navigationVisibility.nav4 && <div className="flex justify-between mb-2 slider-out-btn">
-              <Prev onClickPrev={() => swiperRef.current?.swiper?.slidePrev()} />
-              <Next onClickNext={() => swiperRef.current?.swiper?.slideNext()} />
+              <Prev onClickPrev={() => swiperRef.current?.default.swiper?.slidePrev()} />
+              <Next onClickNext={() => swiperRef.current?.default?.swiper?.slideNext()} />
             </div>}
-            <Swiper slidesPerView={1.3} spaceBetween={16} ref={swiperRef} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 4 } }}>
+            <Swiper slidesPerView={1.3} spaceBetween={16} ref={(node) => (swiperRefs.current.default = node)} navigation={false} loop={true} className={deviceInfo?.isMobile ? 'mob-navigation-hide' : 'border border-gray-200 bg-white shadow p-2 rounded'} breakpoints={{ 640: { slidesPerView: 1.3 }, 768: { slidesPerView: 3 }, 1024: { slidesPerView: 4 }, 1800: { slidesPerView: 4 } }}>
               {brandGuidePages?.map((item: any, pId: number) => (
                 <SwiperSlide key={pId} className="relative inline-flex flex-col h-auto text-left cursor-pointer height-auto-slide group lg:w-auto">
                   <Link href={sanitizeRelativeUrl(`/${item?.slug}`)} className='flex flex-col items-center justify-center w-full gap-2'>

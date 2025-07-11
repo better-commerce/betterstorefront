@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useState, useRef } from 'react'
+import { useReducer, useEffect, useState, useRef, useMemo } from 'react'
 import useSwr from 'swr'
 import NextHead from 'next/head'
 import Link from 'next/link'
@@ -87,7 +87,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
   const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const faq = useFaqData();
   const adaptedQuery = { ...query }
-  const { isMobile, isOnlyMobile } = deviceInfo
   let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
   let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
   let imgFeatureCollection: any = collections.imgFeatureCollection
@@ -195,8 +194,8 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
   const [showLandingPage, setShowLandingPage] = useState(true)
   const [isProductCompare, setProductCompare] = useState(false)
   const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
-  const [blogData, setBlogData] = useState(null)
-  //router.push({ pathname: router.pathname, query }, undefined, { shallow: true })
+  SwiperCore.use([Navigation])
+  const swiperRefs = useRef<Record<string, any>>({ default: null, ic1: null, pc1: null, pc2: null, pc3: null, })
 
   const {
     data = {
@@ -218,31 +217,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
       revalidateOnFocus: false,
     }
   )
-
-  // reset state on slug change
-  // useEffect(() => {
-  //   const handleRouteChange = (url: any) => {
-  //     const currentSlug = url?.split('?')[0];
-  //     if (currentSlug !== previousSlug) {
-  //       dispatch({ type: RESET_STATE })
-  //       setPreviousSlug(currentSlug);
-  //     }
-  //   };
-
-  //   router.events.on('routeChangeComplete', handleRouteChange);
-
-  //   // Cleanup the event listener on unmount
-  //   return () => {
-  //     router.events.off('routeChangeComplete', handleRouteChange);
-  //   };
-  // }, [previousSlug, router]);
-
-  SwiperCore.use([Navigation])
-  const swiperRef: any = useRef(null)
-  const swiperRefIc1: any = useRef(null)
-  const swiperRefPc1: any = useRef(null)
-  const swiperRefPc2: any = useRef(null)
-  const swiperRefPc3: any = useRef(null)
 
   const onEnableOutOfStockItems = (val: boolean) => {
     setExcludeOOSProduct(!val)
@@ -397,7 +371,7 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
     setMidBanners('')
     setMidBannerHeading('')
     setMidBannerLink('')
-    const Widgets = JSON.parse(brandDetails?.widgetsConfig || '[]')
+    const Widgets = JSON?.parse(brandDetails?.widgetsConfig || '[]')
     Widgets.map((val: any) => {
       if (val.manufacturerSettingType == 'Video' && val.code == 'BrandVideo') {
         setManufacturerStateVideoHeading(val.heading)
@@ -530,12 +504,15 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
   }, [bgColor]);
   const emptyHtmlString = "<html>\n<head>\n\t<title></title>\n</head>\n<body></body>\n</html>\n"
   const cleanPath = removeQueryString(router.asPath)
-  const widgets = JSON.parse(brandDetails?.widgetsConfig)
+  const widgets = JSON?.parse(brandDetails?.widgetsConfig)
 
-  const pc1Title = widgets?.find((item: any) => item?.code == 'PC1')?.heading
-  const pc2Title = widgets?.find((item: any) => item?.code == 'PC2')?.heading
-  const pc3Title = widgets?.find((item: any) => item?.code == 'PC3')?.heading
-  const ic1Title = widgets?.find((item: any) => item?.code == 'IC1')?.heading
+  const getWidgetHeading = (code: string) => widgets?.find((item: any) => item?.code === code)?.heading
+  const pc1Title = getWidgetHeading('PC1')
+  const pc2Title = getWidgetHeading('PC2')
+  const pc3Title = getWidgetHeading('PC3')
+  const ic1Title = getWidgetHeading('IC1')
+
+
 
   const brandGuidePages = pageContents?.pages?.filter((page: any) => page.fields?.brand === brandDetails?.name.toLowerCase());
   return (
@@ -562,12 +539,8 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
           resPc2={resPc2}
           resPc3={resPc3}
           resIc1={resIc1}
-          swiperRef={swiperRef}
-          swiperRefPc1={swiperRefPc1}
-          swiperRefPc2={swiperRefPc2}
-          swiperRefPc3={swiperRefPc3}
+          swiperRefs={swiperRefs}
           sliderRefNew={sliderRefNew}
-          swiperRefIc1={swiperRefIc1}
           ic1Title={ic1Title}
           pc1Title={pc1Title}
           pc2Title={pc2Title}
