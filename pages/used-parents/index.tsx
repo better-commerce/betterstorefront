@@ -424,11 +424,7 @@ export async function getStaticProps({
     if (!containsArrayData(usedUIDData)) {
       try {
         usedUIDData = await getAllUsed({ [Cookie.Key.LANGUAGE]: locale })
-        if (containsArrayData(usedUIDData)) {
-          await setData([{ key: usedUID, value: usedUIDData }])
-        } else {
-          return { notFound: true } // fallback for missing data
-        }
+        await setData([{ key: usedUID, value: usedUIDData }])
       } catch (err) {
         logError(err)
         return { notFound: true }
