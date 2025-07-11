@@ -21,6 +21,7 @@ export enum EntitySlugTypes {
 const REWRITE_HANDLER: Partial<Record<EntitySlugTypes, string>> = {
     [EntitySlugTypes.CATEGORY]: '/category',
     [EntitySlugTypes.SUB_BRAND]: '/brands',
+    [EntitySlugTypes.LIST_DATASET]: '/collection',
     [EntitySlugTypes.PRODUCT]: '/products',
     [EntitySlugTypes.BLOG]: '/blog',
     [EntitySlugTypes.BLOG_CATEGORY]: '/blog',
@@ -53,9 +54,7 @@ export async function middleware(request: NextRequest) {
     } else {
 
         let staticRewritePath = '';
-        if (pathname.startsWith('/shop/')) {
-            staticRewritePath = `/products/${pathname?.split('/').slice(2).join('/')}`;
-        } else if (pathname === '/stores') {
+        if (pathname === '/stores') {
             staticRewritePath = "/store-locator";
         }
         if (staticRewritePath) {
