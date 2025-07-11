@@ -89,9 +89,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
 }
 
-const EXACT_STATIC_PATHS = new Set(["/", "/404", "/500", "/cart", "/contact-us", "/cookie-policy", "/password-protection", "/payment-failed", "/privacy-policy", "/terms-and-condition", "/terms-and-conditions", "/search", "/thank-you", "/validate", "/wishlist",]);
+const EXACT_STATIC_PATHS = new Set(["/", "/404", "/500", "/cart", "/contact-us", "/cookie-policy", "/password-protection", "/payment-failed", "/privacy-policy", "/terms-and-condition", "/terms-and-conditions", "/search", "/thank-you", "/validate", "/wishlist", "/used-parents"]);
 
-const PARTIAL_STATIC_PATH_PREFIXES = ["/account", "/brands", "/blog", "/cache", "/category", "/checkout", "/collection", "/company", "/feed", "/home", "/kit", "/lookbook", "/my-account", "/my-membership", "/my-store", "/page", "/payment-notification", "/preview", "/products", "/quote", "/search", "/sell-or-part-exchange", "/store-locator"] as const;
+const PARTIAL_STATIC_PATH_PREFIXES = ["/account", "/brands", "/blog", "/cache", "/category", "/checkout", "/collection", "/company", "/feed", "/home", "/kit", "/lookbook", "/my-account", "/my-membership", "/my-store", "/page", "/payment-notification", "/preview", "/products", "/quote", "/search", "/sell-or-part-exchange", "/store-locator", "/used-parents"] as const;
 
 function matchStaticPaths(pathname: string): boolean {
     // exact-match paths

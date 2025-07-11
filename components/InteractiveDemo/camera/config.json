@@ -33,7 +33,7 @@
           "group": "PLP",
           "urlCode": "plp-used",
           "name": "Used Products",
-          "url": "https://parkcameras.bettercommerce.tech/used",
+          "url": "https://parkcameras.bettercommerce.tech/used-parents",
           "displayOrder": 9,
           "active": 1
         },
@@ -41,7 +41,7 @@
           "group": "PLP",
           "urlCode": "plp-used-products",
           "name": "Used Product PLP",
-          "url": "https://parkcameras.bettercommerce.tech/used/sony-sony-vg-c2em-battery-grip-a7-ii-a7r-s-ii-7152042e",
+          "url": "https://parkcameras.bettercommerce.tech/used-parents/sony-sony-vg-c2em-battery-grip-a7-ii-a7r-s-ii-7152042e",
           "displayOrder": 10,
           "active": 1
         },
