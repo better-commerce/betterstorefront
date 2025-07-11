@@ -54,7 +54,9 @@ export async function middleware(request: NextRequest) {
     } else {
 
         let staticRewritePath = '';
-        if (pathname === '/stores') {
+        if (pathname === '/brand') {
+            staticRewritePath = "/brands";
+        } else if (pathname === '/stores') {
             staticRewritePath = "/store-locator";
         }
         if (staticRewritePath) {
