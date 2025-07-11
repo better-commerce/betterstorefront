@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useState, useRef, useMemo } from 'react'
+import { useReducer, useEffect, useState, useRef } from 'react'
 import useSwr from 'swr'
 import NextHead from 'next/head'
 import Link from 'next/link'
@@ -31,6 +31,9 @@ import { getFeatureToggle } from 'pages/category/[category]'
 import { isEqual } from 'lodash'
 
 export const ACTION_TYPES = { SORT_BY: 'SORT_BY', PAGE: 'PAGE', SORT_ORDER: 'SORT_ORDER', CLEAR: 'CLEAR', HANDLE_FILTERS_UI: 'HANDLE_FILTERS_UI', SET_FILTERS: 'SET_FILTERS', ADD_FILTERS: 'ADD_FILTERS', REMOVE_FILTERS: 'REMOVE_FILTERS', RESET_STATE: 'RESET_STATE' }
+const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
+const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, RESET_STATE } = ACTION_TYPES
+const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
 
 interface actionInterface {
   type?: string
@@ -43,11 +46,6 @@ interface stateInterface {
   sortOrder?: string
   filters: any
 }
-
-const IS_INFINITE_SCROLL = process.env.NEXT_PUBLIC_ENABLE_INFINITE_SCROLL === 'true'
-const { SORT_BY, PAGE, SORT_ORDER, CLEAR, HANDLE_FILTERS_UI, SET_FILTERS, ADD_FILTERS, REMOVE_FILTERS, RESET_STATE } = ACTION_TYPES
-const DEFAULT_STATE = { sortBy: '', sortOrder: 'asc', currentPage: 1, filters: [], }
-
 function reducer(state: stateInterface, { type, payload }: actionInterface) {
   switch (type) {
     case SORT_BY:
@@ -79,21 +77,36 @@ function reducer(state: stateInterface, { type, payload }: actionInterface) {
 }
 
 function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandDetails, slug, deviceInfo, config, collections, featureToggle, campaignData, defaultDisplayMembership }: any) {
-  const { recordAnalytics } = useAnalytics()
   const translate = useTranslation()
   const router = useRouter()
   const qsFilters = router.asPath
   const filters: any = parsePLPFilters(qsFilters as string)
-  const [previousSlug, setPreviousSlug] = useState(router?.asPath?.split('?')[0]);
   const faq = useFaqData();
   const adaptedQuery = { ...query }
-  let imageBannerCollectionResponse: any = collections.imageBannerCollectionResponse
+  const [manufacturerStateVideoName, setManufacturerStateVideoName] = useState('')
+  const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] = useState('')
+  const [manufacturerStateTextName, setManufacturerStateTextName] = useState('')
+  const [midBannerHeading, setMidBannerHeading] = useState('')
+  const [multipleBrandVideoName, setMultipleBrandVideoName] = useState('')
+  const [multipleBrandVideos, setMultipleBrandVideos] = useState('')
+  const [midBanners, setMidBanners] = useState('')
+  const [midBannerLink, setMidBannerLink] = useState('')
+  const [brandColor, setBrandColor] = useState('')
+  const [manufacturerStateTextHeading, setManufacturerStateTextHeading] = useState('')
+  const [pHeading, setPHeading] = useState('')
+  const [pText, setPText] = useState('')
+  const [textNames, setTextNames] = useState([])
+  const [recommendedProducts, setRecommendedProducts] = useState([])
+  const [showLandingPage, setShowLandingPage] = useState(true)
+  const [isProductCompare, setProductCompare] = useState(false)
+  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
+  SwiperCore.use([Navigation])
+  const swiperRefs = useRef<Record<string, any>>({ default: null, ic1: null, pc1: null, pc2: null, pc3: null, })
+  const [textColor, setTextColor] = useState('#ffffff');
+
   let imageCategoryCollectionResponse: any = collections.imageCategoryCollection
   let imgFeatureCollection: any = collections.imgFeatureCollection
-  let offerBannerResult: any = collections.offerBannerResult
-  let productCollectionRes: any = collections.productCollection
   let saleProductCollectionRes: any = collections.saleProductCollection
-
   let resPcHero: any = collections.resPcHero
   let resPc1: any = collections.resPc1
   let resPc2: any = collections.resPc2
@@ -165,7 +178,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
       ],
   }
   const [state, dispatch] = useReducer(reducer, initialState)
-
   const [productListMemory, setProductListMemory] = useState({
     products: {
       results: [],
@@ -177,25 +189,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
       sortBy: null,
     },
   })
-  const [manufacturerStateVideoName, setManufacturerStateVideoName] = useState('')
-  const [manufacturerStateVideoHeading, setManufacturerStateVideoHeading] = useState('')
-  const [manufacturerStateTextName, setManufacturerStateTextName] = useState('')
-  const [midBannerHeading, setMidBannerHeading] = useState('')
-  const [multipleBrandVideoName, setMultipleBrandVideoName] = useState('')
-  const [multipleBrandVideos, setMultipleBrandVideos] = useState('')
-  const [midBanners, setMidBanners] = useState('')
-  const [midBannerLink, setMidBannerLink] = useState('')
-  const [brandColor, setBrandColor] = useState('')
-  const [manufacturerStateTextHeading, setManufacturerStateTextHeading] = useState('')
-  const [pHeading, setPHeading] = useState('')
-  const [pText, setPText] = useState('')
-  const [textNames, setTextNames] = useState([])
-  const [recommendedProducts, setRecommendedProducts] = useState([])
-  const [showLandingPage, setShowLandingPage] = useState(true)
-  const [isProductCompare, setProductCompare] = useState(false)
-  const [excludeOOSProduct, setExcludeOOSProduct] = useState(true)
-  SwiperCore.use([Navigation])
-  const swiperRefs = useRef<Record<string, any>>({ default: null, ic1: null, pc1: null, pc2: null, pc3: null, })
 
   const {
     data = {
@@ -243,24 +236,17 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
         return dataClone
       })
     }
-    //}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.products?.results?.length, data])
 
   useEffect(() => {
     const urlFilters = parsePLPFilters(router.asPath)
     const stateFilters = state?.filters || []
-
-    // Prevent infinite loop by only updating URL when filters have actually changed
     const filtersAreSame = isEqual(urlFilters, stateFilters)
-
     if (!filtersAreSame && stateFilters.length) {
       routeToPLPWithSelectedFilters(router, stateFilters)
     }
-
     setPLPFilterSelection(stateFilters)
   }, [state?.filters])
-
 
   const handleClick = () => {
     router.push(`/brands/shop-all/${slug?.replace('brands/', '')}`)
@@ -301,7 +287,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
     }
     dispatch({ type: ADD_FILTERS, payload: { Key: 'brand', Value: brandDetails?.name }, })
   }
-
 
   const handleSortBy = (payload: any) => {
     router.push({
@@ -361,10 +346,7 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
       return () => {
         window?.removeEventListener('scroll', trackScroll)
       }
-    } /*else {
-      resetPageScroll()
-    }*/
-
+    }
   }, [])
 
   useEffect(() => {
@@ -414,7 +396,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
     })
   }, [])
 
-  //const productDataToPass = productListMemory.products
   const productDataToPass = IS_INFINITE_SCROLL
     ? productListMemory.products
     : data?.products
@@ -433,13 +414,12 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
     setProductCompare(false)
   }
   const { isCompared } = useUI()
-  // IMPLEMENT HANDLING FOR NULL OBJECT
   if (brandDetails === null) {
     return (
       <div className="container relative py-10 mx-auto text-center top-20">
         <h1 className="pb-6 text-3xl font-medium text-gray-400 font-30">
           {translate('common.label.badUrlText')}
-          <Link href="/brands">
+          <Link href={`${featureToggle?.features?.enableForPCSite ? '/brand' : '/brands'}`}>
             <span className="px-3 text-indigo-500">{translate('common.label.allBrandsText')}</span>
           </Link>
         </h1>
@@ -477,25 +457,17 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
   if (brandColor != "") {
     bgColor = brandColor
   }
-  const [textColor, setTextColor] = useState('#ffffff'); // Default text color for dark background
 
   useEffect(() => {
-    // Function to determine if the background color is dark
     const isColorDark = (color: any) => {
-      // Convert hex color to RGB
       const rgb = parseInt(color.substring(1), 16);
       const r = (rgb >> 16) & 0xff;
       const g = (rgb >> 8) & 0xff;
       const b = (rgb >> 0) & 0xff;
-
-      // Calculate luminance
       const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-      // Check if the luminance is below a certain threshold
       return luminance < 128; // Adjust the threshold as needed
     };
 
-    // Change text color based on background color
     if (isColorDark(bgColor)) {
       setTextColor('#ffffff'); // Light text color for dark background      
     } else {
@@ -511,9 +483,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
   const pc2Title = getWidgetHeading('PC2')
   const pc3Title = getWidgetHeading('PC3')
   const ic1Title = getWidgetHeading('IC1')
-
-
-
   const brandGuidePages = pageContents?.pages?.filter((page: any) => page.fields?.brand === brandDetails?.name.toLowerCase());
   return (
     <>
@@ -533,7 +502,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
       </NextHead>
       {brandDetails?.showLandingPage && showLandingPage ? (
         <StandardBrandLanding
-          // Hero and Sliders
           resPcHero={resPcHero}
           resPc1={resPc1}
           resPc2={resPc2}
@@ -546,9 +514,6 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
           pc2Title={pc2Title}
           pc3Title={pc3Title}
           brandGuidePages={brandGuidePages}
-
-
-          // Brand & Video Info
           onToggleBrandListPage={onToggleBrandListPage}
           manufacturerStateVideoHeading={manufacturerStateVideoHeading}
           manufacturerStateVideoName={manufacturerStateVideoName}
@@ -557,32 +522,20 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
           manufacturerStateTextHeading={manufacturerStateTextHeading}
           brandDetails={brandDetails}
           sanitizedDescription={brandDetails?.description}
-
-          // Texts and UI Labels
           pHeading={pHeading}
           pText={pText}
           textNames={textNames}
           faq={faq}
-
-          // Feature & Category Collections
           saleProductCollectionRes={saleProductCollectionRes}
           imgFeatureCollection={imgFeatureCollection}
           imageCategoryCollectionResponse={imageCategoryCollectionResponse}
-
-          // Banners
           midBanners={midBanners}
           midBannerHeading={midBannerHeading}
           midBannerLink={midBannerLink}
-
-          // Style
           bgColor={bgColor}
           textColor={textColor}
-
-          // Feature Toggles
           featureToggle={featureToggle}
           emptyHtmlString={emptyHtmlString}
-
-          // Filters & Pagination
           excludeOOSProduct={excludeOOSProduct}
           onEnableOutOfStockItems={onEnableOutOfStockItems}
           handleFilters={handleFilters}
@@ -591,15 +544,11 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
           handleSortBy={handleSortBy}
           handlePageChange={handlePageChange}
           handleInfiniteScroll={handleInfiniteScroll}
-
-          // Compare & Cart
           isProductCompare={isProductCompare}
           isCompared={isCompared}
           showCompareProducts={showCompareProducts}
           closeCompareProducts={closeCompareProducts}
           maxBasketItemsCount={maxBasketItemsCount}
-
-          // Others
           isValidating={isValidating}
           handleClick={handleClick}
           config={config}
@@ -644,12 +593,7 @@ function BrandDetailPage({ query, setEntities, pageContents, recordEvent, brandD
   )
 }
 
-export async function getStaticProps({
-  params,
-  locale,
-  locales,
-  preview,
-}: GetStaticPropsContext<{ brand: string }>) {
+export async function getStaticProps({ params, locale, locales, preview, }: GetStaticPropsContext<{ brand: string }>) {
   let brandSlug: any = params!.brand;
   if (brandSlug?.length) {
     brandSlug = brandSlug.join('/');
@@ -660,29 +604,27 @@ export async function getStaticProps({
   const cookies = serverSideMicrositeCookies(locale!)
   const pageProps = await props.getPageProps({ slug, cookies })
   const BlogContentsPromise = commerce.getBlogList({
-    pagetypeId: BLOG_PAGE_ID, //Constant pageId,
-    skip: 0, //skip,
-    pagesize: 100, //pagesize,s
-    sortby: 3, //sortby,
-    sortorder: 1, //sortorder,
-    cols: BLOG_COLS, //"blogheader.blogheader_mainimage",
+    pagetypeId: BLOG_PAGE_ID,
+    skip: 0,
+    pagesize: 100,
+    sortby: 3,
+    sortorder: 1,
+    cols: BLOG_COLS,
   })
   const blogContents = await BlogContentsPromise
   if (pageProps?.notFound) {
     return { ...notFoundRedirect(), revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS), }
   }
-
   return {
     props: {
       ...pageProps,
-      query: EmptyObject, //context.query,
+      query: EmptyObject,
       params: params,
       pageContents: blogContents ?? {},
-    }, // will be passed to the page component as props
+    },
     revalidate: getSecondsInMinutes(STATIC_PAGE_CACHE_INVALIDATION_IN_MINS),
   }
 }
-
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const paths: Array<string> = await getAllBrandsStaticPath()
   return {
@@ -690,7 +632,5 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     fallback: 'blocking',
   }
 }
-
 const PAGE_TYPE = PAGE_TYPES['Brand']
-
 export default withDataLayer(BrandDetailPage, PAGE_TYPE)
