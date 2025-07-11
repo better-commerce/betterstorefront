@@ -316,7 +316,7 @@ function MyApp({ Component, pageProps, nav, footer, clientIPAddress, ...props }:
           <>
             <title>{seoInfo?.metaTitle}</title>
             {
-              router.asPath.startsWith('/products/') && (
+              router.asPath.startsWith('/shop/') && (
                 // <link rel="canonical" href={(seoInfo?.canonicalTags != "" || seoInfo?.canonicalTags != null) ? (!hasBaseUrl(seoInfo?.canonicalTags) ? SITE_ORIGIN_URL + "/" + seoInfo?.canonicalTags : seoInfo?.canonicalTags) : SITE_ORIGIN_URL +  cleanPath} />
                 <link rel="canonical" href={SITE_ORIGIN_URL + cleanPath} />
               )

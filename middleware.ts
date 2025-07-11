@@ -22,7 +22,7 @@ const REWRITE_HANDLER: Partial<Record<EntitySlugTypes, string>> = {
     [EntitySlugTypes.CATEGORY]: '/category',
     [EntitySlugTypes.SUB_BRAND]: '/brands',
     [EntitySlugTypes.LIST_DATASET]: '/collection',
-    [EntitySlugTypes.PRODUCT]: '/products',
+    [EntitySlugTypes.PRODUCT]: '/shop',
     [EntitySlugTypes.BLOG]: '/blog',
     [EntitySlugTypes.BLOG_CATEGORY]: '/blog',
 };
@@ -77,7 +77,8 @@ export async function middleware(request: NextRequest) {
                 const { slugType } = (await response.json()) as SlugApiResponse;
                 const rewriteHandler = REWRITE_HANDLER[slugType];
                 if (rewriteHandler) {
-                    const rewritePath = `${rewriteHandler}${pathname}`
+                    const rewritePath = slugType === EntitySlugTypes.PRODUCT ? `${rewriteHandler}/${pathname.split('/').slice(2).join('/')}` : `${rewriteHandler}${pathname}`
+                    //console.log("rewritePath", rewritePath)
                     return NextResponse.rewrite(new URL(rewritePath, request.url));
                 }
             }
@@ -91,7 +92,7 @@ export async function middleware(request: NextRequest) {
 
 const EXACT_STATIC_PATHS = new Set(["/", "/404", "/500", "/cart", "/contact-us", "/cookie-policy", "/password-protection", "/payment-failed", "/privacy-policy", "/terms-and-condition", "/terms-and-conditions", "/search", "/thank-you", "/validate", "/wishlist", "/used-parents"]);
 
-const PARTIAL_STATIC_PATH_PREFIXES = ["/account", "/brands", "/blog", "/cache", "/category", "/checkout", "/collection", "/company", "/feed", "/home", "/kit", "/lookbook", "/my-account", "/my-membership", "/my-store", "/page", "/payment-notification", "/preview", "/products", "/quote", "/search", "/sell-or-part-exchange", "/store-locator", "/used-parents"] as const;
+const PARTIAL_STATIC_PATH_PREFIXES = ["/account", "/brands", "/blog", "/cache", "/category", "/checkout", "/collection", "/company", "/feed", "/home", "/kit", "/lookbook", "/my-account", "/my-membership", "/my-store", "/page", "/payment-notification", "/preview", "/quote", "/search", "/sell-or-part-exchange", "/store-locator", "/used-parents"] as const;
 
 function matchStaticPaths(pathname: string): boolean {
     // exact-match paths

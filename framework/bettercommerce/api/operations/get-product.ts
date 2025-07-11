@@ -16,9 +16,10 @@ export default function getProductOperation({
     cookies?: any
   } = {}): Promise<any> {
     const response: any = await fetcher({
-      url: `${PRODUCT_API_ENDPOINT}slug?slug=products/${query}`,
+      url: `${PRODUCT_API_ENDPOINT}slug?slug=shop/${query}`,
       method: 'post',
       cookies,
+      logRequest: true
     })
     return {
       product: response?.result,

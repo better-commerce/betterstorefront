@@ -672,7 +672,7 @@ export const ALERT_TIMER = 5000
 
 export const DATE_FORMAT = 'DD-MMM-yy'
 export const DATE_TIME_FORMAT = 'DD-MMM-yy HH:mm'
-export const PRODUCTS_SLUG_PREFIX = 'products/'
+export const PRODUCTS_SLUG_PREFIX = 'shop/'
 export const EmptyString = ''
 export const collectionSlug = 'you-may-also-like'
 export const CLOTH_SIZE_ATTRIB_NAME = 'clothing.size'

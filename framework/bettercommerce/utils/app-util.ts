@@ -44,7 +44,7 @@ export const isCartAssociated = (cartItems: any) => {
 export const getCurrentPage = () => {
   if (typeof window !== 'undefined') {
     let currentPage = window.location.href
-    if (currentPage.includes('/products')) {
+    if (currentPage.includes('/shop')) {
       currentPage = 'PDP'
     } else if (currentPage.includes('/collection')) {
       currentPage = 'PLP'
