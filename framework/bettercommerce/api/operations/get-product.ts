@@ -19,7 +19,6 @@ export default function getProductOperation({
       url: `${PRODUCT_API_ENDPOINT}slug?slug=shop/${query}`,
       method: 'post',
       cookies,
-      logRequest: true
     })
     return {
       product: response?.result,
