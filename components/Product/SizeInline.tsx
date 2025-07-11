@@ -205,7 +205,7 @@ export default function SizeInline({
 
    const handleOnChange = (value: any) => {
       let selectedVariant = items?.find((o: any) => o?.fieldValue === value);
-      const slug = selectedVariant?.slug || `products/${router.query?.slug}`;
+      const slug = selectedVariant?.slug || `shop/${router.query?.slug}`;
       selectedVariant = getStockPerAttribute(fieldCode, value, slug)
       setSelected({ fieldValue: value, ...selectedVariant });
       setAttrCombination(fieldCode, value);

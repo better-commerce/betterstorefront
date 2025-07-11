@@ -50,8 +50,8 @@ export async function getStaticProps({ params, locale, locales, preview }: GetSt
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const { products } = await commerce.getAllProductPaths()
   let paths = products?.map((product: any) => {
-    if (!product?.slug?.includes('products/')) {
-      return `/products/${product?.slug}`
+    if (!product?.slug?.includes('shop/')) {
+      return `/shop/${product?.slug}`
     } else return `/${product?.slug}`
   })
   return {
@@ -59,6 +59,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     fallback: 'blocking',
   }
 }
+
 function Slug({ data, setEntities, recordEvent, slug, relatedProducts, availabelPromotions, allProductsByCategory, pdpLookbookProducts, pdpCachedImages, reviews, deviceInfo, config, campaignData, featureToggle, defaultDisplayMembership }: any) {
   const router = useRouter()
   const selectedFilters = getPLPFilterSelection()

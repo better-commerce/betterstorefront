@@ -21,7 +21,7 @@ function DeliveryMessage({ product, freeShippingOverXValue }: IDeliveryMessagePr
     const productSlug = product?.slug || product?.link
     if (!productSlug) return
     if (productSlug) {
-      const slug = productSlug?.replace('products/', '')
+      const slug = productSlug?.replace('shop/', '')
       try {
         const response: any = await axios.post(NEXT_GET_PRODUCT, {
           slug,
