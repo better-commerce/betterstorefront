@@ -54,13 +54,13 @@ const SectionSliderProductCard: FC<SectionSliderProductCardProps> = ({ className
         {CURRENT_THEME != 'green' ? (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
             <Heading key={iIdx} className={`text-neutral-900 dark:text-neutral-50 heading-px-4 ${featureToggle?.features?.enableForPCSite ? 'mb-4 sm:mb-6 lg:mb-6' : 'mb-4 sm:mb-12 lg:mb-14'}`} desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
-              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title}
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title || h?.productheading_title}
             </Heading>
           ))}
         </>) : (<>
           {heading?.length > 0 && heading?.map((h: any, iIdx: number) => (
-            <GliderNextPrev key={iIdx} className="text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle} hasNextPrev >
-              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title}
+            <GliderNextPrev key={iIdx} className="text-neutral-900 dark:text-neutral-50 heading-px-4" desc="" rightDescText={h?.newarrivalheading_subtitle || h?.popularheading_subtitle || h?.saleheading_subtitle || h?.relateditemheading_subtitle || h?.featureditemheading_subtitle  || h?.productheading_subtitle} hasNextPrev >
+              {h?.newarrivalheading_title || h?.saleheading_title || h?.popularheading_title || h?.offerproductheading_title || h?.newproductheading_title || h?.relateditemheading_title || h?.featureditemheading_title || h?.productheading_title}
             </GliderNextPrev>
           ))}
         </>)}
