@@ -145,7 +145,7 @@ function BrandsPage({ brands }: any) {
                 <div className="flex flex-col gap-3">
                   {brand?.results?.filter((brands: any) => brands?.isActive)?.map((brands: any, brandIdx: number) => (
                     <div key={`brand-list-${brandIdx}`} className="flex w-full text-gray-900 sm:inline-flex">
-                      <Link passHref href={brands?.link}>
+                      <Link passHref href={brands?.link || '#'}>
                         <span className="w-full text-sm capitalize cursor-pointer sm:text-lg hover:text-sky-700 hover:underline hover:font-medium">
                           {brands?.manufacturerName?.toLowerCase()}
                         </span>
